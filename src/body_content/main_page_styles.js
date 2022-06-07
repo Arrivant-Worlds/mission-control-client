@@ -25,6 +25,7 @@ const styles = {
     gridColumn: "1",
     gridRow: "1",
     color: "#111111",
+    fontSize: "16px",
     fontWeight: "700",
     width: "198px",
     height: "56px",

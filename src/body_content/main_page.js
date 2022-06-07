@@ -23,7 +23,7 @@ export default function MAIN_PAGE(props) {
           <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
           <div style={styles.button_container}>
             <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-            <Button variant="contained" style={styles.button} onClick={() => renderSwitch("connect")}>Join Now</Button>
+            <Button variant="contained" style={styles.button} onClick={() => change_body_state("connect")}>JOIN NOW</Button>
           </div>
         </Grid>
       );
@@ -32,7 +32,7 @@ export default function MAIN_PAGE(props) {
 
   return (
     <div style={styles.container}>
-      {renderSwitch()}
+      {renderSwitch(body_state)}
     </div>
   );
 }
