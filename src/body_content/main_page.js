@@ -18,13 +18,21 @@ export default function MAIN_PAGE(props) {
       );
       default:
       return (
-        <Grid container style={styles.grid_container} direction="column" columnSpacing={3} justifyContent="space-around" alignItems="center">
-          <Typography style={styles.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.</Typography>
-          <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
-          <div style={styles.button_container}>
-            <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-            <Button variant="contained" style={styles.button} onClick={() => change_body_state("connect")}>JOIN NOW</Button>
-          </div>
+        <Grid container style={styles.grid_container}
+        direction="column"
+        justifyContent="center" alignItems="center">
+          <Grid item xs={4} alignItems="center" justifyContent="center">
+            <Typography style={styles.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
+          </Grid>
+          <Grid container item justifyContent="center" alignItems="center" xs={1}>
+            <div style={styles.button_container}>
+              <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
+              <Button variant="contained" style={styles.button} onClick={() => change_body_state("connect")}>JOIN NOW</Button>
+            </div>
+          </Grid>
         </Grid>
       );
     }
