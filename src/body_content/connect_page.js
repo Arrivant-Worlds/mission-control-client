@@ -21,7 +21,7 @@ import React, { useState, useEffect } from 'react';
 // }));
 
 export default function JOIN_PAGE(props) {
-
+  
   return (
     <div>
     </div>

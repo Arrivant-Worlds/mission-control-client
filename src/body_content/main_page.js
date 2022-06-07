@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import JOIN_PAGE from './join_page.js';
+import CONNECT_PAGE from './connect_page.js';
 import styles from './main_page_styles.js';
 import SG_logo from '../images/PE_SG_logo.png';
 import ripple_diamond from '../images/ripple_diamond.png';
@@ -12,9 +12,9 @@ export default function MAIN_PAGE(props) {
 
   const renderSwitch = (param) => {
     switch(param) {
-      case 'join':
+      case 'connect':
       return (
-        <JOIN_PAGE/>
+        <CONNECT_PAGE body_state={body_state} change_body_state={change_body_state}/>
       );
       default:
       return (
@@ -23,7 +23,7 @@ export default function MAIN_PAGE(props) {
           <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
           <div style={styles.button_container}>
             <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-            <Button variant="contained" style={styles.button}>Join Now</Button>
+            <Button variant="contained" style={styles.button} onClick={() => renderSwitch("connect")}>Join Now</Button>
           </div>
         </Grid>
       );
