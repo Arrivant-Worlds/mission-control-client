@@ -1,10 +1,7 @@
 const styles = {
   connect_container: {
-    height: "90%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    alignItems: "center",
+    marginTop: "50px",
+    height: "50%",
   },
   connect_title: {
     fontSize: "24px",
@@ -22,3 +19,11 @@ const styles = {
 };
 
 export default styles;
+
+// connect_container: {
+//   height: "90%",
+//   display: "flex",
+//   flexDirection: "column",
+//   justifyContent: "space-around",
+//   alignItems: "center",
+// },
