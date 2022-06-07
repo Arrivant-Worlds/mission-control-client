@@ -1,22 +1,25 @@
 const styles = {
   container: {
     height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   grid_container: {
+    marginTop: "-75px",
     height: "90%",
-  },
-  logo: {
-    marginTop: "10px",
-    width: "786px",
   },
   text: {
     textTransform: "uppercase",
-    marginTop: "40px",
+    margin: "0 auto",
     fontSize: "18px",
     width: "60%",
   },
+  logo: {
+    marginTop: "-30px",
+    width: "800px",
+  },
   button_container: {
-    marginTop: "-100px",
     display: "grid",
     justifyContent: "center",
     alignItems: "center",
