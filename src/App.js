@@ -6,7 +6,7 @@ import MAIN_PAGE from './body_content/main_page.js';
 
 const theme = createTheme({
   typography: {
-    fontFamily: "Montserrat",
+    fontFamily: "Proxima Nova, sans-serif",
     fontWeight: "400",
     allVariants: {
       color: "#F6F6F6"
