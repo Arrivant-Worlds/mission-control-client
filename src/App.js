@@ -32,10 +32,9 @@ const theme = createTheme({
     }
   },
   palette: {
-    // primary: {
-    //   main: '#1A1A1A',
-    //   dark: '#a10031',
-    // },
+    primary: {
+      main: '#F6F6F6',
+    },
   },
   overrides: {
     // MuiTypography: {

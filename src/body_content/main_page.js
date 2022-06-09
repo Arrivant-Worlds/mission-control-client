@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import CONNECT_PAGE from './connect_page.js';
 import CONNECT_WALLET from './connect_wallet.js';
-import styles from './main_page_styles.js';
+import BOUNTY_PAGE from './bounty_page.js';
 import SG_logo from '../images/PE_SG_logo.png';
 import ripple_diamond from '../images/ripple_diamond.png';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import styles from './main_page_styles.js';
 
 export default function MAIN_PAGE(props) {
   const [body_state, change_body_state] = useState('join');
@@ -20,6 +21,10 @@ export default function MAIN_PAGE(props) {
       case 'connect_wallet':
         return (
           <CONNECT_WALLET body_state={body_state} change_body_state={change_body_state}/>
+        );
+      case 'bounty_main':
+        return (
+          <BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state}/>
         );
       default:
         return (
@@ -43,8 +48,16 @@ export default function MAIN_PAGE(props) {
     }
   }
 
+  const bounty_overlay_css = {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "linear-gradient(180deg, #15181B -16.28%, rgba(21, 24, 27, 0) 36.97%)",
+  }
+
   return (
-    <div style={styles.container}>
+    <div style={body_state === "bounty_main" ? bounty_overlay_css : styles.container}>
       {renderSwitch(body_state)}
     </div>
   );
