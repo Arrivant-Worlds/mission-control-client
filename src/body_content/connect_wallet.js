@@ -5,7 +5,9 @@ import styles from './connect_wallet_styles.js';
 
 export default function CONNECT_WALLET(props) {
   const { wallet, signMessage, publicKey } = useWallet();
-  console.log("meow");
+  console.log(wallet, "wallet");
+  console.log(signMessage, "sign_message");
+  console.log(publicKey, "public key");
   return (
     <WalletMultiButton>
       CONNECT WALLET
