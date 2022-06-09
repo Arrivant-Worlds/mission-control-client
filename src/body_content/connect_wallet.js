@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import styles from './connect_page_styles.js';
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
+import styles from './connect_wallet_styles.js';
 
 export default function CONNECT_WALLET(props) {
+  const { wallet, signMessage, publicKey } = useWallet();
+  console.log("meow");
   return (
-    <div>
-      Connect Wallet
-    </div>
+    <WalletMultiButton>
+      CONNECT WALLET
+    </WalletMultiButton>
   );
 }
