@@ -19,11 +19,3 @@ const styles = {
 };
 
 export default styles;
-
-// connect_container: {
-//   height: "90%",
-//   display: "flex",
-//   flexDirection: "column",
-//   justifyContent: "space-around",
-//   alignItems: "center",
-// },

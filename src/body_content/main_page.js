@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CONNECT_PAGE from './connect_page.js';
+import CONNECT_WALLET from './connect_wallet.js';
 import styles from './main_page_styles.js';
 import SG_logo from '../images/PE_SG_logo.png';
 import ripple_diamond from '../images/ripple_diamond.png';
@@ -13,28 +14,32 @@ export default function MAIN_PAGE(props) {
   const renderSwitch = (param) => {
     switch(param) {
       case 'connect':
-      return (
-        <CONNECT_PAGE body_state={body_state} change_body_state={change_body_state}/>
-      );
+        return (
+          <CONNECT_PAGE body_state={body_state} change_body_state={change_body_state}/>
+        );
+      case 'connect_wallet':
+        return (
+          <CONNECT_WALLET body_state={body_state} change_body_state={change_body_state}/>
+        );
       default:
-      return (
-        <Grid container style={styles.grid_container}
-        direction="column"
-        justifyContent="center" alignItems="center">
-          <Grid item xs={4} alignItems="center" justifyContent="center">
-            <Typography style={styles.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.</Typography>
+        return (
+          <Grid container style={styles.grid_container}
+          direction="column"
+          justifyContent="center" alignItems="center">
+            <Grid item xs={4} alignItems="center" justifyContent="center">
+              <Typography style={styles.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
+            </Grid>
+            <Grid container item justifyContent="center" alignItems="center" xs={1}>
+              <div style={styles.button_container}>
+                <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
+                <Button variant="contained" style={styles.button} onClick={() => change_body_state("connect")}>JOIN NOW</Button>
+              </div>
+            </Grid>
           </Grid>
-          <Grid item xs={2}>
-            <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
-          </Grid>
-          <Grid container item justifyContent="center" alignItems="center" xs={1}>
-            <div style={styles.button_container}>
-              <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-              <Button variant="contained" style={styles.button} onClick={() => change_body_state("connect")}>JOIN NOW</Button>
-            </div>
-          </Grid>
-        </Grid>
-      );
+        );
     }
   }
 
