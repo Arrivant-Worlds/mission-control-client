@@ -7,8 +7,8 @@ import styles from './connect_page_styles.js';
 export default function CONNECT_PAGE(props) {
 
   const handleClick = (state) => {
-    props.change_body_state("bounty_main");
-    // props.change_body_state(state);
+    // props.change_body_state("bounty_main");
+    props.change_body_state(state);
   }
 
   return (
