@@ -9,8 +9,8 @@ import styles from './connect_wallet_styles.js';
 export default function CONNECT_WALLET(props) {
   const { wallet, signMessage, publicKey } = useWallet();
 
-
   const getData = async (wal, sig, pkey) => {
+
     let now = new Date();
     // let pubkey = pkey.toString();
     let signedMsg = now.getTime().toString();
@@ -32,16 +32,18 @@ export default function CONNECT_WALLET(props) {
       pubkey: pkey._bn.words.toString()
     }
 
-    try {
-      const response = await axios.post(`http://localhost:3001/users/`, {}, { headers: payload });
-      const data = response.data;
-      console.log(response);
-      console.log(data);
-      // console.log(`list of article objects`, articles);
-      return data;
-    } catch (errors) {
-      console.error(errors);
-    }
+    // try {
+    //   const response = await axios.post(`http://localhost:3001/users/`, {}, { headers: payload });
+    //   const data = response.data;
+    //   console.log(response);
+    //   console.log(data);
+    //   // console.log(`list of article objects`, articles);
+    //   return data;
+    // } catch (errors) {
+    //   console.error(errors);
+    // }
+
+    props.change_body_state("bounty_main");
   };
   // console.log(wallet, "wallet");
   // console.log(signMessage, "sign_message");
