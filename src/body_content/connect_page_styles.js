@@ -15,6 +15,7 @@ const styles = {
     fontSize: "16px",
     backgroundColor: "transparent",
     border: "1px solid #F6F6F6",
+    color: "#F6F6F6",
   }
 };
 

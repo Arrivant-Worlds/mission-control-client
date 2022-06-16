@@ -70,19 +70,21 @@ export default function BOUNTY_PAGE(props) {
   const container_style = {
     backgroundImage: `url(${bounty_frame})`,
     backgroundPosition: "center",
-    width: "80%",
+    backgroundSize: "cover",
+    width: "87%",
   };
 
   const container_style_combined = {...container_style, ...styles.bounty_container};
 
   return (
     <div style={styles.tab_label_container}>
-      <Grid container direction="row" justifyContent="space-between">
+      <Grid container direction="row" justifyContent="space-between" sx={{marginBottom: "20px", width: "87%"}}>
         <Grid container item xs={4} style={styles.tab_label_grid}>
           <Tabs
             value={tab1_value}
             onChange={handleChange}
             textColor="primary"
+            style={styles.tab_label}
             TabIndicatorProps={{style: {zIndex: 2}}}
           >
             <Tab label="MISSIONS" {...a11yProps(0)}/>
@@ -90,7 +92,7 @@ export default function BOUNTY_PAGE(props) {
           </Tabs>
           <div style={styles.bottom_border}></div>
         </Grid>
-        <Grid container item xs={4} style={styles.tab_label_grid}>
+        <Grid container item xs={4} style={styles.tab_label_grid_2}>
           <Tabs
             value={tab2_value}
             onChange={handleChange}
@@ -103,7 +105,7 @@ export default function BOUNTY_PAGE(props) {
           <div style={styles.bottom_border}></div>
         </Grid>
       </Grid>
-      <Grid container style={container_style_combined} justifyContent="space-around" alignItems="center">
+      <Grid container style={container_style_combined} justifyContent="space-between" alignItems="center">
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab1_value} index={0} style={styles.tab_content_container}>
             <MISSION_BOARD/>
