@@ -12,8 +12,7 @@ const styles = {
     marginBottom: "5px",
   },
   content_container: {
-    height: "395px",
-    overflowY: "scroll",
+    height: "400px",
   },
   mission_title: {
     fontSize: "20px",
@@ -26,13 +25,11 @@ const styles = {
   },
   plus: {
     width: "10px",
-    cursor: "pointer",
   },
   minus: {
     width: "10px",
   },
   hr: {
-    marginTop: "7px",
     width: "100%",
     height: "1px",
     backgroundColor: "#888888",

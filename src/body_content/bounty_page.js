@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import MISSION_BOARD from './mission_board.js';
+import LEADERBOARD from './leaderboard.js';
 import bounty_frame from '../images/bounty_frame.png';
 import styles from './bounty_page_styles.js';
 
@@ -111,7 +112,7 @@ export default function BOUNTY_PAGE(props) {
             <MISSION_BOARD/>
           </TabPanel>
           <TabPanel value={tab1_value} index={1}>
-            LEADERBOARD ITEMS
+            <LEADERBOARD/>
             </TabPanel>
         </Grid>
         <Grid container item xs={3}>
