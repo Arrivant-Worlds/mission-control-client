@@ -13,7 +13,7 @@ const styles = {
   },
   content_container: {
     height: "395px",
-    overflowY: "scroll",
+    // overflowY: "scroll",
   },
   mission_title: {
     fontSize: "20px",

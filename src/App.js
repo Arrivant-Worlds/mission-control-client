@@ -2,6 +2,7 @@ import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import background from './images/arrivant_background.png';
 import black_circle from './images/black_circle.png';
+import 'simplebar-react/dist/simplebar.min.css';
 import MAIN_PAGE from './body_content/main_page.js';
 import React, { FC, useMemo } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';

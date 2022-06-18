@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import SimpleBar from 'simplebar-react';
 import styles from './mission_board_styles.js';
 import MISSION_BLOCK from "./mission_block.js";
 import plus from "../images/plus.png";
@@ -32,15 +33,18 @@ export default function MISSION_BOARD(props) {
           style={expanded_tab === "daily" ? styles.minus : styles.plus}/>
         </Grid>
         <div style={expanded_tab === "daily" ? styles.hr : styles.hidden}/>
-        <div style={expanded_tab === "daily" ? styles.content_container : styles.hidden}>
-          {
-            mission_data.map((item, i) => {
-              return (
-                <MISSION_BLOCK item_data={item} key={i}/>
-              )
-            })
-          }
-        </div>
+        <SimpleBar style={{ height: '395px', width: "100%" }}>
+          <div style={expanded_tab === "daily" ? styles.content_container : styles.hidden}
+          >
+            {
+              mission_data.map((item, i) => {
+                return (
+                  <MISSION_BLOCK item_data={item} key={i}/>
+                )
+              })
+            }
+          </div>
+        </SimpleBar>
       </Grid>
       <Grid container item direction="column" justifyContent="space-between"
       style={styles.mission_grid_container} alignItems="center">

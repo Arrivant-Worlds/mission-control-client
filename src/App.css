@@ -1,3 +1,26 @@
 .App {
   text-align: center;
 }
+/*
+::-webkit-scrollbar {
+  display: none;
+} */
+.simplebar-scrollbar {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.simplebar-scrollbar:before {
+  background-color: #888888 !important;
+  top: -10px !important;
+  left: 0px !important;
+  opacity: 1 !important;
+  width: 3px;
+}
+
+.simplebar-track.simplebar-vertical {
+  background-color: black;
+  top: 10px !important;
+  width: 3px !important;
+}
