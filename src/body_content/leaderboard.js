@@ -29,7 +29,7 @@ export default function LEADERBOARD(props) {
             <Typography style={styles.leader_categories}>Total Points</Typography>
           </Grid>
         </Grid>
-        <SimpleBar style={{ height: '490px', width: "100%" }}>
+        <SimpleBar style={{ height: '500px', width: "100%" }}>
           <div style={styles.content_container}
           >
             {

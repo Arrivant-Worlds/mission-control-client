@@ -1,6 +1,7 @@
 const styles = {
   mission_board_container: {
     width: "100%",
+    height: "100%",
   },
   mission_grid_container: {
     padding: "15px",
@@ -10,10 +11,7 @@ const styles = {
     backdropFilter: "blur(40px)",
     borderRadius: "5px",
     marginBottom: "5px",
-  },
-  content_container: {
-    height: "395px",
-    // overflowY: "scroll",
+    height: "100%",
   },
   mission_title: {
     fontSize: "20px",

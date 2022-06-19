@@ -5,6 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import MISSION_BOARD from './mission_board.js';
 import LEADERBOARD from './leaderboard.js';
+import REWARDS from './rewards.js';
 import bounty_frame from '../images/bounty_frame.png';
 import styles from './bounty_page_styles.js';
 
@@ -113,18 +114,18 @@ export default function BOUNTY_PAGE(props) {
           </TabPanel>
           <TabPanel value={tab1_value} index={1} style={styles.tab_content_container}>
             <LEADERBOARD/>
-            </TabPanel>
+          </TabPanel>
         </Grid>
         <Grid container item xs={3}>
           <div style={styles.center_panel_container}>
             rounded square
           </div>
         </Grid>
-        <Grid container item direction="column" justifyContent="space_around" alignItems="center" xs={4}>
-          <TabPanel value={tab2_value} index={0}>
-            REWARDS PANEL
+        <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
+          <TabPanel value={tab2_value} index={0} style={styles.tab_content_container}>
+            <REWARDS/>
           </TabPanel>
-          <TabPanel value={tab2_value} index={1}>
+          <TabPanel value={tab2_value} index={1} style={styles.tab_content_container}>
             EGG PANEL
           </TabPanel>
         </Grid>

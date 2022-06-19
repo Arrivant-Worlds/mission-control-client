@@ -30,7 +30,7 @@ export default function MISSION_BOARD(props) {
           style={expanded_tab === "daily" ? styles.minus : styles.plus}/>
         </Grid>
         <div style={expanded_tab === "daily" ? styles.hr : styles.hidden}/>
-        <SimpleBar style={ expanded_tab === "daily" ? { height: '395px', width: "100%" } : styles.hidden}>
+        <SimpleBar style={ expanded_tab === "daily" ? {height: '400px', width: "100%" } : styles.hidden}>
           <div style={expanded_tab === "daily" ? styles.content_container : styles.hidden}
           >
             {
@@ -54,7 +54,7 @@ export default function MISSION_BOARD(props) {
           style={expanded_tab === "weekly" ? styles.minus : styles.plus}/>
         </Grid>
         <div style={expanded_tab === "weekly" ? styles.hr : styles.hidden}/>
-        <SimpleBar style={ expanded_tab === "weekly" ? { height: '395px', width: "100%" } : styles.hidden}>
+        <SimpleBar style={ expanded_tab === "weekly" ? { height: '400px', width: "100%" } : styles.hidden}>
           <div style={expanded_tab === "weekly" ? styles.content_container : styles.hidden}
           >
             {
@@ -78,7 +78,7 @@ export default function MISSION_BOARD(props) {
           style={expanded_tab === "prime" ? styles.minus : styles.plus}/>
         </Grid>
         <div style={expanded_tab === "prime" ? styles.hr : styles.hidden}/>
-        <SimpleBar style={ expanded_tab === "prime" ? { height: '395px', width: "100%" } : styles.hidden}>
+        <SimpleBar style={ expanded_tab === "prime" ? { height: '400px', width: "100%" } : styles.hidden}>
           <div style={expanded_tab === "prime" ? styles.content_container : styles.hidden}
           >
             {
