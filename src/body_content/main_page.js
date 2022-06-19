@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CONNECT_PAGE from './connect_page.js';
 import CONNECT_WALLET from './connect_wallet.js';
 import BOUNTY_PAGE from './bounty_page.js';
+import { Typewriter, useTypewriter, Cursor } from 'react-simple-typewriter'
 import SG_logo from '../images/PE_SG_logo.png';
 import ripple_diamond from '../images/ripple_diamond.png';
 import Grid from '@mui/material/Grid';
@@ -32,7 +33,22 @@ export default function MAIN_PAGE(props) {
           direction="column"
           justifyContent="center" alignItems="center">
             <Grid item xs={4} alignItems="center" justifyContent="center">
-              <Typography style={styles.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.</Typography>
+              <div style={{
+                textTransform: "uppercase",
+                margin: "-20px auto 0 auto",
+                fontSize: "18px",
+                width: "60%",
+                color: "#F6F6F6"}}>
+                <Typewriter
+                  loop={1}
+                  deleteSpeed={0}
+                  words={['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.']}
+                  cursor
+                  cursorStyle='_'
+                  typeSpeed={70}
+                  delaySpeed={500}
+                />
+              </div>
             </Grid>
             <Grid item xs={2}>
               <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
