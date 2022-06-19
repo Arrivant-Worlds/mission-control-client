@@ -15,12 +15,6 @@ export default function MISSION_BOARD(props) {
     change_expanded_tab(tab);
   }
 
-  const render_missions = (mission_data) => {
-    return (
-      <div style={styles.test}>hello</div>
-    )
-  }
-
   return (
     <div style={styles.mission_board_container}>
       <Grid container item direction="column" justifyContent="space-between"

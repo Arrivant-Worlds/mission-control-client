@@ -111,7 +111,7 @@ export default function BOUNTY_PAGE(props) {
           <TabPanel value={tab1_value} index={0} style={styles.tab_content_container}>
             <MISSION_BOARD/>
           </TabPanel>
-          <TabPanel value={tab1_value} index={1}>
+          <TabPanel value={tab1_value} index={1} style={styles.tab_content_container}>
             <LEADERBOARD/>
             </TabPanel>
         </Grid>

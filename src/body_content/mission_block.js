@@ -18,7 +18,7 @@ export default function MISSION_BLOCK(props) {
         <Typography style={styles.description}>{props.item_data.description}</Typography>
       </Grid>
       <Grid container item xs={1} justifyContent="center" alignItems="center">
-        <Icon className='fa-brands fa-discord' style={styles.icon}></Icon>
+        <Icon className={props.item_data.platform === "discord"?'fa-brands fa-discord':"fa-brands fa-twitter"} style={styles.icon}></Icon>
       </Grid>
     </Grid>
   );
