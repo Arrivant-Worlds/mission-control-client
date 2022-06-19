@@ -31,7 +31,9 @@ export default function LEADER_BLOCK(props) {
   }
 
   return (
-    <Grid container direction="row" justifyContent="space-between" style={styles.leader_block_container}>
+    <Grid container direction="row" justifyContent="space-between" style={styles.leader_block_container}
+      sx={[{'&:hover': {background:"rgba(230, 177, 184, .4)"}}]}
+    >
       <Grid container item direction="row" justifyContent="space-between" alignItems="center" sx={{width: "100%"}}>
         <Grid container item direction="row" style={styles.laurel_container} justifyContent="space-between" xs={4}>
           <Grid container item xs={6} justifyContent="flex-start">
