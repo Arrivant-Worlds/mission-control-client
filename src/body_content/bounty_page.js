@@ -7,12 +7,14 @@ import MISSION_BOARD from './mission_board.js';
 import LEADERBOARD from './leaderboard.js';
 import REWARDS from './rewards.js';
 import EGG from './egg.js';
+import PASSPORT from './passport.js';
 import bounty_frame from '../images/bounty_frame.png';
 import styles from './bounty_page_styles.js';
 
 export default function BOUNTY_PAGE(props) {
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
+  const [expanded_tab, change_expanded_tab] = useState("daily");
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0" || event.target.id === "tab1") {
@@ -111,7 +113,7 @@ export default function BOUNTY_PAGE(props) {
       <Grid container style={container_style_combined} justifyContent="space-between" alignItems="center">
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab1_value} index={0} style={styles.tab_content_container}>
-            <MISSION_BOARD/>
+            <MISSION_BOARD expanded_tab={expanded_tab} change_expanded_tab={change_expanded_tab}/>
           </TabPanel>
           <TabPanel value={tab1_value} index={1} style={styles.tab_content_container}>
             <LEADERBOARD/>
@@ -119,7 +121,7 @@ export default function BOUNTY_PAGE(props) {
         </Grid>
         <Grid container item xs={3}>
           <div style={styles.center_panel_container}>
-            rounded square
+            <PASSPORT/>
           </div>
         </Grid>
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>

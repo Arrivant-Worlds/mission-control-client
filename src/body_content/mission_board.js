@@ -12,10 +12,9 @@ import prime_mission_data from "./prime_mission_data.js";
 
 
 export default function MISSION_BOARD(props) {
-  const [expanded_tab, change_expanded_tab] = useState("daily");
 
   const handleClick = (tab) => {
-    change_expanded_tab(tab);
+    props.change_expanded_tab(tab);
   }
 
   return (
@@ -24,14 +23,14 @@ export default function MISSION_BOARD(props) {
       style={styles.mission_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
           onClick={() => handleClick("daily")} alignItems="center">
-          <Typography style={ expanded_tab === "daily" ? styles.mission_title : styles.mission_title_not_active }>DAILY MISSIONS
+          <Typography style={ props.expanded_tab === "daily" ? styles.mission_title : styles.mission_title_not_active }>DAILY MISSIONS
           </Typography>
-          <img src={expanded_tab === "daily" ? minus : plus}
-          style={expanded_tab === "daily" ? styles.minus : styles.plus}/>
+          <img src={props.expanded_tab === "daily" ? minus : plus}
+          style={props.expanded_tab === "daily" ? styles.minus : styles.plus}/>
         </Grid>
-        <div style={expanded_tab === "daily" ? styles.hr : styles.hidden}/>
-        <SimpleBar style={ expanded_tab === "daily" ? {height: '400px', width: "100%" } : styles.hidden}>
-          <div style={expanded_tab === "daily" ? styles.content_container : styles.hidden}
+        <div style={props.expanded_tab === "daily" ? styles.hr : styles.hidden}/>
+        <SimpleBar style={ props.expanded_tab === "daily" ? {height: '400px', width: "100%" } : styles.hidden}>
+          <div style={props.expanded_tab === "daily" ? styles.content_container : styles.hidden}
           >
             {
               mission_data.map((item, i) => {
@@ -48,14 +47,14 @@ export default function MISSION_BOARD(props) {
         <Grid container item direction="row" justifyContent="space-between"
         onClick={() => handleClick("weekly")} alignItems="center">
           <Typography style={styles.mission_title}
-            style={ expanded_tab === "weekly" ? styles.mission_title : styles.mission_title_not_active}>WEEKLY MISSIONS
+            style={ props.expanded_tab === "weekly" ? styles.mission_title : styles.mission_title_not_active}>WEEKLY MISSIONS
           </Typography>
-          <img src={expanded_tab === "weekly" ? minus : plus}
-          style={expanded_tab === "weekly" ? styles.minus : styles.plus}/>
+          <img src={props.expanded_tab === "weekly" ? minus : plus}
+          style={props.expanded_tab === "weekly" ? styles.minus : styles.plus}/>
         </Grid>
-        <div style={expanded_tab === "weekly" ? styles.hr : styles.hidden}/>
-        <SimpleBar style={ expanded_tab === "weekly" ? { height: '400px', width: "100%" } : styles.hidden}>
-          <div style={expanded_tab === "weekly" ? styles.content_container : styles.hidden}
+        <div style={props.expanded_tab === "weekly" ? styles.hr : styles.hidden}/>
+        <SimpleBar style={ props.expanded_tab === "weekly" ? { height: '400px', width: "100%" } : styles.hidden}>
+          <div style={props.expanded_tab === "weekly" ? styles.content_container : styles.hidden}
           >
             {
               weekly_mission_data.map((item, i) => {
@@ -72,14 +71,14 @@ export default function MISSION_BOARD(props) {
         <Grid container item direction="row" justifyContent="space-between"
         onClick={() => handleClick("prime")} alignItems="center">
           <Typography style={styles.mission_title}
-            style={expanded_tab === "prime" ? styles.mission_title : styles.mission_title_not_active}>PRIME MISSIONS
+            style={props.expanded_tab === "prime" ? styles.mission_title : styles.mission_title_not_active}>PRIME MISSIONS
           </Typography>
-          <img src={expanded_tab === "prime" ? minus : plus}
-          style={expanded_tab === "prime" ? styles.minus : styles.plus}/>
+          <img src={props.expanded_tab === "prime" ? minus : plus}
+          style={props.expanded_tab === "prime" ? styles.minus : styles.plus}/>
         </Grid>
-        <div style={expanded_tab === "prime" ? styles.hr : styles.hidden}/>
-        <SimpleBar style={ expanded_tab === "prime" ? { height: '400px', width: "100%" } : styles.hidden}>
-          <div style={expanded_tab === "prime" ? styles.content_container : styles.hidden}
+        <div style={props.expanded_tab === "prime" ? styles.hr : styles.hidden}/>
+        <SimpleBar style={ props.expanded_tab === "prime" ? { height: '400px', width: "100%" } : styles.hidden}>
+          <div style={props.expanded_tab === "prime" ? styles.content_container : styles.hidden}
           >
             {
               prime_mission_data.map((item, i) => {
@@ -95,5 +94,5 @@ export default function MISSION_BOARD(props) {
   );
 }
 
-// <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
+// <Typography style={props.expanded_tab === "daily" ? styles.minus : styles.plus}>
 // {expanded_tab === "daily" ? "-" : "+"}</Typography>
