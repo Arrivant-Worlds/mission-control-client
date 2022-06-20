@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SimpleBar from 'simplebar-react';
+import egg_image from '../images/egg.png';
 import styles from './egg_styles.js';
 
 export default function EGG(props) {
@@ -17,6 +18,19 @@ export default function EGG(props) {
         <Grid container item direction="column" justifyContent="space-around" alignItems="center"
           style={styles.egg_content_container}
         >
+          <Grid>
+            <Typography style={styles.subtitle}>
+              coming soon
+            </Typography>
+          </Grid>
+          <Grid>
+            <img src={egg_image} alt="egg_image" style={styles.egg_image}/>
+          </Grid>
+          <Grid>
+            <Typography style={styles.text}>
+              Your elerian egg is on its way. While you wait, keep collecting XP because it may be  helpful when it arrives!
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
     </div>

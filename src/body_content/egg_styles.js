@@ -29,6 +29,19 @@ const styles = {
   },
   egg_content_container: {
     height: "535px",
+  },
+  subtitle: {
+    fontWeight: "700",
+    fontSize: "16px"
+  },
+  egg_image: {
+    height: "270px",
+  },
+  text: {
+    fontWeight: "400",
+    width: "80%",
+    margin: "0 auto 40px auto",
+    fontSize: "14px",
   }
 };
 
