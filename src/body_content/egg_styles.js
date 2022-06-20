@@ -1,9 +1,9 @@
 const styles = {
-  rewards_container: {
+  egg_container: {
     width: "100%",
     height: "100%",
   },
-  rewards_grid_container: {
+  egg_grid_container: {
     padding: "15px",
     background: "linear-gradient(180deg, rgba(0, 0, 0, 0.42) 25.01%, rgba(15, 15, 15, 0.3) 120.09%)",
     border: "1px solid #6A6A6A",
@@ -17,7 +17,7 @@ const styles = {
     fontWeight: "600",
     fontSize: "14px",
   },
-  rewards_title: {
+  egg_title: {
     fontSize: "20px",
     fontWeight: "700",
   },
@@ -27,6 +27,9 @@ const styles = {
     height: "1px",
     backgroundColor: "#888888",
   },
+  egg_content_container: {
+    height: "535px",
+  }
 };
 
 export default styles;

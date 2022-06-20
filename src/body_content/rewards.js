@@ -16,7 +16,7 @@ export default function REWARDS(props) {
           <Typography style={styles.rewards_title}>REWARDS</Typography>
         </Grid>
         <div style={styles.hr}/>
-        <SimpleBar style={{height: '542px', width: "100%"}}>
+        <SimpleBar style={{height: '535px', width: "100%"}}>
           <div style={styles.content_container}
           >
             {

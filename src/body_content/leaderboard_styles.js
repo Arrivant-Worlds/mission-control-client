@@ -22,6 +22,7 @@ const styles = {
     fontWeight: "700",
   },
   hr: {
+    marginTop: "7px",
     width: "100%",
     height: "1px",
     backgroundColor: "#888888",

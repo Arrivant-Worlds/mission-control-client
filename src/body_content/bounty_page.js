@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab';
 import MISSION_BOARD from './mission_board.js';
 import LEADERBOARD from './leaderboard.js';
 import REWARDS from './rewards.js';
+import EGG from './egg.js';
 import bounty_frame from '../images/bounty_frame.png';
 import styles from './bounty_page_styles.js';
 
@@ -126,7 +127,7 @@ export default function BOUNTY_PAGE(props) {
             <REWARDS/>
           </TabPanel>
           <TabPanel value={tab2_value} index={1} style={styles.tab_content_container}>
-            EGG PANEL
+            <EGG/>
           </TabPanel>
         </Grid>
       </Grid>
