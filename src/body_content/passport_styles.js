@@ -83,6 +83,9 @@ const styles = {
     textTransform: "uppercase",
     color: "#e6b2b9",
   },
+  XP_container: {
+    marginTop: "10px",
+  },
   rank_text: {
     fontWeight: "400",
     fontSize: "11px",

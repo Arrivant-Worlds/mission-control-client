@@ -38,7 +38,7 @@ export default function PASSPORT(props) {
       <Typography style={styles.survival_text}>survival assessment</Typography>
       <Typography style={styles.assessment_text}>unlikely</Typography>
       <div style={styles.hr}/>
-      <Grid container direction="row" justifyContent="space-around" alignItems="center">
+      <Grid container direction="row" justifyContent="space-around" alignItems="center" style={styles.XP_container}>
         <Grid item xs={2.5}>
           <Typography style={styles.rank_text}>Rank XP</Typography>
         </Grid>
