@@ -8,37 +8,35 @@ import styles from './passport_styles.js';
 export default function PASSPORT(props) {
 
   return (
-    <div style={styles.egg_container}>
-      <Grid>
-        <Typography>eleriah pioneer</Typography>
-        <Typography>PASSPORT</Typography>
-        <Typography>issued: 06-06-22</Typography>
-        <Grid container direction="column">
-          <img src={default_passport} alt="passport_symbol"/>
-          <div style={styles.hr}/>
-          <Grid container direction="row">
-            <img src={lock} alt="lock image"/>
-            <Typography>
-              Locked
-            </Typography>
-          </Grid>
-        </Grid>
-        <Typography>survival assessment</Typography>
-        <Typography>unlikely</Typography>
+    <Grid style={styles.passport_container}>
+      <Typography style={styles.title}>eleriah pioneer</Typography>
+      <Typography style={styles.passport}>PASSPORT</Typography>
+      <Typography style={styles.date}>issued: 06-06-22</Typography>
+      <Grid container direction="column" justifyContent="center" alignItems="center" style={styles.image_container}>
+        <img src={default_passport} alt="passport_symbol" style={styles.passport_image}/>
         <div style={styles.hr}/>
-        <Grid>
-          <Grid>
-            <Typography>Rank XP</Typography>
-          </Grid>
-          <Grid>
-            <div/>
-          </Grid>
-          <Grid>
-            <Typography>9,999/999,999</Typography>
-          </Grid>
+        <Grid container direction="row" justifyContent="center" alignItems="center" style={styles.decoder_container}>
+          <img src={lock} alt="lock image" style={styles.lock_image}/>
+          <Typography style={styles.decoder_text}>
+            Locked
+          </Typography>
         </Grid>
       </Grid>
-    </div>
+      <Typography>survival assessment</Typography>
+      <Typography>unlikely</Typography>
+      <div style={styles.hr}/>
+      <Grid>
+        <Grid>
+          <Typography>Rank XP</Typography>
+        </Grid>
+        <Grid>
+          <div/>
+        </Grid>
+        <Grid>
+          <Typography>9,999/999,999</Typography>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
 

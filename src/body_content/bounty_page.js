@@ -119,7 +119,7 @@ export default function BOUNTY_PAGE(props) {
             <LEADERBOARD/>
           </TabPanel>
         </Grid>
-        <Grid container item xs={3}>
+        <Grid container item xs={4} justifyContent="center" alignItems="center">
           <div style={styles.center_panel_container}>
             <PASSPORT/>
           </div>

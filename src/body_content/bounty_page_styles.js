@@ -14,7 +14,19 @@ const styles = {
     marginRight: "40px",
   },
   center_panel_container: {
-
+    width: "270px",
+    height: "397px",
+    background: "linear-gradient(180deg, rgba(0, 0, 0, 0.539) 25.01%, rgba(15, 15, 15, 0.385) 120.09%)",
+    /* box (blurred) */
+    border: "0.916143px solid #6A6A6A",
+    backdropFilter: "blur(36.6457px)",
+    /* Note: backdrop-filter has minimal browser support */
+    borderRadius: "4.58071px 61.3816px 4.58071px 4.58071px",
+    marginBottom: "23px",
+    marginLeft: "2px",
+    display: "flex",
+    justiftContent: "center",
+    alignItems: "center",
   },
   tab_label_grid: {
     position: "relative",
