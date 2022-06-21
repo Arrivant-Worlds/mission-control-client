@@ -6,6 +6,19 @@ import lock from '../images/lock.png';
 import styles from './passport_styles.js';
 
 export default function PASSPORT(props) {
+  const [exp_value, set_exp_value] = useState(0);
+  let xp = 99999;
+  //change to props.exp etc in render.
+
+  useEffect(() => {
+    let exp_percent = calculate_progress(99999);
+    //change to props.exp etc.
+    set_exp_value(Math.round(exp_percent));
+  }, []);
+
+   const calculate_progress = (exp) => {
+     return (100 * exp) / 999999;
+   }
 
   return (
     <Grid style={styles.passport_container}>
@@ -22,18 +35,29 @@ export default function PASSPORT(props) {
           </Typography>
         </Grid>
       </Grid>
-      <Typography>survival assessment</Typography>
-      <Typography>unlikely</Typography>
+      <Typography style={styles.survival_text}>survival assessment</Typography>
+      <Typography style={styles.assessment_text}>unlikely</Typography>
       <div style={styles.hr}/>
-      <Grid>
-        <Grid>
-          <Typography>Rank XP</Typography>
+      <Grid container direction="row" justifyContent="space-around" alignItems="center">
+        <Grid item xs={2.5}>
+          <Typography style={styles.rank_text}>Rank XP</Typography>
         </Grid>
-        <Grid>
-          <div/>
+        <Grid container item xs sx={{position: "relative"}}>
+          <div style={styles.progress_container}>
+            <div style={
+              { width: exp_value+"%",
+                background: "#F6F6F6",
+                borderRadius: "94.854px",
+                height: "7px",
+                position: "absolute",
+                zIndex: "1",
+              }
+            }/>
+            <div style={styles.exp_track}/>
+          </div>
         </Grid>
-        <Grid>
-          <Typography>9,999/999,999</Typography>
+        <Grid item xs={4.5}>
+          <Typography style={styles.xp_numbers}>{`${xp}/999999`}</Typography>
         </Grid>
       </Grid>
     </Grid>
