@@ -15,15 +15,8 @@ const styles = {
     fontSize: "16px",
     backgroundColor: "transparent",
     border: "1px solid #F6F6F6",
+    color: "#F6F6F6",
   }
 };
 
 export default styles;
-
-// connect_container: {
-//   height: "90%",
-//   display: "flex",
-//   flexDirection: "column",
-//   justifyContent: "space-around",
-//   alignItems: "center",
-// },
