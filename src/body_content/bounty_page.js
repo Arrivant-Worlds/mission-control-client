@@ -8,6 +8,7 @@ import LEADERBOARD from './leaderboard.js';
 import REWARDS from './rewards.js';
 import EGG from './egg.js';
 import PASSPORT from './passport.js';
+import {get_user} from "./../api_calls";
 import bounty_frame from '../images/bounty_frame.png';
 import styles from './bounty_page_styles.js';
 
@@ -15,6 +16,15 @@ export default function BOUNTY_PAGE(props) {
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("daily");
+
+  // useEffect(() => {
+  //   async function getUser() {
+  //     const user = await get_user();
+  //     console.log(user, "user");
+  //   }
+  //   getUser();
+  //   //change to props.exp etc.
+  // }, []);
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0" || event.target.id === "tab1") {

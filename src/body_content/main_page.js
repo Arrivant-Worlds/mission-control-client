@@ -8,10 +8,23 @@ import ripple_diamond from '../images/ripple_diamond.png';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import styles from './main_page_styles.js';
 
 export default function MAIN_PAGE(props) {
   const [body_state, change_body_state] = useState('join');
+  const [dialog_state, change_dialog_state] = useState(false);
+
+  const handleDialogOpen = () => {
+    change_dialog_state(true);
+  };
+
+  const handleDialogClose = () => {
+    change_dialog_state(false);
+  };
 
   const renderSwitch = (param) => {
     switch(param) {
@@ -25,7 +38,7 @@ export default function MAIN_PAGE(props) {
         );
       case 'bounty_main':
         return (
-          <BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state}/>
+          <BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state} handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}/>
         );
       default:
         return (
