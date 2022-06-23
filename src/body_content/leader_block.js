@@ -11,21 +11,21 @@ import styles from './leader_block_styles.js';
 export default function LEADER_BLOCK(props) {
 
   const laurel_render = () => {
-    if (props.item_data.rank === 1) {
+    if (props.rank === 0) {
       return (
         <img src={laurel_1} alt="laurel_symbol"/>
       )
-    } else if (props.item_data.rank === 2) {
+    } else if (props.rank === 1) {
       return (
         <img src={laurel_2} alt="laurel_symbol"/>
       )
-    } else if (props.item_data.rank === 3) {
+    } else if (props.rank === 2) {
       return (
         <img src={laurel_3} alt="laurel_symbol"/>
       )
     } else {
       return (
-        <Typography style={styles.rank_number}>{props.item_data.rank}</Typography>
+        <Typography style={styles.rank_number}>{props.rank + 1}</Typography>
       )
     }
   }
@@ -52,7 +52,7 @@ export default function LEADER_BLOCK(props) {
             textAlign: "left",
           }
         }>
-          <Typography style={styles.name}>{props.item_data.name}</Typography>
+          <Typography style={styles.name}>{props.item_data.user_name}</Typography>
         </Grid>
         <Grid container item xs={4} sx={
           { overflow: "hidden",
@@ -63,7 +63,7 @@ export default function LEADER_BLOCK(props) {
             textAlign: "left",
           }
         }>
-          <Typography style={styles.number}>{props.item_data.points}</Typography>
+          <Typography style={styles.number}>{props.item_data.user_points}</Typography>
         </Grid>
       </Grid>
     </Grid>

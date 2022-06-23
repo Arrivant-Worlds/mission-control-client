@@ -6,6 +6,20 @@ import styles from './mission_block_styles.js';
 
 export default function MISSION_BLOCK(props) {
 
+  const renderIcon = () => {
+    if (props.item_data.platform === "Discord") {
+      return (
+        <Icon className={'fa-brands fa-discord'} style={styles.icon}></Icon>
+      )
+    } else if (props.item_data.platform === "twitter") {
+      return (
+        <Icon className={'fa-brands fa-twitter'} style={styles.icon}></Icon>
+      )
+    } else {
+      return null
+    }
+  }
+
   return (
     <Grid container direction="row" justifyContent="space-between" style={styles.mission_block_container}
       sx={[{'&:hover': {border: "0.9px solid #F9F9F9 !important"}}]}
@@ -18,7 +32,7 @@ export default function MISSION_BLOCK(props) {
         <Typography style={styles.description}>{props.item_data.description}</Typography>
       </Grid>
       <Grid container item xs={1} justifyContent="center" alignItems="center">
-        <Icon className={props.item_data.platform === "discord"?'fa-brands fa-discord':"fa-brands fa-twitter"} style={styles.icon}></Icon>
+        {renderIcon()}
       </Grid>
     </Grid>
   );

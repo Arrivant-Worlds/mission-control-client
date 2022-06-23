@@ -8,8 +8,12 @@ const styles = {
     width: "95%",
   },
   title: {
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
     fontSize: "14px",
     fontWeight: "700",
+    maxWidth: "65%",
     textTransform: "uppercase",
   },
   description: {

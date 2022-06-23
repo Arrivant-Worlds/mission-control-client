@@ -9,7 +9,7 @@ export default function PASSPORT(props) {
   const [exp_value, set_exp_value] = useState(0);
   let xp = 99999;
   //change to props.exp etc in render.
-
+  // console.log(props.user_data, "user_data");
   useEffect(() => {
     let exp_percent = calculate_progress(99999);
     //change to props.exp etc.

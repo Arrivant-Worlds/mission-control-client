@@ -96,6 +96,7 @@ const Content: FC = (connection) => {
     <ThemeProvider theme={theme}>
       <div className="App" style={{
         backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
         height: '100vh',
         width: '100vw',
       }}>

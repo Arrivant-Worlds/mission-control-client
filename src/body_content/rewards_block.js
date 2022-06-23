@@ -9,6 +9,7 @@ import styles from './rewards_block_styles.js';
 export default function REWARDS_BLOCK(props) {
   const [hover_state, change_hover_state] = useState(false);
 
+
   const render_chest_image = (state) => {
     if (state) {
       return (
@@ -42,7 +43,7 @@ export default function REWARDS_BLOCK(props) {
             height: "100%",
           }
         }>
-          <Typography style={hover_state ? styles.name : styles.name_inactive}>{props.item_data.name}</Typography>
+          <Typography style={hover_state ? styles.title : styles.name_inactive}>{props.item_data.title}</Typography>
         </Grid>
         <Grid container item xs={1}>
           {render_chest_image(hover_state)}

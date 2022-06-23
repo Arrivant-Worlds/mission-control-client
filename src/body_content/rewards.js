@@ -8,6 +8,8 @@ import REWARDS_BLOCK from "./rewards_block.js";
 
 export default function REWARDS(props) {
 
+  console.log(props.rewards_data);
+
   return (
     <div style={styles.rewards_container}>
       <Grid container item direction="column" justifyContent="space-between"
@@ -20,7 +22,7 @@ export default function REWARDS(props) {
           <div style={styles.content_container}
           >
             {
-              rewards_data.map((item, i) => {
+              props.rewards_data.map((item, i) => {
                 return (
                   <REWARDS_BLOCK item_data={item} key={i}/>
                 )

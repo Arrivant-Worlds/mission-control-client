@@ -16,6 +16,7 @@ import styles from './main_page_styles.js';
 
 export default function MAIN_PAGE(props) {
   const [body_state, change_body_state] = useState('join');
+  const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
 
   const handleDialogOpen = () => {
@@ -34,11 +35,13 @@ export default function MAIN_PAGE(props) {
         );
       case 'connect_wallet':
         return (
-          <CONNECT_WALLET body_state={body_state} change_body_state={change_body_state}/>
+          <CONNECT_WALLET body_state={body_state} change_body_state={change_body_state}
+          wallet_data={wallet_data} change_wallet_data={change_wallet_data}/>
         );
       case 'bounty_main':
         return (
-          <BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state} handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}/>
+          <BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state} handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}
+          wallet_data={wallet_data}/>
         );
       default:
         return (

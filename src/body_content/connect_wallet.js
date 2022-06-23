@@ -27,11 +27,11 @@ export default function CONNECT_WALLET(props) {
     }
 
     // set loading
-    // const user_data = await create_user(payload);
+    const user_data = await create_user(payload);
+    props.change_wallet_data(payload);
+    props.change_body_state("bounty_main");
     // console.log(user_data, "user_data");
     // unset loading when user_data comes back and is set to state.
-
-    props.change_body_state("bounty_main");
   };
 
   return (
