@@ -8,7 +8,7 @@ const styles = {
     borderRadius: "5px",
     color: "#888888",
   },
-  name: {
+  title: {
     fontSize: "12px",
     fontWeight: "700",
     textTransform: "uppercase",

@@ -7,9 +7,8 @@ import styles from './passport_styles.js';
 
 export default function PASSPORT(props) {
   const [exp_value, set_exp_value] = useState(0);
-  let xp = 99999;
   //change to props.exp etc in render.
-
+  console.log(props.user_data, "user_data");
   useEffect(() => {
     let exp_percent = calculate_progress(99999);
     //change to props.exp etc.
@@ -17,12 +16,12 @@ export default function PASSPORT(props) {
   }, []);
 
    const calculate_progress = (exp) => {
-     return (100 * exp) / 999999;
+     return (100 * props.user_data.xp) / 999999;
    }
 
   return (
     <Grid style={styles.passport_container}>
-      <Typography style={styles.title}>eleriah pioneer</Typography>
+      <Typography style={styles.title}>{props.user_data.badgeName}</Typography>
       <Typography style={styles.passport}>PASSPORT</Typography>
       <Typography style={styles.date}>issued: 06-06-22</Typography>
       <Grid container direction="column" justifyContent="center" alignItems="center" style={styles.image_container}>
@@ -36,7 +35,7 @@ export default function PASSPORT(props) {
         </Grid>
       </Grid>
       <Typography style={styles.survival_text}>survival assessment</Typography>
-      <Typography style={styles.assessment_text}>unlikely</Typography>
+      <Typography style={styles.assessment_text}>{props.user_data.survivalAssessment}</Typography>
       <div style={styles.hr}/>
       <Grid container direction="row" justifyContent="space-around" alignItems="center" style={styles.XP_container}>
         <Grid item xs={2.5}>
@@ -57,7 +56,7 @@ export default function PASSPORT(props) {
           </div>
         </Grid>
         <Grid item xs={4.5}>
-          <Typography style={styles.xp_numbers}>{`${xp}/999999`}</Typography>
+          <Typography style={styles.xp_numbers}>{`${props.user_data.xp}/999999`}</Typography>
         </Grid>
       </Grid>
     </Grid>

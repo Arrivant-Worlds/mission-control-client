@@ -6,7 +6,7 @@ import styles from './mission_board_styles.js';
 import MISSION_BLOCK from "./mission_block.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
-import mission_data from "./mission_data.js";
+// import mission_data from "./mission_data.js";
 import weekly_mission_data from "./weekly_mission_data.js";
 import prime_mission_data from "./prime_mission_data.js";
 
@@ -33,7 +33,7 @@ export default function MISSION_BOARD(props) {
           <div style={props.expanded_tab === "daily" ? styles.content_container : styles.hidden}
           >
             {
-              mission_data.map((item, i) => {
+              props.quests_data.map((item, i) => {
                 return (
                   <MISSION_BLOCK item_data={item} key={i}/>
                 )
