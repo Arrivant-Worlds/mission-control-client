@@ -16,7 +16,12 @@ export default function BOUNTY_PAGE(props) {
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("daily");
-  const [user_data, change_user_data] = useState({});
+  const [user_data, change_user_data] = useState({
+    xp: 0,
+    badgeName: "",
+    survivalAssessment: "",
+    badgeUr: "",
+  });
   const [quests_data, change_quests_data] = useState([{
     title: "",
     xp: 0,
