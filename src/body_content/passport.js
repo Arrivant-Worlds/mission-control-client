@@ -8,7 +8,7 @@ import styles from './passport_styles.js';
 export default function PASSPORT(props) {
   const [exp_value, set_exp_value] = useState(0);
   //change to props.exp etc in render.
-  console.log(props.user_data, "user_data");
+  // console.log(props.user_data, "user_data");
   useEffect(() => {
     let exp_percent = calculate_progress(99999);
     //change to props.exp etc.
@@ -28,9 +28,9 @@ export default function PASSPORT(props) {
         <img src={default_passport} alt="passport_symbol" style={styles.passport_image}/>
         <div style={styles.hr}/>
         <Grid container direction="row" justifyContent="center" alignItems="center" style={styles.decoder_container}>
-          <img src={lock} alt="lock image" style={styles.lock_image}/>
+          <img src={lock} alt="lock image" style={ props.user_data.badgeName ? styles.hidden : styles.lock_image }/>
           <Typography style={styles.decoder_text}>
-            Locked
+            { props.user_data.badgeName ? props.user_data.badgeName : "Locked"}
           </Typography>
         </Grid>
       </Grid>

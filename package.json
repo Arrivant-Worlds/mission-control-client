@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.2",
     "@solana/wallet-adapter-base": "^0.9.5",
     "@solana/wallet-adapter-react": "^0.15.5",

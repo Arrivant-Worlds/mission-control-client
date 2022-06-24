@@ -6,6 +6,13 @@ import styles from './mission_block_styles.js';
 
 export default function MISSION_BLOCK(props) {
 
+  const handleOnClick = () => {
+    // console.log("firing in mission block click");
+    // props.change_dialog_data({test: "meow meow meow"});
+    props.change_dialog_data(props.item_data);
+    props.handleDialogOpen();
+  }
+
   const renderIcon = () => {
     if (props.item_data.platform === "Discord") {
       return (
@@ -22,7 +29,7 @@ export default function MISSION_BLOCK(props) {
 
   return (
     <Grid container direction="row" justifyContent="space-between" style={styles.mission_block_container}
-      sx={[{'&:hover': {border: "0.9px solid #F9F9F9 !important"}}]}
+      sx={[{'&:hover': {border: "0.9px solid #F9F9F9 !important"}}]} onClick={() => handleOnClick()}
     >
       <Grid container item direction="column" xs={11}>
         <Grid container item direction="row" justifyContent="flex-start" alignItems="center">

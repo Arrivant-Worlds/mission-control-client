@@ -16,9 +16,9 @@ export default function CONNECT_WALLET(props) {
     let signedMsg = now.getTime().toString();
     const encodedMsg = decodeUTF8(signedMsg);
     const signature = await sig(encodedMsg);
-    console.log(signature, "signed sig");
-    console.log(pkey, "pubkey");
-    console.log(wal, "wallet");
+    // console.log(signature, "signed sig");
+    // console.log(pkey, "pubkey");
+    // console.log(wal, "wallet");
 
     const payload = {
       signedMsg: signedMsg,

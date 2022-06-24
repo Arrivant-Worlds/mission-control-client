@@ -13,6 +13,8 @@ import prime_mission_data from "./prime_mission_data.js";
 
 export default function MISSION_BOARD(props) {
 
+  // console.log(props.quests_data, "quest data");
+
   const handleClick = (tab) => {
     props.change_expanded_tab(tab);
   }
@@ -35,7 +37,8 @@ export default function MISSION_BOARD(props) {
             {
               props.quests_data.map((item, i) => {
                 return (
-                  <MISSION_BLOCK item_data={item} key={i}/>
+                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                  handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
                 )
               })
             }
@@ -59,7 +62,8 @@ export default function MISSION_BOARD(props) {
             {
               weekly_mission_data.map((item, i) => {
                 return (
-                  <MISSION_BLOCK item_data={item} key={i}/>
+                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                  dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
                 )
               })
             }
@@ -83,7 +87,8 @@ export default function MISSION_BOARD(props) {
             {
               prime_mission_data.map((item, i) => {
                 return (
-                  <MISSION_BLOCK item_data={item} key={i}/>
+                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                  dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
                 )
               })
             }

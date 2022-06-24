@@ -16,25 +16,10 @@ export default function BOUNTY_PAGE(props) {
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("daily");
-  const [user_data, change_user_data] = useState({
-    xp: 0,
-    badgeName: "",
-    survivalAssessment: "",
-    badgeUr: "",
-  });
-  const [quests_data, change_quests_data] = useState([{
-    title: "",
-    xp: 0,
-    description: "",
-    platform: "",
-  }]);
+  const [user_data, change_user_data] = useState({});
+  const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
-  const [rewards_data, change_rewards_data] = useState([
-    {
-      xp: 0,
-      title: "",
-    }
-  ]);
+  const [rewards_data, change_rewards_data] = useState([]);
 
   useEffect(() => {
     async function getUser() {
@@ -158,7 +143,7 @@ export default function BOUNTY_PAGE(props) {
       <Grid container style={container_style_combined} justifyContent="space-between" alignItems="center">
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab1_value} index={0} style={styles.tab_content_container}>
-            <MISSION_BOARD expanded_tab={expanded_tab} change_expanded_tab={change_expanded_tab} quests_data={quests_data}/>
+            <MISSION_BOARD expanded_tab={expanded_tab} change_expanded_tab={change_expanded_tab} quests_data={quests_data} handleDialogOpen={props.handleDialogOpen} handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
           </TabPanel>
           <TabPanel value={tab1_value} index={1} style={styles.tab_content_container}>
             <LEADERBOARD leaderboard_data={leaderboard_data}/>

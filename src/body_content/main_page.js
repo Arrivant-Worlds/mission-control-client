@@ -2,24 +2,25 @@ import React, { useState, useEffect } from 'react';
 import CONNECT_PAGE from './connect_page.js';
 import CONNECT_WALLET from './connect_wallet.js';
 import BOUNTY_PAGE from './bounty_page.js';
+import MISSION_DIALOG from './mission_dialog.js';
 import { Typewriter, useTypewriter, Cursor } from 'react-simple-typewriter'
 import SG_logo from '../images/PE_SG_logo.png';
 import ripple_diamond from '../images/ripple_diamond.png';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import styles from './main_page_styles.js';
 
 export default function MAIN_PAGE(props) {
   const [body_state, change_body_state] = useState('join');
   const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
+  const [dialog_data, change_dialog_data] = useState({
+    test: "meow mix",
+  });
 
   const handleDialogOpen = () => {
+    // console.log("firing?? in main open");
     change_dialog_state(true);
   };
 
@@ -41,7 +42,7 @@ export default function MAIN_PAGE(props) {
       case 'bounty_main':
         return (
           <BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state} handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}
-          wallet_data={wallet_data}/>
+          wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
         );
       default:
         return (
@@ -91,6 +92,7 @@ export default function MAIN_PAGE(props) {
   return (
     <div style={body_state === "bounty_main" ? bounty_overlay_css : styles.container}>
       {renderSwitch(body_state)}
+      <MISSION_DIALOG handleDialogClose={handleDialogClose} handleDialogOpen={handleDialogOpen}       dialog_state={dialog_state} change_dialog_state={change_dialog_state} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
     </div>
   );
 }

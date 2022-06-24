@@ -7,7 +7,7 @@ import LEADER_BLOCK from "./leader_block.js";
 import leader_data from "./leader_data.js";
 
 export default function LEADERBOARD(props) {
-  console.log(props.leaderboard_data, "leaderboard data");
+  // console.log(props.leaderboard_data, "leaderboard data");
   return (
     <div style={styles.leader_board_container}>
       <Grid container item direction="column" justifyContent="space-between"
