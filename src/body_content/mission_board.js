@@ -13,7 +13,7 @@ import prime_mission_data from "./prime_mission_data.js";
 
 export default function MISSION_BOARD(props) {
 
-  // console.log(props.quests_data, "quest data");
+  console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.change_expanded_tab(tab);
