@@ -87,11 +87,11 @@ export default function MAIN_PAGE(props) {
   //             </Box>
   //           </Grid>
   //           <Grid item xs={2}>
-  //             <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
+  //             <Box src={SG_logo} alt="SG Logo" style={styles.logo}/>
   //           </Grid>
   //           <Grid container item justifyContent="center" alignItems="center" xs={1}>
   //             <Box style={styles.button_container}>
-  //               <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
+  //               <Box src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
   //               <Button variant="contained" style={styles.button} onClick={() => handleClick("connect")}>JOIN NOW</Button>
   //             </Box>
   //           </Grid>
@@ -120,7 +120,11 @@ export default function MAIN_PAGE(props) {
               margin: "-20px auto 0 auto",
               fontSize: "18px",
               width: "60%",
-              color: "#F6F6F6"}}>
+              color: "#F6F6F6",
+              '@media screen and (min-width: 2400px)': {
+                  fontSize: "30px",
+                },
+              }}>
               <Typewriter
                 loop={1}
                 deleteSpeed={0}
@@ -133,11 +137,11 @@ export default function MAIN_PAGE(props) {
             </Box>
           </Grid>
           <Grid item xs={2}>
-            <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
+            <Box component="img" src={SG_logo} alt="SG Logo" style={styles.logo}/>
           </Grid>
           <Grid container item justifyContent="center" alignItems="center" xs={1}>
             <Box style={styles.button_container}>
-              <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
+              <Box component="img" src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
               <Button variant="contained" style={styles.button} onClick={() => handleClick("/connect")}>JOIN NOW</Button>
             </Box>
           </Grid>

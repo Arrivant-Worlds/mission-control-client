@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Icon from '@mui/material/Icon';
 import white_chest from '../images/chest.png';
@@ -12,11 +13,11 @@ export default function REWARDS_BLOCK(props) {
   const render_chest_image = (state) => {
     if (state) {
       return (
-        <img src={white_chest} alt="chest symbol" style={styles.chest_symbol}/>
+        <Box component="img" src={white_chest} alt="chest symbol" style={styles.chest_symbol}/>
       )
     } else {
       return (
-        <img src={grey_chest} alt="chest symbol" style={styles.chest_symbol}/>
+        <Box component="img" src={grey_chest} alt="chest symbol" style={styles.chest_symbol}/>
       )
     }
   }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Icon from '@mui/material/Icon';
+import Box from '@mui/material/Box';
 import laurel_1 from '../images/laurel_1.png';
 import laurel_2 from '../images/laurel_2.png';
 import laurel_3 from '../images/laurel_3.png';
@@ -13,15 +14,15 @@ export default function LEADER_BLOCK(props) {
   const laurel_render = () => {
     if (props.rank === 0) {
       return (
-        <img src={laurel_1} alt="laurel_symbol"/>
+        <Box component="img" src={laurel_1} alt="laurel_symbol"/>
       )
     } else if (props.rank === 1) {
       return (
-        <img src={laurel_2} alt="laurel_symbol"/>
+        <Box component="img" src={laurel_2} alt="laurel_symbol"/>
       )
     } else if (props.rank === 2) {
       return (
-        <img src={laurel_3} alt="laurel_symbol"/>
+        <Box component="img" src={laurel_3} alt="laurel_symbol"/>
       )
     } else {
       return (
@@ -40,7 +41,7 @@ export default function LEADER_BLOCK(props) {
             {laurel_render()}
           </Grid>
           <Grid container item xs={6} justifyContent="flex-start">
-            <img src={passport_symbol} alt="passport symbol" style={styles.passport_symbol}/>
+            <Box component="img" src={passport_symbol} alt="passport symbol" style={styles.passport_symbol}/>
           </Grid>
         </Grid>
         <Grid container item xs={3} sx={

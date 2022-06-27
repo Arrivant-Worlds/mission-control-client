@@ -84,7 +84,7 @@ export default function MISSION_DIALOG(props) {
           >
             <Grid container item xs={7}>
               <Grid container item xs={1}>
-                <img src={elune_icon} alt="elune_icon" />
+                <Box component="img" src={elune_icon} alt="elune_icon" />
               </Grid>
                 <Grid container item xs alignItems="center">
                   <Typography>Project Eluüne (@ProjectEluune)</Typography>
