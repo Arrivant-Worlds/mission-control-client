@@ -19,7 +19,7 @@ import styles from './main_page_styles.js';
 
 export default function MAIN_PAGE(props) {
   let navigate = useNavigate();
-  const [body_state, change_body_state] = useState('join');
+  // const [body_state, change_body_state] = useState('join');
   const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState({
@@ -142,10 +142,10 @@ export default function MAIN_PAGE(props) {
           </Grid>
         </Grid>} />
         <Route path="connect"
-          element={<CONNECT_PAGE body_state={body_state} change_body_state={change_body_state}/>}/>
-        <Route path="connect_wallet" element={<CONNECT_WALLET body_state={body_state} change_body_state={change_body_state}
+          element={<CONNECT_PAGE/>}/>
+        <Route path="connect_wallet" element={<CONNECT_WALLET
         wallet_data={wallet_data} change_wallet_data={change_wallet_data}/>}/>
-        <Route path="bounty_main" element={<BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state} handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}
+        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}
         wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>}/>
       </Routes>
       <MISSION_DIALOG handleDialogClose={handleDialogClose} handleDialogOpen={handleDialogOpen}       dialog_state={dialog_state} change_dialog_state={change_dialog_state} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>

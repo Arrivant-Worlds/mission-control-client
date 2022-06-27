@@ -3,6 +3,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import background from './images/arrivant_background.png';
 import black_circle from './images/black_circle.png';
 import 'simplebar-react/dist/simplebar.min.css';
+import { useNavigate } from "react-router-dom";
 import {
   BrowserRouter,
   Routes,
@@ -100,6 +101,10 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Content: FC = (connection) => {
+  let navigate = useNavigate();
+  const handleOnClick = () => {
+    navigate('/connect_wallet');
+  }
   return (
     <ThemeProvider theme={theme}>
       <div className="App" style={{
@@ -108,7 +113,7 @@ const Content: FC = (connection) => {
         height: '100vh',
         width: '100vw',
       }}>
-        <img style={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo"/>
+        <img style={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={() => handleOnClick()}/>
         <MAIN_PAGE/>
       </div>
     </ThemeProvider>
