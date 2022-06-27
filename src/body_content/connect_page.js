@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from "react-router-dom";
 import styles from './connect_page_styles.js';
 
 export default function CONNECT_PAGE(props) {
+  let navigate = useNavigate();
 
   const handleClick = (state) => {
-    // props.change_body_state("bounty_main");
-    props.change_body_state(state);
+    // props.change_body_state(state);
+    navigate(state);
   }
 
   return (
@@ -20,7 +22,7 @@ export default function CONNECT_PAGE(props) {
         <Typography style={styles.connect_text}>YOUR BOUNTY WILL BE PLENTIFUL.</Typography>
       </Grid>
       <Grid container item xs={3} direction="column" justifyContent="flex-end" alignItems="center">
-        <Button variant="contained" style={styles.button} onClick={() => handleClick("connect_wallet")}>CONNECT WALLET</Button>
+        <Button variant="contained" style={styles.button} onClick={() => handleClick("/connect_wallet")}>CONNECT WALLET</Button>
       </Grid>
     </Grid>
   );

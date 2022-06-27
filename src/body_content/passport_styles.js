@@ -112,6 +112,9 @@ const styles = {
     textAlign: "left",
     color: "#F6F6F6",
   },
+  hidden: {
+    display: "none",
+  },
 };
 
 export default styles;

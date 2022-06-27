@@ -1,9 +1,19 @@
 import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 import background from './images/arrivant_background.png';
 import black_circle from './images/black_circle.png';
 import 'simplebar-react/dist/simplebar.min.css';
-import MAIN_PAGE from './body_content/main_page.js';
+import { useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import MAIN_PAGE from "./body_content/main_page.js";
+import CONNECT_PAGE from "./body_content/connect_page.js";
+import CONNECT_WALLET from "./body_content/connect_wallet.js";
+import BOUNTY_PAGE from "./body_content/bounty_page.js";
 import React, { FC, useMemo } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
@@ -92,17 +102,23 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Content: FC = (connection) => {
+  let navigate = useNavigate();
+  const handleOnClick = () => {
+    navigate('/connect_wallet');
+  }
   return (
     <ThemeProvider theme={theme}>
-      <div className="App" style={{
+      <Box className="App" style={{
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
         height: '100vh',
         width: '100vw',
       }}>
-        <img style={{position: 'absolute', top: '40px', left: "40px"}} src={black_circle} alt="black_circle_logo"/>
+        <img style={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={() => handleOnClick()}/>
         <MAIN_PAGE/>
-      </div>
+      </Box>
     </ThemeProvider>
   );
 };
+
+//turn all divs into boxes. fml

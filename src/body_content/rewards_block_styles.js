@@ -8,6 +8,15 @@ const styles = {
     borderRadius: "5px",
     color: "#888888",
   },
+  rewards_block_container_active: {
+    marginTop: "10px",
+    width: "95%",
+    padding: "5px 15px",
+    cursor: "pointer",
+    border: "0.9px solid #F9F9F9",
+    borderRadius: "5px",
+    color: "#F9F9F9",
+  },
   title: {
     fontSize: "12px",
     fontWeight: "700",

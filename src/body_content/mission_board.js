@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SimpleBar from 'simplebar-react';
 import styles from './mission_board_styles.js';
@@ -13,12 +14,14 @@ import prime_mission_data from "./prime_mission_data.js";
 
 export default function MISSION_BOARD(props) {
 
+  // console.log(props.quests_data, "quest data");
+
   const handleClick = (tab) => {
     props.change_expanded_tab(tab);
   }
 
   return (
-    <div style={styles.mission_board_container}>
+    <Box style={styles.mission_board_container}>
       <Grid container item direction="column" justifyContent="space-between"
       style={styles.mission_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
@@ -28,18 +31,19 @@ export default function MISSION_BOARD(props) {
           <img src={props.expanded_tab === "daily" ? minus : plus}
           style={props.expanded_tab === "daily" ? styles.minus : styles.plus}/>
         </Grid>
-        <div style={props.expanded_tab === "daily" ? styles.hr : styles.hidden}/>
+        <Box style={props.expanded_tab === "daily" ? styles.hr : styles.hidden}/>
         <SimpleBar style={ props.expanded_tab === "daily" ? {height: '400px', width: "100%" } : styles.hidden}>
-          <div style={props.expanded_tab === "daily" ? styles.content_container : styles.hidden}
+          <Box style={props.expanded_tab === "daily" ? styles.content_container : styles.hidden}
           >
             {
               props.quests_data.map((item, i) => {
                 return (
-                  <MISSION_BLOCK item_data={item} key={i}/>
+                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                  handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
                 )
               })
             }
-          </div>
+          </Box>
         </SimpleBar>
       </Grid>
       <Grid container item direction="column" justifyContent="space-between"
@@ -52,18 +56,19 @@ export default function MISSION_BOARD(props) {
           <img src={props.expanded_tab === "weekly" ? minus : plus}
           style={props.expanded_tab === "weekly" ? styles.minus : styles.plus}/>
         </Grid>
-        <div style={props.expanded_tab === "weekly" ? styles.hr : styles.hidden}/>
+        <Box style={props.expanded_tab === "weekly" ? styles.hr : styles.hidden}/>
         <SimpleBar style={ props.expanded_tab === "weekly" ? { height: '400px', width: "100%" } : styles.hidden}>
-          <div style={props.expanded_tab === "weekly" ? styles.content_container : styles.hidden}
+          <Box style={props.expanded_tab === "weekly" ? styles.content_container : styles.hidden}
           >
             {
               weekly_mission_data.map((item, i) => {
                 return (
-                  <MISSION_BLOCK item_data={item} key={i}/>
+                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                  dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
                 )
               })
             }
-          </div>
+          </Box>
         </SimpleBar>
       </Grid>
       <Grid container item direction="column" justifyContent="space-between"
@@ -76,21 +81,22 @@ export default function MISSION_BOARD(props) {
           <img src={props.expanded_tab === "prime" ? minus : plus}
           style={props.expanded_tab === "prime" ? styles.minus : styles.plus}/>
         </Grid>
-        <div style={props.expanded_tab === "prime" ? styles.hr : styles.hidden}/>
+        <Box style={props.expanded_tab === "prime" ? styles.hr : styles.hidden}/>
         <SimpleBar style={ props.expanded_tab === "prime" ? { height: '400px', width: "100%" } : styles.hidden}>
-          <div style={props.expanded_tab === "prime" ? styles.content_container : styles.hidden}
+          <Box style={props.expanded_tab === "prime" ? styles.content_container : styles.hidden}
           >
             {
               prime_mission_data.map((item, i) => {
                 return (
-                  <MISSION_BLOCK item_data={item} key={i}/>
+                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                  dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
                 )
               })
             }
-          </div>
+          </Box>
         </SimpleBar>
       </Grid>
-    </div>
+    </Box>
   );
 }
 
