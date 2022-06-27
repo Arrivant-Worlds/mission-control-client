@@ -71,3 +71,13 @@ export const get_leaderboard = async (payload) => {
     return ([]);
   }
 };
+
+export const auth_twitter = async (payload, wallet) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/users/${wallet}/twitter/authorize`, {});
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+    return ([]);
+  }
+};

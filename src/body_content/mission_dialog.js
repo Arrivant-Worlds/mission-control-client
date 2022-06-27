@@ -132,7 +132,7 @@ export default function MISSION_DIALOG(props) {
               <Grid item xs={.5}>
                 <Typography style={styles.step_number}>{`1.`}</Typography>
               </Grid>
-              <Grid container direction="column" xs={10} style={styles.instructions}>
+              <Grid container item direction="column" xs={10} style={styles.instructions}>
                 <Typography style={styles.friends}>Invite your friends</Typography>
                 <Typography>{`Inviting your friends is the easiest way to get 10 invites. Invite your friends only if you believe that our project has value for them.`}</Typography>
               </Grid>
@@ -141,7 +141,7 @@ export default function MISSION_DIALOG(props) {
               <Grid item xs={.5}>
                 <Typography style={styles.step_number}>{`2.`}</Typography>
               </Grid>
-              <Grid container direction="column" xs={10} style={styles.instructions}>
+              <Grid container item direction="column" xs={10} style={styles.instructions}>
                 <Typography style={styles.friends}>Post in Discord Groups</Typography>
                 <Typography>{`Share your Discord invitation link in other Discord group. DON’T SPAM, respect the rules of the groups and share your link where it’s appropriate. FIND SERVERS/PLACES WHERE NOBODY ELSE IS POSTING OUR PROJECT. IT’S THE QUICKEST WAY TO GET INVITES!`}</Typography>
               </Grid>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
+import { useNavigate } from "react-router-dom";
 import {create_user} from "./../api_calls";
 import nacl from 'tweetnacl'
 import { decodeUTF8 } from "tweetnacl-util";
@@ -9,6 +10,7 @@ import styles from './connect_wallet_styles.js';
 
 export default function CONNECT_WALLET(props) {
   const { wallet, signMessage, publicKey } = useWallet();
+  let navigate = useNavigate();
 
   const getData = async (wal, sig, pkey) => {
     //
@@ -29,7 +31,8 @@ export default function CONNECT_WALLET(props) {
     // set loading
     const user_data = await create_user(payload);
     props.change_wallet_data(payload);
-    props.change_body_state("bounty_main");
+    navigate(`/bounty_main`);
+    // props.change_body_state("bounty_main");
     // console.log(user_data, "user_data");
     // unset loading when user_data comes back and is set to state.
   };

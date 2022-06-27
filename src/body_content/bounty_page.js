@@ -79,7 +79,7 @@ export default function BOUNTY_PAGE(props) {
       style: styles.tab_label,
       sx: [
             {
-              color: "#888888",
+              color: "#AAAAAA",
               fontWeight: "700",
             },
             {

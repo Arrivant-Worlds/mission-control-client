@@ -3,7 +3,15 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import background from './images/arrivant_background.png';
 import black_circle from './images/black_circle.png';
 import 'simplebar-react/dist/simplebar.min.css';
-import MAIN_PAGE from './body_content/main_page.js';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import MAIN_PAGE from "./body_content/main_page.js";
+import CONNECT_PAGE from "./body_content/connect_page.js";
+import CONNECT_WALLET from "./body_content/connect_wallet.js";
+import BOUNTY_PAGE from "./body_content/bounty_page.js";
 import React, { FC, useMemo } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
@@ -100,7 +108,7 @@ const Content: FC = (connection) => {
         height: '100vh',
         width: '100vw',
       }}>
-        <img style={{position: 'absolute', top: '40px', left: "40px"}} src={black_circle} alt="black_circle_logo"/>
+        <img style={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo"/>
         <MAIN_PAGE/>
       </div>
     </ThemeProvider>

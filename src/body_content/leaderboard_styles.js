@@ -5,7 +5,7 @@ const styles = {
   },
   leader_grid_container: {
     padding: "15px",
-    background: "linear-gradient(180deg, rgba(0, 0, 0, 0.42) 25.01%, rgba(15, 15, 15, 0.3) 120.09%)",
+    background: "linear-gradient(180deg, rgba(0, 0, 0, 0.42) 25.01%, rgba(15, 15, 15, 0.2) 120.09%)",
     border: "1px solid #6A6A6A",
     boxShadow: "0px 3px 10px rgba(0, 0, 0, 0.35)",
     backdropFilter: "blur(40px)",
