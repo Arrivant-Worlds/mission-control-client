@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { WalletMultiButton, WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import { useNavigate } from "react-router-dom";
 import {create_user} from "./../api_calls";
@@ -51,17 +52,17 @@ export default function CONNECT_WALLET(props) {
   }
 
   return (
-    <div style={styles.button_container}>
+    <Box style={styles.button_container}>
       {!props.wallet_data.signedMsg ?
         <WalletMultiButton onClick={() => getData(wallet, signMessage, publicKey)}>
         CONNECT WALLET
         </WalletMultiButton>
         :
-        <div style={styles.button_container}>
+        <Box style={styles.button_container}>
           <WalletDisconnectButton onClick={() => handleDisconnect()}/>
           <Button variant="contained" style={styles.button} onClick={() => handleNavigate()}>DASHBOARD</Button>
-        </div>
+        </Box>
       }
-    </div>
+    </Box>
   );
 }

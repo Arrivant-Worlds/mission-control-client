@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SimpleBar from 'simplebar-react';
+import Box from '@mui/material/Box';
 import styles from './leaderboard_styles.js';
 import LEADER_BLOCK from "./leader_block.js";
 import leader_data from "./leader_data.js";
@@ -9,13 +10,13 @@ import leader_data from "./leader_data.js";
 export default function LEADERBOARD(props) {
   // console.log(props.leaderboard_data, "leaderboard data");
   return (
-    <div style={styles.leader_board_container}>
+    <Box style={styles.leader_board_container}>
       <Grid container item direction="column" justifyContent="space-between"
       style={styles.leader_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between" alignItems="center">
           <Typography style={styles.leader_title}>LEADERBOARD</Typography>
         </Grid>
-        <div style={styles.hr}/>
+        <Box style={styles.hr}/>
         <Grid container item direction="row" justifyContent="space-between" alignItems="center"
           style={styles.category_container}
         >
@@ -30,7 +31,7 @@ export default function LEADERBOARD(props) {
           </Grid>
         </Grid>
         <SimpleBar style={{ height: '493px', width: "100%" }}>
-          <div style={styles.content_container}
+          <Box style={styles.content_container}
           >
             {
               props.leaderboard_data.map((item, i) => {
@@ -39,10 +40,10 @@ export default function LEADERBOARD(props) {
                 )
               })
             }
-          </div>
+          </Box>
         </SimpleBar>
       </Grid>
-    </div>
+    </Box>
   );
 }
 

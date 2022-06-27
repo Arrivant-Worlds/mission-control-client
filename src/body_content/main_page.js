@@ -4,6 +4,7 @@ import CONNECT_PAGE from './connect_page.js';
 import CONNECT_WALLET from './connect_wallet.js';
 import BOUNTY_PAGE from './bounty_page.js';
 import MISSION_DIALOG from './mission_dialog.js';
+import Box from '@mui/material/Box';
 import { Typewriter, useTypewriter, Cursor } from 'react-simple-typewriter';
 import {
   BrowserRouter,
@@ -68,7 +69,7 @@ export default function MAIN_PAGE(props) {
   //         direction="column"
   //         justifyContent="center" alignItems="center">
   //           <Grid item xs={4} alignItems="center" justifyContent="center">
-  //             <div style={{
+  //             <Box style={{
   //               textTransform: "uppercase",
   //               margin: "-20px auto 0 auto",
   //               fontSize: "18px",
@@ -83,16 +84,16 @@ export default function MAIN_PAGE(props) {
   //                 typeSpeed={70}
   //                 delaySpeed={500}
   //               />
-  //             </div>
+  //             </Box>
   //           </Grid>
   //           <Grid item xs={2}>
   //             <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
   //           </Grid>
   //           <Grid container item justifyContent="center" alignItems="center" xs={1}>
-  //             <div style={styles.button_container}>
+  //             <Box style={styles.button_container}>
   //               <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
   //               <Button variant="contained" style={styles.button} onClick={() => handleClick("connect")}>JOIN NOW</Button>
-  //             </div>
+  //             </Box>
   //           </Grid>
   //         </Grid>
   //       );
@@ -108,13 +109,13 @@ export default function MAIN_PAGE(props) {
   }
 
   return (
-    <div style={window.location.pathname === "/bounty_main" ? bounty_overlay_css : styles.container}>
+    <Box style={window.location.pathname === "/bounty_main" ? bounty_overlay_css : styles.container}>
       <Routes>
         <Route index element={<Grid container style={styles.grid_container}
         direction="column"
         justifyContent="center" alignItems="center">
           <Grid item xs={4} alignItems="center" justifyContent="center">
-            <div style={{
+            <Box sx={{
               textTransform: "uppercase",
               margin: "-20px auto 0 auto",
               fontSize: "18px",
@@ -129,16 +130,16 @@ export default function MAIN_PAGE(props) {
                 typeSpeed={70}
                 delaySpeed={500}
               />
-            </div>
+            </Box>
           </Grid>
           <Grid item xs={2}>
             <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
           </Grid>
           <Grid container item justifyContent="center" alignItems="center" xs={1}>
-            <div style={styles.button_container}>
+            <Box style={styles.button_container}>
               <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
               <Button variant="contained" style={styles.button} onClick={() => handleClick("/connect")}>JOIN NOW</Button>
-            </div>
+            </Box>
           </Grid>
         </Grid>} />
         <Route path="connect"
@@ -149,6 +150,6 @@ export default function MAIN_PAGE(props) {
         wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>}/>
       </Routes>
       <MISSION_DIALOG handleDialogClose={handleDialogClose} handleDialogOpen={handleDialogOpen}       dialog_state={dialog_state} change_dialog_state={change_dialog_state} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
-    </div>
+    </Box>
   );
 }

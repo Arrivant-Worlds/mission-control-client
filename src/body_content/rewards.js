@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import SimpleBar from 'simplebar-react';
 import styles from './rewards_styles.js';
 import rewards_data from "./rewards_data.js";
@@ -11,15 +12,15 @@ export default function REWARDS(props) {
   // console.log(props.rewards_data);
 
   return (
-    <div style={styles.rewards_container}>
+    <Box style={styles.rewards_container}>
       <Grid container item direction="column" justifyContent="space-between"
       style={styles.rewards_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between" alignItems="center">
           <Typography style={styles.rewards_title}>REWARDS</Typography>
         </Grid>
-        <div style={styles.hr}/>
+        <Box style={styles.hr}/>
         <SimpleBar style={{height: '535px', width: "100%"}}>
-          <div style={styles.content_container}
+          <Box style={styles.content_container}
           >
             {
               props.rewards_data.map((item, i) => {
@@ -28,10 +29,10 @@ export default function REWARDS(props) {
                 )
               })
             }
-          </div>
+          </Box>
         </SimpleBar>
       </Grid>
-    </div>
+    </Box>
   );
 }
 

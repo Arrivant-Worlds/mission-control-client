@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import styles from './mission_dialog_styles.js';
 import elune_icon from '../images/dialog_elune_icon.png';
@@ -119,10 +120,10 @@ export default function MISSION_DIALOG(props) {
               </Grid>
             </Grid>
             <Grid item xs={5}>
-              <div style={styles.upload_frame}/>
+              <Box style={styles.upload_frame}/>
             </Grid>
           </Grid>
-          <div style={styles.hr}/>
+          <Box style={styles.hr}/>
           <Typography style={styles.directions}>
             TO COMPLETE THIS BOUNTY
           </Typography>

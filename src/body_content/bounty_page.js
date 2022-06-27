@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import MISSION_BOARD from './mission_board.js';
 import LEADERBOARD from './leaderboard.js';
 import REWARDS from './rewards.js';
@@ -57,7 +58,7 @@ export default function BOUNTY_PAGE(props) {
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
     return (
-      <div
+      <Box
         role="tabpanel"
         hidden={value !== index}
         aria-labelledby={`tab${index}`}
@@ -68,7 +69,7 @@ export default function BOUNTY_PAGE(props) {
             <Typography component={"div"} variant={"body2"}>{children}</Typography>
           </Grid>
         )}
-      </div>
+      </Box>
     );
   }
 
@@ -112,7 +113,7 @@ export default function BOUNTY_PAGE(props) {
   const container_style_combined = {...container_style, ...styles.bounty_container};
 
   return (
-    <div style={styles.tab_label_container}>
+    <Box style={styles.tab_label_container}>
       <Grid container direction="row" justifyContent="space-between" sx={{marginBottom: "20px", width: "87%"}}>
         <Grid container item xs={4} style={styles.tab_label_grid}>
           <Tabs
@@ -125,7 +126,7 @@ export default function BOUNTY_PAGE(props) {
             <Tab label="MISSIONS" {...a11yProps(0)}/>
             <Tab label="LEADERBOARD" {...a11yProps(1)}/>
           </Tabs>
-          <div style={styles.bottom_border}></div>
+          <Box style={styles.bottom_border}></Box>
         </Grid>
         <Grid container item xs={4} style={styles.tab_label_grid_2}>
           <Tabs
@@ -137,7 +138,7 @@ export default function BOUNTY_PAGE(props) {
             <Tab label="REWARDS" {...a11yProps(2)}/>
             <Tab label="EGG" {...a11yProps(3)}/>
           </Tabs>
-          <div style={styles.bottom_border}></div>
+          <Box style={styles.bottom_border}></Box>
         </Grid>
       </Grid>
       <Grid container style={container_style_combined} justifyContent="space-between" alignItems="center">
@@ -150,9 +151,9 @@ export default function BOUNTY_PAGE(props) {
           </TabPanel>
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
-          <div style={styles.center_panel_container}>
+          <Box style={styles.center_panel_container}>
             <PASSPORT user_data={user_data}/>
-          </div>
+          </Box>
         </Grid>
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab2_value} index={0} style={styles.tab_content_container}>
@@ -163,6 +164,6 @@ export default function BOUNTY_PAGE(props) {
           </TabPanel>
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 }

@@ -1,5 +1,6 @@
 import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 import background from './images/arrivant_background.png';
 import black_circle from './images/black_circle.png';
 import 'simplebar-react/dist/simplebar.min.css';
@@ -107,7 +108,7 @@ const Content: FC = (connection) => {
   }
   return (
     <ThemeProvider theme={theme}>
-      <div className="App" style={{
+      <Box className="App" style={{
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
         height: '100vh',
@@ -115,7 +116,9 @@ const Content: FC = (connection) => {
       }}>
         <img style={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={() => handleOnClick()}/>
         <MAIN_PAGE/>
-      </div>
+      </Box>
     </ThemeProvider>
   );
 };
+
+//turn all divs into boxes. fml

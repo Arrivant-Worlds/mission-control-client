@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import default_passport from '../images/default_passport_symbol.png';
 import lock from '../images/lock.png';
@@ -26,7 +27,7 @@ export default function PASSPORT(props) {
       <Typography style={styles.date}>issued: 06-06-22</Typography>
       <Grid container direction="column" justifyContent="center" alignItems="center" style={styles.image_container}>
         <img src={default_passport} alt="passport_symbol" style={styles.passport_image}/>
-        <div style={styles.hr}/>
+        <Box style={styles.hr}/>
         <Grid container direction="row" justifyContent="center" alignItems="center" style={styles.decoder_container}>
           <img src={lock} alt="lock image" style={ props.user_data.badgeName ? styles.hidden : styles.lock_image }/>
           <Typography style={styles.decoder_text}>
@@ -36,14 +37,14 @@ export default function PASSPORT(props) {
       </Grid>
       <Typography style={styles.survival_text}>survival assessment</Typography>
       <Typography style={styles.assessment_text}>{props.user_data.survivalAssessment}</Typography>
-      <div style={styles.hr}/>
+      <Box style={styles.hr}/>
       <Grid container direction="row" justifyContent="space-around" alignItems="center" style={styles.XP_container}>
         <Grid item xs={2.5}>
           <Typography style={styles.rank_text}>Rank XP</Typography>
         </Grid>
         <Grid container item xs sx={{position: "relative"}}>
-          <div style={styles.progress_container}>
-            <div style={
+          <Box style={styles.progress_container}>
+            <Box style={
               { width: exp_value+"%",
                 background: "#F6F6F6",
                 borderRadius: "94.854px",
@@ -52,8 +53,8 @@ export default function PASSPORT(props) {
                 zIndex: "1",
               }
             }/>
-            <div style={styles.exp_track}/>
-          </div>
+            <Box style={styles.exp_track}/>
+          </Box>
         </Grid>
         <Grid item xs={4.5}>
           <Typography style={styles.xp_numbers}>{`${props.user_data.xp}/999999`}</Typography>
