@@ -18,7 +18,9 @@ export default function MISSION_DIALOG(props) {
   const handleOnClick = () => {
     if (props.dialog_data.platform === "Discord") {
       //open up discord
+      window.open("https://discord.gg/eluune");
     } else if (props.dialog_data.platform === "twitter") {
+      window.open("https://twitter.com/ProjectEluune");
       //open up twitter
     }
   }
