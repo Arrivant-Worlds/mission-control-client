@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { WalletMultiButton, WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useNavigate } from "react-router-dom";
 import {create_user} from "./../api_calls";
-import nacl from 'tweetnacl'
 import { decodeUTF8 } from "tweetnacl-util";
 import styles from './connect_wallet_styles.js';
 
@@ -22,14 +20,11 @@ export default function CONNECT_WALLET(props) {
       let signedMsg = now.getTime().toString();
       const encodedMsg = decodeUTF8(signedMsg);
       const signature = await sig(encodedMsg);
-      // console.log(signature, "signed sig");
-      // console.log(pkey, "pubkey");
-      // console.log(wal, "wallet");
 
       const payload = {
         signedMsg: signedMsg,
         signature: JSON.stringify(Array.from(signature)),
-        pubkey: pkey._bn.words.toString()
+        pubkey: publicKey.toString()
       }
 
       // set loading
