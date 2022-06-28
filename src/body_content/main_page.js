@@ -26,6 +26,10 @@ export default function MAIN_PAGE(props) {
   const [dialog_data, change_dialog_data] = useState({
     test: "meow mix",
   });
+  const [user_data, change_user_data] = useState({});
+  const [quests_data, change_quests_data] = useState([]);
+  const [leaderboard_data, change_leaderboard_data] = useState([]);
+  const [rewards_data, change_rewards_data] = useState([]);
 
   // useEffect(() => {
   //   let path_split = window.location.pathname.split("/");
@@ -164,9 +168,12 @@ export default function MAIN_PAGE(props) {
         <Route path="connect"
           element={<CONNECT_PAGE/>}/>
         <Route path="connect_wallet" element={<CONNECT_WALLET
-        wallet_data={wallet_data} change_wallet_data={change_wallet_data}/>}/>
-        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}
-        wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>}/>
+        wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
+        change_user_data={change_user_data} quests_data={quests_data} change_quests_data={change_quests_data}
+        leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
+        rewards_data={rewards_data} change_rewards_data={change_rewards_data}
+        />}/>
+        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>}/>
       </Routes>
       <MISSION_DIALOG handleDialogClose={handleDialogClose} handleDialogOpen={handleDialogOpen}       dialog_state={dialog_state} change_dialog_state={change_dialog_state} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
     </Box>

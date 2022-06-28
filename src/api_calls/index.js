@@ -13,6 +13,7 @@ export const create_user = async (payload) => {
 
 export const get_user = async (payload) => {
   try {
+    console.log(payload, "payload in api call");
     const response = await axios.get(`${BASE_URL}/users`, {}, {headers: payload});
     return response.data;
   } catch (errors) {

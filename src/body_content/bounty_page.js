@@ -17,35 +17,14 @@ export default function BOUNTY_PAGE(props) {
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("daily");
-  const [user_data, change_user_data] = useState({});
-  const [quests_data, change_quests_data] = useState([]);
-  const [leaderboard_data, change_leaderboard_data] = useState([]);
-  const [rewards_data, change_rewards_data] = useState([]);
 
-  useEffect(() => {
-    async function getUser() {
-      let user = get_user(props.wallet_data);
-      let leaderboard = get_leaderboard(props.wallet_data);
-      let quests = get_quests(props.wallet_data);
-      let rewards = get_rewards(props.wallet_data);
-
-      let userData = await user;
-      let leaderboardData = await leaderboard;
-      let questsData = await quests;
-      let rewardsData = await rewards;
-
-      // console.log(userData, "user");
-      change_user_data(userData);
-      // console.log(leaderboardData, "leaderboard");
-      change_leaderboard_data(leaderboardData);
-      // console.log(questsData, "quests");
-      change_quests_data(questsData);
-      // console.log(rewardsData, "rewards");
-      change_rewards_data(rewardsData);
-    }
-    getUser();
-    //change to props.exp etc.
-  }, []);
+  // useEffect(() => {
+  //   async function getUser() {
+  //
+  //   }
+  //   getUser();
+  //   //change to props.exp etc.
+  // }, []);
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0" || event.target.id === "tab1") {
@@ -144,20 +123,20 @@ export default function BOUNTY_PAGE(props) {
       <Grid container style={container_style_combined} justifyContent="space-between" alignItems="center">
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab1_value} index={0} style={styles.tab_content_container}>
-            <MISSION_BOARD expanded_tab={expanded_tab} change_expanded_tab={change_expanded_tab} quests_data={quests_data} handleDialogOpen={props.handleDialogOpen} handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+            <MISSION_BOARD expanded_tab={expanded_tab} change_expanded_tab={change_expanded_tab} quests_data={props.quests_data} handleDialogOpen={props.handleDialogOpen} handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
           </TabPanel>
           <TabPanel value={tab1_value} index={1} style={styles.tab_content_container}>
-            <LEADERBOARD leaderboard_data={leaderboard_data}/>
+            <LEADERBOARD leaderboard_data={props.leaderboard_data}/>
           </TabPanel>
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
           <Box style={styles.center_panel_container}>
-            <PASSPORT user_data={user_data}/>
+            <PASSPORT user_data={props.user_data}/>
           </Box>
         </Grid>
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab2_value} index={0} style={styles.tab_content_container}>
-            <REWARDS rewards_data={rewards_data}/>
+            <REWARDS rewards_data={props.rewards_data}/>
           </TabPanel>
           <TabPanel value={tab2_value} index={1} style={styles.tab_content_container}>
             <EGG/>
