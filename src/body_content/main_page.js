@@ -121,8 +121,14 @@ export default function MAIN_PAGE(props) {
               fontSize: "18px",
               width: "60%",
               color: "#F6F6F6",
-              '@media screen and (min-width: 2400px)': {
+                '@media screen and (max-width: 2400px)': {
                   fontSize: "30px",
+                },
+                '@media screen and (max-width: 2200px)': {
+                  fontSize: "28px",
+                },
+                '@media screen and (max-width: 2000px)': {
+                  fontSize: "26px",
                 },
               }}>
               <Typewriter
@@ -137,7 +143,16 @@ export default function MAIN_PAGE(props) {
             </Box>
           </Grid>
           <Grid item xs={2}>
-            <Box component="img" src={SG_logo} alt="SG Logo" style={styles.logo}/>
+            <Box component="img" src={SG_logo} alt="SG Logo" sx={{
+              marginTop: "-30px",
+              width: "800px",
+              '@media screen and (max-width: 2400px)': {
+                width: "1000px",
+              },
+              '@media screen and (max-width: 2100px)': {
+                width: "900px",
+              }
+            }}/>
           </Grid>
           <Grid container item justifyContent="center" alignItems="center" xs={1}>
             <Box style={styles.button_container}>
