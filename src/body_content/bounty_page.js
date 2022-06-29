@@ -136,7 +136,7 @@ export default function BOUNTY_PAGE(props) {
         </Grid>
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab2_value} index={0} style={styles.tab_content_container}>
-            <REWARDS rewards_data={props.rewards_data}/>
+            <REWARDS rewards_data={props.rewards_data} user_data={props.user_data}/>
           </TabPanel>
           <TabPanel value={tab2_value} index={1} style={styles.tab_content_container}>
             <EGG/>

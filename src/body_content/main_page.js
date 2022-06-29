@@ -173,7 +173,9 @@ export default function MAIN_PAGE(props) {
         leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
         rewards_data={rewards_data} change_rewards_data={change_rewards_data}
         />}/>
-        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>}/>
+        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
+        user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
+        rewards_data={rewards_data} change_rewards_data={change_rewards_data}/>}/>
       </Routes>
       <MISSION_DIALOG handleDialogClose={handleDialogClose} handleDialogOpen={handleDialogOpen}       dialog_state={dialog_state} change_dialog_state={change_dialog_state} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
     </Box>

@@ -14,17 +14,25 @@ export default function CONNECT_WALLET(props) {
 
   const getData = async (wal, sig, pkey) => {
     if (props.wallet_data.signedMsg) {
+      console.log("is this triggering?");
+      //use external function for signing?
+        //check local storage/if wallet data exists
+          //sign if it doesn't.
+        //call the rest of the data if it does.
       return;
     } else {
-      let now = new Date();
-      let signedMsg = now.getTime().toString();
+      let now = Date.now();
+      // console.log(now, "time?");
+      // window.localStorage.setItem('signature_time', JSON.stringify(now));
+      // console.log(window.localStorage.getItem('signature_time'));
+      let signedMsg = now.toString();
       const encodedMsg = decodeUTF8(signedMsg);
       const signature = await sig(encodedMsg);
 
       const payload = {
         signedMsg: signedMsg,
         signature: JSON.stringify(Array.from(signature)),
-        pubkey: publicKey.toString()
+        pubkey: pkey.toString(),
       }
 
       //get user
@@ -38,16 +46,10 @@ export default function CONNECT_WALLET(props) {
       let leaderboardData = await leaderboard;
       let questsData = await quests;
       let rewardsData = await rewards;
-
-      // console.log(userData, "user");
       props.change_user_data(userData);
-      // console.log(leaderboardData, "leaderboard");
       props.change_leaderboard_data(leaderboardData);
-      // console.log(questsData, "quests");
       props.change_quests_data(questsData);
-      // console.log(rewardsData, "rewards");
       props.change_rewards_data(rewardsData);
-      //conditional for if user doesn't exist.
       props.change_wallet_data(payload);
       //need some errorhandling here for if the user doesn't exist.
 

@@ -13,25 +13,29 @@ export const create_user = async (payload) => {
 
 export const get_user = async (payload) => {
   try {
-    console.log(payload, "payload in api call");
-    const response = await axios.get(`${BASE_URL}/users`, {}, {headers: payload});
+    const response = await axios.get(`${BASE_URL}/users`, {headers: payload});
     return response.data;
   } catch (errors) {
-    console.error(errors);
-    return (
-      {
-        xp: 0,
-        badgeName: "",
-        survivalAssessment: "",
-        badgeUrl: "",
-      }
-    )
+    console.error(errors.response.data);
+    if (errors.response.data === "user does not exist") {
+      const create_user_call = await create_user(payload);
+      return create_user_call;
+    } else {
+      return (
+        {
+          xp: 0,
+          badgeName: "",
+          survivalAssessment: "",
+          badgeUrl: "",
+        }
+      )
+    }
   }
 };
 
 export const get_quests = async (payload) => {
   try {
-    const response = await axios.get(`${BASE_URL}/quests?available_to_user=true`, {}, {headers: payload});
+    const response = await axios.get(`${BASE_URL}/quests?available_to_user=true`, {headers: payload});
     return response.data;
   } catch (errors) {
     console.error(errors);
@@ -48,7 +52,7 @@ export const get_quests = async (payload) => {
 
 export const get_rewards = async (payload) => {
   try {
-    const response = await axios.get(`${BASE_URL}/journeyRewards`, {}, {headers: payload});
+    const response = await axios.get(`${BASE_URL}/journeyRewards`, {headers: payload});
     return response.data;
   } catch (errors) {
     console.error(errors);
@@ -65,7 +69,7 @@ export const get_rewards = async (payload) => {
 
 export const get_leaderboard = async (payload) => {
   try {
-    const response = await axios.get(`${BASE_URL}/leaderboard`, {}, {headers: payload});
+    const response = await axios.get(`${BASE_URL}/leaderboard`, {headers: payload});
     return response.data;
   } catch (errors) {
     console.error(errors);
