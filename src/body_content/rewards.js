@@ -8,8 +8,8 @@ import rewards_data from "./rewards_data.js";
 import REWARDS_BLOCK from "./rewards_block.js";
 
 export default function REWARDS(props) {
-
-  // console.log(props.rewards_data);
+  console.log(props.user_data);
+  console.log(props.rewards_data);
 
   return (
     <Box style={styles.rewards_container}>
@@ -25,7 +25,7 @@ export default function REWARDS(props) {
             {
               props.rewards_data.map((item, i) => {
                 return (
-                  <REWARDS_BLOCK item_data={item} key={i}/>
+                  <REWARDS_BLOCK item_data={item} key={i} user_data={props.user_data}/>
                 )
               })
             }

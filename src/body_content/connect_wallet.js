@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useNavigate } from "react-router-dom";
-import {create_user} from "./../api_calls";
+import {create_user, get_user, get_quests, get_rewards, get_leaderboard} from "./../api_calls";
 import { decodeUTF8 } from "tweetnacl-util";
 import styles from './connect_wallet_styles.js';
 
@@ -14,23 +14,44 @@ export default function CONNECT_WALLET(props) {
 
   const getData = async (wal, sig, pkey) => {
     if (props.wallet_data.signedMsg) {
+      console.log("is this triggering?");
+      //use external function for signing?
+        //check local storage/if wallet data exists
+          //sign if it doesn't.
+        //call the rest of the data if it does.
       return;
     } else {
-      let now = new Date();
-      let signedMsg = now.getTime().toString();
+      let now = Date.now();
+      // console.log(now, "time?");
+      // window.localStorage.setItem('signature_time', JSON.stringify(now));
+      // console.log(window.localStorage.getItem('signature_time'));
+      let signedMsg = now.toString();
       const encodedMsg = decodeUTF8(signedMsg);
       const signature = await sig(encodedMsg);
 
       const payload = {
         signedMsg: signedMsg,
         signature: JSON.stringify(Array.from(signature)),
-        pubkey: publicKey.toString()
+        pubkey: pkey.toString(),
       }
 
-      // set loading
-      const user_data = await create_user(payload);
+      //get user
+      // const user_data = await get_user(payload);
+      let user = get_user(payload);
+      let leaderboard = get_leaderboard(payload);
+      let quests = get_quests(payload);
+      let rewards = get_rewards(payload);
+
+      let userData = await user;
+      let leaderboardData = await leaderboard;
+      let questsData = await quests;
+      let rewardsData = await rewards;
+      props.change_user_data(userData);
+      props.change_leaderboard_data(leaderboardData);
+      props.change_quests_data(questsData);
+      props.change_rewards_data(rewardsData);
       props.change_wallet_data(payload);
-      // navigate(`/bounty_main`);
+      //need some errorhandling here for if the user doesn't exist.
 
       // props.change_body_state("bounty_main");
       // console.log(user_data, "user_data");

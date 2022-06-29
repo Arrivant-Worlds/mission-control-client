@@ -114,11 +114,9 @@ const Content: FC = (connection) => {
         height: '100vh',
         width: '100vw',
       }}>
-        <img style={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={() => handleOnClick()}/>
+        <Box component="img" sx={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={() => handleOnClick()}/>
         <MAIN_PAGE/>
       </Box>
     </ThemeProvider>
   );
 };
-
-//turn all divs into boxes. fml

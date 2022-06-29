@@ -28,7 +28,7 @@ export default function MISSION_BOARD(props) {
           onClick={() => handleClick("daily")} alignItems="center">
           <Typography style={ props.expanded_tab === "daily" ? styles.mission_title : styles.mission_title_not_active }>DAILY MISSIONS
           </Typography>
-          <img src={props.expanded_tab === "daily" ? minus : plus}
+          <Box component="img" src={props.expanded_tab === "daily" ? minus : plus}
           style={props.expanded_tab === "daily" ? styles.minus : styles.plus}/>
         </Grid>
         <Box style={props.expanded_tab === "daily" ? styles.hr : styles.hidden}/>
@@ -53,7 +53,7 @@ export default function MISSION_BOARD(props) {
           <Typography style={styles.mission_title}
             style={ props.expanded_tab === "weekly" ? styles.mission_title : styles.mission_title_not_active}>WEEKLY MISSIONS
           </Typography>
-          <img src={props.expanded_tab === "weekly" ? minus : plus}
+          <Box component="img" src={props.expanded_tab === "weekly" ? minus : plus}
           style={props.expanded_tab === "weekly" ? styles.minus : styles.plus}/>
         </Grid>
         <Box style={props.expanded_tab === "weekly" ? styles.hr : styles.hidden}/>
@@ -78,7 +78,7 @@ export default function MISSION_BOARD(props) {
           <Typography style={styles.mission_title}
             style={props.expanded_tab === "prime" ? styles.mission_title : styles.mission_title_not_active}>PRIME MISSIONS
           </Typography>
-          <img src={props.expanded_tab === "prime" ? minus : plus}
+          <Box component="img" src={props.expanded_tab === "prime" ? minus : plus}
           style={props.expanded_tab === "prime" ? styles.minus : styles.plus}/>
         </Grid>
         <Box style={props.expanded_tab === "prime" ? styles.hr : styles.hidden}/>

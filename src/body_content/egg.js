@@ -25,7 +25,7 @@ export default function EGG(props) {
             </Typography>
           </Grid>
           <Grid>
-            <img src={egg_image} alt="egg_image" style={styles.egg_image}/>
+            <Box component="img" src={egg_image} alt="egg_image" style={styles.egg_image}/>
           </Grid>
           <Grid>
             <Typography style={styles.text}>

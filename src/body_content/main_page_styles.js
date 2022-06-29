@@ -15,10 +15,6 @@ const styles = {
     fontSize: "18px",
     width: "60%",
   },
-  logo: {
-    marginTop: "-30px",
-    width: "800px",
-  },
   button_container: {
     display: "grid",
     justifyContent: "center",

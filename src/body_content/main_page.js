@@ -26,6 +26,10 @@ export default function MAIN_PAGE(props) {
   const [dialog_data, change_dialog_data] = useState({
     test: "meow mix",
   });
+  const [user_data, change_user_data] = useState({});
+  const [quests_data, change_quests_data] = useState([]);
+  const [leaderboard_data, change_leaderboard_data] = useState([]);
+  const [rewards_data, change_rewards_data] = useState([]);
 
   // useEffect(() => {
   //   let path_split = window.location.pathname.split("/");
@@ -87,11 +91,11 @@ export default function MAIN_PAGE(props) {
   //             </Box>
   //           </Grid>
   //           <Grid item xs={2}>
-  //             <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
+  //             <Box src={SG_logo} alt="SG Logo" style={styles.logo}/>
   //           </Grid>
   //           <Grid container item justifyContent="center" alignItems="center" xs={1}>
   //             <Box style={styles.button_container}>
-  //               <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
+  //               <Box src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
   //               <Button variant="contained" style={styles.button} onClick={() => handleClick("connect")}>JOIN NOW</Button>
   //             </Box>
   //           </Grid>
@@ -120,7 +124,17 @@ export default function MAIN_PAGE(props) {
               margin: "-20px auto 0 auto",
               fontSize: "18px",
               width: "60%",
-              color: "#F6F6F6"}}>
+              color: "#F6F6F6",
+                '@media screen and (max-width: 2400px)': {
+                  fontSize: "30px",
+                },
+                '@media screen and (max-width: 2200px)': {
+                  fontSize: "28px",
+                },
+                '@media screen and (max-width: 2000px)': {
+                  fontSize: "26px",
+                },
+              }}>
               <Typewriter
                 loop={1}
                 deleteSpeed={0}
@@ -133,11 +147,20 @@ export default function MAIN_PAGE(props) {
             </Box>
           </Grid>
           <Grid item xs={2}>
-            <img src={SG_logo} alt="SG Logo" style={styles.logo}/>
+            <Box component="img" src={SG_logo} alt="SG Logo" sx={{
+              marginTop: "-30px",
+              width: "800px",
+              '@media screen and (max-width: 2400px)': {
+                width: "1000px",
+              },
+              '@media screen and (max-width: 2100px)': {
+                width: "900px",
+              }
+            }}/>
           </Grid>
           <Grid container item justifyContent="center" alignItems="center" xs={1}>
             <Box style={styles.button_container}>
-              <img src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
+              <Box component="img" src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
               <Button variant="contained" style={styles.button} onClick={() => handleClick("/connect")}>JOIN NOW</Button>
             </Box>
           </Grid>
@@ -145,9 +168,14 @@ export default function MAIN_PAGE(props) {
         <Route path="connect"
           element={<CONNECT_PAGE/>}/>
         <Route path="connect_wallet" element={<CONNECT_WALLET
-        wallet_data={wallet_data} change_wallet_data={change_wallet_data}/>}/>
-        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}
-        wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>}/>
+        wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
+        change_user_data={change_user_data} quests_data={quests_data} change_quests_data={change_quests_data}
+        leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
+        rewards_data={rewards_data} change_rewards_data={change_rewards_data}
+        />}/>
+        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
+        user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
+        rewards_data={rewards_data} change_rewards_data={change_rewards_data}/>}/>
       </Routes>
       <MISSION_DIALOG handleDialogClose={handleDialogClose} handleDialogOpen={handleDialogOpen}       dialog_state={dialog_state} change_dialog_state={change_dialog_state} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
     </Box>

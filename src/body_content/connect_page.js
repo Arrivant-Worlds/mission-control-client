@@ -14,15 +14,15 @@ export default function CONNECT_PAGE(props) {
   }
 
   return (
-    <Grid container style={styles.connect_container} direction="column" justifyContent="center" alignItems="center">
+    <Grid container sx={styles.connect_container} direction="column" justifyContent="center" alignItems="center">
       <Grid item xs={1}>
-        <Typography style={styles.connect_title}>CONNECT YOUR CRYPTO WALLET</Typography>
+        <Typography sx={styles.connect_title}>CONNECT YOUR CRYPTO WALLET</Typography>
       </Grid>
       <Grid container item xs={1} justifyContent="center" alignItems="center">
-        <Typography style={styles.connect_text}>YOUR BOUNTY WILL BE PLENTIFUL.</Typography>
+        <Typography sx={styles.connect_text}>YOUR BOUNTY WILL BE PLENTIFUL.</Typography>
       </Grid>
       <Grid container item xs={3} direction="column" justifyContent="flex-end" alignItems="center">
-        <Button variant="contained" style={styles.button} onClick={() => handleClick("/connect_wallet")}>CONNECT WALLET</Button>
+        <Button variant="contained" sx={styles.button} onClick={() => handleClick("/connect_wallet")}>CONNECT WALLET</Button>
       </Grid>
     </Grid>
   );
