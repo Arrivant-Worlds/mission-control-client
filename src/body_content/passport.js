@@ -22,7 +22,7 @@ export default function PASSPORT(props) {
 
   return (
     <Grid style={styles.passport_container}>
-      <Typography style={styles.title}>{props.user_data.badgeName}</Typography>
+      <Typography style={styles.title}>ELERIAH PIONEER</Typography>
       <Typography style={styles.passport}>PASSPORT</Typography>
       <Typography style={styles.date}>issued: 06-06-22</Typography>
       <Grid container direction="column" justifyContent="center" alignItems="center" style={styles.image_container}>
