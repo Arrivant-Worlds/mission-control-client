@@ -37,56 +37,95 @@ export default function MAIN_PAGE(props) {
 
   //react hook function here for signing and then pass down to lower components
   // useEffect(() => {
-  //   if(wallet && connected) {
-  //     let now = Date.now();
-  //     let difference = now - window.localStorage.getItem('signature_time');
-  //     // console.log(difference, "difference");
-  //     if (now - window.localStorage.getItem('signature_time') <= 3600000) {
-  //       navigate('bounty_main');
-  //     } else {
-  //       navigate('')
-  //     }
-  //   }
-  // })
+  //   console.log(wallet, "wallet?");
+  //   console.log(connected, "connected");
+  //
+  // }, [])
+
+  const setWithExpiration = async (key: string, value: any, ttl: number) => {
+    const item = {
+      value: value,
+      expiry: new Date().getTime() + ttl * 1000,
+    };
+    localStorage.setItem(key, JSON.stringify(item));
+  };
+
+  const getWithExpiration = async (key: string) => {
+    const itemStr = localStorage.getItem(key);
+    // console.log(`itemStr`, itemStr);
+    // if the item doesn't exist, return null
+    if (itemStr === null) {
+      return null;
+    }
+    const item = JSON.parse(itemStr);
+    const now = new Date();
+    // compare the expiry time of the item with the current time
+    if (now.getTime() > item.expiry) {
+      // If the item is expired, delete the item from storage
+      // and return null
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.value;
+  };
 
   const sign_message = async () => {
-    let now = Date.now();
-    window.localStorage.setItem('signature_time', JSON.stringify(now));
-    // console.log(now, "time?");
-    // window.localStorage.setItem('signature_time', JSON.stringify(now));
-    // console.log(window.localStorage.getItem('signature_time'));
-    let signedMsg = now.toString();
-    const encodedMsg = decodeUTF8(signedMsg);
-    const signature = await signMessage(encodedMsg);
+    let verifyHeader = await getWithExpiration("verifyHeader");
 
-    const payload = {
-      signedMsg: signedMsg,
-      signature: JSON.stringify(Array.from(signature)),
-      pubkey: publicKey.toString(),
+    if (verifyHeader == null) {
+      const now = Date.now();
+      const message = now.toString();
+      const encodedMessage = decodeUTF8(message);
+      // @ts-ignore
+      let signature = await signMessage(encodedMessage);
+      const pubkey = publicKey.toString();
+      verifyHeader = {
+        signedMsg: message,
+        // @ts-ignore
+        signature: JSON.stringify(Array.from(signature)),
+        pubkey: pubkey,
+      };
+      setWithExpiration("verifyHeader", verifyHeader, 3500);
     }
-    return payload;
-  }
+
+    return verifyHeader;
+  };
+
+  // const sign_message = async () => {
+  //   let now = Date.now();
+  //   window.localStorage.setItem('signature_time', JSON.stringify(now));
+  //   // console.log(now, "time?");
+  //   // window.localStorage.setItem('signature_time', JSON.stringify(now));
+  //   // console.log(window.localStorage.getItem('signature_time'));
+  //   let signedMsg = now.toString();
+  //   const encodedMsg = decodeUTF8(signedMsg);
+  //   const signature = await signMessage(encodedMsg);
+  //
+  //   const payload = {
+  //     signedMsg: signedMsg,
+  //     signature: JSON.stringify(Array.from(signature)),
+  //     pubkey: publicKey.toString(),
+  //   }
+  //   return payload;
+  // }
 
   const populate_data = async (payload) => {
     console.log(payload, "payload?");
-    try {
-      let user = get_user(payload);
-      let leaderboard = get_leaderboard(payload);
-      let quests = get_quests(payload);
-      let rewards = get_rewards(payload);
+    let user = get_user(payload);
+    let leaderboard = get_leaderboard(payload);
+    let quests = get_quests(payload);
+    let rewards = get_rewards(payload);
 
-      let userData = await user;
-      let leaderboardData = await leaderboard;
-      let questsData = await quests;
-      let rewardsData = await rewards;
-      change_user_data(userData);
-      change_leaderboard_data(leaderboardData);
-      change_quests_data(questsData);
-      change_rewards_data(rewardsData);
-      change_wallet_data(payload);
-    } catch(errors){
-      console.log(errors);
-    }
+    let userData = await user;
+    console.log(userData, "user data?");
+    let leaderboardData = await leaderboard;
+    let questsData = await quests;
+    let rewardsData = await rewards;
+    change_user_data(userData);
+    change_leaderboard_data(leaderboardData);
+    change_quests_data(questsData);
+    change_rewards_data(rewardsData);
+    change_wallet_data(payload);
   }
   // useEffect(() => {
   //   let path_split = window.location.pathname.split("/");
@@ -97,15 +136,14 @@ export default function MAIN_PAGE(props) {
   // console.log(window.location.pathname, "pathname?");
   const handleClick = async () => {
     if(wallet && connected) {
-      let now = Date.now();
-      let difference = now - window.localStorage.getItem('signature_time');
-      if (now - window.localStorage.getItem('signature_time') <= 3600000) {
-        //add loading in
-          //add calls here for data using wallet data that shoul be in state if it's under an hour
-        let gather_data = await populate_data(wallet_data);
-        navigate('bounty_main');
+      let header_verification = await getWithExpiration("verifyHeader");
+      console.log(header_verification, "return from local storage?");
+      if (header_verification) {
+        console.log(header_verification, "headers?");
+        let gather_data = await populate_data(header_verification);
+        navigate('/bounty_main');
       } else {
-        navigate('connect');
+        navigate('/connect');
       }
     }
   }
@@ -234,18 +272,24 @@ export default function MAIN_PAGE(props) {
           </Grid>
         </Grid>} />
         <Route path="connect"
-          element={<CONNECT_PAGE sign_message={sign_message}/>}/>
-        <Route path="connect_wallet" element={<CONNECT_WALLET
-        wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
-        change_user_data={change_user_data} quests_data={quests_data} change_quests_data={change_quests_data}
-        leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
-        rewards_data={rewards_data} change_rewards_data={change_rewards_data}
-        />}/>
-        <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
-        user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
-        rewards_data={rewards_data} change_rewards_data={change_rewards_data}/>}/>
+          element={<CONNECT_PAGE sign_message={sign_message} setWithExpiration={setWithExpiration}
+          getWithExpiration={getWithExpiration} populate_data={populate_data}
+          />}/>
+          <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
+          user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
+          rewards_data={rewards_data} change_rewards_data={change_rewards_data}/>}/>
       </Routes>
-      <MISSION_DIALOG handleDialogClose={handleDialogClose} handleDialogOpen={handleDialogOpen}       dialog_state={dialog_state} change_dialog_state={change_dialog_state} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
+      <MISSION_DIALOG handleDialogClose={handleDialogClose}
+        handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
+        change_dialog_state={change_dialog_state}
+        dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
     </Box>
   );
 }
+
+// <Route path="connect_wallet" element={<CONNECT_WALLET
+// wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
+// change_user_data={change_user_data} quests_data={quests_data} change_quests_data={change_quests_data}
+// leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
+// rewards_data={rewards_data} change_rewards_data={change_rewards_data}
+// />}/>
