@@ -9,12 +9,12 @@ import { decodeUTF8 } from "tweetnacl-util";
 import styles from './connect_wallet_styles.js';
 
 export default function CONNECT_WALLET(props) {
-  const { wallet, signMessage, publicKey } = useWallet();
   let navigate = useNavigate();
+  const { wallet, signMessage, publicKey, connected } = useWallet();
 
   const getData = async (wal, sig, pkey) => {
+
     if (props.wallet_data.signedMsg) {
-      console.log("is this triggering?");
       //use external function for signing?
         //check local storage/if wallet data exists
           //sign if it doesn't.
@@ -22,9 +22,9 @@ export default function CONNECT_WALLET(props) {
       return;
     } else {
       let now = Date.now();
-      // console.log(now, "time?");
-      // window.localStorage.setItem('signature_time', JSON.stringify(now));
-      // console.log(window.localStorage.getItem('signature_time'));
+      // // console.log(now, "time?");
+      window.localStorage.setItem('signature_time', JSON.stringify(now));
+      // // console.log(window.localStorage.getItem('signature_time'));
       let signedMsg = now.toString();
       const encodedMsg = decodeUTF8(signedMsg);
       const signature = await sig(encodedMsg);
@@ -34,7 +34,6 @@ export default function CONNECT_WALLET(props) {
         signature: JSON.stringify(Array.from(signature)),
         pubkey: pkey.toString(),
       }
-
       //get user
       // const user_data = await get_user(payload);
       let user = get_user(payload);
