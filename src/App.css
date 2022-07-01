@@ -24,3 +24,23 @@
   top: 10px !important;
   width: 3px !important;
 }
+
+.wallet-adapter-button.wallet_button {
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid #F6F6F6;
+  color: #F6F6F6;
+
+}
+
+@media screen and (max-width: 2400px): {
+  .wallet-adapter-button.wallet_button {
+    font-size: 26px;
+  }
+}
+
+@media screen and (max-width: 2100px): {
+  .wallet-adapter-button.wallet_button {
+    font-size: 22px;
+  }
+}

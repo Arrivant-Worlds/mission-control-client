@@ -104,7 +104,7 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 const Content: FC = (connection) => {
   let navigate = useNavigate();
   const handleOnClick = () => {
-    navigate('/connect_wallet');
+    navigate('/');
   }
   return (
     <ThemeProvider theme={theme}>

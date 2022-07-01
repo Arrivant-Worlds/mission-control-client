@@ -9,21 +9,13 @@ import { useNavigate } from "react-router-dom";
 import styles from './connect_page_styles.js';
 
 export default function CONNECT_PAGE(props) {
-  const { wallet, signMessage, publicKey, connected } = useWallet();
-  const [signed_message, change_signed_message] = useState(false);
+  const { wallet, signMessage, publicKey, connect, connected } = useWallet();
   const [button_text, change_button_text] = useState("CONNECT WALLET");
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (wallet && connected) {
-      let now = Date.now();
-      let difference = now - window.localStorage.getItem('signature_time');
-      if (now - window.localStorage.getItem('signature_time') <= 3600000) {
-        change_signed_message(true);
-        navigate('bounty_main');
-      } else {
-        change_button_text("SIGN MESSAGE");
-      }
+    if (wallet && connected && !props.signed_message) {
+      change_button_text("SIGN MESSAGE");
     }
     // console.log(connected, "connected");
     // // window.localStorage.setItem('signature_time', JSON.stringify(now));
@@ -32,15 +24,19 @@ export default function CONNECT_PAGE(props) {
     // let difference = now - window.localStorage.getItem('signature_time');
   })
 
-  const handleClick = (state) => {
+  const handleClick = async () => {
+    let connect_to_wallet = await connect();
+    if (wallet && connected) {
+      change_button_text("SIGN MESSAGE");
+    }
     // props.change_body_state(state);
-    navigate(state);
+    // navigate(state);
   }
 
   const handleSign = async () => {
     let payload = await props.sign_message();
     let gather_data = await props.populate_data(payload);
-    navigate('bounty_main');
+    navigate('/bounty_main');
   }
 
   return (
@@ -52,7 +48,7 @@ export default function CONNECT_PAGE(props) {
         <Typography sx={styles.connect_text}>YOUR BOUNTY WILL BE PLENTIFUL.</Typography>
       </Grid>
       <Grid container item xs={3} direction="column" justifyContent="flex-end" alignItems="center">
-        <WalletMultiButton variant="contained" sx={styles.button} onClick={connected && signed_message ? () => handleClick() : () => handleSign()}>
+        <WalletMultiButton className="wallet-adapter-button wallet_button" onClick={connected && wallet && !props.signed_message ? () => handleSign() : () => handleClick()}>
         {button_text}
         </WalletMultiButton>
       </Grid>
