@@ -34,6 +34,11 @@ const styles = {
     margin: "0 auto",
     gridColumn: "1",
     gridRow: "1",
+  },
+  disconnect: {
+    position: "absolute",
+    top: "10px",
+    right: "20px",
   }
 };
 

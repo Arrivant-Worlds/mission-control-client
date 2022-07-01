@@ -30,7 +30,16 @@
   background-color: transparent;
   border: 1px solid #F6F6F6;
   color: #F6F6F6;
+}
 
+.wallet-adapter-button.disconnect_button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid #F6F6F6;
+  color: #F6F6F6;
 }
 
 @media screen and (max-width: 2400px): {

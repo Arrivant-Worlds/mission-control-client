@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { decodeUTF8 } from "tweetnacl-util";
+import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
 import {create_user, get_user, get_quests, get_rewards, get_leaderboard} from "./../api_calls";
 import CONNECT_PAGE from './connect_page.js';
 // import CONNECT_WALLET from './connect_wallet.js';
@@ -154,6 +155,8 @@ export default function MAIN_PAGE(props) {
       } else {
         navigate('/connect');
       }
+    } else {
+      navigate('/connect');
     }
   }
 
@@ -299,6 +302,10 @@ export default function MAIN_PAGE(props) {
         handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
         dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
+      {wallet && connected ?
+        <WalletDisconnectButton className="disconnect_button"/>
+        : null
+      }
     </Box>
   );
 }

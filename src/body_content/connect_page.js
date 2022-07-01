@@ -48,7 +48,7 @@ export default function CONNECT_PAGE(props) {
         <Typography sx={styles.connect_text}>YOUR BOUNTY WILL BE PLENTIFUL.</Typography>
       </Grid>
       <Grid container item xs={3} direction="column" justifyContent="flex-end" alignItems="center">
-        <WalletMultiButton className="wallet-adapter-button wallet_button" onClick={connected && wallet && !props.signed_message ? () => handleSign() : () => handleClick()}>
+        <WalletMultiButton className="wallet_button" onClick={connected && wallet && !props.signed_message ? () => handleSign() : () => handleClick()}>
         {button_text}
         </WalletMultiButton>
       </Grid>
