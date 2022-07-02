@@ -14,7 +14,7 @@ import Icon from '@mui/material/Icon';
 
 
 export default function MISSION_DIALOG(props) {
-  // console.log(props.dialog_state, "dialog state");
+  // console.log(props.dialog_data, "dialog_data");
   const handleOnClick = () => {
     if (props.dialog_data.platform === "Discord") {
       //open up discord

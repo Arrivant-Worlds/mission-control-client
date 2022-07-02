@@ -24,7 +24,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import styles from './main_page_styles.js';
 
 export default function MAIN_PAGE(props) {
-  const { wallet, signMessage, publicKey, connect, connected } = useWallet();
+  const { wallet, signMessage, publicKey, connect, connected, disconnect } = useWallet();
   let navigate = useNavigate();
   const [body_state, change_body_state] = useState('join');
   const [wallet_data, change_wallet_data] = useState({});
@@ -92,7 +92,7 @@ export default function MAIN_PAGE(props) {
         signature: JSON.stringify(Array.from(signature)),
         pubkey: pubkey,
       };
-      change_signed_message(false);
+      change_signed_message(true);
       setWithExpiration("verifyHeader", verifyHeader, 3500);
     }
     change_loading_state(false);
@@ -158,6 +158,12 @@ export default function MAIN_PAGE(props) {
     } else {
       navigate('/connect');
     }
+  }
+
+  const handleDiconnect = async () => {
+    let disconnect_wallet = await disconnect();
+    localStorage.removeItem('verifyHeader');
+    navigate('/');
   }
 
   const handleDialogOpen = () => {
@@ -303,7 +309,7 @@ export default function MAIN_PAGE(props) {
         change_dialog_state={change_dialog_state}
         dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
       {wallet && connected ?
-        <WalletDisconnectButton className="disconnect_button"/>
+        <WalletDisconnectButton className="disconnect_button" onClick={() => handleDiconnect()}/>
         : null
       }
     </Box>

@@ -12,11 +12,32 @@ export default function CONNECT_PAGE(props) {
   const { wallet, signMessage, publicKey, connect, connected } = useWallet();
   const [button_text, change_button_text] = useState("CONNECT WALLET");
   let navigate = useNavigate();
-
+  let check_headers;
   useEffect(() => {
-    if (wallet && connected && !props.signed_message) {
-      change_button_text("SIGN MESSAGE");
+    console.log("fired? in connect page");
+    console.log(!props.signed_message, "props.signed_msg");
+    console.log(wallet, "wallet");
+    console.log(connected, "connected?");
+
+    const check_sig = async () => {
+      check_headers = await props.getWithExpiration("verifyHeader");
+      if (wallet && connected && !check_headers) {
+        change_button_text("SIGN MESSAGE");
+      } else if (wallet && connected && check_headers) {
+        let gather_data = props.populate_data(check_headers);
+        navigate('/bounty_main');
+      }
     }
+    check_sig();
+    // if (wallet && connected && !props.signed_message) {
+    // } else if (wallet && connected && props.signed_message) {
+    //   console.log("hittingggg??????");
+    //   let payload = props.sign_message();
+    //   let gather_data = props.populate_data(payload);
+    //   navigate('/bounty_main');
+    // }
+    //check for all three props wallet, connect and sign_message
+      //redirect to dashboard anyways.
     // console.log(connected, "connected");
     // // window.localStorage.setItem('signature_time', JSON.stringify(now));
     // // console.log(window.localStorage.getItem('signature_time'));
@@ -48,7 +69,7 @@ export default function CONNECT_PAGE(props) {
         <Typography sx={styles.connect_text}>YOUR BOUNTY WILL BE PLENTIFUL.</Typography>
       </Grid>
       <Grid container item xs={3} direction="column" justifyContent="flex-end" alignItems="center">
-        <WalletMultiButton className="wallet_button" onClick={connected && wallet && !props.signed_message ? () => handleSign() : () => handleClick()}>
+        <WalletMultiButton className="wallet_button" onClick={connected && wallet && !check_headers ? () => handleSign() : () => handleClick()}>
         {button_text}
         </WalletMultiButton>
       </Grid>

@@ -1,7 +1,7 @@
 import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import background from './images/arrivant_background.png';
+import background from './images/MissionControl_HQ_background.jpg';
 import black_circle from './images/black_circle.png';
 import 'simplebar-react/dist/simplebar.min.css';
 import { useNavigate } from "react-router-dom";
