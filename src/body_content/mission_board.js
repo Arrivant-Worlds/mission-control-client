@@ -14,7 +14,7 @@ import minus from "../images/minus.png";
 
 export default function MISSION_BOARD(props) {
 
-  // console.log(props.quests_data, "quest data");
+  console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.change_expanded_tab(tab);

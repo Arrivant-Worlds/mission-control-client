@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
+// const BASE_URL = 'http://localhost:3001';
 
 export const create_user = async (payload) => {
   try {

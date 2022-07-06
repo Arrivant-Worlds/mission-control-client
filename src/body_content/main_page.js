@@ -8,6 +8,7 @@ import CONNECT_PAGE from './connect_page.js';
 // import CONNECT_WALLET from './connect_wallet.js';
 import BOUNTY_PAGE from './bounty_page.js';
 import MISSION_DIALOG from './mission_dialog.js';
+import SNACKBAR from './snackbar.js';
 import Box from '@mui/material/Box';
 import { Typewriter, useTypewriter, Cursor } from 'react-simple-typewriter';
 import {
@@ -33,7 +34,6 @@ export default function MAIN_PAGE(props) {
   const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState({
-    test: "meow mix",
   });
   const [user_data, change_user_data] = useState({});
   const [quests_data, change_quests_data] = useState([]);
@@ -43,6 +43,12 @@ export default function MAIN_PAGE(props) {
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
   const dropdown_open = Boolean(dropdown_anchor);
+  const [alertState, setAlertState] = useState({
+    open: false,
+    message: "",
+    severity: undefined,
+  });
+  //severity: "success" | "info" | "warning" | "error" | undefined;
 
   //react hook function here for signing and then pass down to lower components
   useEffect(() => {
@@ -177,6 +183,7 @@ export default function MAIN_PAGE(props) {
   }
 
   const handleDropdown_navigate = (path) => {
+    change_dropdown_anchor(null);
     navigate(path);
   }
 
@@ -249,6 +256,13 @@ export default function MAIN_PAGE(props) {
           anchorEl={dropdown_anchor}
           open={dropdown_open}
           onClose={handleDropdownClose}
+          PaperProps={{
+            style: {
+              background: "linear-gradient(180deg, rgba(0, 0, 0, 0.539) 25.01%, rgba(15, 15, 15, 0.285) 120.09%)",
+              border: "0.916143px solid #6A6A6A",
+              backdropFilter: "blur(36.6457px)",
+            }
+          }}
         >
           <MenuItem onClick={() => handleDropdown_navigate("/")}>Home</MenuItem>
           <MenuItem disabled={!signed_message} onClick={() => handleDropdown_navigate("/bounty_main")}>Dashboard</MenuItem>
@@ -312,10 +326,12 @@ export default function MAIN_PAGE(props) {
         <Route path="connect"
           element={<CONNECT_PAGE sign_message={sign_message} setWithExpiration={setWithExpiration}
           getWithExpiration={getWithExpiration} populate_data={populate_data} signed_message={signed_message}
+          alertState={alertState} setAlertState={setAlertState}
           />}/>
           <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
           user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
-          rewards_data={rewards_data} change_rewards_data={change_rewards_data} populate_data={populate_data}/>}/>
+          rewards_data={rewards_data} change_rewards_data={change_rewards_data} populate_data={populate_data} getWithExpiration={getWithExpiration} alertState={alertState} setAlertState={setAlertState}
+          />}/>
       </Routes>
       {loading_state ?
         <Box sx={{height: "100vh", width: "100vw", background: "rgba(26, 32, 38, 0.8)",
@@ -327,7 +343,10 @@ export default function MAIN_PAGE(props) {
       <MISSION_DIALOG handleDialogClose={handleDialogClose}
         handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
-        dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
+        dialog_data={dialog_data} change_dialog_data={change_dialog_data}
+        alertState={alertState} setAlertState={setAlertState}
+        />
+      <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
     </Box>
   );
 }

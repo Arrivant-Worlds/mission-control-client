@@ -53,7 +53,7 @@ const styles = {
     color: "#E6B2B9",
     textTransform: "capitalize",
   },
-  upload_frame: {
+  action_frame: {
     width: "100%",
     height: "190px",
     border: "1px solid #888888",

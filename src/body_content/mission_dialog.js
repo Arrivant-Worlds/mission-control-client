@@ -122,7 +122,9 @@ export default function MISSION_DIALOG(props) {
               </Grid>
             </Grid>
             <Grid item xs={5}>
-              <Box style={styles.upload_frame}/>
+              <Box style={styles.action_frame}>
+                
+              </Box>
             </Grid>
           </Grid>
           <Box style={styles.hr}/>
