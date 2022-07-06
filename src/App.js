@@ -2,7 +2,6 @@ import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import background from './images/MissionControl_HQ_background.jpg';
-import black_circle from './images/black_circle.png';
 import 'simplebar-react/dist/simplebar.min.css';
 import { useNavigate } from "react-router-dom";
 import {
@@ -103,9 +102,7 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 
 const Content: FC = (connection) => {
   let navigate = useNavigate();
-  const handleOnClick = () => {
-    navigate('/');
-  }
+
   return (
     <ThemeProvider theme={theme}>
       <Box className="App" style={{
@@ -114,7 +111,6 @@ const Content: FC = (connection) => {
         height: '100vh',
         width: '100vw',
       }}>
-        <Box component="img" sx={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={() => handleOnClick()}/>
         <MAIN_PAGE/>
       </Box>
     </ThemeProvider>

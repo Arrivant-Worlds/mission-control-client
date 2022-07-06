@@ -8,8 +8,8 @@ import MISSION_BLOCK from "./mission_block.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
 // import mission_data from "./mission_data.js";
-import weekly_mission_data from "./weekly_mission_data.js";
-import prime_mission_data from "./prime_mission_data.js";
+// import weekly_mission_data from "./weekly_mission_data.js";
+// import prime_mission_data from "./prime_mission_data.js";
 
 
 export default function MISSION_BOARD(props) {
@@ -37,10 +37,14 @@ export default function MISSION_BOARD(props) {
           >
             {
               props.quests_data.map((item, i) => {
-                return (
-                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                  handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
-                )
+                if (item.recurrence === "daily") {
+                  return (
+                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                    handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+                  )
+                } else {
+                  return null;
+                }
               })
             }
           </Box>
@@ -61,11 +65,15 @@ export default function MISSION_BOARD(props) {
           <Box style={props.expanded_tab === "weekly" ? styles.content_container : styles.hidden}
           >
             {
-              weekly_mission_data.map((item, i) => {
-                return (
-                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                  dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
-                )
+              props.quests_data.map((item, i) => {
+                if (item.recurrence === "weekly") {
+                  return (
+                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+                  )
+                } else {
+                  return null;
+                }
               })
             }
           </Box>
@@ -86,11 +94,15 @@ export default function MISSION_BOARD(props) {
           <Box style={props.expanded_tab === "prime" ? styles.content_container : styles.hidden}
           >
             {
-              prime_mission_data.map((item, i) => {
-                return (
-                  <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                  dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
-                )
+              props.quests_data.map((item, i) => {
+                if (item.recurrence === "prime") {
+                  return (
+                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+                  )
+                } else {
+                  return null;
+                }
               })
             }
           </Box>

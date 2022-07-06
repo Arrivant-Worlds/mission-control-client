@@ -9,7 +9,7 @@ import REWARDS_BLOCK from "./rewards_block.js";
 
 export default function REWARDS(props) {
   // console.log(props.user_data);
-  // console.log(props.rewards_data);
+  console.log(props.rewards_data);
 
   return (
     <Box style={styles.rewards_container}>

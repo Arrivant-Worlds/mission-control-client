@@ -16,11 +16,14 @@ import {
   Route,
 } from "react-router-dom";
 import SG_logo from '../images/PE_SG_logo.png';
+import black_circle from '../images/black_circle.png';
 import ripple_diamond from '../images/ripple_diamond.png';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import styles from './main_page_styles.js';
 
 export default function MAIN_PAGE(props) {
@@ -38,13 +41,22 @@ export default function MAIN_PAGE(props) {
   const [rewards_data, change_rewards_data] = useState([]);
   const [signed_message, change_signed_message] = useState(false);
   const [loading_state, change_loading_state] = useState(false);
+  const [dropdown_anchor, change_dropdown_anchor] = useState(null);
+  const dropdown_open = Boolean(dropdown_anchor);
 
   //react hook function here for signing and then pass down to lower components
-  // useEffect(() => {
-  //   console.log(wallet, "wallet?");
-  //   console.log(connected, "connected");
-  //
-  // }, [])
+  useEffect(() => {
+    const check_sig = async () => {
+      let check_headers = await getWithExpiration("verifyHeader");
+      // console.log(check_headers, "headers?");
+      if (wallet && connected && check_headers) {
+        change_signed_message(true);
+        // console.log(signed_message, "true??");
+        change_wallet_data(check_headers);
+      }
+    }
+    check_sig();
+  }, [])
 
   const setWithExpiration = async (key: string, value: any, ttl: number) => {
     const item = {
@@ -99,24 +111,6 @@ export default function MAIN_PAGE(props) {
     return verifyHeader;
   };
 
-  // const sign_message = async () => {
-  //   let now = Date.now();
-  //   window.localStorage.setItem('signature_time', JSON.stringify(now));
-  //   // console.log(now, "time?");
-  //   // window.localStorage.setItem('signature_time', JSON.stringify(now));
-  //   // console.log(window.localStorage.getItem('signature_time'));
-  //   let signedMsg = now.toString();
-  //   const encodedMsg = decodeUTF8(signedMsg);
-  //   const signature = await signMessage(encodedMsg);
-  //
-  //   const payload = {
-  //     signedMsg: signedMsg,
-  //     signature: JSON.stringify(Array.from(signature)),
-  //     pubkey: publicKey.toString(),
-  //   }
-  //   return payload;
-  // }
-
   const populate_data = async (payload) => {
     change_loading_state(true);
     // console.log(payload, "payload?");
@@ -135,15 +129,10 @@ export default function MAIN_PAGE(props) {
     change_quests_data(questsData);
     change_rewards_data(rewardsData);
     change_wallet_data(payload);
+    change_signed_message(true);
     change_loading_state(false);
   }
-  // useEffect(() => {
-  //   let path_split = window.location.pathname.split("/");
-  //   console.log(window.location.pathname, "path?");
-  //   console.log(path_split, "path split");
-  //   change_body_state("/"+path_split[1]);
-  // });
-  // console.log(window.location.pathname, "pathname?");
+
   const handleClick = async () => {
     if(wallet && connected) {
       let header_verification = await getWithExpiration("verifyHeader");
@@ -163,6 +152,8 @@ export default function MAIN_PAGE(props) {
   const handleDiconnect = async () => {
     let disconnect_wallet = await disconnect();
     localStorage.removeItem('verifyHeader');
+    change_signed_message(false);
+    change_wallet_data({});
     navigate('/');
   }
 
@@ -174,6 +165,20 @@ export default function MAIN_PAGE(props) {
   const handleDialogClose = () => {
     change_dialog_state(false);
   };
+
+  const handleDropdownOpen = (e) => {
+    change_dropdown_anchor(e.currentTarget);
+    // navigate('/');
+  }
+
+  const handleDropdownClose = () => {
+    change_dropdown_anchor(null);
+    // navigate('/');
+  }
+
+  const handleDropdown_navigate = (path) => {
+    navigate(path);
+  }
 
   // const renderSwitch = (param) => {
   //   switch(param) {
@@ -238,6 +243,21 @@ export default function MAIN_PAGE(props) {
 
   return (
     <Box style={window.location.pathname === "/bounty_main" ? bounty_overlay_css : styles.container}>
+      <Grid container justifyContent="space-between" alignItems="center" sx={{position: 'absolute', top: '40px', width: "90%"}}>
+        <Box component="img" sx={{cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={(e) => handleDropdownOpen(e)}/>
+        <Menu
+          anchorEl={dropdown_anchor}
+          open={dropdown_open}
+          onClose={handleDropdownClose}
+        >
+          <MenuItem onClick={() => handleDropdown_navigate("/")}>Home</MenuItem>
+          <MenuItem disabled={!signed_message} onClick={() => handleDropdown_navigate("/bounty_main")}>Dashboard</MenuItem>
+        </Menu>
+        {wallet && connected ?
+          <WalletDisconnectButton className="disconnect_button" onClick={() => handleDiconnect()}/>
+          : null
+        }
+      </Grid>
       <Routes>
         <Route index element={<Grid container style={styles.grid_container}
         direction="column"
@@ -295,7 +315,7 @@ export default function MAIN_PAGE(props) {
           />}/>
           <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
           user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
-          rewards_data={rewards_data} change_rewards_data={change_rewards_data}/>}/>
+          rewards_data={rewards_data} change_rewards_data={change_rewards_data} populate_data={populate_data}/>}/>
       </Routes>
       {loading_state ?
         <Box sx={{height: "100vh", width: "100vw", background: "rgba(26, 32, 38, 0.8)",
@@ -308,10 +328,6 @@ export default function MAIN_PAGE(props) {
         handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
         dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
-      {wallet && connected ?
-        <WalletDisconnectButton className="disconnect_button" onClick={() => handleDiconnect()}/>
-        : null
-      }
     </Box>
   );
 }
