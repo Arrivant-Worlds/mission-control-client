@@ -1,32 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { decodeUTF8 } from "tweetnacl-util";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
-import {create_user, get_user, get_quests, get_rewards, get_leaderboard} from "./../api_calls";
-import CONNECT_PAGE from './connect_page.js';
-// import CONNECT_WALLET from './connect_wallet.js';
-import BOUNTY_PAGE from './bounty_page.js';
-import MISSION_DIALOG from './mission_dialog.js';
-import Box from '@mui/material/Box';
-import { Typewriter, useTypewriter, Cursor } from 'react-simple-typewriter';
 import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-import SG_logo from '../images/PE_SG_logo.png';
-import ripple_diamond from '../images/ripple_diamond.png';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import styles from './main_page_styles.js';
+  create_user,
+  get_user,
+  get_quests,
+  get_rewards,
+  get_leaderboard,
+} from "./../api_calls";
+import CONNECT_PAGE from "./connect_page.js";
+// import CONNECT_WALLET from './connect_wallet.js';
+import BOUNTY_PAGE from "./bounty_page.js";
+import MISSION_DIALOG from "./mission_dialog.js";
+import Box from "@mui/material/Box";
+import { Typewriter, useTypewriter, Cursor } from "react-simple-typewriter";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SG_logo from "../images/PE_SG_logo.png";
+import ripple_diamond from "../images/ripple_diamond.png";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import styles from "./main_page_styles.js";
+import AurahTheme from "../audio/AurahTheme.mp3";
+import MainHover from "../audio/MainHover.mp3";
+import QuestOpen from "../audio/QuestOpen.wav";
+import QuestClose from "../audio/QuestClose.wav";
+import QuestHover from "../audio/QuestHover.mp3";
+import DisconnectWallet from "../audio/DisconnectWallet.wav";
+import ConnectWallet from "../audio/ClaimPassport.mp3";
+import ClaimPassport from "../audio/ClaimPassport.mp3";
+import QuestType from "../audio/QuestType.wav";
+import MissionsTab from "../audio/MissionsTab.wav";
+import LeaderboardTab from "../audio/LeaderboardTab.wav";
+import RewardsTab from "../audio/RewardsTab.wav";
+import EggTab from "../audio/EggTab.wav";
+import DisconnectHover from "../audio/QuestHover.mp3";
+import useSound from "use-sound";
 
 export default function MAIN_PAGE(props) {
-  const { wallet, signMessage, publicKey, connect, connected, disconnect } = useWallet();
+  const { wallet, signMessage, publicKey, connect, connected, disconnect } =
+    useWallet();
   let navigate = useNavigate();
-  const [body_state, change_body_state] = useState('join');
+  const [body_state, change_body_state] = useState("join");
   const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState({
@@ -39,6 +57,31 @@ export default function MAIN_PAGE(props) {
   const [signed_message, change_signed_message] = useState(false);
   const [loading_state, change_loading_state] = useState(false);
 
+  // Drew's changes - sound hooks
+  const [playbackRate, setPlaybackRate] = React.useState(0.7);
+  const [playAurahTheme] = useSound(AurahTheme, {
+    interrupt: true,
+    volume: 0.3,
+  });
+  const [playQuestOpen] = useSound(QuestOpen, { interrupt: true });
+  const [playQuestClose] = useSound(QuestClose, { interrupt: true });
+  const [playQuestHover] = useSound(QuestHover, { interrupt: true });
+  const [playConnectWallet] = useSound(ConnectWallet, { interrupt: true });
+  const [playClaimPassport] = useSound(ClaimPassport, { interrupt: true });
+  const [playQuestType] = useSound(QuestType, { interrupt: true });
+  const [playMissionsTab] = useSound(MissionsTab, { interrupt: true });
+  const [playLeaderboardTab] = useSound(LeaderboardTab, { interrupt: true });
+  const [playRewardsTab] = useSound(RewardsTab, { interrupt: true });
+  const [playEggTab] = useSound(EggTab, { interrupt: true });
+  const [playDisconnectWallet] = useSound(DisconnectWallet, {
+    interrupt: true,
+  });
+  const [playDisconnectHover] = useSound(DisconnectHover, { interrupt: true });
+  const [playMainHover] = useSound(MainHover, {
+    interrupt: true,
+    playbackRate,
+  });
+
   //react hook function here for signing and then pass down to lower components
   // useEffect(() => {
   //   console.log(wallet, "wallet?");
@@ -46,7 +89,7 @@ export default function MAIN_PAGE(props) {
   //
   // }, [])
 
-  const setWithExpiration = async (key: string, value: any, ttl: number) => {
+  const setWithExpiration = async (key, value, ttl) => {
     const item = {
       value: value,
       expiry: new Date().getTime() + ttl * 1000,
@@ -54,7 +97,7 @@ export default function MAIN_PAGE(props) {
     localStorage.setItem(key, JSON.stringify(item));
   };
 
-  const getWithExpiration = async (key: string) => {
+  const getWithExpiration = async (key) => {
     const itemStr = localStorage.getItem(key);
     // console.log(`itemStr`, itemStr);
     // if the item doesn't exist, return null
@@ -120,23 +163,18 @@ export default function MAIN_PAGE(props) {
   const populate_data = async (payload) => {
     change_loading_state(true);
     // console.log(payload, "payload?");
-    let user = get_user(payload);
-    let leaderboard = get_leaderboard(payload);
-    let quests = get_quests(payload);
-    let rewards = get_rewards(payload);
+    let user = await get_user(payload);
+    let leaderboard = await get_leaderboard(payload);
+    let quests = await get_quests(payload);
+    let rewards = await get_rewards(payload);
 
-    let userData = await user;
-    // console.log(userData, "user data?");
-    let leaderboardData = await leaderboard;
-    let questsData = await quests;
-    let rewardsData = await rewards;
-    change_user_data(userData);
-    change_leaderboard_data(leaderboardData);
-    change_quests_data(questsData);
-    change_rewards_data(rewardsData);
+    change_user_data(user);
+    change_leaderboard_data(leaderboard);
+    change_quests_data(quests);
+    change_rewards_data(rewards);
     change_wallet_data(payload);
     change_loading_state(false);
-  }
+  };
   // useEffect(() => {
   //   let path_split = window.location.pathname.split("/");
   //   console.log(window.location.pathname, "path?");
@@ -145,34 +183,60 @@ export default function MAIN_PAGE(props) {
   // });
   // console.log(window.location.pathname, "pathname?");
   const handleClick = async () => {
-    if(wallet && connected) {
+    playAurahTheme();
+
+    if (wallet && connected) {
       let header_verification = await getWithExpiration("verifyHeader");
       console.log(header_verification, "return from local storage?");
       if (header_verification) {
         console.log(header_verification, "headers?");
         let gather_data = await populate_data(header_verification);
-        navigate('/bounty_main');
+        navigate("/bounty_main");
       } else {
-        navigate('/connect');
+        navigate("/connect");
       }
     } else {
-      navigate('/connect');
+      navigate("/connect");
     }
-  }
+  };
 
-  const handleDiconnect = async () => {
+  const handleMainHover = () => {
+    playMainHover();
+    if (playbackRate > 1.2) {
+      setPlaybackRate(0.7);
+    } else {
+      setPlaybackRate(playbackRate + 0.1);
+    }
+  };
+
+  const handleConnectHover = () => {
+    playQuestHover();
+  };
+
+  const handleDisconnect = async () => {
+    playDisconnectWallet();
     let disconnect_wallet = await disconnect();
-    localStorage.removeItem('verifyHeader');
-    navigate('/');
-  }
+    localStorage.removeItem("verifyHeader");
+    navigate("/");
+  };
+
+  const handleDisconnectHover = () => {
+    playDisconnectHover();
+  };
 
   const handleDialogOpen = () => {
+    playQuestOpen();
     // console.log("firing?? in main open");
     change_dialog_state(true);
   };
 
   const handleDialogClose = () => {
+    playQuestClose();
     change_dialog_state(false);
+  };
+
+  const handleDialogHover = () => {
+    playQuestHover();
   };
 
   // const renderSwitch = (param) => {
@@ -233,85 +297,180 @@ export default function MAIN_PAGE(props) {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(180deg, #15181B -16.28%, rgba(21, 24, 27, 0) 36.97%)",
-  }
+    background:
+      "linear-gradient(180deg, #15181B -16.28%, rgba(21, 24, 27, 0) 36.97%)",
+  };
 
   return (
-    <Box style={window.location.pathname === "/bounty_main" ? bounty_overlay_css : styles.container}>
+    <Box
+      style={
+        window.location.pathname === "/bounty_main"
+          ? bounty_overlay_css
+          : styles.container
+      }
+    >
       <Routes>
-        <Route index element={<Grid container style={styles.grid_container}
-        direction="column"
-        justifyContent="center" alignItems="center">
-          <Grid item xs={4} alignItems="center" justifyContent="center">
-            <Box sx={{
-              textTransform: "uppercase",
-              margin: "-20px auto 0 auto",
-              fontSize: "18px",
-              width: "60%",
-              color: "#F6F6F6",
-                '@media screen and (max-width: 2400px)': {
-                  fontSize: "30px",
-                },
-                '@media screen and (max-width: 2200px)': {
-                  fontSize: "28px",
-                },
-                '@media screen and (max-width: 2000px)': {
-                  fontSize: "26px",
-                },
-              }}>
-              <Typewriter
-                loop={1}
-                deleteSpeed={0}
-                words={['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.']}
-                cursor
-                cursorStyle='_'
-                typeSpeed={70}
-                delaySpeed={500}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={2}>
-            <Box component="img" src={SG_logo} alt="SG Logo" sx={{
-              marginTop: "-30px",
-              width: "800px",
-              '@media screen and (max-width: 2400px)': {
-                width: "1000px",
-              },
-              '@media screen and (max-width: 2100px)': {
-                width: "900px",
-              }
-            }}/>
-          </Grid>
-          <Grid container item justifyContent="center" alignItems="center" xs={1}>
-            <Box style={styles.button_container}>
-              <Box component="img" src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-              <Button variant="contained" style={styles.button} onClick={() => handleClick()}>JOIN NOW</Button>
-            </Box>
-          </Grid>
-        </Grid>} />
-        <Route path="connect"
-          element={<CONNECT_PAGE sign_message={sign_message} setWithExpiration={setWithExpiration}
-          getWithExpiration={getWithExpiration} populate_data={populate_data} signed_message={signed_message}
-          />}/>
-          <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
-          user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
-          rewards_data={rewards_data} change_rewards_data={change_rewards_data}/>}/>
+        <Route
+          index
+          element={
+            <Grid
+              container
+              style={styles.grid_container}
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item xs={4} alignItems="center" justifyContent="center">
+                <Box
+                  sx={{
+                    textTransform: "uppercase",
+                    margin: "-20px auto 0 auto",
+                    fontSize: "18px",
+                    width: "60%",
+                    color: "#F6F6F6",
+                    "@media screen and (max-width: 2400px)": {
+                      fontSize: "30px",
+                    },
+                    "@media screen and (max-width: 2200px)": {
+                      fontSize: "28px",
+                    },
+                    "@media screen and (max-width: 2000px)": {
+                      fontSize: "26px",
+                    },
+                  }}
+                >
+                  <Typewriter
+                    loop={1}
+                    deleteSpeed={0}
+                    words={[
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.",
+                    ]}
+                    cursor
+                    cursorStyle="_"
+                    typeSpeed={70}
+                    delaySpeed={500}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={2}>
+                <Box
+                  component="img"
+                  src={SG_logo}
+                  alt="SG Logo"
+                  sx={{
+                    marginTop: "-30px",
+                    width: "800px",
+                    "@media screen and (max-width: 2400px)": {
+                      width: "1000px",
+                    },
+                    "@media screen and (max-width: 2100px)": {
+                      width: "900px",
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid
+                container
+                item
+                justifyContent="center"
+                alignItems="center"
+                xs={1}
+              >
+                <Box style={styles.button_container}>
+                  <Box
+                    component="img"
+                    src={ripple_diamond}
+                    alt="diamond ripple"
+                    style={styles.ripple_diamond}
+                  />
+                  <Button
+                    variant="contained"
+                    style={styles.button}
+                    onClick={() => handleClick()}
+                    onMouseEnter={() => handleMainHover()}
+                  >
+                    JOIN NOW
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          }
+        />
+        <Route
+          path="connect"
+          element={
+            <CONNECT_PAGE
+              handleConnectHover={handleConnectHover}
+              handleDisconnectHover={handleDisconnectHover}
+              playConnectWallet={playConnectWallet}
+              sign_message={sign_message}
+              setWithExpiration={setWithExpiration}
+              getWithExpiration={getWithExpiration}
+              populate_data={populate_data}
+              signed_message={signed_message}
+            />
+          }
+        />
+        <Route
+          path="bounty_main"
+          element={
+            <BOUNTY_PAGE
+              playQuestType={playQuestType}
+              playLeaderboardTab={playLeaderboardTab}
+              playRewardsTab={playRewardsTab}
+              playEggTab={playEggTab}
+              handleTwitterButton={playClaimPassport}
+              playMissionsTab={playMissionsTab}
+              handleDialogOpen={handleDialogOpen}
+              handleDialogClose={handleDialogClose}
+              handleDialogHover={handleDialogHover}
+              wallet_data={wallet_data}
+              dialog_data={dialog_data}
+              change_dialog_data={change_dialog_data}
+              quests_data={quests_data}
+              change_quests_data={change_quests_data}
+              user_data={user_data}
+              change_user_data={change_user_data}
+              leaderboard_data={leaderboard_data}
+              rewards_data={rewards_data}
+              change_rewards_data={change_rewards_data}
+            />
+          }
+        />
       </Routes>
-      {loading_state ?
-        <Box sx={{height: "100vh", width: "100vw", background: "rgba(26, 32, 38, 0.8)",
-          opacity: "0.8", position: "absolute", display: "flex", justifyContent: "center", alignItems: "center"}}>
+      {loading_state ? (
+        <Box
+          sx={{
+            height: "100vh",
+            width: "100vw",
+            background: "rgba(26, 32, 38, 0.8)",
+            opacity: "0.8",
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress />
         </Box>
-        : null
-      }
-      <MISSION_DIALOG handleDialogClose={handleDialogClose}
-        handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
+      ) : null}
+      <MISSION_DIALOG
+        handleDialogClose={handleDialogClose}
+        handleDialogOpen={handleDialogOpen}
+        dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
-        dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
-      {wallet && connected ?
-        <WalletDisconnectButton className="disconnect_button" onClick={() => handleDiconnect()}/>
-        : null
-      }
+        dialog_data={dialog_data}
+        change_dialog_data={change_dialog_data}
+      />
+      {wallet && connected ? (
+        <Box onMouseEnter={() => handleConnectHover()}>
+          <WalletDisconnectButton
+            className="disconnect_button"
+            onClick={() => handleDisconnect()}
+            onMouseEnter={() => handleDisconnectHover()}
+          />
+        </Box>
+      ) : null}
     </Box>
   );
 }
