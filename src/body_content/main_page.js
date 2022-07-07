@@ -183,6 +183,13 @@ export default function MAIN_PAGE(props) {
   }
 
   const handleDropdown_navigate = (path) => {
+    if (!wallet || !connected || !signed_message) {
+      setAlertState({
+        open: true,
+        message: "Please connect your wallet and sign!",
+        severity: "error",
+      })
+    }
     change_dropdown_anchor(null);
     navigate(path);
   }
@@ -265,7 +272,7 @@ export default function MAIN_PAGE(props) {
           }}
         >
           <MenuItem onClick={() => handleDropdown_navigate("/")}>Home</MenuItem>
-          <MenuItem disabled={!signed_message} onClick={() => handleDropdown_navigate("/bounty_main")}>Dashboard</MenuItem>
+          <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>Dashboard</MenuItem>
         </Menu>
         {wallet && connected ?
           <WalletDisconnectButton className="disconnect_button" onClick={() => handleDiconnect()}/>
@@ -344,7 +351,9 @@ export default function MAIN_PAGE(props) {
         handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
         dialog_data={dialog_data} change_dialog_data={change_dialog_data}
-        alertState={alertState} setAlertState={setAlertState}
+        alertState={alertState} setAlertState={setAlertState} loading_state={loading_state}
+        change_loading_state={change_loading_state} getWithExpiration={getWithExpiration}
+        sign_message={sign_message}
         />
       <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
     </Box>

@@ -11,19 +11,20 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Icon from '@mui/material/Icon';
+import ACTION_COMPONENT from './action_component.js';
 
 
 export default function MISSION_DIALOG(props) {
   // console.log(props.dialog_data, "dialog_data");
-  const handleOnClick = () => {
-    if (props.dialog_data.platform === "Discord") {
-      //open up discord
-      window.open("https://discord.gg/eluune");
-    } else if (props.dialog_data.platform === "twitter") {
-      window.open("https://twitter.com/ProjectEluune");
-      //open up twitter
-    }
-  }
+  // const handleOnClick = () => {
+  //   if (props.dialog_data.platform === "Discord") {
+  //     //open up discord
+  //     window.open("https://discord.gg/eluune");
+  //   } else if (props.dialog_data.platform === "twitter") {
+  //     window.open("https://twitter.com/ProjectEluune");
+  //     //open up twitter
+  //   }
+  // }
 
   const renderIcon = () => {
     if (props.dialog_data.platform === "Discord") {
@@ -79,9 +80,7 @@ export default function MISSION_DIALOG(props) {
       </DialogTitle>
       <DialogContent style={styles.content_container}>
         <Grid container direction="column" style={styles.platform_container}>
-          <Grid container direction="row" justifyContent="space-between" onClick={() => {handleOnClick()}}
-            sx={{cursor: "pointer"}}
-          >
+          <Grid container direction="row" justifyContent="space-between">
             <Grid container item xs={7}>
               <Grid container item xs={1}>
                 <Box component="img" src={elune_icon} alt="elune_icon" />
@@ -123,7 +122,10 @@ export default function MISSION_DIALOG(props) {
             </Grid>
             <Grid item xs={5}>
               <Box style={styles.action_frame}>
-                
+                <ACTION_COMPONENT action_data={props.dialog_data.action} loading_state={props.loading_state}
+                change_loading_state={props.change_loading_state} getWithExpiration={props.getWithExpiration}
+                sign_message={props.sign_message}
+                />
               </Box>
             </Grid>
           </Grid>

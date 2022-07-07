@@ -20,7 +20,7 @@ export default function BOUNTY_PAGE(props) {
   let navigate = useNavigate();
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
-  const [expanded_tab, change_expanded_tab] = useState("daily");
+  const [expanded_tab, change_expanded_tab] = useState("prime");
 
   useEffect(() => {
     const check_sig = async () => {

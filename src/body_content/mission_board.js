@@ -14,7 +14,7 @@ import minus from "../images/minus.png";
 
 export default function MISSION_BOARD(props) {
 
-  console.log(props.quests_data, "quest data");
+  // console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.change_expanded_tab(tab);
@@ -22,6 +22,35 @@ export default function MISSION_BOARD(props) {
 
   return (
     <Box style={styles.mission_board_container}>
+      <Grid container item direction="column" justifyContent="space-between"
+      style={styles.mission_grid_container} sx={{marginBottom: "0px !important"}} alignItems="center">
+        <Grid container item direction="row" justifyContent="space-between"
+        onClick={() => handleClick("prime")} alignItems="center">
+          <Typography style={styles.mission_title}
+            style={props.expanded_tab === "prime" ? styles.mission_title : styles.mission_title_not_active}>PRIME MISSIONS
+          </Typography>
+          <Box component="img" src={props.expanded_tab === "prime" ? minus : plus}
+          style={props.expanded_tab === "prime" ? styles.minus : styles.plus}/>
+        </Grid>
+        <Box style={props.expanded_tab === "prime" ? styles.hr : styles.hidden}/>
+        <SimpleBar style={ props.expanded_tab === "prime" ? { height: '400px', width: "100%" } : styles.hidden}>
+          <Box style={props.expanded_tab === "prime" ? styles.content_container : styles.hidden}
+          >
+            {
+              props.quests_data.map((item, i) => {
+                if (item.recurrence === "once") {
+                  return (
+                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
+                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+                  )
+                } else {
+                  return null;
+                }
+              })
+            }
+          </Box>
+        </SimpleBar>
+      </Grid>
       <Grid container item direction="column" justifyContent="space-between"
       style={styles.mission_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
@@ -67,35 +96,6 @@ export default function MISSION_BOARD(props) {
             {
               props.quests_data.map((item, i) => {
                 if (item.recurrence === "weekly") {
-                  return (
-                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
-                  )
-                } else {
-                  return null;
-                }
-              })
-            }
-          </Box>
-        </SimpleBar>
-      </Grid>
-      <Grid container item direction="column" justifyContent="space-between"
-      style={styles.mission_grid_container} sx={{marginBottom: "0px !important"}} alignItems="center">
-        <Grid container item direction="row" justifyContent="space-between"
-        onClick={() => handleClick("prime")} alignItems="center">
-          <Typography style={styles.mission_title}
-            style={props.expanded_tab === "prime" ? styles.mission_title : styles.mission_title_not_active}>PRIME MISSIONS
-          </Typography>
-          <Box component="img" src={props.expanded_tab === "prime" ? minus : plus}
-          style={props.expanded_tab === "prime" ? styles.minus : styles.plus}/>
-        </Grid>
-        <Box style={props.expanded_tab === "prime" ? styles.hr : styles.hidden}/>
-        <SimpleBar style={ props.expanded_tab === "prime" ? { height: '400px', width: "100%" } : styles.hidden}>
-          <Box style={props.expanded_tab === "prime" ? styles.content_container : styles.hidden}
-          >
-            {
-              props.quests_data.map((item, i) => {
-                if (item.recurrence === "prime") {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
                     dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
