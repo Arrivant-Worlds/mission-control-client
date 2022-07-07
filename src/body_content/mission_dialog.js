@@ -122,8 +122,7 @@ export default function MISSION_DIALOG(props) {
             </Grid>
             <Grid item xs={5}>
               <Box style={styles.action_frame}>
-                <ACTION_COMPONENT action_data={props.dialog_data.action} loading_state={props.loading_state}
-                change_loading_state={props.change_loading_state} getWithExpiration={props.getWithExpiration}
+                <ACTION_COMPONENT action_data={props.dialog_data.action} getWithExpiration={props.getWithExpiration}
                 sign_message={props.sign_message}
                 />
               </Box>

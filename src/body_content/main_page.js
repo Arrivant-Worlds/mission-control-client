@@ -351,8 +351,7 @@ export default function MAIN_PAGE(props) {
         handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
         dialog_data={dialog_data} change_dialog_data={change_dialog_data}
-        alertState={alertState} setAlertState={setAlertState} loading_state={loading_state}
-        change_loading_state={change_loading_state} getWithExpiration={getWithExpiration}
+        alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
         sign_message={sign_message}
         />
       <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>

@@ -38,19 +38,15 @@ export default function ACTION_COMPONENT(props) {
     if (emailForm.test(formValue)) {
       setErrorState(false);
       setHelperText(" ");
-      props.change_loading_state(true);
       let header_verification = await props.getWithExpiration("verifyHeader");
       if (header_verification) {
-        let email_submission = await submit_email(header_verification, formValue);
         setFormSubmission(true);
-        //api call
-        props.change_loading_state(false);
+        let email_submission = await submit_email(header_verification, formValue);
         console.log("great success");
       } else {
         let sign_request = await props.sign_message();
-        let email_submission = await submit_email(sign_request, formValue);
         setFormSubmission(true);
-        props.change_loading_state(false);
+        let email_submission = await submit_email(sign_request, formValue);
       }
     } else {
       setErrorState(true);
@@ -115,6 +111,8 @@ export default function ACTION_COMPONENT(props) {
           }
         </Grid>
       )
+    } else if (props.action_data.type === "message") {
+      <Typography>{props.action_data.message}</Typography>
     }
   }
 
