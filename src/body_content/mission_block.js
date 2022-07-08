@@ -5,6 +5,7 @@ import Icon from "@mui/material/Icon";
 import styles from "./mission_block_styles.js";
 
 export default function MISSION_BLOCK(props) {
+  console.log(props.item_data, "item data?");
   const handleOnClick = () => {
     // console.log("firing in mission block click");
     // props.change_dialog_data({test: "meow meow meow"});
@@ -19,24 +20,45 @@ export default function MISSION_BLOCK(props) {
   const renderIcon = () => {
     if (props.item_data.platform === "Discord") {
       return (
-        <Icon className={"fa-brands fa-discord"} style={styles.icon}></Icon>
+        <Icon className={"fa-brands fa-discord"} style={render_style("icon")}></Icon>
       );
     } else if (props.item_data.platform === "twitter") {
       return (
-        <Icon className={"fa-brands fa-twitter"} style={styles.icon}></Icon>
+        <Icon className={"fa-brands fa-twitter"} style={render_style("icon")}></Icon>
       );
-    } else {
+    }
+      // else if (props.item_data.complete) {
+        //   return(
+          //     <Icon className={"fa-solid fa-check"} style={render_style("icon"}></Icon>
+          //   );
+          // }
+    else {
       return null;
     }
+
   };
+
+  const render_style = (section) => {
+    //render different style objects based on
+    if (props.item_data.available_to_user) {
+      let style_name = `active_${section}`;
+      return styles[style_name];
+    } else if (!props.item_data.available_to_user) {
+      let style_name = `inactive_${section}`;
+      return styles[style_name];
+    }
+    // else if (props.item_data.complete) {
+    //   let style_name = `complete_${section}`;
+    //   return styles[style_name];
+    // }
+  }
 
   return (
     <Grid
       container
       direction="row"
       justifyContent="space-between"
-      style={styles.mission_block_container}
-      sx={[{ "&:hover": { border: "0.9px solid #F9F9F9 !important" } }]}
+      sx={render_style("mission_block_container")}
       onClick={() => handleOnClick()}
       onMouseEnter={() => handleOnHover()}
     >
@@ -48,12 +70,12 @@ export default function MISSION_BLOCK(props) {
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Typography style={styles.title}>{props.item_data.title}</Typography>
+          <Typography style={render_style("title")}>{props.item_data.title}</Typography>
           <Typography
-            style={styles.xp}
+            style={render_style("xp")}
           >{`+${props.item_data.xp} XP`}</Typography>
         </Grid>
-        <Typography style={styles.description}>
+        <Typography style={render_style("description")}>
           {props.item_data.description}
         </Typography>
       </Grid>

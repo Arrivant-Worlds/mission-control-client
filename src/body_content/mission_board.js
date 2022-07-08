@@ -40,7 +40,7 @@ export default function MISSION_BOARD(props) {
                 if (item.recurrence === "once") {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
                   )
                 } else {
                   return null;
@@ -71,27 +71,13 @@ export default function MISSION_BOARD(props) {
                 if (item.recurrence === "daily") {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                    handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+                    handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
                   )
                 } else {
                   return null;
                 }
               })
             }
-          >
-            {props.quests_data.map((item, i) => {
-              return (
-                <MISSION_BLOCK
-                  item_data={item}
-                  key={i}
-                  handleDialogOpen={props.handleDialogOpen}
-                  handleDialogClose={props.handleDialogClose}
-                  handleDialogHover={props.handleDialogHover}
-                  dialog_data={props.dialog_data}
-                  change_dialog_data={props.change_dialog_data}
-                />
-              );
-            })}
           </Box>
         </SimpleBar>
       </Grid>
@@ -136,27 +122,13 @@ export default function MISSION_BOARD(props) {
                 if (item.recurrence === "weekly") {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data}/>
+                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
                   )
                 } else {
                   return null;
                 }
               })
             }
-          >
-            {prime_mission_data.map((item, i) => {
-              return (
-                <MISSION_BLOCK
-                  item_data={item}
-                  key={i}
-                  handleDialogOpen={props.handleDialogOpen}
-                  handleDialogClose={props.handleDialogClose}
-                  handleDialogHover={props.handleDialogHover}
-                  dialog_data={props.dialog_data}
-                  change_dialog_data={props.change_dialog_data}
-                />
-              );
-            })}
           </Box>
         </SimpleBar>
       </Grid>

@@ -95,7 +95,6 @@ export default function MAIN_PAGE(props) {
     playbackRate,
   });
 
-  //react hook function here for signing and then pass down to lower components
   useEffect(() => {
     const check_sig = async () => {
       let check_headers = await getWithExpiration("verifyHeader");
@@ -233,9 +232,16 @@ export default function MAIN_PAGE(props) {
     change_dialog_state(true);
   };
 
-  const handleDialogClose = () => {
+  const handleDialogClose = async () => {
     playQuestClose();
     change_dialog_state(false);
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let gather_data = await populate_data(header_verification);
+    } else {
+      let get_signature = await sign_message();
+      let gather_data = await populate_data(get_signature);
+    }
   };
 
   const handleRewardsOpen = () => {
@@ -445,7 +451,6 @@ export default function MAIN_PAGE(props) {
             playLeaderboardTab={playLeaderboardTab}
             playRewardsTab={playRewardsTab}
             playEggTab={playEggTab}
-            handleTwitterButton={playClaimPassport}
             playMissionsTab={playMissionsTab}
             handleDialogOpen={handleDialogOpen}
             handleDialogClose={handleDialogClose}
@@ -475,11 +480,8 @@ export default function MAIN_PAGE(props) {
         change_dialog_state={change_dialog_state}
         dialog_data={dialog_data} change_dialog_data={change_dialog_data}
         alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
-        sign_message={sign_message}
+        sign_message={sign_message} handleTwitterButton={playClaimPassport} handleDialogHover={handleDialogHover}
         />
-      <REWARDS_DIALOG rewards_dialog_state={rewards_dialog_state} change_rewards_dialog_state={change_rewards_dialog_state}
-      handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
-      />
       <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
     </Box>
   );
@@ -491,3 +493,7 @@ export default function MAIN_PAGE(props) {
 // leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
 // rewards_data={rewards_data} change_rewards_data={change_rewards_data}
 // />}/>
+
+// <REWARDS_DIALOG rewards_dialog_state={rewards_dialog_state} change_rewards_dialog_state={change_rewards_dialog_state}
+// handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
+// />

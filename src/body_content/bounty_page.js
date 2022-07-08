@@ -9,7 +9,6 @@ import LEADERBOARD from './leaderboard.js';
 import REWARDS from './rewards.js';
 import EGG from './egg.js';
 import PASSPORT from './passport.js';
-import CONNECT_TWITTER from "./connect_twitter.js";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
@@ -17,9 +16,6 @@ import {
   get_quests,
   get_rewards,
   get_leaderboard,
-  auth_twitter,
-  get_twitter_oauth_redirect,
-  verify_twitter
 } from "./../api_calls";
 import bounty_frame from '../images/bounty_frame.png';
 import styles from './bounty_page_styles.js';
@@ -112,14 +108,6 @@ export default function BOUNTY_PAGE(props) {
     props.change_body_state(state);
   };
 
-  const handleOnHover = () => {
-    props.handleDialogHover();
-  };
-
-  const handleTwitterClick = () => {
-    props.handleTwitterButton();
-  };
-
   const container_style = {
     backgroundImage: `url(${bounty_frame})`,
     backgroundPosition: "center",
@@ -140,16 +128,6 @@ export default function BOUNTY_PAGE(props) {
         justifyContent="space-between"
         sx={{ marginBottom: "20px", width: "87%" }}
       >
-        <Box style={styles.button_container}>
-          {wallet && connected ? (
-            <CONNECT_TWITTER
-              variant="contained"
-              style={styles.button}
-              handleButtonHover={() => handleOnHover()}
-              handleButtonClick={() => handleTwitterClick()}
-            />
-          ) : null}
-        </Box>
         <Grid container item xs={4} style={styles.tab_label_grid}>
           <Tabs
             value={tab1_value}
@@ -228,7 +206,7 @@ export default function BOUNTY_PAGE(props) {
               handleRewardsOpen={props.handleRewardsOpen}
               handleRewardsClose={props.handleRewardsClose}
               getWithExpiration={props.getWithExpiration}
-              sign_message={props.sign_message} 
+              sign_message={props.sign_message}
               loading_state={props.loading_state}
               change_loading_state={props.change_loading_state}
               populate_data={props.populate_data}/>

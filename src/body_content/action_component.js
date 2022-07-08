@@ -4,7 +4,10 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
-import {submit_email} from "./../api_calls";
+import CONNECT_TWITTER from "./connect_twitter.js";
+import {submit_email, auth_twitter,
+  get_twitter_oauth_redirect,
+  verify_twitter} from "./../api_calls";
 
 
 export default function ACTION_COMPONENT(props) {
@@ -31,6 +34,10 @@ export default function ACTION_COMPONENT(props) {
     const { value } = e.target;
     setFormValue(value);
   }
+
+  const handleTwitterClick = () => {
+    props.handleTwitterButton();
+  };
 
   const handleEmailSubmit = async (event) => {
     event.preventDefault();
@@ -112,6 +119,22 @@ export default function ACTION_COMPONENT(props) {
       )
     } else if (props.action_data.type === "message") {
       <Typography>{props.action_data.message}</Typography>
+    } else if (props.action_data.type === "") {
+      //twitter oauth component
+      return (
+        <Box>
+          <CONNECT_TWITTER
+            variant="contained"
+            style={{color: "black",
+            fontSize: "14px",
+            fontWeight: "700",
+            width: "40%",
+            backgroundColor: "#F6F6F6"}}
+            handleButtonHover={() => props.handleOnDialogHover()}
+            handleButtonClick={() => handleTwitterClick()}
+          />
+        </Box>
+      )
     }
   }
 

@@ -4,8 +4,8 @@ import queryString from "query-string";
 // import { BASE_URL } from "./constants";
 
 // const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
-// const BASE_URL = 'http://localhost:3001';
-const BASE_URL = "https://mission-control-dev.herokuapp.com";
+const BASE_URL = 'http://localhost:3001';
+// const BASE_URL = "https://mission-control-dev.herokuapp.com";
 
 const sleep = (ms) => {
   return new Promise((resolve) => {
@@ -118,9 +118,9 @@ export const get_twitter_oauth_redirect = async (oauth_token) => {
 // call this function in a useEffect, which waits for callback URL to contain necessary query params
 export const verify_twitter = async (query) => {
   let { oauth_token, oauth_verifier } = queryString.parse(query);
-  console.log("callback query", query);
-  console.log("query oauth_token", oauth_token);
-  console.log("query oauth_verifier", oauth_verifier);
+  // console.log("callback query", query);
+  // console.log("query oauth_token", oauth_token);
+  // console.log("query oauth_verifier", oauth_verifier);
   if (oauth_token && oauth_verifier) {
     try {
       const response = await axios.put(
@@ -141,8 +141,8 @@ export const verify_twitter = async (query) => {
 };
 
 export const submit_email = async (payload, email_string) => {
-  console.log(payload, "in api call");
-  console.log(email_string, "email in api call");
+  // console.log(payload, "in api call");
+  // console.log(email_string, "email in api call");
   try {
     const response = await axios.post(`${BASE_URL}/quests/registerEmail`, {email: email_string}, {headers: payload});
     return response.data;

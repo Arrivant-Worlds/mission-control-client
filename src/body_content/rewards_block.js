@@ -10,7 +10,7 @@ import {claim_reward} from "./../api_calls";
 import styles from './rewards_block_styles.js';
 
 export default function REWARDS_BLOCK(props) {
-  console.log(props.item_data, "reward data?");
+  // console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
