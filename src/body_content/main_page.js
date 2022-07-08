@@ -8,6 +8,7 @@ import CONNECT_PAGE from './connect_page.js';
 // import CONNECT_WALLET from './connect_wallet.js';
 import BOUNTY_PAGE from './bounty_page.js';
 import MISSION_DIALOG from './mission_dialog.js';
+import REWARDS_DIALOG from './rewards_dialog.js';
 import SNACKBAR from './snackbar.js';
 import Box from '@mui/material/Box';
 import { Typewriter, useTypewriter, Cursor } from 'react-simple-typewriter';
@@ -33,8 +34,8 @@ export default function MAIN_PAGE(props) {
   const [body_state, change_body_state] = useState('join');
   const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
-  const [dialog_data, change_dialog_data] = useState({
-  });
+  const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
+  const [dialog_data, change_dialog_data] = useState({});
   const [user_data, change_user_data] = useState({});
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
@@ -170,6 +171,15 @@ export default function MAIN_PAGE(props) {
 
   const handleDialogClose = () => {
     change_dialog_state(false);
+  };
+
+  const handleRewardsOpen = () => {
+    // console.log("firing?? in main open");
+    change_rewards_dialog_state(true);
+  };
+
+  const handleRewardsClose = () => {
+    change_rewards_dialog_state(false);
   };
 
   const handleDropdownOpen = (e) => {
@@ -337,7 +347,8 @@ export default function MAIN_PAGE(props) {
           />}/>
           <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
           user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
-          rewards_data={rewards_data} change_rewards_data={change_rewards_data} populate_data={populate_data} getWithExpiration={getWithExpiration} alertState={alertState} setAlertState={setAlertState}
+          rewards_data={rewards_data} change_rewards_data={change_rewards_data} populate_data={populate_data} getWithExpiration={getWithExpiration} alertState={alertState} setAlertState={setAlertState} handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose} sign_message={sign_message}
+          loading_state={loading_state} change_loading_state={change_loading_state}
           />}/>
       </Routes>
       {loading_state ?
@@ -354,6 +365,9 @@ export default function MAIN_PAGE(props) {
         alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
         sign_message={sign_message}
         />
+      <REWARDS_DIALOG rewards_dialog_state={rewards_dialog_state} change_rewards_dialog_state={change_rewards_dialog_state}
+      handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
+      />
       <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
     </Box>
   );

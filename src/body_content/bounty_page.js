@@ -144,7 +144,9 @@ export default function BOUNTY_PAGE(props) {
         </Grid>
         <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
           <TabPanel value={tab2_value} index={0} style={styles.tab_content_container}>
-            <REWARDS rewards_data={props.rewards_data} user_data={props.user_data}/>
+            <REWARDS rewards_data={props.rewards_data} user_data={props.user_data} handleRewardsOpen={props.handleRewardsOpen} handleRewardsClose={props.handleRewardsClose}
+            getWithExpiration={props.getWithExpiration} sign_message={props.sign_message} loading_state={props.loading_state} change_loading_state={props.change_loading_state}
+            populate_data={props.populate_data}/>
           </TabPanel>
           <TabPanel value={tab2_value} index={1} style={styles.tab_content_container}>
             <EGG/>

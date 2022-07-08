@@ -42,7 +42,6 @@ export default function ACTION_COMPONENT(props) {
       if (header_verification) {
         setFormSubmission(true);
         let email_submission = await submit_email(header_verification, formValue);
-        console.log("great success");
       } else {
         let sign_request = await props.sign_message();
         setFormSubmission(true);
@@ -57,7 +56,7 @@ export default function ACTION_COMPONENT(props) {
   const type_render = () => {
     if (props.action_data.type === "link") {
       return (
-        <Grid sx={{height: "100%", width: "100%"}} container justifyContent="center" alignItems="center">
+        <Grid sx={{height: "100%", width: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
           <Typography>{props.action_data.message}</Typography>
           <Button variant="contained" onClick={() => handleLinkClick(props.action_data.url)}
             sx={{color: "black",
