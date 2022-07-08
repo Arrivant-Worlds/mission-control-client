@@ -8,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Icon from '@mui/material/Icon';
-import {claim_reward} from "./../api_calls";
 
 
 export default function REWARDS_DIALOG(props) {

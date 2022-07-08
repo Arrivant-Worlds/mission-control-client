@@ -16,16 +16,26 @@ export default function REWARDS_BLOCK(props) {
   const render_chest_image = (state) => {
     if (state) {
       return (
-        <Box component="img" src={white_chest} alt="chest symbol" style={styles.chest_symbol}/>
-      )
+        <Box
+          component="img"
+          src={white_chest}
+          alt="chest symbol"
+          style={styles.chest_symbol}
+        />
+      );
     } else {
       return (
-        <Box component="img" src={grey_chest} alt="chest symbol" style={styles.chest_symbol}/>
-      )
+        <Box
+          component="img"
+          src={grey_chest}
+          alt="chest symbol"
+          style={styles.chest_symbol}
+        />
+      );
     }
-  }
+  };
 
-  const handleClaimReward =(reward_id) => {
+  const handleClaimReward = async (reward_id) => {
     //loading
     props.change_loading_state(true);
     let header_verification = await props.getWithExpiration("verifyHeader");
@@ -50,22 +60,64 @@ export default function REWARDS_BLOCK(props) {
       // onMouseEnter={() => change_hover_state(true)}
       // onMouseLeave={() => change_hover_state(false)}
     >
-      <Grid container item direction="row" justifyContent="space-between" alignItems="center" sx={{width: "100%"}}>
-        <Grid container item direction="column" justifyContent="space-between" xs={1}>
-          <Typography style={ props.item_data.claimed_status === "claimable" ? styles.name : styles.name_inactive}>LVL</Typography>
-          <Typography style={ props.item_data.claimed_status === "claimable" ? styles.name : styles.name_inactive}>{props.item_data.requiredLevel}</Typography>
+      <Grid
+        container
+        item
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ width: "100%" }}
+      >
+        <Grid
+          container
+          item
+          direction="column"
+          justifyContent="space-between"
+          xs={1}
+        >
+          <Typography
+            style={
+              props.item_data.claimed_status === "claimable"
+                ? styles.name
+                : styles.name_inactive
+            }
+          >
+            LVL
+          </Typography>
+          <Typography
+            style={
+              props.item_data.claimed_status === "claimable"
+                ? styles.name
+                : styles.name_inactive
+            }
+          >
+            {props.item_data.requiredLevel}
+          </Typography>
         </Grid>
-        <Grid container item xs={6} alignItems="flex-start" sx={
-          { overflow: "hidden",
+        <Grid
+          container
+          item
+          xs={6}
+          alignItems="flex-start"
+          sx={{
+            overflow: "hidden",
             textOverflow: "ellipsis",
             display: "-webkit-box",
             WebkitLineClamp: "2",
             WebkitBoxOrient: "vertical",
             textAlign: "left",
             height: "100%",
-          }
-        }>
-          <Typography style={props.item_data.claimed_status === "claimable" ? styles.title : styles.name_inactive}>{props.item_data.name}</Typography>
+          }}
+        >
+          <Typography
+            style={
+              props.item_data.claimed_status === "claimable"
+                ? styles.title
+                : styles.name_inactive
+            }
+          >
+            {props.item_data.name}
+          </Typography>
         </Grid>
         <Grid container item xs={1}>
           {render_chest_image(props.item_data.claimed_status === "claimable")}
