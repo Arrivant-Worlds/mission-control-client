@@ -15,10 +15,17 @@ const styles = {
     borderRadius: "5px",
     width: "95%",
   },
-  complete_mission_block_container: {
+  claim_mission_block_container: {
     marginTop: "10px",
     padding: "5px 15px",
     border: "0.9px solid #e6b2b9",
+    borderRadius: "5px",
+    width: "95%",
+  },
+  complete_mission_block_container: {
+    marginTop: "10px",
+    padding: "5px 15px",
+    border: "0.9px solid #888888",
     borderRadius: "5px",
     width: "95%",
   },
@@ -42,6 +49,16 @@ const styles = {
     textTransform: "uppercase",
   },
   complete_title: {
+    textOverflow: "ellipsis",
+    color: "#888888",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    fontSize: "14px",
+    fontWeight: "700",
+    maxWidth: "65%",
+    textTransform: "uppercase",
+  },
+  claim_title: {
     textOverflow: "ellipsis",
     color: "#e6b2b9",
     overflow: "hidden",
@@ -70,6 +87,13 @@ const styles = {
     fontSize: "14px",
     fontWeight: "700",
     textTransform: "uppercase",
+    color: "#888888",
+  },
+  claim_description: {
+    textAlign: "left",
+    fontSize: "14px",
+    fontWeight: "700",
+    textTransform: "uppercase",
     color: "#e6b2b9",
   },
   active_xp: {
@@ -91,6 +115,13 @@ const styles = {
     fontSize: "14px",
     fontWeight: "700",
     textTransform: "uppercase",
+    color: "#888888",
+  },
+  claim_xp: {
+    marginLeft: "10px",
+    fontSize: "14px",
+    fontWeight: "700",
+    textTransform: "uppercase",
     color: "#e6b2b9",
   },
   active_icon: {
@@ -106,6 +137,12 @@ const styles = {
     fontSize: "20px",
   },
   complete_icon: {
+    color: "#888888",
+    display: "flex",
+    justifyContent: "center",
+    fontSize: "20px",
+  },
+  claim_icon: {
     color: "#e6b2b9",
     display: "flex",
     justifyContent: "center",
