@@ -2,34 +2,72 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import styles from './mission_dialog_styles.js';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import Icon from '@mui/material/Icon';
+import Button from "@mui/material/Button";
+import styles from './rewards_dialog_styles.js';
 
 
 export default function REWARDS_DIALOG(props) {
+  const [clicked_state, set_clicked_state] = useState(false);
+
+  console.log(clicked_state);
+
+  const handleOnClick = () => {
+    set_clicked_state(true);
+    // console.log(props.rewards_id_dialog, "id?");
+    props.handleClaimJourneyReward(props.rewards_id_dialog);
+  }
+
+  const handleOnClose = () => {
+    set_clicked_state(false);
+    props.handleRewardsClose();
+  }
 
   return (
     <Dialog
       open={props.rewards_dialog_state}
-      onClose={props.handleRewardsClose}
+      onClose={handleOnClose}
       BackdropProps={{
         style: {
+          background: "rgba(26, 32, 38, 0.8)",
+          opacity: "0.8",
         }
       }}
       PaperProps={{
-       style: {
-
-       }
+        style: {
+          background: "#000000",
+          border: "1px solid #E6B2B9",
+          width: "414px",
+          height: "203px",
+        }
       }}
     >
-      <DialogTitle>
-        <Typography>Meow</Typography>
-      </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{height: "100%"}}>
+        {clicked_state ?
+          <Grid sx={{height: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
+            <Typography sx={styles.title}>Reward Claimed!</Typography>
+            <Typography sx={styles.text}>Keep gaining XP to level up!</Typography>
+            <Button
+              sx={styles.button}
+              onClick={() => handleOnClose()}
+            >
+            DASHBOARD
+            </Button>
+          </Grid>
+          :
+          <Grid sx={{height: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
+            <Typography sx={styles.title}>Congratulations!</Typography>
+            <Typography sx={styles.text}>Here is your reward!</Typography>
+            <Button
+              sx={styles.button}
+              onClick={() => handleOnClick()}
+            >
+            CLAIM REWARD
+            </Button>
+          </Grid>
+        }
       </DialogContent>
     </Dialog>
   );

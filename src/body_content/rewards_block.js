@@ -10,7 +10,7 @@ import {claim_reward} from "./../api_calls";
 import styles from './rewards_block_styles.js';
 
 export default function REWARDS_BLOCK(props) {
-  // console.log(props.item_data, "reward data?");
+  console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
@@ -35,30 +35,14 @@ export default function REWARDS_BLOCK(props) {
     }
   };
 
-  const handleClaimReward = async (reward_id) => {
-    //loading
-    props.change_loading_state(true);
-    let header_verification = await props.getWithExpiration("verifyHeader");
-    if (header_verification) {
-      let claim = await claim_reward(header_verification, reward_id);
-      //do get request for user data update.
-      let retrieve_user = await props.populate_data(header_verification);
-      props.handleRewardsOpen(true);
-      //render rewards pop up for post claiming.
-    } else {
-      let sign_request = await props.sign_message();
-      // setFormSubmission(true);
-      let claim = await claim_reward(header_verification, reward_id);
-      let retrieve_user = await props.populate_data(header_verification);
-      props.handleRewardsOpen(true);
-    }
+  const handleOpenRewardDialog = async () => {
+    props.set_rewards_id_dialog(props.item_data.id);
+    props.handleRewardsOpen(true);
   }
 
   return (
     <Grid container direction="row" justifyContent="space-between"
-    style={props.item_data.claimed_status === "claimable" ? styles.rewards_block_container_active : styles.rewards_block_container} onClick={() => {handleClaimReward(props.items_data.id)}}
-      // onMouseEnter={() => change_hover_state(true)}
-      // onMouseLeave={() => change_hover_state(false)}
+      style={props.item_data.claimed_status === "claimable" ? styles.rewards_block_container_active : styles.rewards_block_container} onClick={props.item_data.claimed_status === "claimable" ? handleOpenRewardDialog : null}
     >
       <Grid
         container

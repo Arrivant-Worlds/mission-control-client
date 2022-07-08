@@ -152,9 +152,10 @@ export const submit_email = async (payload, email_string) => {
   }
 };
 
-export const claim_reward = async (payload, reward_id) => {
+export const claim_journey_reward = async (payload, reward_id) => {
   try {
     const response = await axios.post(`${BASE_URL}/journeyRewards?=${reward_id}/claim`, {}, {headers: payload});
+    console.log(response.data);
     return response.data;
   } catch (errors) {
     console.error(errors);

@@ -111,9 +111,10 @@ const Content: FC = (connection) => {
         height: '100vh',
         width: '100vw',
       }}>
-        // {media_query_1000 ?  <MAIN_PAGE/> : <MOBILE_BANNER/>}
         <MAIN_PAGE/>
       </Box>
     </ThemeProvider>
   );
 };
+
+// {media_query_1000 ?  <MAIN_PAGE/> : <MOBILE_BANNER/>}

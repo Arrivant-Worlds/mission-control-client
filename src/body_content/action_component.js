@@ -119,10 +119,11 @@ export default function ACTION_COMPONENT(props) {
       )
     } else if (props.action_data.type === "message") {
       <Typography>{props.action_data.message}</Typography>
-    } else if (props.action_data.type === "") {
+    } else if (props.action_data.type === "twitterOauth") {
       //twitter oauth component
       return (
-        <Box>
+        <Grid sx={{height: "100%", width: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
+          <Typography>{props.action_data.message}</Typography>
           <CONNECT_TWITTER
             variant="contained"
             style={{color: "black",
@@ -133,7 +134,7 @@ export default function ACTION_COMPONENT(props) {
             handleButtonHover={() => props.handleOnDialogHover()}
             handleButtonClick={() => handleTwitterClick()}
           />
-        </Box>
+        </Grid>
       )
     }
   }

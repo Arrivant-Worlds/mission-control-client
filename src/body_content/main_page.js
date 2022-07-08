@@ -9,6 +9,7 @@ import {
   get_quests,
   get_rewards,
   get_leaderboard,
+  claim_journey_reward
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
 // import CONNECT_WALLET from './connect_wallet.js';
@@ -59,6 +60,7 @@ export default function MAIN_PAGE(props) {
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
   const [rewards_data, change_rewards_data] = useState([]);
+  const [rewards_id_dialog, set_rewards_id_dialog] = useState("");
   const [signed_message, change_signed_message] = useState(false);
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
@@ -183,9 +185,7 @@ export default function MAIN_PAGE(props) {
 
     if (wallet && connected) {
       let header_verification = await getWithExpiration("verifyHeader");
-      console.log(header_verification, "return from local storage?");
       if (header_verification) {
-        console.log(header_verification, "headers?");
         let gather_data = await populate_data(header_verification);
         navigate("/bounty_main");
       } else {
@@ -244,14 +244,40 @@ export default function MAIN_PAGE(props) {
     }
   };
 
-  const handleRewardsOpen = () => {
+  const handleRewardsOpen = (reward_id) => {
     // console.log("firing?? in main open");
     change_rewards_dialog_state(true);
   };
 
-  const handleRewardsClose = () => {
+  const handleRewardsClose = async () => {
     change_rewards_dialog_state(false);
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let gather_data = await populate_data(header_verification);
+    } else {
+      let get_signature = await sign_message();
+      let gather_data = await populate_data(get_signature);
+    }
   };
+
+  const handleClaimJourneyReward = async (reward_id) => {
+    //loading
+    // props.change_loading_state(true);
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let claim = await claim_journey_reward(header_verification, reward_id);
+      //do get request for user data update.
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+      //render rewards pop up for post claiming.
+    } else {
+      let sign_request = await sign_message();
+      // setFormSubmission(true);
+      let claim = await claim_journey_reward(header_verification, reward_id);
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+    }
+  }
 
   const handleDropdownOpen = (e) => {
     change_dropdown_anchor(e.currentTarget);
@@ -455,6 +481,8 @@ export default function MAIN_PAGE(props) {
             handleDialogOpen={handleDialogOpen}
             handleDialogClose={handleDialogClose}
             handleDialogHover={handleDialogHover}
+            rewards_id_dialog={rewards_id_dialog}
+            set_rewards_id_dialog={set_rewards_id_dialog}
           />}/>
       </Routes>
       {loading_state ? (
@@ -482,6 +510,15 @@ export default function MAIN_PAGE(props) {
         alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
         sign_message={sign_message} handleTwitterButton={playClaimPassport} handleDialogHover={handleDialogHover}
         />
+      <REWARDS_DIALOG
+        rewards_dialog_state={rewards_dialog_state}
+        change_rewards_dialog_state={change_rewards_dialog_state}
+        handleRewardsOpen={handleRewardsOpen}
+        handleRewardsClose={handleRewardsClose}
+        handleClaimJourneyReward={handleClaimJourneyReward}
+        rewards_id_dialog={rewards_id_dialog}
+        set_rewards_id_dialog={set_rewards_id_dialog}
+      />
       <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
     </Box>
   );
@@ -493,7 +530,3 @@ export default function MAIN_PAGE(props) {
 // leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
 // rewards_data={rewards_data} change_rewards_data={change_rewards_data}
 // />}/>
-
-// <REWARDS_DIALOG rewards_dialog_state={rewards_dialog_state} change_rewards_dialog_state={change_rewards_dialog_state}
-// handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
-// />

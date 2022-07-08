@@ -5,7 +5,7 @@ import Icon from "@mui/material/Icon";
 import styles from "./mission_block_styles.js";
 
 export default function MISSION_BLOCK(props) {
-  console.log(props.item_data, "item data?");
+  // console.log(props.item_data, "item data?");
   const handleOnClick = () => {
     // console.log("firing in mission block click");
     // props.change_dialog_data({test: "meow meow meow"});
