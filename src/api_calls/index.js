@@ -3,12 +3,6 @@ import axios from "axios";
 import queryString from "query-string";
 import { BASE_URL } from "./constants";
 
-const sleep = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-};
-
 export const create_user = async (payload) => {
   try {
     const response = await axios.post(
@@ -134,5 +128,43 @@ export const verify_twitter = async (query) => {
     } catch (e) {
       return false;
     }
+  }
+};
+
+export const get_soulbound = async (payload) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/soulbounds`, {
+      headers: payload,
+    });
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+    return [];
+  }
+};
+
+export const create_soulbound = async (payload) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/soulbounds`,
+      {},
+      { headers: payload }
+    );
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+  }
+};
+
+export const confirm_soulbound = async (headers) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/soulbounds`,
+      {},
+      { headers: headers }
+    );
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
   }
 };
