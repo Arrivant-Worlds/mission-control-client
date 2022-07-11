@@ -22,6 +22,7 @@ import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 // Drew's changes - twitter and sound
 import CONNECT_TWITTER from "./connect_twitter.js";
+import CLAIM_SOULBOUND from "./claim_soulbound.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function BOUNTY_PAGE(props) {
@@ -117,6 +118,10 @@ export default function BOUNTY_PAGE(props) {
     props.handleTwitterButton();
   };
 
+  const handleClaimClick = () => {
+    props.handleTwitterButton();
+  };
+
   const container_style = {
     backgroundImage: `url(${bounty_frame})`,
     backgroundPosition: "center",
@@ -144,6 +149,17 @@ export default function BOUNTY_PAGE(props) {
               style={styles.button}
               handleButtonHover={() => handleOnHover()}
               handleButtonClick={() => handleTwitterClick()}
+            />
+          ) : null}
+        </Box>
+        <Box style={styles.button_container}>
+          {wallet && connected ? (
+            <CLAIM_SOULBOUND
+              variant="contained"
+              style={styles.button}
+              wallet_data={props.wallet_data}
+              handleButtonHover={() => handleOnHover()}
+              handleButtonClick={() => handleClaimClick()}
             />
           ) : null}
         </Box>
