@@ -12,6 +12,15 @@ export default function CLAIM_SOULBOUND(props) {
   const { signTransaction, sendTransaction } = useWallet();
   const connection = new Connection(RPC_CONNECTION_URL);
 
+  //button implementation for later:
+  // <CLAIM_SOULBOUND
+  //           variant="contained"
+  //           style={styles.button}
+  //           wallet_data={props.wallet_data}
+  //           handleButtonHover={() => handleOnHover()}
+  //           handleButtonClick={() => handleClaimClick()}
+  //         />
+
   const handleOnHover = () => {
     props.handleButtonHover();
   };

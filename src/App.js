@@ -2,7 +2,6 @@ import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import background from './images/MissionControl_HQ_background.jpg';
-import black_circle from './images/black_circle.png';
 import 'simplebar-react/dist/simplebar.min.css';
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,9 +10,7 @@ import {
   Route,
 } from "react-router-dom";
 import MAIN_PAGE from "./body_content/main_page.js";
-import CONNECT_PAGE from "./body_content/connect_page.js";
-import CONNECT_WALLET from "./body_content/connect_wallet.js";
-import BOUNTY_PAGE from "./body_content/bounty_page.js";
+import MOBILE_BANNER from "./body_content/mobile_banner.js";
 import React, { FC, useMemo } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
@@ -32,6 +29,7 @@ import {
     WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
+import useMediaQuery from '@mui/material/useMediaQuery';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const theme = createTheme({
@@ -102,10 +100,9 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Content: FC = (connection) => {
+  const media_query_1000 = useMediaQuery('(min-width:1000px)');
   let navigate = useNavigate();
-  const handleOnClick = () => {
-    navigate('/');
-  }
+
   return (
     <ThemeProvider theme={theme}>
       <Box className="App" style={{
@@ -114,9 +111,10 @@ const Content: FC = (connection) => {
         height: '100vh',
         width: '100vw',
       }}>
-        <Box component="img" sx={{position: 'absolute', top: '40px', left: "40px", cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={() => handleOnClick()}/>
         <MAIN_PAGE/>
       </Box>
     </ThemeProvider>
   );
 };
+
+// {media_query_1000 ?  <MAIN_PAGE/> : <MOBILE_BANNER/>}

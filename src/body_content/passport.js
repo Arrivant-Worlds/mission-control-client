@@ -26,10 +26,12 @@ export default function PASSPORT(props) {
       <Typography style={styles.passport}>PASSPORT</Typography>
       <Typography style={styles.date}>issued: 06-06-22</Typography>
       <Grid container direction="column" justifyContent="center" alignItems="center" style={styles.image_container}>
-        <Box component="img" src={default_passport} alt="passport_symbol" style={styles.passport_image}/>
+        <Box component="img" src={ props.user_data.badgeUrl ? default_passport : default_passport} alt="passport_symbol" style={styles.passport_image}/>
         <Box style={styles.hr}/>
         <Grid container direction="row" justifyContent="center" alignItems="center" style={styles.decoder_container}>
-          <Box component="img" src={lock} alt="lock image" style={ props.user_data.badgeName ? styles.hidden : styles.lock_image }/>
+          {props.user_data.badgeUrl ? null :
+            <Box component="img" src={lock} alt="lock image" style={ props.user_data.badgeName ? styles.hidden : styles.lock_image }/>
+          }
           <Typography style={styles.decoder_text}>
             { props.user_data.badgeName ? props.user_data.badgeName : "Locked"}
           </Typography>

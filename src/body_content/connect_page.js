@@ -23,11 +23,12 @@ export default function CONNECT_PAGE(props) {
 
   let navigate = useNavigate();
   let check_headers;
+
   useEffect(() => {
-    console.log("fired? in connect page");
-    console.log(!props.signed_message, "props.signed_msg");
-    console.log(wallet, "wallet");
-    console.log(connected, "connected?");
+    // console.log("fired? in connect page");
+    // console.log(!props.signed_message, "props.signed_msg");
+    // console.log(wallet, "wallet");
+    // console.log(connected, "connected?");
 
     const check_sig = async () => {
       check_headers = await props.getWithExpiration("verifyHeader");

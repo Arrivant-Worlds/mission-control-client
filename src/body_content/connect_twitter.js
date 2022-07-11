@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import styles from "./mission_board_styles.js";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ export default function CONNECT_TWITTER(props) {
   };
 
   return (
-    <Box>
+    <Grid container justifyContent="center" sx={{width: "100%"}}>
       <Button
         variant={props.variant}
         style={props.style}
@@ -53,6 +53,6 @@ export default function CONNECT_TWITTER(props) {
       >
         Connect Twitter
       </Button>
-    </Box>
+    </Grid>
   );
 }

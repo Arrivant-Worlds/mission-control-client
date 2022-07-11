@@ -1,45 +1,44 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import MISSION_BOARD from "./mission_board.js";
-import LEADERBOARD from "./leaderboard.js";
-import REWARDS from "./rewards.js";
-import EGG from "./egg.js";
-import PASSPORT from "./passport.js";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import MISSION_BOARD from './mission_board.js';
+import LEADERBOARD from './leaderboard.js';
+import REWARDS from './rewards.js';
+import EGG from './egg.js';
+import PASSPORT from './passport.js';
+import { useNavigate } from "react-router-dom";
+import { useWallet } from "@solana/wallet-adapter-react";
 import {
   get_user,
   get_quests,
   get_rewards,
   get_leaderboard,
-  auth_twitter,
-  get_twitter_oauth_redirect,
-  verify_twitter,
 } from "./../api_calls";
 import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 // Drew's changes - twitter and sound
-import CONNECT_TWITTER from "./connect_twitter.js";
-import CLAIM_SOULBOUND from "./claim_soulbound.js";
-import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function BOUNTY_PAGE(props) {
+  const { wallet, signMessage, publicKey, connect, connected, disconnect } = useWallet();
+  let navigate = useNavigate();
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
-  const [expanded_tab, change_expanded_tab] = useState("daily");
+  const [expanded_tab, change_expanded_tab] = useState("prime");
 
-  const { wallet, signMessage, publicKey, connect, connected, disconnect } =
-    useWallet();
-
-  // useEffect(() => {
-  //   async function getUser() {
-  //
-  //   }
-  //   getUser();
-  //   //change to props.exp etc.
-  // }, []);
+  useEffect(() => {
+    const check_sig = async () => {
+      let check_headers = await props.getWithExpiration("verifyHeader");
+      if (!wallet || !connected || !check_headers) {
+        navigate('/connect');
+      } else if (wallet && connected && check_headers) {
+        let gather_data = props.populate_data(check_headers);
+      }
+    }
+    check_sig();
+  }, []);
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0") {
@@ -110,18 +109,6 @@ export default function BOUNTY_PAGE(props) {
     props.change_body_state(state);
   };
 
-  const handleOnHover = () => {
-    props.handleDialogHover();
-  };
-
-  const handleTwitterClick = () => {
-    props.handleTwitterButton();
-  };
-
-  const handleClaimClick = () => {
-    props.handleTwitterButton();
-  };
-
   const container_style = {
     backgroundImage: `url(${bounty_frame})`,
     backgroundPosition: "center",
@@ -142,27 +129,6 @@ export default function BOUNTY_PAGE(props) {
         justifyContent="space-between"
         sx={{ marginBottom: "20px", width: "87%" }}
       >
-        <Box style={styles.button_container}>
-          {wallet && connected ? (
-            <CONNECT_TWITTER
-              variant="contained"
-              style={styles.button}
-              handleButtonHover={() => handleOnHover()}
-              handleButtonClick={() => handleTwitterClick()}
-            />
-          ) : null}
-        </Box>
-        <Box style={styles.button_container}>
-          {wallet && connected ? (
-            <CLAIM_SOULBOUND
-              variant="contained"
-              style={styles.button}
-              wallet_data={props.wallet_data}
-              handleButtonHover={() => handleOnHover()}
-              handleButtonClick={() => handleClaimClick()}
-            />
-          ) : null}
-        </Box>
         <Grid container item xs={4} style={styles.tab_label_grid}>
           <Tabs
             value={tab1_value}
@@ -233,22 +199,20 @@ export default function BOUNTY_PAGE(props) {
             <PASSPORT user_data={props.user_data} />
           </Box>
         </Grid>
-        <Grid
-          container
-          item
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          xs={4}
-        >
-          <TabPanel
-            value={tab2_value}
-            index={0}
-            style={styles.tab_content_container}
-          >
+        <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
+          <TabPanel value={tab2_value} index={0} style={styles.tab_content_container}>
             <REWARDS
               rewards_data={props.rewards_data}
               user_data={props.user_data}
+              handleRewardsOpen={props.handleRewardsOpen}
+              handleRewardsClose={props.handleRewardsClose}
+              getWithExpiration={props.getWithExpiration}
+              sign_message={props.sign_message}
+              loading_state={props.loading_state}
+              change_loading_state={props.change_loading_state}
+              populate_data={props.populate_data}
+              rewards_dialog_data={props.rewards_dialog_data}
+              set_rewards_dialog_data={props.set_rewards_dialog_data}
             />
           </TabPanel>
           <TabPanel

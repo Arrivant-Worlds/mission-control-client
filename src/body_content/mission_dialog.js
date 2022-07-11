@@ -11,19 +11,18 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Icon from '@mui/material/Icon';
+import ACTION_COMPONENT from './action_component.js';
 
 
 export default function MISSION_DIALOG(props) {
+
   // console.log(props.dialog_data, "dialog_data");
-  const handleOnClick = () => {
-    if (props.dialog_data.platform === "Discord") {
-      //open up discord
-      window.open("https://discord.gg/eluune");
-    } else if (props.dialog_data.platform === "twitter") {
-      window.open("https://twitter.com/ProjectEluune");
-      //open up twitter
-    }
-  }
+  //snackbar notifies user it may take some time after click of action button.
+    //when they return to mission dialog.
+      //quest_user_status is in dialog data.
+      //action component needs 5th state for claim reward mode.
+      //click opens up secondary confirm dialog can test with current dialog?
+        //claim has not been implemented.
 
   const renderIcon = () => {
     if (props.dialog_data.platform === "Discord") {
@@ -42,7 +41,7 @@ export default function MISSION_DIALOG(props) {
   return (
     <Dialog
       open={props.dialog_state}
-      onClose={() => props.handleDialogClose()}
+      onClose={() => props.handleDialogClose(props.actionDone)}
       BackdropProps={{
         style: {
           background: "rgba(26, 32, 38, 0.8)",
@@ -65,7 +64,7 @@ export default function MISSION_DIALOG(props) {
         {props.dialog_state? (
           <IconButton
             aria-label="close"
-            onClick={() => props.handleDialogClose()}
+            onClick={() => props.handleDialogClose(props.actionDone)}
             sx={{
               position: 'absolute',
               right: 15,
@@ -79,9 +78,7 @@ export default function MISSION_DIALOG(props) {
       </DialogTitle>
       <DialogContent style={styles.content_container}>
         <Grid container direction="column" style={styles.platform_container}>
-          <Grid container direction="row" justifyContent="space-between" onClick={() => {handleOnClick()}}
-            sx={{cursor: "pointer"}}
-          >
+          <Grid container direction="row" justifyContent="space-between">
             <Grid container item xs={7}>
               <Grid container item xs={1}>
                 <Box component="img" src={elune_icon} alt="elune_icon" />
@@ -122,7 +119,23 @@ export default function MISSION_DIALOG(props) {
               </Grid>
             </Grid>
             <Grid item xs={5}>
-              <Box style={styles.upload_frame}/>
+              <Box style={styles.action_frame}>
+                <ACTION_COMPONENT action_data={props.dialog_data.action}
+                  getWithExpiration={props.getWithExpiration}
+                  sign_message={props.sign_message}
+                  handleTwitterButton={props.handleTwitterButton}
+                  handleOnDialogHover={props.handleOnDialogHover}
+                  actionDone={props.actionDone}
+                  setActionDone={props.setActionDone}
+                  alertState={props.alertState}
+                  setAlertState={props.setAlertState}
+                  dialog_data={props.dialog_data}
+                  handleRewardsOpen={props.handleRewardsOpen}
+                  handleRewardsClose={props.handleRewardsClose}
+                  rewards_dialog_data={props.rewards_dialog_data}
+                  set_rewards_dialog_data={props.set_rewards_dialog_data}
+                />
+              </Box>
             </Grid>
           </Grid>
           <Box style={styles.hr}/>

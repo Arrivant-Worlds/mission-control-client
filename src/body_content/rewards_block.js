@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Icon from "@mui/material/Icon";
-import white_chest from "../images/chest.png";
-import grey_chest from "../images/grey_chest.png";
-import styles from "./rewards_block_styles.js";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Icon from '@mui/material/Icon';
+import white_chest from '../images/chest.png';
+import grey_chest from '../images/grey_chest.png';
+import {claim_reward} from "./../api_calls";
+
+import styles from './rewards_block_styles.js';
 
 export default function REWARDS_BLOCK(props) {
+  // console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
@@ -32,16 +35,14 @@ export default function REWARDS_BLOCK(props) {
     }
   };
 
+  const handleOpenRewardDialog = async () => {
+    props.set_rewards_dialog_data({xp:props.item_data.xp, id:props.item_data.id});
+    props.handleRewardsOpen(true);
+  }
+
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="space-between"
-      style={
-        props.item_data.claimed_status === "claimable"
-          ? styles.rewards_block_container_active
-          : styles.rewards_block_container
-      }
+    <Grid container direction="row" justifyContent="space-between"
+      style={props.item_data.claimed_status === "claimable" ? styles.rewards_block_container_active : styles.rewards_block_container} onClick={props.item_data.claimed_status === "claimable" ? handleOpenRewardDialog : null}
     >
       <Grid
         container

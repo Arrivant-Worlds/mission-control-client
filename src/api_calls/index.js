@@ -1,7 +1,11 @@
 import SelectInput from "@mui/material/Select/SelectInput";
 import axios from "axios";
 import queryString from "query-string";
-import { BASE_URL } from "./constants";
+// import { BASE_URL } from "./constants";
+
+const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
+// const BASE_URL = 'http://localhost:3001';
+// const BASE_URL = "https://mission-control-dev.herokuapp.com";
 
 export const create_user = async (payload) => {
   try {
@@ -38,10 +42,8 @@ export const get_user = async (payload) => {
 
 export const get_quests = async (payload) => {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/quests?available_to_user=true`,
-      { headers: payload }
-    );
+    // const response = await axios.get(`${BASE_URL}/quests?available_to_user=true`, {headers: payload});
+    const response = await axios.get(`${BASE_URL}/quests`, {headers: payload});
     return response.data;
   } catch (errors) {
     console.error(errors);
@@ -109,9 +111,9 @@ export const get_twitter_oauth_redirect = async (oauth_token) => {
 // call this function in a useEffect, which waits for callback URL to contain necessary query params
 export const verify_twitter = async (query) => {
   let { oauth_token, oauth_verifier } = queryString.parse(query);
-  console.log("callback query", query);
-  console.log("query oauth_token", oauth_token);
-  console.log("query oauth_verifier", oauth_verifier);
+  // console.log("callback query", query);
+  // console.log("query oauth_token", oauth_token);
+  // console.log("query oauth_verifier", oauth_verifier);
   if (oauth_token && oauth_verifier) {
     try {
       const response = await axios.put(
@@ -130,6 +132,29 @@ export const verify_twitter = async (query) => {
     }
   }
 };
+
+export const submit_email = async (payload, email_string) => {
+  // console.log(payload, "in api call");
+  // console.log(email_string, "email in api call");
+  try {
+    const response = await axios.post(`${BASE_URL}/quests/registerEmail`, {email: email_string}, {headers: payload});
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+    return ([]);
+  }
+};
+
+export const claim_journey_reward = async (payload, reward_id) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/journeyRewards?=${reward_id}/claim`, {}, {headers: payload});
+    console.log(response.data);
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+    return ([]);
+  }
+}
 
 export const get_soulbound = async (payload) => {
   try {
@@ -167,4 +192,4 @@ export const confirm_soulbound = async (headers) => {
   } catch (errors) {
     console.error(errors);
   }
-};
+}
