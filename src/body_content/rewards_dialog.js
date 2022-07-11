@@ -12,7 +12,7 @@ import styles from './rewards_dialog_styles.js';
 export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
 
-  console.log(clicked_state);
+  // console.log(clicked_state);
 
   const handleOnClick = () => {
     set_clicked_state(true);

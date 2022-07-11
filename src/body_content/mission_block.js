@@ -41,21 +41,21 @@ export default function MISSION_BLOCK(props) {
 
   const render_style = (section) => {
     //render different style objects based on
-    let style_name = `active_${section}`;
-    return styles[style_name];
-    // if (props.item_data.user_quest_status === "Available") {
-    //   let style_name = `active_${section}`;
-    //   return styles[style_name];
-    // } else if (!props.item_data.user_quest_status === "Locked") {
-    //   let style_name = `inactive_${section}`;
-    //   return styles[style_name];
-    // } else if (props.item_data.user_quest_status === "Complete") {
-    //   let style_name = `complete_${section}`;
-    //   return styles[style_name];
-    // } else if (props.item_data.user_quest_status === "Claimable") {
-    //   let style_name = `claim_${section}`;
-    //   return styles[style_name];
-    // }
+    // let style_name = `active_${section}`;
+    // return styles[style_name];
+    if (props.item_data.user_quest_status === "Available") {
+      let style_name = `active_${section}`;
+      return styles[style_name];
+    } else if (!props.item_data.user_quest_status === "Locked") {
+      let style_name = `inactive_${section}`;
+      return styles[style_name];
+    } else if (props.item_data.user_quest_status === "Complete") {
+      let style_name = `complete_${section}`;
+      return styles[style_name];
+    } else if (props.item_data.user_quest_status === "Claimable") {
+      let style_name = `claim_${section}`;
+      return styles[style_name];
+    }
   }
 
   return (
