@@ -17,8 +17,9 @@ import {
   get_rewards,
   get_leaderboard,
 } from "./../api_calls";
-import bounty_frame from '../images/bounty_frame.png';
-import styles from './bounty_page_styles.js';
+import bounty_frame from "../images/bounty_frame.png";
+import styles from "./bounty_page_styles.js";
+// Drew's changes - twitter and sound
 
 export default function BOUNTY_PAGE(props) {
   const { wallet, signMessage, publicKey, connect, connected, disconnect } = useWallet();

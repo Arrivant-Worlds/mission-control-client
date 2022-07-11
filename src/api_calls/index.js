@@ -7,6 +7,7 @@ import queryString from "query-string";
 const BASE_URL = 'http://localhost:3001';
 // const BASE_URL = "https://mission-control-dev.herokuapp.com";
 
+<<<<<<< HEAD
 const sleep = (ms) => {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -14,6 +15,8 @@ const sleep = (ms) => {
 };
 
 
+=======
+>>>>>>> 19c8ab971dc1b20900428d2a09319c7768ddfc7e
 export const create_user = async (payload) => {
   try {
     const response = await axios.post(
@@ -140,6 +143,7 @@ export const verify_twitter = async (query) => {
   }
 };
 
+<<<<<<< HEAD
 export const submit_email = async (payload, email_string) => {
   // console.log(payload, "in api call");
   // console.log(email_string, "email in api call");
@@ -160,5 +164,42 @@ export const claim_journey_reward = async (payload, reward_id) => {
   } catch (errors) {
     console.error(errors);
     return ([]);
+=======
+export const get_soulbound = async (payload) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/soulbounds`, {
+      headers: payload,
+    });
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+    return [];
+  }
+};
+
+export const create_soulbound = async (payload) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/soulbounds`,
+      {},
+      { headers: payload }
+    );
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+  }
+};
+
+export const confirm_soulbound = async (headers) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/soulbounds`,
+      {},
+      { headers: headers }
+    );
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+>>>>>>> 19c8ab971dc1b20900428d2a09319c7768ddfc7e
   }
 };
