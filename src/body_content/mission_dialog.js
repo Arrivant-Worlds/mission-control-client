@@ -132,8 +132,8 @@ export default function MISSION_DIALOG(props) {
                   dialog_data={props.dialog_data}
                   handleRewardsOpen={props.handleRewardsOpen}
                   handleRewardsClose={props.handleRewardsClose}
-                  rewards_id_dialog={props.rewards_id_dialog}
-                  set_rewards_id_dialog={props.set_rewards_id_dialog}
+                  rewards_dialog_data={props.rewards_dialog_data}
+                  set_rewards_dialog_data={props.set_rewards_dialog_data}
                 />
               </Box>
             </Grid>

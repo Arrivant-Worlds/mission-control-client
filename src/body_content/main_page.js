@@ -60,7 +60,10 @@ export default function MAIN_PAGE(props) {
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
   const [rewards_data, change_rewards_data] = useState([]);
-  const [rewards_id_dialog, set_rewards_id_dialog] = useState("");
+  const [rewards_dialog_data, set_rewards_dialog_data] = useState({
+    xp: "",
+    id: ""
+  });
   const [signed_message, change_signed_message] = useState(false);
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
@@ -499,8 +502,8 @@ export default function MAIN_PAGE(props) {
             handleDialogOpen={handleDialogOpen}
             handleDialogClose={handleDialogClose}
             handleDialogHover={handleDialogHover}
-            rewards_id_dialog={rewards_id_dialog}
-            set_rewards_id_dialog={set_rewards_id_dialog}
+            rewards_dialog_data={rewards_dialog_data}
+            set_rewards_dialog_data={set_rewards_dialog_data}
           />}/>
       </Routes>
       {loading_state ? (
@@ -529,8 +532,8 @@ export default function MAIN_PAGE(props) {
         alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
         sign_message={sign_message} handleTwitterButton={playClaimPassport} handleDialogHover={handleDialogHover}
         handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
-        rewards_id_dialog={rewards_id_dialog}
-        set_rewards_id_dialog={set_rewards_id_dialog}
+        rewards_dialog_data={rewards_dialog_data}
+        set_rewards_dialog_data={set_rewards_dialog_data}
         />
       <REWARDS_DIALOG
         rewards_dialog_state={rewards_dialog_state}
@@ -538,8 +541,8 @@ export default function MAIN_PAGE(props) {
         handleRewardsOpen={handleRewardsOpen}
         handleRewardsClose={handleRewardsClose}
         handleClaimJourneyReward={handleClaimJourneyReward}
-        rewards_id_dialog={rewards_id_dialog}
-        set_rewards_id_dialog={set_rewards_id_dialog}
+        rewards_dialog_data={rewards_dialog_data}
+        set_rewards_dialog_data={set_rewards_dialog_data}
       />
       <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
     </Box>

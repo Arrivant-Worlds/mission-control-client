@@ -34,7 +34,10 @@ export default function ACTION_COMPONENT(props) {
   const handleRewardClaim = () => {
     //open rewards dialog
     // console.log(props.dialog_data, "dialog data");
-    props.set_rewards_id_dialog(props.dialog_data.id);
+    props.set_rewards_dialog_data({
+      xp: props.dialog_data.xp,
+      id: props.dialog_data.id
+    });
     props.handleRewardsOpen();
   }
 

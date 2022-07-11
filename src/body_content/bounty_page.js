@@ -211,8 +211,8 @@ export default function BOUNTY_PAGE(props) {
               loading_state={props.loading_state}
               change_loading_state={props.change_loading_state}
               populate_data={props.populate_data}
-              rewards_id_dialog={props.rewards_id_dialog}
-              set_rewards_id_dialog={props.set_rewards_id_dialog}
+              rewards_dialog_data={props.rewards_dialog_data}
+              set_rewards_dialog_data={props.set_rewards_dialog_data}
             />
           </TabPanel>
           <TabPanel

@@ -36,7 +36,7 @@ export default function REWARDS_BLOCK(props) {
   };
 
   const handleOpenRewardDialog = async () => {
-    props.set_rewards_id_dialog(props.item_data.id);
+    props.set_rewards_dialog_data({xp:props.item_data.xp, id:props.item_data.id});
     props.handleRewardsOpen(true);
   }
 

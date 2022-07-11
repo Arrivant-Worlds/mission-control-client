@@ -12,13 +12,13 @@ import styles from './rewards_dialog_styles.js';
 export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
 
-  // console.log(props.rewards_id_dialog, "Id of current quest for dialog");
+  // console.log(props.rewards_dialog_data.id, "Id of current quest for dialog");
 
   const handleOnClick = () => {
     set_clicked_state(true);
-    // console.log(props.rewards_id_dialog, "id?");
+    // console.log(props.rewards_dialog_data.id, "id?");
     //rework higher level function using this id
-      //perhaps split journey reward claim and quest claim and conditional to see which to fire. 
+      //perhaps split journey reward claim and quest claim and conditional to see which to fire.
 
   }
 
@@ -61,7 +61,7 @@ export default function REWARDS_DIALOG(props) {
           :
           <Grid sx={{height: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
             <Typography sx={styles.title}>Congratulations!</Typography>
-            <Typography sx={styles.text}>Here is your reward!</Typography>
+            <Typography sx={styles.text}>{`+${props.rewards_dialog_data.xp} xp`}</Typography>
             <Button
               sx={styles.button}
               onClick={() => handleOnClick()}
