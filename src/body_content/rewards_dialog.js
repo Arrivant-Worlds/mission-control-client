@@ -12,12 +12,14 @@ import styles from './rewards_dialog_styles.js';
 export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
 
-  // console.log(clicked_state);
+  // console.log(props.rewards_id_dialog, "Id of current quest for dialog");
 
   const handleOnClick = () => {
     set_clicked_state(true);
     // console.log(props.rewards_id_dialog, "id?");
-    props.handleClaimJourneyReward(props.rewards_id_dialog);
+    //rework higher level function using this id
+      //perhaps split journey reward claim and quest claim and conditional to see which to fire. 
+
   }
 
   const handleOnClose = () => {

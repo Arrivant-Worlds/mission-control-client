@@ -15,16 +15,14 @@ import ACTION_COMPONENT from './action_component.js';
 
 
 export default function MISSION_DIALOG(props) {
+
   // console.log(props.dialog_data, "dialog_data");
-  // const handleOnClick = () => {
-  //   if (props.dialog_data.platform === "Discord") {
-  //     //open up discord
-  //     window.open("https://discord.gg/eluune");
-  //   } else if (props.dialog_data.platform === "twitter") {
-  //     window.open("https://twitter.com/ProjectEluune");
-  //     //open up twitter
-  //   }
-  // }
+  //snackbar notifies user it may take some time after click of action button.
+    //when they return to mission dialog.
+      //quest_user_status is in dialog data.
+      //action component needs 5th state for claim reward mode.
+      //click opens up secondary confirm dialog can test with current dialog?
+        //claim has not been implemented.
 
   const renderIcon = () => {
     if (props.dialog_data.platform === "Discord") {
@@ -43,7 +41,7 @@ export default function MISSION_DIALOG(props) {
   return (
     <Dialog
       open={props.dialog_state}
-      onClose={() => props.handleDialogClose()}
+      onClose={() => props.handleDialogClose(props.actionDone)}
       BackdropProps={{
         style: {
           background: "rgba(26, 32, 38, 0.8)",
@@ -66,7 +64,7 @@ export default function MISSION_DIALOG(props) {
         {props.dialog_state? (
           <IconButton
             aria-label="close"
-            onClick={() => props.handleDialogClose()}
+            onClick={() => props.handleDialogClose(props.actionDone)}
             sx={{
               position: 'absolute',
               right: 15,
@@ -123,10 +121,19 @@ export default function MISSION_DIALOG(props) {
             <Grid item xs={5}>
               <Box style={styles.action_frame}>
                 <ACTION_COMPONENT action_data={props.dialog_data.action}
-                getWithExpiration={props.getWithExpiration}
-                sign_message={props.sign_message}
-                handleTwitterButton={props.handleTwitterButton}
-                handleOnDialogHover={props.handleOnDialogHover}
+                  getWithExpiration={props.getWithExpiration}
+                  sign_message={props.sign_message}
+                  handleTwitterButton={props.handleTwitterButton}
+                  handleOnDialogHover={props.handleOnDialogHover}
+                  actionDone={props.actionDone}
+                  setActionDone={props.setActionDone}
+                  alertState={props.alertState}
+                  setAlertState={props.setAlertState}
+                  dialog_data={props.dialog_data}
+                  handleRewardsOpen={props.handleRewardsOpen}
+                  handleRewardsClose={props.handleRewardsClose}
+                  rewards_id_dialog={props.rewards_id_dialog}
+                  set_rewards_id_dialog={props.set_rewards_id_dialog}
                 />
               </Box>
             </Grid>

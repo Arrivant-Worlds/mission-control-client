@@ -27,7 +27,15 @@ export default function ACTION_COMPONENT(props) {
   const [helperText, setHelperText] = useState(" ");
 
   const handleLinkClick = (path) => {
+    props.setActionDone(true);
     window.open(path);
+  }
+
+  const handleRewardClaim = () => {
+    //open rewards dialog
+    // console.log(props.dialog_data, "dialog data");
+    props.set_rewards_id_dialog(props.dialog_data.id);
+    props.handleRewardsOpen();
   }
 
   const handleInputChange = (e) => {
@@ -36,6 +44,7 @@ export default function ACTION_COMPONENT(props) {
   }
 
   const handleTwitterClick = () => {
+    props.setActionDone(true);
     props.handleTwitterButton();
   };
 
@@ -48,10 +57,12 @@ export default function ACTION_COMPONENT(props) {
       let header_verification = await props.getWithExpiration("verifyHeader");
       if (header_verification) {
         setFormSubmission(true);
+        props.setActionDone(true);
         let email_submission = await submit_email(header_verification, formValue);
       } else {
         let sign_request = await props.sign_message();
         setFormSubmission(true);
+        props.setActionDone(true);
         let email_submission = await submit_email(sign_request, formValue);
       }
     } else {
@@ -61,7 +72,24 @@ export default function ACTION_COMPONENT(props) {
   };
 
   const type_render = () => {
-    if (props.action_data.type === "link") {
+    if (props.user_quest_status === "Available") {
+      return (
+        <Grid container direction="column" justifyContent="center" alignItems="center" sx={{height: "100%", width: "100%"}}>
+          <Grid container direction="column" justifyContent="space-around" alignItems="flex-start" sx={{height: "100%", width: "100%", padding: "10px"}}>
+            <Typography sx={{fontWeight: "700"}}>VERIFIED!</Typography>
+            <Typography>Your submission has been verified! Click the button below to claim your reward.</Typography>
+            <Button variant="contained" onClick={() => handleRewardClaim()}
+              sx={{color: "black",
+              fontSize: "14px",
+              width: "100%",
+              fontWeight: "700",
+              backgroundColor: "#F6F6F6"}}>
+            CLAIM REWARD
+            </Button>
+          </Grid>
+        </Grid>
+      )
+    } else if (props.action_data.type === "link") {
       return (
         <Grid sx={{height: "100%", width: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
           <Typography>{props.action_data.message}</Typography>
@@ -69,7 +97,6 @@ export default function ACTION_COMPONENT(props) {
             sx={{color: "black",
             fontSize: "14px",
             fontWeight: "700",
-            width: "40%",
             backgroundColor: "#F6F6F6"}}
           >PLACEHOLDER</Button>
         </Grid>
@@ -109,7 +136,6 @@ export default function ACTION_COMPONENT(props) {
                 sx={{color: "black",
                 fontSize: "14px",
                 fontWeight: "700",
-                width: "40%",
                 backgroundColor: "#F6F6F6"}}>
                 Submit
               </Button>
@@ -119,7 +145,7 @@ export default function ACTION_COMPONENT(props) {
       )
     } else if (props.action_data.type === "message") {
       <Typography>{props.action_data.message}</Typography>
-    } else if (props.action_data.type === "twitterOauth") {
+    } else if (props.action_data.type === "linkTwitter") {
       //twitter oauth component
       return (
         <Grid sx={{height: "100%", width: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
@@ -129,7 +155,6 @@ export default function ACTION_COMPONENT(props) {
             style={{color: "black",
             fontSize: "14px",
             fontWeight: "700",
-            width: "40%",
             backgroundColor: "#F6F6F6"}}
             handleButtonHover={() => props.handleOnDialogHover()}
             handleButtonClick={() => handleTwitterClick()}

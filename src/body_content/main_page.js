@@ -71,6 +71,8 @@ export default function MAIN_PAGE(props) {
     severity: undefined,
   });
   //severity: "success" | "info" | "warning" | "error" | undefined;
+  //state for if user did the action in mission dialog
+  const [actionDone, setActionDone] = useState(false);
 
   // Drew's changes - sound hooks
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
@@ -232,8 +234,36 @@ export default function MAIN_PAGE(props) {
     change_dialog_state(true);
   };
 
-  const handleDialogClose = async () => {
+  const handleDialogClose = async (action_state) => {
     playQuestClose();
+    change_dialog_state(false);
+    if (action_state) {
+      //set the alert saying it could take up to a min to verify, come back and claim.
+      setAlertState(
+        {
+          open: true,
+          message: "Verification of mission object can take up to 60 seconds! Come back to claim your reward",
+          severity: "success",
+        }
+      )
+    }
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let gather_data = await populate_data(header_verification);
+    } else {
+      let get_signature = await sign_message();
+      let gather_data = await populate_data(get_signature);
+    }
+    setActionDone(false);
+  };
+
+  const handleRewardsOpen = (reward_id) => {
+    // console.log("firing?? in main open");
+    change_rewards_dialog_state(true);
+  };
+
+  const handleRewardsClose = async () => {
+    change_rewards_dialog_state(false);
     change_dialog_state(false);
     let header_verification = await getWithExpiration("verifyHeader");
     if (header_verification) {
@@ -244,21 +274,9 @@ export default function MAIN_PAGE(props) {
     }
   };
 
-  const handleRewardsOpen = (reward_id) => {
-    // console.log("firing?? in main open");
-    change_rewards_dialog_state(true);
-  };
-
-  const handleRewardsClose = async () => {
-    change_rewards_dialog_state(false);
-    let header_verification = await getWithExpiration("verifyHeader");
-    if (header_verification) {
-      let gather_data = await populate_data(header_verification);
-    } else {
-      let get_signature = await sign_message();
-      let gather_data = await populate_data(get_signature);
-    }
-  };
+  const handleClaimQuestReward = async (reward_id) => {
+    //to be implemented.
+  }
 
   const handleClaimJourneyReward = async (reward_id) => {
     //loading
@@ -507,8 +525,12 @@ export default function MAIN_PAGE(props) {
         dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
         dialog_data={dialog_data} change_dialog_data={change_dialog_data}
+        actionDone={actionDone} setActionDone={setActionDone}
         alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
         sign_message={sign_message} handleTwitterButton={playClaimPassport} handleDialogHover={handleDialogHover}
+        handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
+        rewards_id_dialog={rewards_id_dialog}
+        set_rewards_id_dialog={set_rewards_id_dialog}
         />
       <REWARDS_DIALOG
         rewards_dialog_state={rewards_dialog_state}

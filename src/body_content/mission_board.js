@@ -12,7 +12,7 @@ import minus from "../images/minus.png";
 // import prime_mission_data from "./prime_mission_data.js";
 
 export default function MISSION_BOARD(props) {
-  console.log(props.quests_data, "quest data");
+  // console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.playQuestType();
@@ -37,7 +37,7 @@ export default function MISSION_BOARD(props) {
           >
             {
               props.quests_data.map((item, i) => {
-                if (item.recurrence === "once") {
+                if (item.recurrence === "prime") {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
                     dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
