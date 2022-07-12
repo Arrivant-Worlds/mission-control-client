@@ -11,7 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Icon from '@mui/material/Icon';
-
+import Mailchimp from "react-mailchimp-form"
 
 export default function MISSION_DIALOG(props) {
   // console.log(props.dialog_data, "dialog_data");
@@ -89,6 +89,17 @@ export default function MISSION_DIALOG(props) {
                 <Grid container item xs alignItems="center">
                   <Typography>Project Eluüne (@ProjectEluune)</Typography>
                 </Grid>
+                <Mailchimp
+        action='https://projecteluune.us13.list-manage.com/subscribe/post?u=76cfb9846ba202e2ff8e1f6ba&amp;id=226877539a'
+        fields={[
+          {
+            name: 'EMAIL',
+            placeholder: 'Email',
+            type: 'email',
+            required: true
+          }
+        ]}
+        />
             </Grid>
             <Grid container item xs={1} justifyContent="flex-end">
               {renderIcon()}
