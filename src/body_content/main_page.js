@@ -1,52 +1,121 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { decodeUTF8 } from "tweetnacl-util";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
-import {create_user, get_user, get_quests, get_rewards, get_leaderboard} from "./../api_calls";
-import CONNECT_PAGE from './connect_page.js';
-// import CONNECT_WALLET from './connect_wallet.js';
-import BOUNTY_PAGE from './bounty_page.js';
-import MISSION_DIALOG from './mission_dialog.js';
-import Box from '@mui/material/Box';
-import { Typewriter, useTypewriter, Cursor } from 'react-simple-typewriter';
 import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-import SG_logo from '../images/PE_SG_logo.png';
-import ripple_diamond from '../images/ripple_diamond.png';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import styles from './main_page_styles.js';
+  create_user,
+  get_user,
+  get_quests,
+  get_rewards,
+  get_leaderboard,
+  claim_journey_reward
+} from "./../api_calls";
+import CONNECT_PAGE from "./connect_page.js";
+// import CONNECT_WALLET from './connect_wallet.js';
+import BOUNTY_PAGE from "./bounty_page.js";
+import MISSION_DIALOG from "./mission_dialog.js";
+import REWARDS_DIALOG from './rewards_dialog.js';
+import SNACKBAR from './snackbar.js';
+import Box from "@mui/material/Box";
+import { Typewriter, useTypewriter, Cursor } from "react-simple-typewriter";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SG_logo from "../images/PE_SG_logo.png";
+import black_circle from '../images/black_circle.png';
+import ripple_diamond from "../images/ripple_diamond.png";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import styles from "./main_page_styles.js";
+
+import AurahTheme from "../audio/AurahTheme.mp3";
+import MainHover from "../audio/MainHover.mp3";
+import QuestOpen from "../audio/QuestOpen.wav";
+import QuestClose from "../audio/QuestClose.wav";
+import QuestHover from "../audio/QuestHover.mp3";
+import DisconnectWallet from "../audio/DisconnectWallet.wav";
+import ConnectWallet from "../audio/ClaimPassport.mp3";
+import ClaimPassport from "../audio/ClaimPassport.mp3";
+import QuestType from "../audio/QuestType.wav";
+import MissionsTab from "../audio/MissionsTab.wav";
+import LeaderboardTab from "../audio/LeaderboardTab.wav";
+import RewardsTab from "../audio/RewardsTab.wav";
+import EggTab from "../audio/EggTab.wav";
+import DisconnectHover from "../audio/QuestHover.mp3";
+import useSound from "use-sound";
 
 export default function MAIN_PAGE(props) {
-  const { wallet, signMessage, publicKey, connect, connected, disconnect } = useWallet();
+  const { wallet, signMessage, publicKey, connect, connected, disconnect } =
+    useWallet();
   let navigate = useNavigate();
-  const [body_state, change_body_state] = useState('join');
+  const [body_state, change_body_state] = useState("join");
   const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
-  const [dialog_data, change_dialog_data] = useState({
-    test: "meow mix",
-  });
+  const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
+  const [dialog_data, change_dialog_data] = useState({});
   const [user_data, change_user_data] = useState({});
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
   const [rewards_data, change_rewards_data] = useState([]);
+  const [rewards_dialog_data, set_rewards_dialog_data] = useState({
+    xp: "",
+    id: ""
+  });
   const [signed_message, change_signed_message] = useState(false);
   const [loading_state, change_loading_state] = useState(false);
+  const [dropdown_anchor, change_dropdown_anchor] = useState(null);
+  const dropdown_open = Boolean(dropdown_anchor);
+  const [alertState, setAlertState] = useState({
+    open: false,
+    message: "",
+    severity: undefined,
+  });
+  //severity: "success" | "info" | "warning" | "error" | undefined;
+  //state for if user did the action in mission dialog
+  const [actionDone, setActionDone] = useState(false);
 
-  //react hook function here for signing and then pass down to lower components
-  // useEffect(() => {
-  //   console.log(wallet, "wallet?");
-  //   console.log(connected, "connected");
-  //
-  // }, [])
+  // Drew's changes - sound hooks
+  const [playbackRate, setPlaybackRate] = React.useState(0.7);
+  const [playAurahTheme] = useSound(AurahTheme, {
+    interrupt: true,
+    volume: 0.3,
+  });
+  const [playQuestOpen] = useSound(QuestOpen, { interrupt: true });
+  const [playQuestClose] = useSound(QuestClose, { interrupt: true });
+  const [playQuestHover] = useSound(QuestHover, { interrupt: true });
+  const [playConnectWallet] = useSound(ConnectWallet, { interrupt: true });
+  const [playClaimPassport] = useSound(ClaimPassport, { interrupt: true });
+  const [playQuestType] = useSound(QuestType, { interrupt: true });
+  const [playMissionsTab] = useSound(MissionsTab, { interrupt: true });
+  const [playLeaderboardTab] = useSound(LeaderboardTab, { interrupt: true });
+  const [playRewardsTab] = useSound(RewardsTab, { interrupt: true });
+  const [playEggTab] = useSound(EggTab, { interrupt: true });
+  const [playDisconnectWallet] = useSound(DisconnectWallet, {
+    interrupt: true,
+  });
+  const [playDisconnectHover] = useSound(DisconnectHover, { interrupt: true });
+  const [playMainHover] = useSound(MainHover, {
+    interrupt: true,
+    playbackRate,
+  });
 
-  const setWithExpiration = async (key: string, value: any, ttl: number) => {
+  useEffect(() => {
+    const check_sig = async () => {
+      let check_headers = await getWithExpiration("verifyHeader");
+      // console.log(check_headers, "headers?");
+      if (wallet && connected && check_headers) {
+        change_signed_message(true);
+        // console.log(signed_message, "true??");
+        change_wallet_data(check_headers);
+      }
+    }
+    check_sig();
+  }, [])
+
+  const setWithExpiration = async (key, value, ttl) => {
     const item = {
       value: value,
       expiry: new Date().getTime() + ttl * 1000,
@@ -54,7 +123,7 @@ export default function MAIN_PAGE(props) {
     localStorage.setItem(key, JSON.stringify(item));
   };
 
-  const getWithExpiration = async (key: string) => {
+  const getWithExpiration = async (key) => {
     const itemStr = localStorage.getItem(key);
     // console.log(`itemStr`, itemStr);
     // if the item doesn't exist, return null
@@ -99,81 +168,159 @@ export default function MAIN_PAGE(props) {
     return verifyHeader;
   };
 
-  // const sign_message = async () => {
-  //   let now = Date.now();
-  //   window.localStorage.setItem('signature_time', JSON.stringify(now));
-  //   // console.log(now, "time?");
-  //   // window.localStorage.setItem('signature_time', JSON.stringify(now));
-  //   // console.log(window.localStorage.getItem('signature_time'));
-  //   let signedMsg = now.toString();
-  //   const encodedMsg = decodeUTF8(signedMsg);
-  //   const signature = await signMessage(encodedMsg);
-  //
-  //   const payload = {
-  //     signedMsg: signedMsg,
-  //     signature: JSON.stringify(Array.from(signature)),
-  //     pubkey: publicKey.toString(),
-  //   }
-  //   return payload;
-  // }
-
   const populate_data = async (payload) => {
     change_loading_state(true);
     // console.log(payload, "payload?");
-    let user = get_user(payload);
-    let leaderboard = get_leaderboard(payload);
-    let quests = get_quests(payload);
-    let rewards = get_rewards(payload);
+    let user = await get_user(payload);
+    let leaderboard = await get_leaderboard(payload);
+    let quests = await get_quests(payload);
+    let rewards = await get_rewards(payload);
 
-    let userData = await user;
-    // console.log(userData, "user data?");
-    let leaderboardData = await leaderboard;
-    let questsData = await quests;
-    let rewardsData = await rewards;
-    change_user_data(userData);
-    change_leaderboard_data(leaderboardData);
-    change_quests_data(questsData);
-    change_rewards_data(rewardsData);
+    change_user_data(user);
+    change_leaderboard_data(leaderboard);
+    change_quests_data(quests);
+    change_rewards_data(rewards);
     change_wallet_data(payload);
+    change_signed_message(true);
     change_loading_state(false);
   }
-  // useEffect(() => {
-  //   let path_split = window.location.pathname.split("/");
-  //   console.log(window.location.pathname, "path?");
-  //   console.log(path_split, "path split");
-  //   change_body_state("/"+path_split[1]);
-  // });
-  // console.log(window.location.pathname, "pathname?");
+
   const handleClick = async () => {
-    if(wallet && connected) {
+    playAurahTheme();
+
+    if (wallet && connected) {
       let header_verification = await getWithExpiration("verifyHeader");
-      console.log(header_verification, "return from local storage?");
       if (header_verification) {
-        console.log(header_verification, "headers?");
         let gather_data = await populate_data(header_verification);
-        navigate('/bounty_main');
+        navigate("/bounty_main");
       } else {
-        navigate('/connect');
+        navigate("/connect");
       }
     } else {
-      navigate('/connect');
+      navigate("/connect");
     }
-  }
+  };
 
-  const handleDiconnect = async () => {
+  const handleMainHover = () => {
+    playMainHover();
+    if (playbackRate > 1.2) {
+      setPlaybackRate(0.7);
+    } else {
+      setPlaybackRate(playbackRate + 0.1);
+    }
+  };
+
+  const handleConnectHover = () => {
+    playQuestHover();
+  };
+
+  const handleDisconnect = async () => {
+    playDisconnectWallet();
     let disconnect_wallet = await disconnect();
-    localStorage.removeItem('verifyHeader');
-    navigate('/');
-  }
+    localStorage.removeItem("verifyHeader");
+    change_signed_message(false);
+    change_wallet_data({});
+    navigate("/");
+  };
+
+  const handleDisconnectHover = () => {
+    playDisconnectHover();
+  };
+
+  const handleDialogHover = () => {
+    playQuestHover();
+  };
 
   const handleDialogOpen = () => {
+    playQuestOpen();
     // console.log("firing?? in main open");
     change_dialog_state(true);
   };
 
-  const handleDialogClose = () => {
+  const handleDialogClose = async (action_state) => {
+    playQuestClose();
     change_dialog_state(false);
+    if (action_state) {
+      //set the alert saying it could take up to a min to verify, come back and claim.
+      setAlertState(
+        {
+          open: true,
+          message: "Verification of mission object can take up to 60 seconds! Come back to claim your reward",
+          severity: "success",
+        }
+      )
+    }
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let gather_data = await populate_data(header_verification);
+    } else {
+      let get_signature = await sign_message();
+      let gather_data = await populate_data(get_signature);
+    }
+    setActionDone(false);
   };
+
+  const handleRewardsOpen = (reward_id) => {
+    // console.log("firing?? in main open");
+    change_rewards_dialog_state(true);
+  };
+
+  const handleRewardsClose = async () => {
+    change_rewards_dialog_state(false);
+    change_dialog_state(false);
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let gather_data = await populate_data(header_verification);
+    } else {
+      let get_signature = await sign_message();
+      let gather_data = await populate_data(get_signature);
+    }
+  };
+
+  const handleClaimQuestReward = async (reward_id) => {
+    //to be implemented.
+  }
+
+  const handleClaimJourneyReward = async (reward_id) => {
+    //loading
+    // props.change_loading_state(true);
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let claim = await claim_journey_reward(header_verification, reward_id);
+      //do get request for user data update.
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+      //render rewards pop up for post claiming.
+    } else {
+      let sign_request = await sign_message();
+      // setFormSubmission(true);
+      let claim = await claim_journey_reward(header_verification, reward_id);
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+    }
+  }
+
+  const handleDropdownOpen = (e) => {
+    change_dropdown_anchor(e.currentTarget);
+    // navigate('/');
+  }
+
+  const handleDropdownClose = () => {
+    change_dropdown_anchor(null);
+    // navigate('/');
+  }
+
+  const handleDropdown_navigate = (path) => {
+    if (!wallet || !connected || !signed_message) {
+      setAlertState({
+        open: true,
+        message: "Please connect your wallet and sign!",
+        severity: "error",
+      })
+    }
+    change_dropdown_anchor(null);
+    navigate(path);
+  }
 
   // const renderSwitch = (param) => {
   //   switch(param) {
@@ -233,11 +380,38 @@ export default function MAIN_PAGE(props) {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(180deg, #15181B -16.28%, rgba(21, 24, 27, 0) 36.97%)",
-  }
+    background:
+      "linear-gradient(180deg, #15181B -16.28%, rgba(21, 24, 27, 0) 36.97%)",
+  };
 
   return (
     <Box style={window.location.pathname === "/bounty_main" ? bounty_overlay_css : styles.container}>
+      <Grid container justifyContent="space-between" alignItems="center" sx={{position: 'absolute', top: '40px', width: "90%"}}>
+        <Box component="img" sx={{cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={(e) => handleDropdownOpen(e)}/>
+        <Menu
+          anchorEl={dropdown_anchor}
+          open={dropdown_open}
+          onClose={handleDropdownClose}
+          PaperProps={{
+            style: {
+              background: "linear-gradient(180deg, rgba(0, 0, 0, 0.539) 25.01%, rgba(15, 15, 15, 0.285) 120.09%)",
+              border: "0.916143px solid #6A6A6A",
+              backdropFilter: "blur(36.6457px)",
+            }
+          }}
+        >
+          <MenuItem onClick={() => handleDropdown_navigate("/")}>Home</MenuItem>
+          <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>Dashboard</MenuItem>
+        </Menu>
+        {wallet && connected ?
+          <Box onMouseEnter={() => handleConnectHover()}>
+            <WalletDisconnectButton className="disconnect_button"
+            onClick={() => handleDisconnect()}
+            onMouseEnter={() => handleDisconnectHover()}/>
+          </Box>
+          : null
+        }
+      </Grid>
       <Routes>
         <Route index element={<Grid container style={styles.grid_container}
         direction="column"
@@ -285,33 +459,92 @@ export default function MAIN_PAGE(props) {
           <Grid container item justifyContent="center" alignItems="center" xs={1}>
             <Box style={styles.button_container}>
               <Box component="img" src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-              <Button variant="contained" style={styles.button} onClick={() => handleClick()}>JOIN NOW</Button>
+              <Button variant="contained" style={styles.button} onClick={() => handleClick()}
+                onMouseEnter={() => handleMainHover()}
+              >JOIN NOW</Button>
             </Box>
           </Grid>
         </Grid>} />
         <Route path="connect"
           element={<CONNECT_PAGE sign_message={sign_message} setWithExpiration={setWithExpiration}
           getWithExpiration={getWithExpiration} populate_data={populate_data} signed_message={signed_message}
+          alertState={alertState} setAlertState={setAlertState} handleConnectHover={handleConnectHover}
+          handleDisconnectHover={handleDisconnectHover}
+          playConnectWallet={playConnectWallet}
           />}/>
-          <Route path="bounty_main" element={<BOUNTY_PAGE handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose} wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data} quests_data={quests_data} change_quests_data={change_quests_data}
-          user_data={user_data} change_user_data={change_user_data} leaderboard_data={leaderboard_data}
-          rewards_data={rewards_data} change_rewards_data={change_rewards_data}/>}/>
+          <Route path="bounty_main" element={<BOUNTY_PAGE
+            handleDialogOpen={handleDialogOpen}
+            handleDialogClose={handleDialogClose}
+            wallet_data={wallet_data}
+            dialog_data={dialog_data}
+            change_dialog_data={change_dialog_data}
+            quests_data={quests_data}
+            change_quests_data={change_quests_data}
+            user_data={user_data}
+            change_user_data={change_user_data}
+            leaderboard_data={leaderboard_data}
+            rewards_data={rewards_data}
+            change_rewards_data={change_rewards_data}
+            populate_data={populate_data}
+            getWithExpiration={getWithExpiration}
+            alertState={alertState}
+            setAlertState={setAlertState}
+            handleRewardsOpen={handleRewardsOpen}
+            handleRewardsClose={handleRewardsClose}
+            sign_message={sign_message}
+            loading_state={loading_state}
+            change_loading_state={change_loading_state}
+            playQuestType={playQuestType}
+            playLeaderboardTab={playLeaderboardTab}
+            playRewardsTab={playRewardsTab}
+            playEggTab={playEggTab}
+            playMissionsTab={playMissionsTab}
+            handleDialogOpen={handleDialogOpen}
+            handleDialogClose={handleDialogClose}
+            handleDialogHover={handleDialogHover}
+            rewards_dialog_data={rewards_dialog_data}
+            set_rewards_dialog_data={set_rewards_dialog_data}
+          />}/>
       </Routes>
-      {loading_state ?
-        <Box sx={{height: "100vh", width: "100vw", background: "rgba(26, 32, 38, 0.8)",
-          opacity: "0.8", position: "absolute", display: "flex", justifyContent: "center", alignItems: "center"}}>
+      {loading_state ? (
+        <Box
+          sx={{
+            height: "100vh",
+            width: "100vw",
+            background: "rgba(26, 32, 38, 0.8)",
+            opacity: "0.8",
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress />
         </Box>
-        : null
-      }
-      <MISSION_DIALOG handleDialogClose={handleDialogClose}
-        handleDialogOpen={handleDialogOpen} dialog_state={dialog_state}
+      ) : null}
+      <MISSION_DIALOG
+        handleDialogClose={handleDialogClose}
+        handleDialogOpen={handleDialogOpen}
+        dialog_state={dialog_state}
         change_dialog_state={change_dialog_state}
-        dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
-      {wallet && connected ?
-        <WalletDisconnectButton className="disconnect_button" onClick={() => handleDiconnect()}/>
-        : null
-      }
+        dialog_data={dialog_data} change_dialog_data={change_dialog_data}
+        actionDone={actionDone} setActionDone={setActionDone}
+        alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
+        sign_message={sign_message} handleTwitterButton={playClaimPassport} handleDialogHover={handleDialogHover}
+        handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
+        rewards_dialog_data={rewards_dialog_data}
+        set_rewards_dialog_data={set_rewards_dialog_data}
+        />
+      <REWARDS_DIALOG
+        rewards_dialog_state={rewards_dialog_state}
+        change_rewards_dialog_state={change_rewards_dialog_state}
+        handleRewardsOpen={handleRewardsOpen}
+        handleRewardsClose={handleRewardsClose}
+        handleClaimJourneyReward={handleClaimJourneyReward}
+        rewards_dialog_data={rewards_dialog_data}
+        set_rewards_dialog_data={set_rewards_dialog_data}
+      />
+      <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
     </Box>
   );
 }

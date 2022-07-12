@@ -3,7 +3,6 @@ const styles = {
     marginTop: "10px",
     width: "95%",
     padding: "5px 15px",
-    cursor: "pointer",
     border: "0.9px solid #888888",
     borderRadius: "5px",
     color: "#888888",
@@ -32,15 +31,6 @@ const styles = {
   number: {
     fontSize: "12px",
     fontWeight: "700",
-  },
-  passport_symbol: {
-    height: "32px",
-    width: "32px",
-  },
-  rank_number: {
-    fontWeight: "700",
-    fontSize: "14px",
-    marginLeft: "12px"
   },
 };
 

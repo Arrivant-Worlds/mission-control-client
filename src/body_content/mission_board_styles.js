@@ -12,6 +12,7 @@ const styles = {
     borderRadius: "5px",
     marginBottom: "5px",
     height: "100%",
+    cursor: "pointer",
   },
   mission_title: {
     fontSize: "20px",
