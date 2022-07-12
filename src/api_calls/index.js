@@ -3,8 +3,8 @@ import axios from "axios";
 import queryString from "query-string";
 // import { BASE_URL } from "./constants";
 
-// const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
+// const BASE_URL = 'http://localhost:3001';
 // const BASE_URL = "https://mission-control-dev.herokuapp.com";
 
 export const create_user = async (payload) => {
