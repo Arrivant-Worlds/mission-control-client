@@ -22,7 +22,7 @@ export default function MISSION_BOARD(props) {
   return (
     <Box style={styles.mission_board_container}>
       <Grid container item direction="column" justifyContent="space-between"
-      style={styles.mission_grid_container} sx={{marginBottom: "0px !important"}} alignItems="center">
+      style={styles.mission_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
         onClick={() => handleClick("prime")} alignItems="center">
           <Typography style={styles.mission_title}

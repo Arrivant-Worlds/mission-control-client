@@ -5,6 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import MISSION_BOARD from './mission_board.js';
+import LOG_BOARD from './log_board.js';
 import LEADERBOARD from './leaderboard.js';
 import REWARDS from './rewards.js';
 import EGG from './egg.js';
@@ -44,16 +45,16 @@ export default function BOUNTY_PAGE(props) {
     if (event.target.id === "tab0") {
       tab1_setValue(newValue);
       props.playMissionsTab();
-    }
-    if (event.target.id === "tab1") {
+    } else if (event.target.id === "tab1") {
       tab1_setValue(newValue);
       props.playLeaderboardTab();
-    }
-    if (event.target.id === "tab2") {
-      tab2_setValue(newValue);
+    } else if (event.target.id === "tab2") {
+      tab1_setValue(newValue);
       props.playRewardsTab();
-    }
-    if (event.target.id === "tab3") {
+    } else if (event.target.id === "tab3") {
+      tab2_setValue(newValue);
+      props.playEggTab();
+    } else if (event.target.id === "tab4") {
       tab2_setValue(newValue);
       props.playEggTab();
     }
@@ -139,6 +140,7 @@ export default function BOUNTY_PAGE(props) {
           >
             <Tab label="MISSIONS" {...a11yProps(0)} />
             <Tab label="LEADERBOARD" {...a11yProps(1)} />
+            <Tab label="LOG" {...a11yProps(2)} />
           </Tabs>
           <Box style={styles.bottom_border}></Box>
         </Grid>
@@ -149,8 +151,8 @@ export default function BOUNTY_PAGE(props) {
             textColor="primary"
             TabIndicatorProps={{ style: { zIndex: 2 } }}
           >
-            <Tab label="REWARDS" {...a11yProps(2)} />
-            <Tab label="EGG" {...a11yProps(3)} />
+            <Tab label="REWARDS" {...a11yProps(3)} />
+            <Tab label="EGG" {...a11yProps(4)} />
           </Tabs>
           <Box style={styles.bottom_border}></Box>
         </Grid>
@@ -192,6 +194,21 @@ export default function BOUNTY_PAGE(props) {
             style={styles.tab_content_container}
           >
             <LEADERBOARD leaderboard_data={props.leaderboard_data} />
+          </TabPanel>
+          <TabPanel
+            value={tab1_value}
+            index={2}
+            style={styles.tab_content_container}
+          >
+            <LOG_BOARD
+              quests_data={props.quests_data}
+              playQuestType={props.playQuestType}
+              handleDialogOpen={props.handleDialogOpen}
+              handleDialogClose={props.handleDialogClose}
+              handleDialogHover={props.handleDialogHover}
+              dialog_data={props.dialog_data}
+              change_dialog_data={props.change_dialog_data}
+            />
           </TabPanel>
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
