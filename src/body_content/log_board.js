@@ -16,7 +16,7 @@ export default function LOG_BOARD(props) {
   // console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
-    console.log(tab, "????");
+    // console.log(tab, "????");
     props.playQuestType();
     change_expanded_tab(tab);
   };
@@ -40,7 +40,7 @@ export default function LOG_BOARD(props) {
           >
             {
               props.quests_data.map((item, i) => {
-                if (item.quest_user_status === "complete") {
+                if (item.active_reward) {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
                     dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>

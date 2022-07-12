@@ -46,15 +46,6 @@ const theme = createTheme({
     },
   },
   overrides: {
-    // MuiTypography: {
-    //   root: {
-    //   },
-    //   body1: {
-    //     // '&:hover': {
-    //       //    color: '#15B999'
-    //       // }
-    //   },
-    // }
   }
 });
 

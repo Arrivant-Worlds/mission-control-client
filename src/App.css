@@ -39,6 +39,10 @@
   color: #F6F6F6;
 }
 
+.MuiButtonBase-root.MuiButton-root.Mui-disabled{
+  background-color: #888888;
+}
+
 @media screen and (max-width: 2400px): {
   .wallet-adapter-button.wallet_button {
     font-size: 26px;

@@ -9,7 +9,8 @@ import {
   get_quests,
   get_rewards,
   get_leaderboard,
-  claim_journey_reward
+  claim_journey_reward,
+  claim_quest_reward
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
 // import CONNECT_WALLET from './connect_wallet.js';
@@ -245,7 +246,7 @@ export default function MAIN_PAGE(props) {
       setAlertState(
         {
           open: true,
-          message: "Verification of mission object can take up to 60 seconds! Come back to claim your reward",
+          message: "Verification of mission can take up to 60 seconds! Come back and check the Log tab to claim your reward!",
           severity: "success",
         }
       )
@@ -279,6 +280,20 @@ export default function MAIN_PAGE(props) {
 
   const handleClaimQuestReward = async (reward_id) => {
     //to be implemented.
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let claim = await claim_quest_reward(header_verification, reward_id);
+      //do get request for user data update.
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+      //render rewards pop up for post claiming.
+    } else {
+      let sign_request = await sign_message();
+      // setFormSubmission(true);
+      let claim = await claim_quest_reward(header_verification, reward_id);
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+    }
   }
 
   const handleClaimJourneyReward = async (reward_id) => {
@@ -540,6 +555,7 @@ export default function MAIN_PAGE(props) {
         change_rewards_dialog_state={change_rewards_dialog_state}
         handleRewardsOpen={handleRewardsOpen}
         handleRewardsClose={handleRewardsClose}
+        handleClaimQuestReward={handleClaimQuestReward}
         handleClaimJourneyReward={handleClaimJourneyReward}
         rewards_dialog_data={rewards_dialog_data}
         set_rewards_dialog_data={set_rewards_dialog_data}
