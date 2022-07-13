@@ -7,7 +7,7 @@ import styles from "./mission_block_styles.js";
 export default function MISSION_BLOCK(props) {
   // console.log(props.item_data, "item data?");
   const handleOnClick = () => {
-    console.log("msakjns", props)
+    // console.log("msakjns", props);
     // console.log("firing in mission block click");
     // props.change_dialog_data({test: "meow meow meow"});
     props.change_dialog_data(props.item_data);
@@ -26,7 +26,11 @@ export default function MISSION_BLOCK(props) {
   };
 
   const renderIcon = () => {
-    if (props.item_data.platform === "Discord") {
+    if (props.item_data.user_quest_status === "Complete" || props.item_data.active_reward) {
+      return(
+        <Icon className={"fa-solid fa-check"} style={render_style("icon")}></Icon>
+      );
+    } else if (props.item_data.platform === "Discord") {
       return (
         <Icon className={"fa-brands fa-discord"} style={render_style("icon")}></Icon>
       );
@@ -34,14 +38,9 @@ export default function MISSION_BLOCK(props) {
       return (
         <Icon className={"fa-brands fa-twitter"} style={render_style("icon")}></Icon>
       );
-    } else if (props.item_data.user_quest_status === "Complete" || props.item_data.active_reward) {
-      return(
-        <Icon className={"fa-solid fa-check"} style={render_style("icon")}></Icon>
-      );
     } else {
       return null;
     }
-
   };
 
   const render_style = (section) => {
@@ -55,12 +54,10 @@ export default function MISSION_BLOCK(props) {
     } else if (props.item_data.user_quest_status === "Locked") {
       let style_name = `inactive_${section}`;
       return styles[style_name];
-    }
-    else if (props.item_data.active_reward) {
+    } else if (props.item_data.active_reward) {
       let style_name = `claim_${section}`;
       return styles[style_name];
-    }
-    else if (props.item_data.user_quest_status === "Complete") {
+    } else if (props.item_data.user_quest_status === "Complete" && !props.item_data.active_reward) {
       let style_name = `complete_${section}`;
       return styles[style_name];
     }

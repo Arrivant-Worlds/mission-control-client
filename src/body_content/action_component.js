@@ -14,8 +14,8 @@ import {
 
 export default function ACTION_COMPONENT(props) {
 
-  console.log("oosoosoa", props.rewards_dialog_data)
-  console.log("not asdkaoSD", props.dialog_data)
+  // console.log("oosoosoa", props.rewards_dialog_data);
+  // console.log("not asdkaoSD", props.dialog_data);
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",
@@ -37,6 +37,8 @@ export default function ACTION_COMPONENT(props) {
   const disabled_button = () => {
     //need to add or for when a user has claimed 2 for a day already.
     if (props.dialog_data.user_quest_status === "Locked") {
+      return true;
+    } else if (props.dialog_data.user_quest_status === "Complete" && !props.dialog_data.active_reward) {
       return true;
     } else {
       return false;

@@ -15,7 +15,7 @@ export default function LOG_BOARD(props) {
   const [expanded_tab, change_expanded_tab] = useState(true);
   // console.log(props.quests_data, "quest data");
 
-  console.log("egaaev", props)
+  // console.log("egaaev", props);
   const handleClick = (tab) => {
     // console.log(tab, "????");
     props.playQuestType();
@@ -41,13 +41,13 @@ export default function LOG_BOARD(props) {
           >
             {
               props.quests_data.map((item, i) => {
-                if (item.active_reward) {
+                if (item.active_reward || item.user_quest_status === "Complete") {
                   return (
-                    <MISSION_BLOCK 
-                    item_data={item} key={i} 
+                    <MISSION_BLOCK
+                    item_data={item} key={i}
                     handleDialogOpen={props.handleDialogOpen}
-                    dialog_data={props.dialog_data} 
-                    change_dialog_data={props.change_dialog_data} 
+                    dialog_data={props.dialog_data}
+                    change_dialog_data={props.change_dialog_data}
                     handleDialogHover={props.handleDialogHover}
                     set_rewards_dialog_data = {props.set_rewards_dialog_data}
                     />
