@@ -156,6 +156,17 @@ export const claim_journey_reward = async (payload, reward_id) => {
   }
 }
 
+export const claim_quest_reward = async (payload, reward_id) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/questRewards?=${reward_id}/claim`, {}, {headers: payload});
+    console.log(response.data);
+    return response.data;
+  } catch (errors) {
+    console.error(errors);
+    return ([]);
+  }
+}
+
 export const get_soulbound = async (payload) => {
   try {
     const response = await axios.get(`${BASE_URL}/soulbounds`, {

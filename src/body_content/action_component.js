@@ -21,11 +21,22 @@ export default function ACTION_COMPONENT(props) {
     paddingRight: "14px",
   }
   // console.log(props.action_data,"action data!");
+  console.log(props.rewards_dialog_data, "rewards dialog data");
+  console.log(props.dialog_data, "dialog data");
+
   const [formValue, setFormValue] = useState("");
   const [formSubmission, setFormSubmission] = useState(false);
   const [errorState, setErrorState] = useState(false);
   const [helperText, setHelperText] = useState(" ");
 
+  const disabled_button = () => {
+    //need to add or for when a user has claimed 2 for a day already.
+    if (props.dialog_data.user_quest_status === "Locked") {
+      return true;
+    } else {
+      return false;
+    }
+  }
   const handleLinkClick = (path) => {
     props.setActionDone(true);
     window.open(path);
@@ -75,18 +86,19 @@ export default function ACTION_COMPONENT(props) {
   };
 
   const type_render = () => {
-    if (props.user_quest_status === "Available") {
+    if (props.active_reward) {
       return (
         <Grid container direction="column" justifyContent="center" alignItems="center" sx={{height: "100%", width: "100%"}}>
           <Grid container direction="column" justifyContent="space-around" alignItems="flex-start" sx={{height: "100%", width: "100%", padding: "10px"}}>
             <Typography sx={{fontWeight: "700"}}>VERIFIED!</Typography>
             <Typography>Your submission has been verified! Click the button below to claim your reward.</Typography>
-            <Button variant="contained" onClick={() => handleRewardClaim()}
+            <Button variant="contained" disabled={disabled_button()} onClick={() => handleRewardClaim()}
               sx={{color: "black",
               fontSize: "14px",
               width: "100%",
               fontWeight: "700",
-              backgroundColor: "#F6F6F6"}}>
+              backgroundColor: "#F6F6F6",
+            }}>
             CLAIM REWARD
             </Button>
           </Grid>
@@ -96,7 +108,7 @@ export default function ACTION_COMPONENT(props) {
       return (
         <Grid sx={{height: "100%", width: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
           <Typography>{props.action_data.message}</Typography>
-          <Button variant="contained" onClick={() => handleLinkClick(props.action_data.url)}
+          <Button variant="contained" disabled={disabled_button()} onClick={() => handleLinkClick(props.action_data.url)}
             sx={{color: "black",
             fontSize: "14px",
             fontWeight: "700",
@@ -135,7 +147,7 @@ export default function ACTION_COMPONENT(props) {
                   }
                 }}
               />
-              <Button variant="contained" color="primary" type="submit"
+              <Button variant="contained" color="primary" disabled={disabled_button()} type="submit"
                 sx={{color: "black",
                 fontSize: "14px",
                 fontWeight: "700",
@@ -154,6 +166,7 @@ export default function ACTION_COMPONENT(props) {
         <Grid sx={{height: "100%", width: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
           <Typography>{props.action_data.message}</Typography>
           <CONNECT_TWITTER
+            disabled={disabled_button()}
             variant="contained"
             style={{color: "black",
             fontSize: "14px",

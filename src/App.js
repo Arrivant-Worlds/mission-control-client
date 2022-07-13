@@ -1,7 +1,6 @@
 import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import background from './images/MissionControl_HQ_background.jpg';
 import 'simplebar-react/dist/simplebar.min.css';
 import { useNavigate } from "react-router-dom";
 import {
@@ -46,15 +45,6 @@ const theme = createTheme({
     },
   },
   overrides: {
-    // MuiTypography: {
-    //   root: {
-    //   },
-    //   body1: {
-    //     // '&:hover': {
-    //       //    color: '#15B999'
-    //       // }
-    //   },
-    // }
   }
 });
 
@@ -105,16 +95,9 @@ const Content: FC = (connection) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box className="App" style={{
-        backgroundImage: `url(${background})`,
-        backgroundSize: "cover",
-        height: '100vh',
-        width: '100vw',
-      }}>
-        <MAIN_PAGE/>
+      <Box className="App">
+        {media_query_1000 ?  <MAIN_PAGE/> : <MOBILE_BANNER/>}
       </Box>
     </ThemeProvider>
   );
 };
-
-// {media_query_1000 ?  <MAIN_PAGE/> : <MOBILE_BANNER/>}

@@ -26,33 +26,31 @@ export default function MISSION_BLOCK(props) {
       return (
         <Icon className={"fa-brands fa-twitter"} style={render_style("icon")}></Icon>
       );
-    }
-      // else if (props.item_data.user_quest_status === "Complete" ||
-      // props.item_data.user_quest_status === "Claimable") {
-        //   return(
-          //     <Icon className={"fa-solid fa-check"} style={render_style("icon"}></Icon>
-          //   );
-          // }
-    else {
+    } else if (props.item_data.user_quest_status === "Complete" || props.item_data.active_reward) {
+      return(
+        <Icon className={"fa-solid fa-check"} style={render_style("icon")}></Icon>
+      );
+    } else {
       return null;
     }
 
   };
 
   const render_style = (section) => {
+    // console.log(props.item_data.user_quest_status, "uqs");
     //render different style objects based on
     // let style_name = `active_${section}`;
     // return styles[style_name];
     if (props.item_data.user_quest_status === "Available") {
       let style_name = `active_${section}`;
       return styles[style_name];
-    } else if (!props.item_data.user_quest_status === "Locked") {
+    } else if (props.item_data.user_quest_status === "Locked") {
       let style_name = `inactive_${section}`;
       return styles[style_name];
     } else if (props.item_data.user_quest_status === "Complete") {
       let style_name = `complete_${section}`;
       return styles[style_name];
-    } else if (props.item_data.user_quest_status === "Claimable") {
+    } else if (props.item_data.active_reward) {
       let style_name = `claim_${section}`;
       return styles[style_name];
     }

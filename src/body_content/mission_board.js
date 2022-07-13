@@ -22,7 +22,7 @@ export default function MISSION_BOARD(props) {
   return (
     <Box style={styles.mission_board_container}>
       <Grid container item direction="column" justifyContent="space-between"
-      style={styles.mission_grid_container} sx={{marginBottom: "0px !important"}} alignItems="center">
+      style={styles.mission_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
         onClick={() => handleClick("prime")} alignItems="center">
           <Typography style={styles.mission_title}
@@ -37,7 +37,7 @@ export default function MISSION_BOARD(props) {
           >
             {
               props.quests_data.map((item, i) => {
-                if (item.recurrence === "prime") {
+                if (item.recurrence === "prime" && !item.active_reward) {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
                     dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
@@ -68,7 +68,7 @@ export default function MISSION_BOARD(props) {
           >
             {
               props.quests_data.map((item, i) => {
-                if (item.recurrence === "daily") {
+                if (item.recurrence === "daily" && !item.active_reward) {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
                     handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
@@ -119,7 +119,7 @@ export default function MISSION_BOARD(props) {
           >
             {
               props.quests_data.map((item, i) => {
-                if (item.recurrence === "weekly") {
+                if (item.recurrence === "weekly" && !item.active_reward) {
                   return (
                     <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
                     dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>

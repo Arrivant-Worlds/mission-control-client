@@ -46,6 +46,7 @@ export default function CONNECT_TWITTER(props) {
   return (
     <Grid container justifyContent="center" sx={{width: "100%"}}>
       <Button
+        disabled={props.disabled}
         variant={props.variant}
         style={props.style}
         onClick={() => handleTwitter(publicKey.toString())}

@@ -17,9 +17,10 @@ export default function REWARDS_DIALOG(props) {
   const handleOnClick = () => {
     set_clicked_state(true);
     // console.log(props.rewards_dialog_data.id, "id?");
+    //conditional here depending on journey reward or quest reward
+    props.handleClaimQuestReward(props.rewards_dialog_data.id);
     //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
-
   }
 
   const handleOnClose = () => {

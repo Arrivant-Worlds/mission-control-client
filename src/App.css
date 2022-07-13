@@ -1,10 +1,7 @@
 .App {
   text-align: center;
 }
-/*
-::-webkit-scrollbar {
-  display: none;
-} */
+
 .simplebar-scrollbar {
   display: flex;
   justify-content: center;
@@ -37,6 +34,35 @@
   background-color: transparent;
   border: 1px solid #F6F6F6;
   color: #F6F6F6;
+}
+
+.MuiButtonBase-root.MuiButton-root.Mui-disabled{
+  background-color: #888888;
+}
+
+.lore_text {
+  animation: fadeIn 2s 1s forwards;
+}
+
+.lore_text_2s {
+  animation: fadeIn 2s 2s forwards;
+}
+
+.lore_text_3s {
+  animation: fadeIn 2s 3s forwards;
+}
+
+.lore_text_4s {
+  animation: fadeIn 2s 4s forwards;
+}
+
+.lore_text_5s {
+  animation: fadeIn 2s 5s forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 @media screen and (max-width: 2400px): {

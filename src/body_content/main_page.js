@@ -9,13 +9,15 @@ import {
   get_quests,
   get_rewards,
   get_leaderboard,
-  claim_journey_reward
+  claim_journey_reward,
+  claim_quest_reward
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
 // import CONNECT_WALLET from './connect_wallet.js';
 import BOUNTY_PAGE from "./bounty_page.js";
 import MISSION_DIALOG from "./mission_dialog.js";
 import REWARDS_DIALOG from './rewards_dialog.js';
+import LORE_PAGE from './lore_page.js';
 import SNACKBAR from './snackbar.js';
 import Box from "@mui/material/Box";
 import { Typewriter, useTypewriter, Cursor } from "react-simple-typewriter";
@@ -23,6 +25,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SG_logo from "../images/PE_SG_logo.png";
 import black_circle from '../images/black_circle.png';
 import ripple_diamond from "../images/ripple_diamond.png";
+import background from '../images/MissionControl_HQ_background.jpg';
+import lore_background from '../images/lore_background.png';
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -114,6 +118,14 @@ export default function MAIN_PAGE(props) {
     }
     check_sig();
   }, [])
+
+  const backgroundImageRender = () => {
+    if (window.location.pathname === '/lore' ) {
+      return lore_background;
+    } else {
+      return background;
+    }
+  }
 
   const setWithExpiration = async (key, value, ttl) => {
     const item = {
@@ -245,7 +257,7 @@ export default function MAIN_PAGE(props) {
       setAlertState(
         {
           open: true,
-          message: "Verification of mission object can take up to 60 seconds! Come back to claim your reward",
+          message: "Verification of mission can take up to 60 seconds! Come back and check the Log tab to claim your reward!",
           severity: "success",
         }
       )
@@ -279,6 +291,20 @@ export default function MAIN_PAGE(props) {
 
   const handleClaimQuestReward = async (reward_id) => {
     //to be implemented.
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (header_verification) {
+      let claim = await claim_quest_reward(header_verification, reward_id);
+      //do get request for user data update.
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+      //render rewards pop up for post claiming.
+    } else {
+      let sign_request = await sign_message();
+      // setFormSubmission(true);
+      let claim = await claim_quest_reward(header_verification, reward_id);
+      let retrieve_user = await populate_data(header_verification);
+      // props.handleRewardsOpen(true);
+    }
   }
 
   const handleClaimJourneyReward = async (reward_id) => {
@@ -311,12 +337,14 @@ export default function MAIN_PAGE(props) {
   }
 
   const handleDropdown_navigate = (path) => {
-    if (!wallet || !connected || !signed_message) {
-      setAlertState({
-        open: true,
-        message: "Please connect your wallet and sign!",
-        severity: "error",
-      })
+    if (path === "/bounty_main") {
+      if (!wallet || !connected || !signed_message) {
+        setAlertState({
+          open: true,
+          message: "Please connect your wallet and sign!",
+          severity: "error",
+        })
+      }
     }
     change_dropdown_anchor(null);
     navigate(path);
@@ -375,7 +403,7 @@ export default function MAIN_PAGE(props) {
   //   }
   // }
 
-  const bounty_overlay_css = {
+  const overlay_css = {
     height: "100%",
     display: "flex",
     justifyContent: "center",
@@ -385,93 +413,101 @@ export default function MAIN_PAGE(props) {
   };
 
   return (
-    <Box style={window.location.pathname === "/bounty_main" ? bounty_overlay_css : styles.container}>
-      <Grid container justifyContent="space-between" alignItems="center" sx={{position: 'absolute', top: '40px', width: "90%"}}>
-        <Box component="img" sx={{cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={(e) => handleDropdownOpen(e)}/>
-        <Menu
-          anchorEl={dropdown_anchor}
-          open={dropdown_open}
-          onClose={handleDropdownClose}
-          PaperProps={{
-            style: {
-              background: "linear-gradient(180deg, rgba(0, 0, 0, 0.539) 25.01%, rgba(15, 15, 15, 0.285) 120.09%)",
-              border: "0.916143px solid #6A6A6A",
-              backdropFilter: "blur(36.6457px)",
-            }
-          }}
+    <Box sx={{
+      height: '100vh',
+      width: '100vw',
+      backgroundSize: "cover",
+      backgroundImage: `url(${backgroundImageRender()})`
+    }}>
+      <Box style={window.location.pathname === "/bounty_main" || window.location.pathname === "/lore" ? overlay_css : styles.container}
         >
-          <MenuItem onClick={() => handleDropdown_navigate("/")}>Home</MenuItem>
-          <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>Dashboard</MenuItem>
-        </Menu>
-        {wallet && connected ?
-          <Box onMouseEnter={() => handleConnectHover()}>
-            <WalletDisconnectButton className="disconnect_button"
-            onClick={() => handleDisconnect()}
-            onMouseEnter={() => handleDisconnectHover()}/>
-          </Box>
-          : null
-        }
-      </Grid>
-      <Routes>
-        <Route index element={<Grid container style={styles.grid_container}
-        direction="column"
-        justifyContent="center" alignItems="center">
-          <Grid item xs={4} alignItems="center" justifyContent="center">
-            <Box sx={{
-              textTransform: "uppercase",
-              margin: "-20px auto 0 auto",
-              fontSize: "18px",
-              width: "60%",
-              color: "#F6F6F6",
-                '@media screen and (max-width: 2400px)': {
-                  fontSize: "30px",
-                },
-                '@media screen and (max-width: 2200px)': {
-                  fontSize: "28px",
-                },
-                '@media screen and (max-width: 2000px)': {
-                  fontSize: "26px",
-                },
-              }}>
-              <Typewriter
-                loop={1}
-                deleteSpeed={0}
-                words={['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.']}
-                cursor
-                cursorStyle='_'
-                typeSpeed={70}
-                delaySpeed={500}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={2}>
-            <Box component="img" src={SG_logo} alt="SG Logo" sx={{
-              marginTop: "-30px",
-              width: "800px",
-              '@media screen and (max-width: 2400px)': {
-                width: "1000px",
-              },
-              '@media screen and (max-width: 2100px)': {
-                width: "900px",
+        <Grid container justifyContent="space-between" alignItems="center" sx={{position: 'absolute', top: '40px', width: "90%"}}>
+          <Box component="img" sx={{cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={(e) => handleDropdownOpen(e)}/>
+          <Menu
+            anchorEl={dropdown_anchor}
+            open={dropdown_open}
+            onClose={handleDropdownClose}
+            PaperProps={{
+              style: {
+                background: "linear-gradient(180deg, rgba(0, 0, 0, 0.539) 25.01%, rgba(15, 15, 15, 0.285) 120.09%)",
+                border: "0.916143px solid #6A6A6A",
+                backdropFilter: "blur(36.6457px)",
               }
-            }}/>
-          </Grid>
-          <Grid container item justifyContent="center" alignItems="center" xs={1}>
-            <Box style={styles.button_container}>
-              <Box component="img" src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-              <Button variant="contained" style={styles.button} onClick={() => handleClick()}
-                onMouseEnter={() => handleMainHover()}
-              >JOIN NOW</Button>
+            }}
+          >
+            <MenuItem onClick={() => handleDropdown_navigate("/")}>Home</MenuItem>
+            <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>Dashboard</MenuItem>
+            <MenuItem onClick={() => handleDropdown_navigate("/lore")}>Lore</MenuItem>
+          </Menu>
+          {wallet && connected ?
+            <Box onMouseEnter={() => handleConnectHover()}>
+              <WalletDisconnectButton className="disconnect_button"
+              onClick={() => handleDisconnect()}
+              onMouseEnter={() => handleDisconnectHover()}/>
             </Box>
-          </Grid>
-        </Grid>} />
-        <Route path="connect"
-          element={<CONNECT_PAGE sign_message={sign_message} setWithExpiration={setWithExpiration}
-          getWithExpiration={getWithExpiration} populate_data={populate_data} signed_message={signed_message}
-          alertState={alertState} setAlertState={setAlertState} handleConnectHover={handleConnectHover}
-          handleDisconnectHover={handleDisconnectHover}
-          playConnectWallet={playConnectWallet}
-          />}/>
+            : null
+          }
+        </Grid>
+        <Routes>
+          <Route index element={<Grid container style={styles.grid_container}
+          direction="column"
+          justifyContent="center" alignItems="center">
+            <Grid item xs={4} alignItems="center" justifyContent="center">
+              <Box sx={{
+                textTransform: "uppercase",
+                margin: "-20px auto 0 auto",
+                fontSize: "18px",
+                width: "60%",
+                color: "#F6F6F6",
+                  '@media screen and (max-width: 2400px)': {
+                    fontSize: "30px",
+                  },
+                  '@media screen and (max-width: 2200px)': {
+                    fontSize: "28px",
+                  },
+                  '@media screen and (max-width: 2000px)': {
+                    fontSize: "26px",
+                  },
+                }}>
+                <Typewriter
+                  loop={1}
+                  deleteSpeed={0}
+                  words={['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.']}
+                  cursor
+                  cursorStyle='_'
+                  typeSpeed={70}
+                  delaySpeed={500}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={2}>
+              <Box component="img" src={SG_logo} alt="SG Logo" sx={{
+                marginTop: "-30px",
+                width: "800px",
+                '@media screen and (max-width: 2400px)': {
+                  width: "1000px",
+                },
+                '@media screen and (max-width: 2100px)': {
+                  width: "900px",
+                }
+              }}/>
+            </Grid>
+            <Grid container item justifyContent="center" alignItems="center" xs={1}>
+              <Box style={styles.button_container}>
+                <Box component="img" src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
+                <Button variant="contained" style={styles.button} onClick={() => handleClick()}
+                  onMouseEnter={() => handleMainHover()}
+                >JOIN NOW</Button>
+              </Box>
+            </Grid>
+          </Grid>} />
+          <Route path="connect"
+            element={<CONNECT_PAGE sign_message={sign_message} setWithExpiration={setWithExpiration}
+            getWithExpiration={getWithExpiration} populate_data={populate_data} signed_message={signed_message}
+            alertState={alertState} setAlertState={setAlertState} handleConnectHover={handleConnectHover}
+            handleDisconnectHover={handleDisconnectHover}
+            playConnectWallet={playConnectWallet}
+            />}/>
           <Route path="bounty_main" element={<BOUNTY_PAGE
             handleDialogOpen={handleDialogOpen}
             handleDialogClose={handleDialogClose}
@@ -505,46 +541,50 @@ export default function MAIN_PAGE(props) {
             rewards_dialog_data={rewards_dialog_data}
             set_rewards_dialog_data={set_rewards_dialog_data}
           />}/>
-      </Routes>
-      {loading_state ? (
-        <Box
-          sx={{
-            height: "100vh",
-            width: "100vw",
-            background: "rgba(26, 32, 38, 0.8)",
-            opacity: "0.8",
-            position: "absolute",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : null}
-      <MISSION_DIALOG
-        handleDialogClose={handleDialogClose}
-        handleDialogOpen={handleDialogOpen}
-        dialog_state={dialog_state}
-        change_dialog_state={change_dialog_state}
-        dialog_data={dialog_data} change_dialog_data={change_dialog_data}
-        actionDone={actionDone} setActionDone={setActionDone}
-        alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
-        sign_message={sign_message} handleTwitterButton={playClaimPassport} handleDialogHover={handleDialogHover}
-        handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
-        rewards_dialog_data={rewards_dialog_data}
-        set_rewards_dialog_data={set_rewards_dialog_data}
+          <Route path="lore"
+            element={<LORE_PAGE/>}/>
+        </Routes>
+        {loading_state ? (
+          <Box
+            sx={{
+              height: "100vh",
+              width: "100vw",
+              background: "rgba(26, 32, 38, 0.8)",
+              opacity: "0.8",
+              position: "absolute",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : null}
+        <MISSION_DIALOG
+          handleDialogClose={handleDialogClose}
+          handleDialogOpen={handleDialogOpen}
+          dialog_state={dialog_state}
+          change_dialog_state={change_dialog_state}
+          dialog_data={dialog_data} change_dialog_data={change_dialog_data}
+          actionDone={actionDone} setActionDone={setActionDone}
+          alertState={alertState} setAlertState={setAlertState} getWithExpiration={getWithExpiration}
+          sign_message={sign_message} handleTwitterButton={playClaimPassport} handleDialogHover={handleDialogHover}
+          handleRewardsOpen={handleRewardsOpen} handleRewardsClose={handleRewardsClose}
+          rewards_dialog_data={rewards_dialog_data}
+          set_rewards_dialog_data={set_rewards_dialog_data}
+          />
+        <REWARDS_DIALOG
+          rewards_dialog_state={rewards_dialog_state}
+          change_rewards_dialog_state={change_rewards_dialog_state}
+          handleRewardsOpen={handleRewardsOpen}
+          handleRewardsClose={handleRewardsClose}
+          handleClaimQuestReward={handleClaimQuestReward}
+          handleClaimJourneyReward={handleClaimJourneyReward}
+          rewards_dialog_data={rewards_dialog_data}
+          set_rewards_dialog_data={set_rewards_dialog_data}
         />
-      <REWARDS_DIALOG
-        rewards_dialog_state={rewards_dialog_state}
-        change_rewards_dialog_state={change_rewards_dialog_state}
-        handleRewardsOpen={handleRewardsOpen}
-        handleRewardsClose={handleRewardsClose}
-        handleClaimJourneyReward={handleClaimJourneyReward}
-        rewards_dialog_data={rewards_dialog_data}
-        set_rewards_dialog_data={set_rewards_dialog_data}
-      />
-      <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
+        <SNACKBAR alertState={alertState} setAlertState={setAlertState}/>
+      </Box>
     </Box>
   );
 }
