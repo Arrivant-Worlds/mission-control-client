@@ -208,6 +208,7 @@ export default function BOUNTY_PAGE(props) {
               handleDialogClose={props.handleDialogClose}
               handleDialogHover={props.handleDialogHover}
               dialog_data={props.dialog_data}
+              set_rewards_dialog_data = {props.set_rewards_dialog_data}
               change_dialog_data={props.change_dialog_data}
             />
           </TabPanel>

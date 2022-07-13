@@ -138,6 +138,7 @@ export const submit_email = async (payload, email_string) => {
   // console.log(email_string, "email in api call");
   try {
     const response = await axios.post(`${BASE_URL}/quests/registerEmail`, {email: email_string}, {headers: payload});
+    console.log("response", response.data)
     return response.data;
   } catch (errors) {
     console.error(errors);
@@ -158,7 +159,7 @@ export const claim_journey_reward = async (payload, reward_id) => {
 
 export const claim_quest_reward = async (payload, reward_id) => {
   try {
-    const response = await axios.post(`${BASE_URL}/questRewards?=${reward_id}/claim`, {}, {headers: payload});
+    const response = await axios.put(`${BASE_URL}/questRewards/${reward_id}/claim`, {}, {headers: payload});
     console.log(response.data);
     return response.data;
   } catch (errors) {

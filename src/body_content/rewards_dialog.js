@@ -21,6 +21,7 @@ export default function REWARDS_DIALOG(props) {
     props.handleClaimQuestReward(props.rewards_dialog_data.id);
     //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
+    props.handleRewardsClose();
   }
 
   const handleOnClose = () => {
