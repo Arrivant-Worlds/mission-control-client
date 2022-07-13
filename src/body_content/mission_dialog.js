@@ -1,43 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import styles from './mission_dialog_styles.js';
-import elune_icon from '../images/dialog_elune_icon.png';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Icon from '@mui/material/Icon';
+import React, { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import styles from "./mission_dialog_styles.js";
+import elune_icon from "../images/dialog_elune_icon.png";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Icon from "@mui/material/Icon";
 // import Mailchimp from "react-mailchimp-form";
-import ACTION_COMPONENT from './action_component.js';
-
+import ACTION_COMPONENT from "./action_component.js";
 
 export default function MISSION_DIALOG(props) {
-
   // console.log(props.dialog_data, "dialog_data");
   //snackbar notifies user it may take some time after click of action button.
-    //when they return to mission dialog.
-      //quest_user_status is in dialog data.
-      //action component needs 5th state for claim reward mode.
-      //click opens up secondary confirm dialog can test with current dialog?
-        //claim has not been implemented.
+  //when they return to mission dialog.
+  //quest_user_status is in dialog data.
+  //action component needs 5th state for claim reward mode.
+  //click opens up secondary confirm dialog can test with current dialog?
+  //claim has not been implemented.
 
   const renderIcon = () => {
     if (props.dialog_data.platform === "Discord") {
       return (
-        <Icon className={'fa-brands fa-discord'} style={styles.icon}></Icon>
-      )
+        <Icon className={"fa-brands fa-discord"} style={styles.icon}></Icon>
+      );
     } else if (props.dialog_data.platform === "twitter") {
       return (
-        <Icon className={'fa-brands fa-twitter'} style={styles.icon}></Icon>
-      )
+        <Icon className={"fa-brands fa-twitter"} style={styles.icon}></Icon>
+      );
     } else {
-      return null
+      return null;
     }
-  }
+  };
 
   return (
     <Dialog
@@ -47,35 +45,35 @@ export default function MISSION_DIALOG(props) {
         style: {
           background: "rgba(26, 32, 38, 0.8)",
           opacity: "0.8",
-        }
+        },
       }}
       PaperProps={{
-       style: {
-         background: "rgba(106, 106, 106, 0.3)",
-         borderRadius: "5px",
-         width: "69%",
-         height: "87%",
-         maxHeight: "none",
-         maxWidth: "none",
-       }
+        style: {
+          background: "rgba(106, 106, 106, 0.3)",
+          borderRadius: "5px",
+          width: "69%",
+          height: "87%",
+          maxHeight: "none",
+          maxWidth: "none",
+        },
       }}
     >
       <DialogTitle style={styles.title_container}>
         <Typography style={styles.title}> {props.dialog_data.title}</Typography>
-        {props.dialog_state? (
+        {props.dialog_state ? (
           <IconButton
             aria-label="close"
             onClick={() => props.handleDialogClose(props.actionDone)}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               right: 15,
               top: 0,
               color: "#6A6A6A",
             }}
           >
             <CloseIcon />
-          </IconButton>):null
-        }
+          </IconButton>
+        ) : null}
       </DialogTitle>
       <DialogContent style={styles.content_container}>
         <Grid container direction="column" style={styles.platform_container}>
@@ -92,27 +90,32 @@ export default function MISSION_DIALOG(props) {
               {renderIcon()}
             </Grid>
           </Grid>
-          <Grid container direction="row" justifyContent="space-between" style={styles.quest_container}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            style={styles.quest_container}
+          >
             <Grid container item direction="column" xs={7}>
-              <Typography style={styles.mission}>
-                MISSION
-              </Typography>
+              <Typography style={styles.mission}>MISSION</Typography>
               <Typography style={styles.description}>
                 {props.dialog_data.description}
               </Typography>
-              <Grid container direction="row" justifyContent="space-between" sx={{width: "100%", marginTop: "40px"}} alignItems="flex-start">
+              <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                sx={{ width: "100%", marginTop: "40px" }}
+                alignItems="flex-start"
+              >
                 <Grid container item direction="column" xs={4}>
-                  <Typography style={styles.xp_frequency}>
-                    xp
-                  </Typography>
+                  <Typography style={styles.xp_frequency}>xp</Typography>
                   <Typography style={styles.xp_frequency_content}>
                     {props.dialog_data.xp}
                   </Typography>
                 </Grid>
                 <Grid container item direction="column" xs={6}>
-                  <Typography style={styles.xp_frequency}>
-                    Frequency
-                  </Typography>
+                  <Typography style={styles.xp_frequency}>Frequency</Typography>
                   <Typography style={styles.xp_frequency_content}>
                     {props.dialog_data.recurrence}
                   </Typography>
@@ -121,11 +124,12 @@ export default function MISSION_DIALOG(props) {
             </Grid>
             <Grid item xs={5}>
               <Box style={styles.action_frame}>
-                <ACTION_COMPONENT action_data={props.dialog_data.action}
+                <ACTION_COMPONENT
+                  action_data={props.dialog_data.action}
                   getWithExpiration={props.getWithExpiration}
                   sign_message={props.sign_message}
                   handleTwitterButton={props.handleTwitterButton}
-                  handleOnDialogHover={props.handleOnDialogHover}
+                  handleDialogHover={props.handleDialogHover}
                   actionDone={props.actionDone}
                   setActionDone={props.setActionDone}
                   alertState={props.alertState}
@@ -139,27 +143,43 @@ export default function MISSION_DIALOG(props) {
               </Box>
             </Grid>
           </Grid>
-          <Box style={styles.hr}/>
+          <Box style={styles.hr} />
           <Typography style={styles.directions}>
             TO COMPLETE THIS BOUNTY
           </Typography>
           <Grid container direction="column">
             <Typography style={styles.guide}>GUIDE</Typography>
             <Grid container direction="row">
-              <Grid item xs={.5}>
+              <Grid item xs={0.5}>
                 <Typography style={styles.step_number}>{`1.`}</Typography>
               </Grid>
-              <Grid container item direction="column" xs={10} style={styles.instructions}>
-                <Typography style={styles.friends}>Invite your friends</Typography>
+              <Grid
+                container
+                item
+                direction="column"
+                xs={10}
+                style={styles.instructions}
+              >
+                <Typography style={styles.friends}>
+                  Invite your friends
+                </Typography>
                 <Typography>{`Inviting your friends is the easiest way to get 10 invites. Invite your friends only if you believe that our project has value for them.`}</Typography>
               </Grid>
             </Grid>
             <Grid container direction="row">
-              <Grid item xs={.5}>
+              <Grid item xs={0.5}>
                 <Typography style={styles.step_number}>{`2.`}</Typography>
               </Grid>
-              <Grid container item direction="column" xs={10} style={styles.instructions}>
-                <Typography style={styles.friends}>Post in Discord Groups</Typography>
+              <Grid
+                container
+                item
+                direction="column"
+                xs={10}
+                style={styles.instructions}
+              >
+                <Typography style={styles.friends}>
+                  Post in Discord Groups
+                </Typography>
                 <Typography>{`Share your Discord invitation link in other Discord group. DON’T SPAM, respect the rules of the groups and share your link where it’s appropriate. FIND SERVERS/PLACES WHERE NOBODY ELSE IS POSTING OUR PROJECT. IT’S THE QUICKEST WAY TO GET INVITES!`}</Typography>
               </Grid>
             </Grid>
