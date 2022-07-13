@@ -26,8 +26,8 @@ export default function ACTION_COMPONENT(props) {
     paddingRight: "14px",
   };
   // console.log(props.action_data,"action data!");
-  console.log(props.rewards_dialog_data, "rewards dialxog data");
-  console.log(props.dialog_data, "dialog data");
+  // console.log(props.rewards_dialog_data, "rewards dialog data");
+  // console.log(props.dialog_data, "dialog data");
 
   const [formValue, setFormValue] = useState("");
   const [formSubmission, setFormSubmission] = useState(false);
@@ -52,11 +52,8 @@ export default function ACTION_COMPONENT(props) {
     // console.log(props.dialog_data, "dialog data");
     props.set_rewards_dialog_data({
       xp: props.dialog_data.xp,
-<<<<<<< Updated upstream
-      id: props.dialog_data.active_reward.id
-=======
-      id: props.dialog_data.id,
->>>>>>> Stashed changes
+      id: props.dialog_data.active_reward.id,
+      type: "quest",
     });
     props.handleRewardsOpen();
   };

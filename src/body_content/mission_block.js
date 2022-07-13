@@ -11,8 +11,12 @@ export default function MISSION_BLOCK(props) {
     // console.log("firing in mission block click");
     // props.change_dialog_data({test: "meow meow meow"});
     props.change_dialog_data(props.item_data);
-    if(props.item_data.active_reward){
-      props.set_rewards_dialog_data({id:props.item_data.id, xp: props.item_data.xp})
+    if (props.item_data.active_reward) {
+      props.set_rewards_dialog_data({
+        id:props.dialog_data.active_reward.id,
+        xp: props.item_data.xp,
+        type: "quest"
+      })
     }
     props.handleDialogOpen();
   };
@@ -55,11 +59,11 @@ export default function MISSION_BLOCK(props) {
     else if (props.item_data.active_reward) {
       let style_name = `claim_${section}`;
       return styles[style_name];
-    } 
+    }
     else if (props.item_data.user_quest_status === "Complete") {
       let style_name = `complete_${section}`;
       return styles[style_name];
-    } 
+    }
   }
 
   return (
