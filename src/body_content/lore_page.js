@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import SimpleBar from "simplebar-react";
-import 'animate.css';
 import styles from "./lore_page_styles.js";
 
 export default function LORE_PAGE(props) {
