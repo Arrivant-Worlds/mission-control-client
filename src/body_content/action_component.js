@@ -13,9 +13,8 @@ import {
 } from "./../api_calls";
 
 export default function ACTION_COMPONENT(props) {
-
-  console.log("oosoosoa", props.rewards_dialog_data)
-  console.log("not asdkaoSD", props.dialog_data)
+  console.log("oosoosoa", props.rewards_dialog_data);
+  console.log("not asdkaoSD", props.dialog_data);
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",
