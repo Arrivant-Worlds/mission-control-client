@@ -337,12 +337,14 @@ export default function MAIN_PAGE(props) {
   }
 
   const handleDropdown_navigate = (path) => {
-    if (!wallet || !connected || !signed_message) {
-      setAlertState({
-        open: true,
-        message: "Please connect your wallet and sign!",
-        severity: "error",
-      })
+    if (path === "/bounty_main") {
+      if (!wallet || !connected || !signed_message) {
+        setAlertState({
+          open: true,
+          message: "Please connect your wallet and sign!",
+          severity: "error",
+        })
+      }
     }
     change_dropdown_anchor(null);
     navigate(path);
