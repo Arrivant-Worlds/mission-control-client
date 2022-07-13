@@ -401,7 +401,7 @@ export default function MAIN_PAGE(props) {
   //   }
   // }
 
-  const bounty_overlay_css = {
+  const overlay_css = {
     height: "100%",
     display: "flex",
     justifyContent: "center",
@@ -417,7 +417,7 @@ export default function MAIN_PAGE(props) {
       backgroundSize: "cover",
       backgroundImage: `url(${backgroundImageRender()})`
     }}>
-      <Box style={window.location.pathname === "/bounty_main" ? bounty_overlay_css : styles.container}
+      <Box style={window.location.pathname === "/bounty_main" || window.location.pathname === "/lore" ? overlay_css : styles.container}
         >
         <Grid container justifyContent="space-between" alignItems="center" sx={{position: 'absolute', top: '40px', width: "90%"}}>
           <Box component="img" sx={{cursor: "pointer"}} src={black_circle} alt="black_circle_logo" onClick={(e) => handleDropdownOpen(e)}/>

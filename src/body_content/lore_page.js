@@ -3,31 +3,44 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import SimpleBar from "simplebar-react";
+import 'animate.css';
 import styles from "./lore_page_styles.js";
 
 export default function LORE_PAGE(props) {
 
+  const scrollbar_options = {
+    scrollbar: "lore_scrollbar",
+    track: "lore_track"
+  }
+
   return (
-    <Grid container direction="row" justifyContent="flex-end">
+    <Grid container direction="row" justifyContent="flex-end" sx={{width: "90%", marginTop: "50px"}}>
       <Grid sx={styles.text_container}>
-        <SimpleBar style={styles.inner_text_container}>
-          <Typography sx={styles.text}>
+        <SimpleBar style={styles.scroll_container}>
+          <Grid sx={styles.inner_text_container} container direction="column" justifyContent="space-between">
+            <Typography className="animate__animated animate__fadeIn" sx={styles.text_first}>
             In September, 2021, our team received an SOS message from the deep web—a world hidden within the interstices of our internet networks. Since then, we have worked tirelessly to interpret and understand this mysterious new landscape.
-          </Typography>
-          <Typography sx={styles.text}>
+            </Typography>
+            <Typography className="animate__animated animate__fadeIn animate__delay-1s" sx={styles.text}>
             At last, we are ready to cross the threshold and chart our own course across the StarGardens.
-          </Typography>
-          <Typography sx={styles.text}>
+            </Typography>
+            <Typography className="animate__animated animate__fadeIn animate__delay-2s" sx={styles.text}>
             And you are invited to join us.
-          </Typography>
-          <Typography sx={styles.text}>
+            </Typography>
+            <Typography className="animate__animated animate__fadeIn animate__delay-3s" sx={styles.text}>
             This is your Eluüne Visa. It doubles as your passport and itinerary as you explore the other side, stake your claim in the great unknown, and uncover unimaginable opportunities over our digital horizon.
-          </Typography>
-          <Typography sx={styles.text}>
+            </Typography>
+            <Typography className="animate__animated animate__fadeIn animate__delay-4s" sx={styles.text}>
             Your Eluüne Visa is your identity in our universe: your reputation, your calling, your immutable presence in our world. Other travelers will know you by your Eluüne Visa (and you will know them by theirs) as you work together to generate prosperity and wonder across twenty unique techno-fantasy domains.
-          </Typography>
+            </Typography>
+          </Grid>
         </SimpleBar>
       </Grid>
+      <Typography sx={styles.welcome}>
+      {`WelCome
+        to YOUR
+        ElUüNE VISA`}
+      </Typography>
     </Grid>
   );
 }

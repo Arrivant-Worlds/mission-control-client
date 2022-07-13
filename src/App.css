@@ -19,10 +19,21 @@
   width: 3px;
 }
 
+.lore_scrollbar: {
+  display: flex;
+  justify-content: center;
+  margin-top: 0px;
+}
+
 .simplebar-track.simplebar-vertical {
   background-color: black;
   top: 10px !important;
   width: 3px !important;
+}
+
+.lore_track: {
+  background-color: black;
+  top: 0px !important;
 }
 
 .wallet-adapter-button.wallet_button {
@@ -42,6 +53,18 @@
 .MuiButtonBase-root.MuiButton-root.Mui-disabled{
   background-color: #888888;
 }
+
+.animate__animated.animate__fadeIn {
+  --animate-duration: 2s;
+}
+
+/* .text_fadeIn_3seconds {
+  animation-delay: 3s;
+}
+
+.text_fadeIn_4seconds {
+  animation-delay: 4s;
+} */
 
 @media screen and (max-width: 2400px): {
   .wallet-adapter-button.wallet_button {

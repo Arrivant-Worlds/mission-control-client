@@ -9,9 +9,27 @@ const styles = {
     backdropFilter: "blur(10px)",
     /* Note: backdrop-filter has minimal browser support */
     borderRadius: "5px",
+    position: "relative",
+  },
+  scroll_container: {
+    height: "500px",
+    width: "80%",
+    position: "relative",
+    top: "50px",
+    right: "-60px",
   },
   inner_text_container: {
-    padding: "60px 100px 60px 60px",
+    width: "85%",
+  },
+  text_first: {
+    textAlign: "left",
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: "17px",
+    lineHeight: "24px",
+    letterSpacing: "0.1em",
+    textTransform: "capitalize",
+    color: "#FFFFFF",
   },
   text: {
     textAlign: "left",
@@ -22,7 +40,21 @@ const styles = {
     letterSpacing: "0.1em",
     textTransform: "capitalize",
     color: "#FFFFFF",
+    marginTop: "30px",
   },
+  welcome: {
+    textAlign: "left",
+    fontWeight: "700",
+    fontSize: "36px",
+    lineHeight: "40px",
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    color: "#F6F6F6",
+    position: "absolute",
+    left: "180px",
+    top: "160px",
+    whiteSpace: "pre-line",
+  }
 }
 
 export default styles;

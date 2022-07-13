@@ -33,6 +33,7 @@ export default function BOUNTY_PAGE(props) {
     const check_sig = async () => {
       let check_headers = await props.getWithExpiration("verifyHeader");
       if (!wallet || !connected || !check_headers) {
+        //check for twitter Oauth path? and save to state? on main?
         navigate('/connect');
       } else if (wallet && connected && check_headers) {
         let gather_data = props.populate_data(check_headers);
