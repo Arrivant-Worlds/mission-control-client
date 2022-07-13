@@ -11,13 +11,13 @@ export default function PASSPORT(props) {
   //change to props.exp etc in render.
   // console.log(props.user_data, "user_data");
   useEffect(() => {
-    let exp_percent = calculate_progress(99999);
+    let exp_percent = calculate_progress(props.user_data.xpToNextLevel);
     //change to props.exp etc.
-    set_exp_value(Math.round(exp_percent));
+    set_exp_value(Math.round(props.user_data.exp_percent));
   }, []);
 
    const calculate_progress = (exp) => {
-     return (100 * props.user_data.xp) / 999999;
+     return (100 * props.user_data.xp) / props.user_data.xpToNextLevel;
    }
 
   return (
@@ -59,7 +59,7 @@ export default function PASSPORT(props) {
           </Box>
         </Grid>
         <Grid item xs={4.5}>
-          <Typography style={styles.xp_numbers}>{`${props.user_data.xp}/999999`}</Typography>
+          <Typography style={styles.xp_numbers}>{`${props.user_data.xp}/${props.user_data.xpToNextLevel}`}</Typography>
         </Grid>
       </Grid>
     </Grid>

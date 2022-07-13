@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SimpleBar from 'simplebar-react';
 import styles from './rewards_styles.js';
-import rewards_data from "./rewards_data.js";
 import REWARDS_BLOCK from "./rewards_block.js";
 
 export default function REWARDS(props) {

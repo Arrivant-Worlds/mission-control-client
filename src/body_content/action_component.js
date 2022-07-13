@@ -52,7 +52,8 @@ export default function ACTION_COMPONENT(props) {
     // console.log(props.dialog_data, "dialog data");
     props.set_rewards_dialog_data({
       xp: props.dialog_data.xp,
-      id: props.dialog_data.active_reward.id
+      id: props.dialog_data.active_reward.id,
+      type: "quest",
     });
     props.handleRewardsOpen();
   };

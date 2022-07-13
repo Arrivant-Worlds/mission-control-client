@@ -1,15 +1,11 @@
 import SelectInput from "@mui/material/Select/SelectInput";
 import axios from "axios";
 import queryString from "query-string";
-<<<<<<< HEAD
 // import { BASE_URL } from "./constants";
 
-// const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
+// const BASE_URL = 'http://localhost:3001';
 // const BASE_URL = "https://mission-control-dev.herokuapp.com";
-=======
-import { BASE_URL } from "./constants";
->>>>>>> f7d9b90cbc30c1999350c49233c2200499798646
 
 export const create_user = async (payload) => {
   try {
@@ -157,8 +153,8 @@ export const submit_email = async (payload, email_string) => {
 
 export const claim_journey_reward = async (payload, reward_id) => {
   try {
-    const response = await axios.post(
-      `${BASE_URL}/journeyRewards?=${reward_id}/claim`,
+    const response = await axios.put(
+      `${BASE_URL}/journeyRewards/${reward_id}/claim`,
       {},
       { headers: payload }
     );
@@ -173,7 +169,7 @@ export const claim_journey_reward = async (payload, reward_id) => {
 export const claim_quest_reward = async (payload, reward_id) => {
   try {
     const response = await axios.post(
-      `${BASE_URL}/questRewards?=${reward_id}/claim`,
+      `${BASE_URL}/questRewards/${reward_id}/claim`,
       {},
       { headers: payload }
     );

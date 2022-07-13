@@ -67,6 +67,7 @@ export default function MAIN_PAGE(props) {
   const [rewards_dialog_data, set_rewards_dialog_data] = useState({
     xp: "",
     id: "",
+    type: "",
   });
   const [signed_message, change_signed_message] = useState(false);
   const [loading_state, change_loading_state] = useState(false);

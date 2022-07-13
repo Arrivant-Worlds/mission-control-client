@@ -10,7 +10,8 @@ import {claim_reward} from "./../api_calls";
 import styles from './rewards_block_styles.js';
 
 export default function REWARDS_BLOCK(props) {
-  // console.log(props.item_data, "reward data?");
+  // props.item_data.claimed_status = "claimable";
+  console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
@@ -36,7 +37,7 @@ export default function REWARDS_BLOCK(props) {
   };
 
   const handleOpenRewardDialog = async () => {
-    props.set_rewards_dialog_data({xp:props.item_data.xp, id:props.item_data.id});
+    props.set_rewards_dialog_data({xp: "something here", id:props.item_data.id, type: "journey"});
     props.handleRewardsOpen(true);
   }
 
