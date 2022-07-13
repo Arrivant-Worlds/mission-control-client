@@ -21,8 +21,8 @@ export default function ACTION_COMPONENT(props) {
     paddingRight: "14px",
   }
   // console.log(props.action_data,"action data!");
-  console.log(props.rewards_dialog_data, "rewards dialog data");
-  console.log(props.dialog_data, "dialog data");
+  // console.log(props.rewards_dialog_data, "rewards dialog data");
+  // console.log(props.dialog_data, "dialog data");
 
   const [formValue, setFormValue] = useState("");
   const [formSubmission, setFormSubmission] = useState(false);
