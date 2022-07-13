@@ -1,10 +1,7 @@
 .App {
   text-align: center;
 }
-/*
-::-webkit-scrollbar {
-  display: none;
-} */
+
 .simplebar-scrollbar {
   display: flex;
   justify-content: center;
@@ -78,14 +75,6 @@
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
-
-/* .text_fadeIn_3seconds {
-  animation-delay: 3s;
-}
-
-.text_fadeIn_4seconds {
-  animation-delay: 4s;
-} */
 
 @media screen and (max-width: 2400px): {
   .wallet-adapter-button.wallet_button {
