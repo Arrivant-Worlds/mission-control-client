@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import React, { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import styles from './rewards_dialog_styles.js';
-
+import styles from "./rewards_dialog_styles.js";
 
 export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
@@ -17,21 +16,24 @@ export default function REWARDS_DIALOG(props) {
   const handleOnClick = () => {
     set_clicked_state(true);
     if (props.rewards_dialog_data.type === "quest") {
-      console.log(props.rewards_dialog_data, "props??");
+      // console.log(props.rewards_dialog_data, "props??");
       props.handleClaimQuestReward(props.rewards_dialog_data.id);
       //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
       // props.handleRewardsClose();
     } else if (props.rewards_dialog_data.type === "journey") {
-      // props.handleClaimJourneyReward(props.rewards_dialog_data.id);
+      props.handleClaimJourneyReward(
+        props.rewards_dialog_data.id,
+        props.rewards_dialog_data.type_reward
+      );
     }
-  }
+  };
 
   const handleOnClose = () => {
     props.handleRewardsClose();
     //set time out?
     set_clicked_state(false);
-  }
+  };
 
   return (
     <Dialog
@@ -41,7 +43,7 @@ export default function REWARDS_DIALOG(props) {
         style: {
           background: "rgba(26, 32, 38, 0.8)",
           opacity: "0.8",
-        }
+        },
       }}
       PaperProps={{
         style: {
@@ -49,33 +51,43 @@ export default function REWARDS_DIALOG(props) {
           border: "1px solid #E6B2B9",
           width: "414px",
           height: "203px",
-        }
+        },
       }}
     >
-      <DialogContent sx={{height: "100%"}}>
-        {clicked_state ?
-          <Grid sx={{height: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
+      <DialogContent sx={{ height: "100%" }}>
+        {clicked_state ? (
+          <Grid
+            sx={{ height: "100%" }}
+            container
+            direction="column"
+            justifyContent="space-around"
+            alignItems="center"
+          >
             <Typography sx={styles.title}>Reward Claimed!</Typography>
-            <Typography sx={styles.text}>Keep gaining XP to level up!</Typography>
-            <Button
-              sx={styles.button}
-              onClick={() => handleOnClose()}
-            >
-            DASHBOARD
+            <Typography sx={styles.text}>
+              Keep gaining XP to level up!
+            </Typography>
+            <Button sx={styles.button} onClick={() => handleOnClose()}>
+              DASHBOARD
             </Button>
           </Grid>
-          :
-          <Grid sx={{height: "100%"}} container direction="column" justifyContent="space-around" alignItems="center">
+        ) : (
+          <Grid
+            sx={{ height: "100%" }}
+            container
+            direction="column"
+            justifyContent="space-around"
+            alignItems="center"
+          >
             <Typography sx={styles.title}>Congratulations!</Typography>
-            <Typography sx={styles.text}>{`+${props.rewards_dialog_data.xp} xp`}</Typography>
-            <Button
-              sx={styles.button}
-              onClick={() => handleOnClick()}
-            >
-            CLAIM REWARD
+            <Typography
+              sx={styles.text}
+            >{`+${props.rewards_dialog_data.xp} xp`}</Typography>
+            <Button sx={styles.button} onClick={() => handleOnClick()}>
+              CLAIM REWARD
             </Button>
           </Grid>
-        }
+        )}
       </DialogContent>
     </Dialog>
   );
