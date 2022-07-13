@@ -7,9 +7,13 @@ import styles from "./mission_block_styles.js";
 export default function MISSION_BLOCK(props) {
   // console.log(props.item_data, "item data?");
   const handleOnClick = () => {
+    console.log("msakjns", props)
     // console.log("firing in mission block click");
     // props.change_dialog_data({test: "meow meow meow"});
     props.change_dialog_data(props.item_data);
+    if(props.item_data.active_reward){
+      props.set_rewards_dialog_data({id:props.item_data.id, xp: props.item_data.xp})
+    }
     props.handleDialogOpen();
   };
 
@@ -47,13 +51,15 @@ export default function MISSION_BLOCK(props) {
     } else if (props.item_data.user_quest_status === "Locked") {
       let style_name = `inactive_${section}`;
       return styles[style_name];
-    } else if (props.item_data.user_quest_status === "Complete") {
-      let style_name = `complete_${section}`;
-      return styles[style_name];
-    } else if (props.item_data.active_reward) {
+    }
+    else if (props.item_data.active_reward) {
       let style_name = `claim_${section}`;
       return styles[style_name];
-    }
+    } 
+    else if (props.item_data.user_quest_status === "Complete") {
+      let style_name = `complete_${section}`;
+      return styles[style_name];
+    } 
   }
 
   return (

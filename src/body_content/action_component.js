@@ -11,6 +11,9 @@ import {submit_email, auth_twitter,
 
 
 export default function ACTION_COMPONENT(props) {
+
+  console.log("oosoosoa", props.rewards_dialog_data)
+  console.log("not asdkaoSD", props.dialog_data)
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",
@@ -21,7 +24,7 @@ export default function ACTION_COMPONENT(props) {
     paddingRight: "14px",
   }
   // console.log(props.action_data,"action data!");
-  console.log(props.rewards_dialog_data, "rewards dialog data");
+  console.log(props.rewards_dialog_data, "rewards dialxog data");
   console.log(props.dialog_data, "dialog data");
 
   const [formValue, setFormValue] = useState("");
@@ -47,7 +50,7 @@ export default function ACTION_COMPONENT(props) {
     // console.log(props.dialog_data, "dialog data");
     props.set_rewards_dialog_data({
       xp: props.dialog_data.xp,
-      id: props.dialog_data.id
+      id: props.dialog_data.active_reward.id
     });
     props.handleRewardsOpen();
   }
@@ -86,7 +89,7 @@ export default function ACTION_COMPONENT(props) {
   };
 
   const type_render = () => {
-    if (props.active_reward) {
+    if (props.dialog_data.active_reward) {
       return (
         <Grid container direction="column" justifyContent="center" alignItems="center" sx={{height: "100%", width: "100%"}}>
           <Grid container direction="column" justifyContent="space-around" alignItems="flex-start" sx={{height: "100%", width: "100%", padding: "10px"}}>
