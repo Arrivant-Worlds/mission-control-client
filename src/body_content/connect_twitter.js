@@ -10,32 +10,33 @@ import {
   verify_twitter,
 } from "../api_calls/index.js";
 
-// Melvin - todo list
-// TODO: receive wallet as props ?
-// TODO: create useState for twitter connection in main_page.js ?
-// TODO: style/format this component as needed
-// TODO: impl this component in the proper place in the client
 export default function CONNECT_TWITTER(props) {
-  const { publicKey } = useWallet();
-
-  useEffect(() => {
-    const verify = async () => {
-      let status = await verify_twitter(window.location.search);
-      console.log("verify twitter status", status);
-    };
-    verify();
-  }, []);
+  const { publicKey, connected } = useWallet();
+  let navigate = useNavigate();
 
   const handleTwitter = async (wallet) => {
     props.handleButtonClick();
-    let oauth_token = await auth_twitter(wallet);
-    if (oauth_token != null) {
-      console.log("oauth_token ", oauth_token);
-      let redirect = await get_twitter_oauth_redirect(oauth_token);
-      console.log("redirect", redirect);
-      window.location.href = redirect;
+
+    if (publicKey && connected) {
+      let header_verification = await props.getWithExpiration("verifyHeader");
+      if (header_verification) {
+        let headers = {
+          signedMsg: header_verification.signedMsg,
+          signature: header_verification.signature,
+          pubkey: header_verification.pubkey,
+        };
+        console.log("headers", headers);
+        let oauth_token = await auth_twitter(headers, publicKey.toString());
+        if (oauth_token != null) {
+          console.log("oauth_token ", oauth_token);
+          let redirect = await get_twitter_oauth_redirect(oauth_token);
+          console.log("redirect", redirect);
+          window.location.href = redirect;
+          await verify_twitter(headers, window.location.search);
+        }
+      }
     } else {
-      console.log("ERROR: failed to get twitter oauth redirect URL");
+      navigate("/connect");
     }
   };
 
@@ -44,9 +45,8 @@ export default function CONNECT_TWITTER(props) {
   };
 
   return (
-    <Grid container justifyContent="center" sx={{width: "100%"}}>
+    <Grid container justifyContent="center" sx={{ width: "100%" }}>
       <Button
-        disabled={props.disabled}
         variant={props.variant}
         style={props.style}
         onClick={() => handleTwitter(publicKey.toString())}

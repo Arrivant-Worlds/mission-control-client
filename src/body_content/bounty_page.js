@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import MISSION_BOARD from './mission_board.js';
-import LOG_BOARD from './log_board.js';
-import LEADERBOARD from './leaderboard.js';
-import REWARDS from './rewards.js';
-import EGG from './egg.js';
-import PASSPORT from './passport.js';
+import React, { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import MISSION_BOARD from "./mission_board.js";
+import LOG_BOARD from "./log_board.js";
+import LEADERBOARD from "./leaderboard.js";
+import REWARDS from "./rewards.js";
+import EGG from "./egg.js";
+import PASSPORT from "./passport.js";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
@@ -17,13 +17,15 @@ import {
   get_quests,
   get_rewards,
   get_leaderboard,
+  verify_twitter,
 } from "./../api_calls";
 import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 // Drew's changes - twitter and sound
 
 export default function BOUNTY_PAGE(props) {
-  const { wallet, signMessage, publicKey, connect, connected, disconnect } = useWallet();
+  const { wallet, signMessage, publicKey, connect, connected, disconnect } =
+    useWallet();
   let navigate = useNavigate();
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
@@ -32,13 +34,15 @@ export default function BOUNTY_PAGE(props) {
   useEffect(() => {
     const check_sig = async () => {
       let check_headers = await props.getWithExpiration("verifyHeader");
+      await verify_twitter(check_headers, window.location.search);
+
       if (!wallet || !connected || !check_headers) {
         //check for twitter Oauth path? and save to state? on main?
-        navigate('/connect');
+        navigate("/connect");
       } else if (wallet && connected && check_headers) {
         let gather_data = props.populate_data(check_headers);
       }
-    }
+    };
     check_sig();
   }, []);
 
@@ -218,8 +222,19 @@ export default function BOUNTY_PAGE(props) {
             <PASSPORT user_data={props.user_data} />
           </Box>
         </Grid>
-        <Grid container item direction="column" justifyContent="center" alignItems="center" xs={4}>
-          <TabPanel value={tab2_value} index={0} style={styles.tab_content_container}>
+        <Grid
+          container
+          item
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          xs={4}
+        >
+          <TabPanel
+            value={tab2_value}
+            index={0}
+            style={styles.tab_content_container}
+          >
             <REWARDS
               rewards_data={props.rewards_data}
               user_data={props.user_data}
