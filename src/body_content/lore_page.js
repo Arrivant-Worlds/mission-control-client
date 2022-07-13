@@ -7,11 +7,6 @@ import styles from "./lore_page_styles.js";
 
 export default function LORE_PAGE(props) {
 
-  const scrollbar_options = {
-    scrollbar: "lore_scrollbar",
-    track: "lore_track"
-  }
-
   return (
     <Grid container direction="row" justifyContent="flex-end" sx={{width: "90%", marginTop: "50px"}}>
       <Grid sx={styles.text_container}>

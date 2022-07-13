@@ -16,21 +16,10 @@
   width: 3px;
 }
 
-.lore_scrollbar: {
-  display: flex;
-  justify-content: center;
-  margin-top: 0px;
-}
-
 .simplebar-track.simplebar-vertical {
   background-color: black;
   top: 10px !important;
   width: 3px !important;
-}
-
-.lore_track: {
-  background-color: black;
-  top: 0px !important;
 }
 
 .wallet-adapter-button.wallet_button {
