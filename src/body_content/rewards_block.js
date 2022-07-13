@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Icon from '@mui/material/Icon';
-import white_chest from '../images/chest.png';
-import grey_chest from '../images/grey_chest.png';
-import {claim_reward} from "./../api_calls";
+import React, { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Icon from "@mui/material/Icon";
+import white_chest from "../images/chest.png";
+import grey_chest from "../images/grey_chest.png";
+import { claim_reward } from "./../api_calls";
 
-import styles from './rewards_block_styles.js';
+import styles from "./rewards_block_styles.js";
 
 export default function REWARDS_BLOCK(props) {
   // props.item_data.claimed_status = "claimable";
@@ -37,13 +37,30 @@ export default function REWARDS_BLOCK(props) {
   };
 
   const handleOpenRewardDialog = async () => {
-    props.set_rewards_dialog_data({xp: "something here", id:props.item_data.id, type: "journey"});
+    props.set_rewards_dialog_data({
+      xp: "something here",
+      id: props.item_data.id,
+      type: "journey",
+      type_reward: props.item_data.rewards,
+    });
     props.handleRewardsOpen(true);
-  }
+  };
 
   return (
-    <Grid container direction="row" justifyContent="space-between"
-      style={props.item_data.claimed_status === "claimable" ? styles.rewards_block_container_active : styles.rewards_block_container} onClick={props.item_data.claimed_status === "claimable" ? handleOpenRewardDialog : null}
+    <Grid
+      container
+      direction="row"
+      justifyContent="space-between"
+      style={
+        props.item_data.claimed_status === "claimable"
+          ? styles.rewards_block_container_active
+          : styles.rewards_block_container
+      }
+      onClick={
+        props.item_data.claimed_status === "claimable"
+          ? handleOpenRewardDialog
+          : null
+      }
     >
       <Grid
         container

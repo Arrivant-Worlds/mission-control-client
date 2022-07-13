@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { decodeUTF8 } from "tweetnacl-util";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
+import { Transaction } from "@solana/web3.js";
 import {
   create_user,
   get_user,
@@ -11,6 +12,7 @@ import {
   get_leaderboard,
   claim_journey_reward,
   claim_quest_reward,
+  RPC_CONNECTION,
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
 // import CONNECT_WALLET from './connect_wallet.js';
@@ -52,8 +54,15 @@ import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
 
 export default function MAIN_PAGE(props) {
-  const { wallet, signMessage, publicKey, connect, connected, disconnect } =
-    useWallet();
+  const {
+    wallet,
+    signMessage,
+    publicKey,
+    connect,
+    connected,
+    disconnect,
+    sendTransaction,
+  } = useWallet();
   let navigate = useNavigate();
   const [body_state, change_body_state] = useState("join");
   const [wallet_data, change_wallet_data] = useState({});
@@ -307,12 +316,13 @@ export default function MAIN_PAGE(props) {
     }
   };
 
-  const handleClaimJourneyReward = async (reward_id) => {
+  const handleClaimJourneyReward = async (reward_id, type_reward) => {
     //loading
     // props.change_loading_state(true);
+    let claim;
     let header_verification = await getWithExpiration("verifyHeader");
     if (header_verification) {
-      let claim = await claim_journey_reward(header_verification, reward_id);
+      claim = await claim_journey_reward(header_verification, reward_id);
       //do get request for user data update.
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
@@ -320,9 +330,22 @@ export default function MAIN_PAGE(props) {
     } else {
       let sign_request = await sign_message();
       // setFormSubmission(true);
-      let claim = await claim_journey_reward(header_verification, reward_id);
+      claim = await claim_journey_reward(header_verification, reward_id);
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
+    }
+    if (claim.length > 0 && type_reward == "soulbound") {
+      console.log("claim trx", claim);
+      let buffer = Buffer.from(claim, "base64");
+      const tx = Transaction.from(buffer);
+      // user signs trx
+      //await signTransaction(tx);
+      //console.log("signed tx", tx);
+      // broadcast trx to solana
+      let sig = await sendTransaction(tx, RPC_CONNECTION);
+      console.log("signature", sig);
+    } else {
+      console.log("Wrong journey reward type or claim transaction is empty");
     }
   };
 

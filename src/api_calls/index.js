@@ -1,11 +1,8 @@
 import SelectInput from "@mui/material/Select/SelectInput";
 import axios from "axios";
 import queryString from "query-string";
-// import { BASE_URL } from "./constants";
-
-const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
-// const BASE_URL = 'http://localhost:3001';
-// const BASE_URL = "https://mission-control-dev.herokuapp.com";
+import { Connection } from "@solana/web3.js";
+import { BASE_URL, RPC_CONNECTION_URL } from "./constants";
 
 export const create_user = async (payload) => {
   try {
@@ -168,7 +165,7 @@ export const claim_journey_reward = async (payload, reward_id) => {
 
 export const claim_quest_reward = async (payload, reward_id) => {
   try {
-    const response = await axios.post(
+    const response = await axios.put(
       `${BASE_URL}/questRewards/${reward_id}/claim`,
       {},
       { headers: payload }
@@ -192,3 +189,5 @@ export const get_soulbound = async (payload) => {
     return [];
   }
 };
+
+export const RPC_CONNECTION = new Connection(RPC_CONNECTION_URL);
