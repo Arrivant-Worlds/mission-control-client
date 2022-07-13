@@ -30,6 +30,7 @@ const styles = {
     letterSpacing: "0.1em",
     textTransform: "capitalize",
     color: "#FFFFFF",
+    opacity: "0",
   },
   text: {
     textAlign: "left",
@@ -41,6 +42,7 @@ const styles = {
     textTransform: "capitalize",
     color: "#FFFFFF",
     marginTop: "30px",
+    opacity: "0",
   },
   welcome: {
     textAlign: "left",
