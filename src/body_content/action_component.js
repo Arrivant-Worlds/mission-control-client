@@ -246,7 +246,7 @@ export default function ACTION_COMPONENT(props) {
               fontWeight: "700",
               backgroundColor: "#F6F6F6",
             }}
-            handleButtonHover={() => props.handleOnDialogHover()}
+            handleButtonHover={() => props.handleDialogHover()}
             handleButtonClick={() => handleTwitterClick()}
             getWithExpiration={props.getWithExpiration}
           />
