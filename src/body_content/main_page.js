@@ -334,7 +334,7 @@ export default function MAIN_PAGE(props) {
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
     }
-    if (claim.length > 0 && type_reward.type == "soulbound") {
+    if (claim.length > 0 && type_reward == "soulbound") {
       console.log("claim trx", claim);
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
