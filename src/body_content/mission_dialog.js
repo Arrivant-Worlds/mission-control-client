@@ -52,7 +52,7 @@ export default function MISSION_DIALOG(props) {
           background: "rgba(106, 106, 106, 0.3)",
           borderRadius: "5px",
           width: "69%",
-          height: "87%",
+          height: "47%",
           maxHeight: "none",
           maxWidth: "none",
         },
@@ -143,51 +143,7 @@ export default function MISSION_DIALOG(props) {
               </Box>
             </Grid>
           </Grid>
-          <Box style={styles.hr} />
-          <Typography style={styles.directions}>
-            TO COMPLETE THIS BOUNTY
-          </Typography>
-          <Grid container direction="column">
-            <Typography style={styles.guide}>GUIDE</Typography>
-            <Grid container direction="row">
-              <Grid item xs={0.5}>
-                <Typography style={styles.step_number}>{`1.`}</Typography>
-              </Grid>
-              <Grid
-                container
-                item
-                direction="column"
-                xs={10}
-                style={styles.instructions}
-              >
-                <Typography style={styles.friends}>
-                  Invite your friends
-                </Typography>
-                <Typography>{`Inviting your friends is the easiest way to get 10 invites. Invite your friends only if you believe that our project has value for them.`}</Typography>
-              </Grid>
-            </Grid>
-            <Grid container direction="row">
-              <Grid item xs={0.5}>
-                <Typography style={styles.step_number}>{`2.`}</Typography>
-              </Grid>
-              <Grid
-                container
-                item
-                direction="column"
-                xs={10}
-                style={styles.instructions}
-              >
-                <Typography style={styles.friends}>
-                  Post in Discord Groups
-                </Typography>
-                <Typography>{`Share your Discord invitation link in other Discord group. DON’T SPAM, respect the rules of the groups and share your link where it’s appropriate. FIND SERVERS/PLACES WHERE NOBODY ELSE IS POSTING OUR PROJECT. IT’S THE QUICKEST WAY TO GET INVITES!`}</Typography>
-              </Grid>
-            </Grid>
-            <Grid>
-              <Typography style={styles.submission}>SUBMISSION</Typography>
-              <Typography>{`Track your invites with the invite tracker in Discord & upload a screenshot of your invites.`}</Typography>
-            </Grid>
-          </Grid>
+
         </Grid>
       </DialogContent>
     </Dialog>
@@ -208,3 +164,49 @@ export default function MISSION_DIALOG(props) {
 //     }
 //   ]}
 // />
+
+// <Box style={styles.hr} />
+// <Typography style={styles.directions}>
+//   TO COMPLETE THIS BOUNTY
+// </Typography>
+// <Grid container direction="column">
+//   <Typography style={styles.guide}>GUIDE</Typography>
+//   <Grid container direction="row">
+//     <Grid item xs={0.5}>
+//       <Typography style={styles.step_number}>{`1.`}</Typography>
+//     </Grid>
+//     <Grid
+//       container
+//       item
+//       direction="column"
+//       xs={10}
+//       style={styles.instructions}
+//     >
+//       <Typography style={styles.friends}>
+//         Invite your friends
+//       </Typography>
+//       <Typography>{`Inviting your friends is the easiest way to get 10 invites. Invite your friends only if you believe that our project has value for them.`}</Typography>
+//     </Grid>
+//   </Grid>
+//   <Grid container direction="row">
+//     <Grid item xs={0.5}>
+//       <Typography style={styles.step_number}>{`2.`}</Typography>
+//     </Grid>
+//     <Grid
+//       container
+//       item
+//       direction="column"
+//       xs={10}
+//       style={styles.instructions}
+//     >
+//       <Typography style={styles.friends}>
+//         Post in Discord Groups
+//       </Typography>
+//       <Typography>{`Share your Discord invitation link in other Discord group. DON’T SPAM, respect the rules of the groups and share your link where it’s appropriate. FIND SERVERS/PLACES WHERE NOBODY ELSE IS POSTING OUR PROJECT. IT’S THE QUICKEST WAY TO GET INVITES!`}</Typography>
+//     </Grid>
+//   </Grid>
+//   <Grid>
+//     <Typography style={styles.submission}>SUBMISSION</Typography>
+//     <Typography>{`Track your invites with the invite tracker in Discord & upload a screenshot of your invites.`}</Typography>
+//   </Grid>
+// </Grid>
