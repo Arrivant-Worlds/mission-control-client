@@ -5,6 +5,10 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    // '@media screen and (maxWidth: 2000px)': {
+    //   // fontSize: "26px",
+    //   width: "80%",
+    // },
   },
   tab_label: {
     textAlign: "left",
@@ -48,6 +52,10 @@ const styles = {
   tab_content_container: {
     width: "100%",
     height: "600px",
+    // '@media screen and (maxWidth: 1200px)': {
+    //   // fontSize: "26px",
+    //   height: "600px",
+    // },
   }
 };
 

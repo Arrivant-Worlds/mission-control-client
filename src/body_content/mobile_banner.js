@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 import Typography from "@mui/material/Typography";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import background from "../images/MissionControl_HQ_background.jpg";
 import mission_control_logo from "../images/mission_control_logo.png";
 
 export default function MOBILE_BANNER(props) {
 
   return (
     <Grid container direction="column" justifyContent="center" alignItems="center"
-      sx={{height: "100%"}}
+      sx={{
+        height: "100vh",
+        width: "100vw",
+        backgroundSize: "cover",
+        backgroundImage: `url(${background})`,
+      }}
     >
       <Grid container direction="column" justifyContent="space-between" alignItems="center"
         sx={{height: "30%"}}>

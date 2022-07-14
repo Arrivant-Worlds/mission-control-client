@@ -16,7 +16,7 @@ export default function REWARDS_DIALOG(props) {
   const handleOnClick = () => {
     set_clicked_state(true);
     if (props.rewards_dialog_data.type === "quest") {
-      console.log(props.rewards_dialog_data, "props??");
+      // console.log(props.rewards_dialog_data, "props??");
       props.handleClaimQuestReward(props.rewards_dialog_data.id);
       //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.

@@ -128,7 +128,7 @@ export default function BOUNTY_PAGE(props) {
   };
 
   return (
-    <Box style={styles.tab_label_container}>
+    <Box sx={styles.tab_label_container}>
       <Grid
         container
         direction="row"
@@ -179,7 +179,7 @@ export default function BOUNTY_PAGE(props) {
           <TabPanel
             value={tab1_value}
             index={0}
-            style={styles.tab_content_container}
+            sx={styles.tab_content_container}
           >
             <MISSION_BOARD
               expanded_tab={expanded_tab}
