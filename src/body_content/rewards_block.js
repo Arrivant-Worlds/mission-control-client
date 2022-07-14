@@ -42,6 +42,7 @@ export default function REWARDS_BLOCK(props) {
       id: props.item_data.id,
       type: "journey",
       type_reward: props.item_data.rewards,
+      // type_reward: props.item_data.rewards.type,
     });
     props.handleRewardsOpen(true);
   };

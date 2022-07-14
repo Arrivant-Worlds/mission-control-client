@@ -35,6 +35,21 @@ export default function REWARDS_DIALOG(props) {
     set_clicked_state(false);
   };
 
+  const renderReward = () => {
+    if (props.rewards_dialog_data.type === "quest") {
+      return (
+        <Typography
+          sx={styles.text}
+        >{`+${props.rewards_dialog_data.xp} xp`}</Typography>
+      )
+    }
+    // else {
+    //   return (
+    //     <Box component="image" src={props.rewards_dialog_data.rewards.url}/>
+    //   )
+    // }
+  }
+
   return (
     <Dialog
       open={props.rewards_dialog_state}
@@ -80,9 +95,9 @@ export default function REWARDS_DIALOG(props) {
             alignItems="center"
           >
             <Typography sx={styles.title}>Congratulations!</Typography>
-            <Typography
-              sx={styles.text}
-            >{`+${props.rewards_dialog_data.xp} xp`}</Typography>
+            {
+              renderReward()
+            }
             <Button sx={styles.button} onClick={() => handleOnClick()}>
               CLAIM REWARD
             </Button>

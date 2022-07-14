@@ -11,9 +11,9 @@ export default function PASSPORT(props) {
   //change to props.exp etc in render.
   // console.log(props.user_data, "user_data");
   useEffect(() => {
-    let exp_percent = calculate_progress(props.user_data.xpToNextLevel);
+    let exp_percent = calculate_progress();
     //change to props.exp etc.
-    set_exp_value(Math.round(props.user_data.exp_percent));
+    set_exp_value(Math.round(exp_percent));
   }, []);
 
    const calculate_progress = (exp) => {
