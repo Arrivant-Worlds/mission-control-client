@@ -169,7 +169,7 @@ export default function ACTION_COMPONENT(props) {
                 backgroundColor: "#F6F6F6",
               }}
             >
-              PLACEHOLDER
+              {props.action_data.buttonText}
             </Button>
           </Grid>
         </Grid>
@@ -234,7 +234,7 @@ export default function ACTION_COMPONENT(props) {
                   backgroundColor: "#F6F6F6",
                 }}
               >
-                Submit
+                {props.action_data.buttonText}
               </Button>
             </form>
           )}
@@ -278,6 +278,7 @@ export default function ACTION_COMPONENT(props) {
               handleButtonHover={() => props.handleDialogHover()}
               handleButtonClick={() => handleTwitterClick()}
               getWithExpiration={props.getWithExpiration}
+              buttonText={props.action_data.buttonText}
             />
           </Grid>
         </Grid>

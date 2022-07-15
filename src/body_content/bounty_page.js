@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
@@ -23,7 +23,7 @@ import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 // Drew's changes - twitter and sound
 
-export default function BOUNTY_PAGE(props) {
+export const BOUNTY_PAGE = (props) => {
   // const { wallet, signMessage, publicKey, connect, connected, disconnect } =
   //   useWallet();
   let navigate = useNavigate();
@@ -264,3 +264,5 @@ export default function BOUNTY_PAGE(props) {
     </Box>
   );
 }
+
+export default memo(BOUNTY_PAGE);

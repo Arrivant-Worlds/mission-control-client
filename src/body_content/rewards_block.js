@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -9,7 +9,7 @@ import { claim_reward } from "./../api_calls";
 
 import styles from "./rewards_block_styles.js";
 
-export default function REWARDS_BLOCK(props) {
+export const REWARDS_BLOCK = (props) => {
   // props.item_data.claimed_status = "claimable";
   // console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
@@ -129,5 +129,7 @@ export default function REWARDS_BLOCK(props) {
     </Grid>
   );
 }
+
+export default memo(REWARDS_BLOCK);
 
 // sx={[{'&:hover': {border: "0.9px solid #F9F9F9 !important"}}]}

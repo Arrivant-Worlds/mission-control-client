@@ -52,7 +52,7 @@ export default function CONNECT_TWITTER(props) {
         onClick={() => handleTwitter(publicKey.toString())}
         onMouseEnter={() => handleOnHover()}
       >
-        Connect Twitter
+        {props.buttonText}
       </Button>
     </Grid>
   );
