@@ -34,8 +34,9 @@ export default function BOUNTY_PAGE(props) {
   useEffect(() => {
     const check_sig = async () => {
       let check_headers = await props.getWithExpiration("verifyHeader");
+      console.log(window.location.search, "???");
       await verify_twitter(check_headers, window.location.search);
-
+      console.log(verify_twitter);
       if (!wallet || !connected || !check_headers) {
         //check for twitter Oauth path? and save to state? on main?
         navigate("/connect");
