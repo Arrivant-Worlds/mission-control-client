@@ -154,7 +154,7 @@ export default function ACTION_COMPONENT(props) {
               height: "100%",
             }}
           >
-            <Typography sx={{fontSize: "18px", lineHeight: "25px"}}>{props.action_data.message}</Typography>
+            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>{props.action_data.message}</Typography>
             <Button
               variant="contained"
               disabled={disabled_button()}
@@ -183,9 +183,9 @@ export default function ACTION_COMPONENT(props) {
           alignItems="center"
         >
           {formSubmission ? (
-            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px"}}>Check your e-mail for verification!</Typography>
+            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>Check your e-mail for verification!</Typography>
           ) : (
-            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px"}}>
+            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>
               {props.action_data.message}
             </Typography>
           )}
@@ -262,7 +262,7 @@ export default function ACTION_COMPONENT(props) {
               height: "100%",
             }}
           >
-            <Typography sx={{fontSize: "18px", lineHeight: "25px"}}>{props.action_data.message}</Typography>
+            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>{props.action_data.message}</Typography>
             <CONNECT_TWITTER
               disabled={disabled_button()}
               variant="contained"

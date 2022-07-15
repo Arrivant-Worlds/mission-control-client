@@ -85,7 +85,15 @@ export const MISSION_BLOCK = (props) => {
             style={render_style("xp")}
           >{`+${props.item_data.xp} XP`}</Typography>
         </Grid>
-        <Typography style={render_style("description")}>
+        <Typography style={render_style("description")}
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "2",
+            WebkitBoxOrient: "vertical",
+          }}
+        >
           {props.item_data.description}
         </Typography>
       </Grid>
