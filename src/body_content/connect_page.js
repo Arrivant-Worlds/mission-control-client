@@ -59,7 +59,7 @@ export default function CONNECT_PAGE(props) {
 
   const handleClick = async () => {
     let connect_to_wallet = await connect();
-    if (wallet && connected) {
+    if (wallet) {
       change_button_text("SIGN MESSAGE");
     }
     // props.change_body_state(state);
@@ -107,7 +107,7 @@ export default function CONNECT_PAGE(props) {
           <WalletMultiButton
             className="wallet_button"
             onClick={
-              connected && wallet && !check_headers
+              wallet && !check_headers
                 ? () => handleSign()
                 : () => handleClick()
             }
