@@ -84,7 +84,7 @@ export default function REWARDS_DIALOG(props) {
       <DialogContent sx={{ height: "100%" }}>
         {clicked_state ? (
           <Grid
-            sx={{ height: "100%" }}
+            sx={{ height: "150px" }}
             container
             direction="column"
             justifyContent="space-around"
