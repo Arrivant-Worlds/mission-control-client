@@ -12,6 +12,7 @@ import {
   get_leaderboard,
   claim_journey_reward,
   claim_quest_reward,
+  verify_twitter,
   RPC_CONNECTION,
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
@@ -65,7 +66,7 @@ export default function MAIN_PAGE(props) {
   } = useWallet();
   let navigate = useNavigate();
   const [body_state, change_body_state] = useState("join");
-  const [wallet_data, change_wallet_data] = useState({});
+  const [wallet_data, change_wallet_data] = useState(null);
   const [dialog_state, change_dialog_state] = useState(false);
   const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState({});
@@ -78,7 +79,6 @@ export default function MAIN_PAGE(props) {
     id: "",
     type: "",
   });
-  const [signed_message, change_signed_message] = useState(false);
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
   const dropdown_open = Boolean(dropdown_anchor);
@@ -115,19 +115,35 @@ export default function MAIN_PAGE(props) {
     interrupt: true,
     playbackRate,
   });
+  // console.log(wallet, "outside useEffect");
 
   useEffect(() => {
+    change_loading_state(true);
     const check_sig = async () => {
+      const { solana } = window;
+      const response = await solana.connect();
+      const publicKey_window = response.publicKey.toString();
+      // console.log(`Wallet connected!, address:, ${publicKey_window}`);
       let check_headers = await getWithExpiration("verifyHeader");
-      // console.log(check_headers, "headers?");
-      if (wallet && connected && check_headers) {
-        console.log("this is firing?");
-        change_signed_message(true);
-        // console.log(signed_message, "true??");
-        // change_wallet_data(check_headers);
+      if (publicKey_window && check_headers) {
+        if (window.location.pathname === "/connect") {
+          let gather_data = populate_data(check_headers);
+          navigate("/bounty_main");
+        } else if (window.location.pathname === "/bounty_main") {
+          if (window.location.search.length >= 20) {
+            let twitter_verify = await verify_twitter(check_headers, window.location.search);
+            console.log(twitter_verify, "verify twitter return");
+          }
+          let gather_data = populate_data(check_headers);
+        }
+      } else {
+        if (window.location.pathname === "/bounty_main") {
+          navigate("/connect");
+        }
       }
     };
     check_sig();
+    change_loading_state(false);
   }, []);
 
   const backgroundImageRender = () => {
@@ -151,7 +167,7 @@ export default function MAIN_PAGE(props) {
     // console.log(`itemStr`, itemStr);
     // if the item doesn't exist, return null
     if (itemStr === null) {
-      change_signed_message(false);
+      change_wallet_data(null);
       return null;
     }
     const item = JSON.parse(itemStr);
@@ -161,7 +177,7 @@ export default function MAIN_PAGE(props) {
       // If the item is expired, delete the item from storage
       // and return null
       localStorage.removeItem(key);
-      change_signed_message(false);
+      change_wallet_data(null);
       return null;
     }
     return item.value;
@@ -184,7 +200,7 @@ export default function MAIN_PAGE(props) {
         signature: JSON.stringify(Array.from(signature)),
         pubkey: pubkey,
       };
-      change_signed_message(true);
+      change_wallet_data(verifyHeader);
       setWithExpiration("verifyHeader", verifyHeader, 3500);
     }
     change_loading_state(false);
@@ -204,7 +220,6 @@ export default function MAIN_PAGE(props) {
     change_quests_data(quests);
     change_rewards_data(rewards);
     change_wallet_data(payload);
-    change_signed_message(true);
     change_loading_state(false);
   };
 
@@ -241,8 +256,7 @@ export default function MAIN_PAGE(props) {
     playDisconnectWallet();
     let disconnect_wallet = await disconnect();
     localStorage.removeItem("verifyHeader");
-    change_signed_message(false);
-    change_wallet_data({});
+    change_wallet_data(null);
     navigate("/");
   };
 
@@ -362,7 +376,7 @@ export default function MAIN_PAGE(props) {
 
   const handleDropdown_navigate = (path) => {
     if (path === "/bounty_main") {
-      if (!wallet || !connected || !signed_message) {
+      if (!wallet || !connected || !wallet_data) {
         setAlertState({
           open: true,
           message: "Please connect your wallet and sign!",
@@ -489,7 +503,7 @@ export default function MAIN_PAGE(props) {
               Lore
             </MenuItem>
           </Menu>
-          {wallet && connected ? (
+          {wallet ? (
             <Box onMouseEnter={() => handleConnectHover()}>
               <WalletDisconnectButton
                 className="disconnect_button"
@@ -594,7 +608,6 @@ export default function MAIN_PAGE(props) {
                 setWithExpiration={setWithExpiration}
                 getWithExpiration={getWithExpiration}
                 populate_data={populate_data}
-                signed_message={signed_message}
                 alertState={alertState}
                 setAlertState={setAlertState}
                 handleConnectHover={handleConnectHover}

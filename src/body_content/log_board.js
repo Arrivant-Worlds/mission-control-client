@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,7 @@ import minus from "../images/minus.png";
 // import weekly_mission_data from "./weekly_mission_data.js";
 // import prime_mission_data from "./prime_mission_data.js";
 
-export default function LOG_BOARD(props) {
+export const LOG_BOARD = (props) => {
   const [expanded_tab, change_expanded_tab] = useState(true);
   // console.log(props.quests_data, "quest data");
 
@@ -63,6 +63,8 @@ export default function LOG_BOARD(props) {
     </Box>
   );
 }
+
+export default memo(LOG_BOARD);
 
 // <Typography style={props.expanded_tab === "daily" ? styles.minus : styles.plus}>
 // {expanded_tab === "daily" ? "-" : "+"}</Typography>

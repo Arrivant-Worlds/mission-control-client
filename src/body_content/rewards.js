@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react';
 import styles from './rewards_styles.js';
 import REWARDS_BLOCK from "./rewards_block.js";
 
-export default function REWARDS(props) {
+export const REWARDS = (props) => {
   // console.log(props.user_data);
   // console.log(props.rewards_data);
 
@@ -40,6 +40,8 @@ export default function REWARDS(props) {
     </Box>
   );
 }
+
+export default memo(REWARDS);
 
 // <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
 // {expanded_tab === "daily" ? "-" : "+"}</Typography>

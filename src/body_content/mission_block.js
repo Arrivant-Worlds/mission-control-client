@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Icon from "@mui/material/Icon";
 import styles from "./mission_block_styles.js";
 
-export default function MISSION_BLOCK(props) {
+export const MISSION_BLOCK = (props) => {
   // console.log(props.item_data, "item data?");
   const handleOnClick = () => {
     // console.log("msakjns", props);
@@ -13,7 +13,7 @@ export default function MISSION_BLOCK(props) {
     props.change_dialog_data(props.item_data);
     if (props.item_data.active_reward) {
       props.set_rewards_dialog_data({
-        id:props.dialog_data.active_reward.id,
+        id: props.dialog_data.active_reward.id,
         xp: props.item_data.xp,
         type: "quest"
       })
@@ -85,7 +85,15 @@ export default function MISSION_BLOCK(props) {
             style={render_style("xp")}
           >{`+${props.item_data.xp} XP`}</Typography>
         </Grid>
-        <Typography style={render_style("description")}>
+        <Typography style={render_style("description")}
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "2",
+            WebkitBoxOrient: "vertical",
+          }}
+        >
           {props.item_data.description}
         </Typography>
       </Grid>
@@ -95,3 +103,5 @@ export default function MISSION_BLOCK(props) {
     </Grid>
   );
 }
+
+export default memo(MISSION_BLOCK);

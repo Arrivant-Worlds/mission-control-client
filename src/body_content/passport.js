@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -6,19 +6,20 @@ import default_passport from '../images/default_passport_symbol.png';
 import lock from '../images/lock.png';
 import styles from './passport_styles.js';
 
-export default function PASSPORT(props) {
+const PASSPORT = (props) => {
   const [exp_value, set_exp_value] = useState(0);
   //change to props.exp etc in render.
   // console.log(props.user_data, "user_data");
   useEffect(() => {
-    let exp_percent = calculate_progress();
+    let exp_percent = calculate_progress(props.user_data.xp);
+    // console.log(exp_percent, "????");
     //change to props.exp etc.
     set_exp_value(Math.round(exp_percent));
-  }, []);
+  });
 
-   const calculate_progress = (exp) => {
-     return (100 * props.user_data.xp) / props.user_data.xpToNextLevel;
-   }
+  const calculate_progress = (exp) => {
+    return (100 * exp) / props.user_data.xpToNextLevel;
+  }
 
   return (
     <Grid style={styles.passport_container}>
@@ -65,6 +66,8 @@ export default function PASSPORT(props) {
     </Grid>
   );
 }
+
+export default memo(PASSPORT);
 
 // <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
 // {expanded_tab === "daily" ? "-" : "+"}</Typography>

@@ -31,13 +31,14 @@ export default function CONNECT_PAGE(props) {
     // console.log(connected, "connected?");
 
     const check_sig = async () => {
-      check_headers = await props.getWithExpiration("verifyHeader");
-      if (wallet && connected && !check_headers) {
+      // check_headers = await props.getWithExpiration("verifyHeader");
+      if (wallet && !props.wallet_data) {
         change_button_text("SIGN MESSAGE");
-      } else if (wallet && connected && check_headers) {
-        //let gather_data = props.populate_data(check_headers);
-        navigate("/bounty_main");
       }
+      // else if (wallet && connected && props.wallet_data) {
+      //   //let gather_data = props.populate_data(check_headers);
+      //   navigate("/bounty_main");
+      // }
     };
     check_sig();
     // if (wallet && connected && !props.signed_message) {
