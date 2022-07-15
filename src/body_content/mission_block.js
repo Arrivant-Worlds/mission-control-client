@@ -38,6 +38,10 @@ export const MISSION_BLOCK = (props) => {
       return (
         <Icon className={"fa-brands fa-twitter"} style={render_style("icon")}></Icon>
       );
+    } else if (props.item_data.platform === "Email") {
+      return (
+        <Icon className={"fa-solid fa-envelope"} style={render_style("icon")}></Icon>
+      );
     } else {
       return null;
     }

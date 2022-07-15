@@ -2,13 +2,7 @@ import SelectInput from "@mui/material/Select/SelectInput";
 import axios from "axios";
 import queryString from "query-string";
 import { Connection } from "@solana/web3.js";
-import { RPC_CONNECTION_URL } from "./constants";
-// import { BASE_URL } from "./constants";
-
-const BASE_URL = 'https://stark-thicket-35864.herokuapp.com';
-// const BASE_URL = 'http://localhost:3001';
-// const BASE_URL = "https://mission-control-dev.herokuapp.com";
-
+import { BASE_URL, RPC_CONNECTION_URL } from "./constants";
 
 export const create_user = async (payload) => {
   try {
