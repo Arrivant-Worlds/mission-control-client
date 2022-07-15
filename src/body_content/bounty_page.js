@@ -24,8 +24,8 @@ import styles from "./bounty_page_styles.js";
 // Drew's changes - twitter and sound
 
 export const BOUNTY_PAGE = (props) => {
-  // const { wallet, signMessage, publicKey, connect, connected, disconnect } =
-  //   useWallet();
+  const { wallet, signMessage, publicKey, connect, connected, disconnect } =
+    useWallet();
   let navigate = useNavigate();
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
