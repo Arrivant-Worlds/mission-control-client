@@ -121,9 +121,10 @@ export default function MAIN_PAGE(props) {
       let check_headers = await getWithExpiration("verifyHeader");
       // console.log(check_headers, "headers?");
       if (wallet && connected && check_headers) {
+        console.log("this is firing?");
         change_signed_message(true);
         // console.log(signed_message, "true??");
-        change_wallet_data(check_headers);
+        // change_wallet_data(check_headers);
       }
     };
     check_sig();
