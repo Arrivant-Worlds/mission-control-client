@@ -14,7 +14,7 @@ export default function CONNECT_TWITTER(props) {
   const { publicKey, connected } = useWallet();
   let navigate = useNavigate();
 
-  const handleTwitter = async (wallet) => {
+  const handleTwitter = async () => {
     props.handleButtonClick();
 
     if (publicKey && connected) {
@@ -49,7 +49,7 @@ export default function CONNECT_TWITTER(props) {
       <Button
         variant={props.variant}
         style={props.style}
-        onClick={() => handleTwitter(publicKey.toString())}
+        onClick={() => handleTwitter()}
         onMouseEnter={() => handleOnHover()}
       >
         {props.buttonText}
