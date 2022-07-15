@@ -12,6 +12,7 @@ export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
 
   // console.log(props.rewards_dialog_data.id, "Id of current quest for dialog");
+  // console.log(props.rewards_dialog_data, "rewards");
 
   const handleOnClick = () => {
     set_clicked_state(true);
@@ -43,11 +44,23 @@ export default function REWARDS_DIALOG(props) {
         >{`+${props.rewards_dialog_data.xp} xp`}</Typography>
       )
     }
-    // else {
-    //   return (
-    //     <Box component="image" src={props.rewards_dialog_data.rewards.url}/>
-    //   )
-    // }
+    else {
+      return (
+        <Grid>
+          <Box component="image" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
+          sx={{width: "141px", height: "163px"}}
+          />
+          <Typography sx={{fontWeight: "700",
+            fontSize: "18px",
+            lineHeight: "25px",
+            textAlign: "center",
+            color: "#F6F6F6",}}
+          >
+            SOULBOUND CLAIMED
+          </Typography>
+        </Grid>
+      )
+    }
   }
 
   return (
@@ -65,7 +78,6 @@ export default function REWARDS_DIALOG(props) {
           background: "#000000",
           border: "1px solid #E6B2B9",
           width: "414px",
-          height: "203px",
         },
       }}
     >

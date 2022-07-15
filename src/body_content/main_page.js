@@ -78,6 +78,10 @@ export default function MAIN_PAGE(props) {
     xp: "",
     id: "",
     type: "",
+    type_reward: {
+      type: "",
+      url: ""
+    }
   });
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
@@ -349,7 +353,7 @@ export default function MAIN_PAGE(props) {
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
     }
-    if (claim.length > 0 && type_reward == "soulbound") {
+    if (claim.length > 0 && type_reward.type == "soulbound") {
       console.log("claim trx", claim);
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
