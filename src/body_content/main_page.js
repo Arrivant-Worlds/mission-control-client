@@ -135,7 +135,6 @@ export default function MAIN_PAGE(props) {
             console.log(twitter_verify, "verify twitter return");
           }
           let gather_data = populate_data(check_headers);
-          change_wallet_data(check_headers);
         }
       } else {
         if (window.location.pathname === "/bounty_main") {
