@@ -38,6 +38,7 @@ const styles = {
     fontWeight: "400",
     fontSize: "18px",
     lineHeight: "25px",
+    width: "80%"
   },
   xp_frequency: {
     fontWeight: "400",
