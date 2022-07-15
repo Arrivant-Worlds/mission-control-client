@@ -46,8 +46,8 @@ export default function REWARDS_DIALOG(props) {
     }
     else {
       return (
-        <Grid>
-          <Box component="image" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+          <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
           sx={{width: "141px", height: "163px"}}
           />
           <Typography sx={{fontWeight: "700",
