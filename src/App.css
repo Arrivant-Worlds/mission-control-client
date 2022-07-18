@@ -60,6 +60,22 @@
   animation: fadeIn 2s 5s forwards;
 }
 
+.lore_text_6s {
+  animation: fadeIn 2s 6s forwards;
+}
+
+.lore_text_7s {
+  animation: fadeIn 2s 7s forwards;
+}
+
+.lore_text_8s {
+  animation: fadeIn 2s 8s forwards;
+}
+
+.lore_text_9s {
+  animation: fadeIn 2s 9s forwards;
+}
+
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }

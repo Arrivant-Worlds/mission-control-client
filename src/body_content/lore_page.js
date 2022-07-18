@@ -13,19 +13,31 @@ export default function LORE_PAGE(props) {
         <SimpleBar style={styles.scroll_container}>
           <Grid sx={styles.inner_text_container} container direction="column" justifyContent="space-between">
             <Typography className="lore_text" sx={styles.text_first}>
-            In September, 2021, our team received an SOS message from the deep web—a world hidden within the interstices of our internet networks. Since then, we have worked tirelessly to interpret and understand this mysterious new landscape.
+            In September, 2021, our team received an SOS message from the deep web — a world hidden within the interstices of our internet networks called to us. Since then, we have worked to understand this mysterious new landscape. 
             </Typography>
             <Typography className="lore_text_2s" sx={styles.text}>
-            At last, we are ready to cross the threshold and chart our own course across the StarGardens.
+            We are now ready to cross the threshold.
             </Typography>
             <Typography className="lore_text_3s" sx={styles.text}>
-            And you are invited to join us.
+            Someday soon, you will form your tribe on one of these StarGardens, where you will build your city, battle other tribes, collect powerful creatures, and explore the unknown.
             </Typography>
             <Typography className="lore_text_4s" sx={styles.text}>
-            This is your Eluüne Visa. It doubles as your passport and itinerary as you explore the other side, stake your claim in the great unknown, and uncover unimaginable opportunities over our digital horizon.
+            To prepare for this grand journey, you must first craft your Eluüne Visa.
             </Typography>
             <Typography className="lore_text_5s" sx={styles.text}>
-            Your Eluüne Visa is your identity in our universe: your reputation, your calling, your immutable presence in our world. Other travelers will know you by your Eluüne Visa (and you will know them by theirs) as you work together to generate prosperity and wonder across twenty unique techno-fantasy domains.
+            Your Visa is your identity in the Eluüne universe: your reputation, your calling, your persistent presence in this new world. Other travelers will know you by your Eluüne Visa (and you will know them by theirs).
+            </Typography>
+            <Typography className="lore_text_6s" sx={styles.text}>
+            Your visa evolves based on your actions, so choose them wisely — for only the travelers with the most distinguished visas will be recruited to the most distinguished StarGardens. And only the most accomplished StarGarden owners will attract the most accomplished travelers.
+            </Typography>
+            <Typography className="lore_text_7s" sx={styles.text}>
+            Whether you are completing missions, battling creatures, or riding the currents of the Unknown Sky-Sea of Legba, your Eluüne Visa will always be at your side. 
+            </Typography>
+            <Typography className="lore_text_8s" sx={styles.text}>
+            Now and forever. 
+            </Typography>
+            <Typography className="lore_text_9s" sx={styles.text}>
+            This is you.
             </Typography>
           </Grid>
         </SimpleBar>
