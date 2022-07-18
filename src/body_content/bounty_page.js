@@ -21,7 +21,6 @@ import {
 } from "./../api_calls";
 import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
-// Drew's changes - twitter and sound
 
 export const BOUNTY_PAGE = (props) => {
   const { wallet, signMessage, publicKey, connect, connected, disconnect } =
