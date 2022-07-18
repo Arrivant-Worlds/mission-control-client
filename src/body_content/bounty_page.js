@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
@@ -23,7 +23,7 @@ import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 // Drew's changes - twitter and sound
 
-export default function BOUNTY_PAGE(props) {
+export const BOUNTY_PAGE = (props) => {
   const { wallet, signMessage, publicKey, connect, connected, disconnect } =
     useWallet();
   let navigate = useNavigate();
@@ -31,20 +31,24 @@ export default function BOUNTY_PAGE(props) {
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("prime");
 
-  useEffect(() => {
-    const check_sig = async () => {
-      let check_headers = await props.getWithExpiration("verifyHeader");
-      await verify_twitter(check_headers, window.location.search);
-
-      if (!wallet || !connected || !check_headers) {
-        //check for twitter Oauth path? and save to state? on main?
-        navigate("/connect");
-      } else if (wallet && connected && check_headers) {
-        let gather_data = props.populate_data(check_headers);
-      }
-    };
-    check_sig();
-  }, []);
+  // useEffect(() => {
+  //   const check_sig = async () => {
+  //     let check_headers = await props.getWithExpiration("verifyHeader");
+  //     // console.log(window.location.search, "???");
+  //     // console.log(window.location.search.length, "length of search?");
+  //     console.log("check_headers", check_headers);
+  //     await verify_twitter(check_headers, window.location.search);
+  //     console.log(verify_twitter, "verify twitter return");
+  //     if (!wallet || !connected || !check_headers) {
+  //       //check for twitter Oauth path? and save to state? on main?
+  //       navigate("/connect");
+  //     } else if (wallet && connected && check_headers) {
+  //       console.log("populate data in bounty page firing?");
+  //       let gather_data = props.populate_data(check_headers);
+  //     }
+  //   };
+  //   check_sig();
+  // }, []);
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0") {
@@ -260,4 +264,6 @@ export default function BOUNTY_PAGE(props) {
       </Grid>
     </Box>
   );
-}
+};
+
+export default memo(BOUNTY_PAGE);

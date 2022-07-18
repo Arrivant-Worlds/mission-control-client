@@ -31,13 +31,14 @@ export default function CONNECT_PAGE(props) {
     // console.log(connected, "connected?");
 
     const check_sig = async () => {
-      check_headers = await props.getWithExpiration("verifyHeader");
-      if (wallet && connected && !check_headers) {
+      // check_headers = await props.getWithExpiration("verifyHeader");
+      if (wallet && !props.wallet_data) {
         change_button_text("SIGN MESSAGE");
-      } else if (wallet && connected && check_headers) {
-        //let gather_data = props.populate_data(check_headers);
-        navigate("/bounty_main");
       }
+      // else if (wallet && connected && props.wallet_data) {
+      //   //let gather_data = props.populate_data(check_headers);
+      //   navigate("/bounty_main");
+      // }
     };
     check_sig();
     // if (wallet && connected && !props.signed_message) {
@@ -58,7 +59,7 @@ export default function CONNECT_PAGE(props) {
 
   const handleClick = async () => {
     let connect_to_wallet = await connect();
-    if (wallet && connected) {
+    if (wallet) {
       change_button_text("SIGN MESSAGE");
     }
     // props.change_body_state(state);
@@ -106,7 +107,7 @@ export default function CONNECT_PAGE(props) {
           <WalletMultiButton
             className="wallet_button"
             onClick={
-              connected && wallet && !check_headers
+              wallet && !check_headers
                 ? () => handleSign()
                 : () => handleClick()
             }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SimpleBar from 'simplebar-react';
@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import styles from './leaderboard_styles.js';
 import LEADER_BLOCK from "./leader_block.js";
 
-export default function LEADERBOARD(props) {
+export const LEADERBOARD = (props)=> {
   // console.log(props.leaderboard_data, "leaderboard data");
   return (
     <Box style={styles.leader_board_container}>
@@ -45,6 +45,8 @@ export default function LEADERBOARD(props) {
     </Box>
   );
 }
+
+export default memo(LEADERBOARD);
 
 // <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
 // {expanded_tab === "daily" ? "-" : "+"}</Typography>

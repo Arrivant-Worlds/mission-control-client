@@ -114,7 +114,7 @@ export default function ACTION_COMPONENT(props) {
             sx={{ height: "100%", width: "100%", padding: "10px" }}
           >
             <Typography sx={{ fontWeight: "700" }}>VERIFIED!</Typography>
-            <Typography>
+            <Typography sx={{fontSize: "18px", lineHeight: "25px"}}>
               Your submission has been verified! Click the button below to claim
               your reward.
             </Typography>
@@ -126,6 +126,7 @@ export default function ACTION_COMPONENT(props) {
                 color: "black",
                 fontSize: "14px",
                 width: "100%",
+                height: "55px",
                 fontWeight: "700",
                 backgroundColor: "#F6F6F6",
               }}
@@ -140,24 +141,37 @@ export default function ACTION_COMPONENT(props) {
         <Grid
           sx={{ height: "100%", width: "100%" }}
           container
-          direction="column"
-          justifyContent="space-around"
           alignItems="center"
+          justifyContent="center"
         >
-          <Typography>{props.action_data.message}</Typography>
-          <Button
-            variant="contained"
-            disabled={disabled_button()}
-            onClick={() => handleLinkClick(props.action_data.url)}
+          <Grid
+            container
+            direction="column"
+            justifyContent="space-around"
+            alignItems="flex-start"
             sx={{
-              color: "black",
-              fontSize: "14px",
-              fontWeight: "700",
-              backgroundColor: "#F6F6F6",
+              width: "90%",
+              height: "100%",
             }}
           >
-            PLACEHOLDER
-          </Button>
+            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>{props.action_data.message}</Typography>
+            <Button
+              variant="contained"
+              disabled={disabled_button()}
+              onClick={() => handleLinkClick(props.action_data.url)}
+              sx={{
+                color: "black",
+                fontSize: "14px",
+                width: "100%",
+                height: "55px",
+                fontWeight: "700",
+                padding: "0 20px",
+                backgroundColor: "#F6F6F6",
+              }}
+            >
+              {props.action_data.buttonText}
+            </Button>
+          </Grid>
         </Grid>
       );
     } else if (props.action_data.type === "form") {
@@ -169,9 +183,9 @@ export default function ACTION_COMPONENT(props) {
           alignItems="center"
         >
           {formSubmission ? (
-            <Typography>Thanks!</Typography>
+            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>Check your e-mail for verification!</Typography>
           ) : (
-            <Typography sx={{ width: "80%" }}>
+            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>
               {props.action_data.message}
             </Typography>
           )}
@@ -179,10 +193,10 @@ export default function ACTION_COMPONENT(props) {
             <form
               onSubmit={handleEmailSubmit}
               style={{
-                height: "80%",
+                height: "90%",
                 width: "100%",
                 display: "flex",
-                justifyContent: "space-around",
+                justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
               }}
@@ -200,7 +214,7 @@ export default function ACTION_COMPONENT(props) {
                 sx={{
                   caretColor: "#F6F6F6",
                   background: "rgba(106, 106, 106, 0.3)",
-                  width: "80%",
+                  width: "90%",
                   input: {
                     color: "#F6F6F6",
                   },
@@ -214,11 +228,13 @@ export default function ACTION_COMPONENT(props) {
                 sx={{
                   color: "black",
                   fontSize: "14px",
+                  width: "90%",
+                  height: "55px",
                   fontWeight: "700",
                   backgroundColor: "#F6F6F6",
                 }}
               >
-                Submit
+                {props.action_data.buttonText}
               </Button>
             </form>
           )}
@@ -236,20 +252,35 @@ export default function ACTION_COMPONENT(props) {
           justifyContent="space-around"
           alignItems="center"
         >
-          <Typography>{props.action_data.message}</Typography>
-          <CONNECT_TWITTER
-            disabled={disabled_button()}
-            variant="contained"
-            style={{
-              color: "black",
-              fontSize: "14px",
-              fontWeight: "700",
-              backgroundColor: "#F6F6F6",
+          <Grid
+            container
+            direction="column"
+            justifyContent="space-around"
+            alignItems="flex-start"
+            sx={{
+              width: "90%",
+              height: "100%",
             }}
-            handleButtonHover={() => props.handleDialogHover()}
-            handleButtonClick={() => handleTwitterClick()}
-            getWithExpiration={props.getWithExpiration}
-          />
+          >
+            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>{props.action_data.message}</Typography>
+            <CONNECT_TWITTER
+              disabled={disabled_button()}
+              variant="contained"
+              style={{
+                color: "black",
+                fontSize: "14px",
+                width: "100%",
+                height: "55px",
+                fontWeight: "700",
+                backgroundColor: "#F6F6F6",
+                padding: "0",
+              }}
+              handleButtonHover={() => props.handleDialogHover()}
+              handleButtonClick={() => handleTwitterClick()}
+              getWithExpiration={props.getWithExpiration}
+              buttonText={props.action_data.buttonText}
+            />
+          </Grid>
         </Grid>
       );
     }
