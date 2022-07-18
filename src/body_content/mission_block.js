@@ -5,7 +5,7 @@ import Icon from "@mui/material/Icon";
 import styles from "./mission_block_styles.js";
 import { useAnalytics } from "../mixpanel.js";
 
-export default function MISSION_BLOCK(props) {
+export function MISSION_BLOCK(props) {
 
   const { track } = useAnalytics()
   // console.log(props.item_data, "item data?");
