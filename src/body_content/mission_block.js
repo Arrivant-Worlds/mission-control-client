@@ -5,13 +5,9 @@ import Icon from "@mui/material/Icon";
 import styles from "./mission_block_styles.js";
 import { useAnalytics } from "../mixpanel.js";
 
-<<<<<<< HEAD
-export const MISSION_BLOCK = (props) => {
-=======
 export function MISSION_BLOCK(props) {
 
   const { track } = useAnalytics()
->>>>>>> 14457b592ca46232917858d13e04dcc5d6d9ce5f
   // console.log(props.item_data, "item data?");
   const handleOnClick = () => {
     // console.log("msakjns", props);
