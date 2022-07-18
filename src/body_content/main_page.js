@@ -121,15 +121,15 @@ export const MAIN_PAGE = (props) => {
     interrupt: true,
     playbackRate,
   });
-  // const { solana } = window;
-  // let response;
+  const { solana } = window;
+  let response;
   // console.log(wallet, "outside useEffect");
 
-  // useEffect(() => {
-  //   const connect = async () => {
-  //     response = await solana.connect();
-  //   }
-  // }, []);
+  useEffect(() => {
+    const connect = async () => {
+      response = await solana.connect();
+    }
+  }, []);
   const check_sig = async () => {
     // console.log(wallet, "???");
     const { solana } = window;
@@ -156,7 +156,7 @@ export const MAIN_PAGE = (props) => {
       if (window.location.pathname === "/bounty_main") {
         navigate("/connect");
       } else {
-        // check_sig();
+        check_sig();
       }
     }
   };
