@@ -92,7 +92,7 @@ export default function REWARDS_DIALOG(props) {
       }}
     >
       <DialogContent sx={{ height: "100%" }}>
-        {clicked_state ? (
+        {clicked_state && props.rewards_dialog_data.type === "journey" ? (
           <Grid
             container
             direction="column"
