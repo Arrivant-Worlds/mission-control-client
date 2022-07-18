@@ -338,7 +338,7 @@ export default function MAIN_PAGE(props) {
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
     }
- 
+
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
@@ -367,7 +367,7 @@ export default function MAIN_PAGE(props) {
       const tx = Transaction.from(buffer);
       // user signs trx
       //await signTransaction(tx);
-      
+
       console.log("signed tx", tx);
       let sig = await sendTransaction(tx, RPC_CONNECTION);
       console.log("signature", sig);
@@ -562,17 +562,7 @@ export default function MAIN_PAGE(props) {
                       },
                     }}
                   >
-                    <Typewriter
-                      loop={1}
-                      deleteSpeed={0}
-                      words={[
-                        "",
-                      ]}
-                      cursor
-                      cursorStyle="_"
-                      typeSpeed={70}
-                      delaySpeed={500}
-                    />
+                  
                   </Box>
                 </Grid>
                 <Grid item xs={2}>
@@ -731,3 +721,15 @@ export default function MAIN_PAGE(props) {
 // leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
 // rewards_data={rewards_data} change_rewards_data={change_rewards_data}
 // />}/>
+
+// <Typewriter
+//   loop={1}
+//   deleteSpeed={0}
+//   words={[
+//     "",
+//   ]}
+//   cursor
+//   cursorStyle="_"
+//   typeSpeed={70}
+//   delaySpeed={500}
+// />
