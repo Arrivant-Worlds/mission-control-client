@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -17,7 +17,7 @@ import {
   verify_twitter,
 } from "../api_calls/index.js";
 
-export default function CONNECT_PAGE(props) {
+export const CONNECT_PAGE = (props) => {
   const { wallet, signMessage, publicKey, connect, connected } = useWallet();
   const [button_text, change_button_text] = useState("CONNECT WALLET");
 
@@ -25,6 +25,8 @@ export default function CONNECT_PAGE(props) {
   let check_headers;
 
   useEffect(() => {
+    console.log(wallet, "connect");
+    // console.log(props, "why?");
     // console.log("fired? in connect page");
     // console.log(!props.signed_message, "props.signed_msg");
     // console.log(wallet, "wallet");
@@ -118,3 +120,5 @@ export default function CONNECT_PAGE(props) {
     </Grid>
   );
 }
+
+export default memo(CONNECT_PAGE);

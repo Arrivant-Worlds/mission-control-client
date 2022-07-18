@@ -110,7 +110,7 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
     } else if (trackingInitialized) {
       resetTracking();
     }
-    /*eslint-disable*/ 
+    /*eslint-disable*/
 
   }, [trackingInitialized]);
 
@@ -153,7 +153,7 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
       }
 
       if (debugAnalytics) {
-        console.log('track', action, attributes, integrations);
+        // console.log('track', action, attributes, integrations);
       }
     } catch (error) {
       console.error(error);

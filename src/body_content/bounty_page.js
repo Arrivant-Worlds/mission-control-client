@@ -44,6 +44,7 @@ export const BOUNTY_PAGE = (props) => {
   }
 
   useEffect(() => {
+    console.log(wallet, "bounty?");
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
     let discordAccessToken = tokenType && accessToken
@@ -207,6 +208,7 @@ export const BOUNTY_PAGE = (props) => {
             sx={styles.tab_content_container}
           >
             <MISSION_BOARD
+              user_data={props.user_data}
               expanded_tab={expanded_tab}
               change_expanded_tab={change_expanded_tab}
               quests_data={props.quests_data}

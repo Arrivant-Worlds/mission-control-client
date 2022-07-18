@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { decodeUTF8 } from "tweetnacl-util";
@@ -29,7 +29,7 @@ import SG_logo from "../images/PE_SG_logo.png";
 import black_circle from "../images/black_circle.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
-import lore_background from "../images/lore_background.png";
+import lore_background from "../images/floating_island_lore.png";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -54,7 +54,8 @@ import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
 import { useAnalytics } from "../mixpanel";
-export default function MAIN_PAGE(props) {
+
+export const MAIN_PAGE = (props) => {
   const {
     wallet,
     signMessage,
@@ -120,33 +121,45 @@ export default function MAIN_PAGE(props) {
     interrupt: true,
     playbackRate,
   });
+  // const { solana } = window;
+  // let response;
   // console.log(wallet, "outside useEffect");
+
+  // useEffect(() => {
+  //   const connect = async () => {
+  //     response = await solana.connect();
+  //   }
+  // }, []);
+  const check_sig = async () => {
+    // console.log(wallet, "???");
+    const { solana } = window;
+    const response = await solana.connect();
+    const publicKey_window = response.publicKey.toString();
+    // console.log(`Wallet connected!, address:, ${publicKey_window}`);
+    let check_headers = await getWithExpiration("verifyHeader");
+    if (publicKey_window && check_headers) {
+      if (window.location.pathname === "/connect") {
+        let gather_data = populate_data(check_headers);
+        navigate("/bounty_main");
+      } else if (window.location.pathname === "/bounty_main") {
+        if (window.location.search.length >= 20) {
+          let twitter_verify = await verify_twitter(check_headers, window.location.search);
+          console.log(twitter_verify, "verify twitter return");
+        }
+        let gather_data = populate_data(check_headers);
+      }
+      return;
+    } else {
+      if (window.location.pathname === "/bounty_main") {
+        navigate("/connect");
+      } else {
+        // check_sig();
+      }
+    }
+  };
 
   useEffect(() => {
     change_loading_state(true);
-    const check_sig = async () => {
-      const { solana } = window;
-      const response = await solana.connect();
-      const publicKey_window = response.publicKey.toString();
-      // console.log(`Wallet connected!, address:, ${publicKey_window}`);
-      let check_headers = await getWithExpiration("verifyHeader");
-      if (publicKey_window && check_headers) {
-        if (window.location.pathname === "/connect") {
-          let gather_data = populate_data(check_headers);
-          navigate("/bounty_main");
-        } else if (window.location.pathname === "/bounty_main") {
-          if (window.location.search.length >= 20) {
-            let twitter_verify = await verify_twitter(check_headers, window.location.search);
-            console.log(twitter_verify, "verify twitter return");
-          }
-          let gather_data = populate_data(check_headers);
-        }
-      } else {
-        if (window.location.pathname === "/bounty_main") {
-          navigate("/connect");
-        }
-      }
-    };
     check_sig();
     change_loading_state(false);
   }, []);
@@ -338,7 +351,7 @@ export default function MAIN_PAGE(props) {
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
     }
- 
+
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
@@ -367,7 +380,7 @@ export default function MAIN_PAGE(props) {
       const tx = Transaction.from(buffer);
       // user signs trx
       //await signTransaction(tx);
-      
+
       console.log("signed tx", tx);
       let sig = await sendTransaction(tx, RPC_CONNECTION);
       console.log("signature", sig);
@@ -387,6 +400,12 @@ export default function MAIN_PAGE(props) {
   };
 
   const handleDropdown_navigate = (path) => {
+    if (path === "/") {
+      window.open("https://www.projecteluune.com");
+      change_dropdown_anchor(null);
+      return;
+    }
+
     if (path === "/bounty_main") {
       if (!wallet || !connected || !wallet_data) {
         setAlertState({
@@ -394,6 +413,7 @@ export default function MAIN_PAGE(props) {
           message: "Please connect your wallet and sign!",
           severity: "error",
         });
+        navigate('/connect');
       }
     }
     change_dropdown_anchor(null);
@@ -506,7 +526,7 @@ export default function MAIN_PAGE(props) {
             }}
           >
             <MenuItem onClick={() => handleDropdown_navigate("/")}>
-              Home
+              Project Elune
             </MenuItem>
             <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>
               Dashboard
@@ -555,17 +575,7 @@ export default function MAIN_PAGE(props) {
                       },
                     }}
                   >
-                    <Typewriter
-                      loop={1}
-                      deleteSpeed={0}
-                      words={[
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.",
-                      ]}
-                      cursor
-                      cursorStyle="_"
-                      typeSpeed={70}
-                      delaySpeed={500}
-                    />
+
                   </Box>
                 </Grid>
                 <Grid item xs={2}>
@@ -718,9 +728,23 @@ export default function MAIN_PAGE(props) {
   );
 }
 
+export default memo(MAIN_PAGE);
+
 // <Route path="connect_wallet" element={<CONNECT_WALLET
 // wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
 // change_user_data={change_user_data} quests_data={quests_data} change_quests_data={change_quests_data}
 // leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
 // rewards_data={rewards_data} change_rewards_data={change_rewards_data}
 // />}/>
+
+// <Typewriter
+//   loop={1}
+//   deleteSpeed={0}
+//   words={[
+//     "",
+//   ]}
+//   cursor
+//   cursorStyle="_"
+//   typeSpeed={70}
+//   delaySpeed={500}
+// />
