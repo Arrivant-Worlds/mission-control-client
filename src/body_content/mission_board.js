@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import SimpleBar from "simplebar-react";
 import styles from "./mission_board_styles.js";
 import MISSION_BLOCK from "./mission_block.js";
+import COUNTDOWN from "./countdown.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
 // import mission_data from "./mission_data.js";
@@ -12,7 +13,7 @@ import minus from "../images/minus.png";
 // import prime_mission_data from "./prime_mission_data.js";
 
 export const MISSION_BOARD = (props) => {
-  console.log(props.quests_data, "quest data");
+  // console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.playQuestType();
@@ -56,6 +57,9 @@ export const MISSION_BOARD = (props) => {
           onClick={() => handleClick("daily")} alignItems="center">
           <Typography style={ props.expanded_tab === "daily" ? styles.mission_title : styles.mission_title_not_active }>DAILY MISSIONS
           </Typography>
+          <Grid item xs={4}>
+            <COUNTDOWN user_data={props.user_data}/>
+          </Grid>
           <Box
             component="img"
             src={props.expanded_tab === "daily" ? minus : plus}

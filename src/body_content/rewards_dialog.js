@@ -50,14 +50,6 @@ export default function REWARDS_DIALOG(props) {
           <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
           sx={{width: "141px", height: "163px"}}
           />
-          <Typography sx={{fontWeight: "700",
-            fontSize: "18px",
-            lineHeight: "25px",
-            textAlign: "center",
-            color: "#F6F6F6",}}
-          >
-            SOULBOUND CLAIMED
-          </Typography>
         </Grid>
       )
     }
@@ -84,16 +76,22 @@ export default function REWARDS_DIALOG(props) {
       <DialogContent sx={{ height: "100%" }}>
         {clicked_state ? (
           <Grid
-            sx={{ height: "150px" }}
             container
             direction="column"
             justifyContent="space-around"
             alignItems="center"
           >
-            <Typography sx={styles.title}>Reward Claimed!</Typography>
-            <Typography sx={styles.text}>
-              Keep gaining XP to level up!
+            <Typography sx={{fontWeight: "700",
+              fontSize: "18px",
+              lineHeight: "25px",
+              textAlign: "center",
+              color: "#F6F6F6",}}
+            >
+              SOULBOUND CLAIMED
             </Typography>
+            <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
+            sx={{width: "141px", height: "163px"}}
+            />
             <Button sx={styles.button} onClick={() => handleOnClose()}>
               DASHBOARD
             </Button>

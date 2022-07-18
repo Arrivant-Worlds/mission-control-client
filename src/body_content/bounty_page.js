@@ -186,6 +186,7 @@ export const BOUNTY_PAGE = (props) => {
             sx={styles.tab_content_container}
           >
             <MISSION_BOARD
+              user_data={props.user_data}
               expanded_tab={expanded_tab}
               change_expanded_tab={change_expanded_tab}
               quests_data={props.quests_data}
