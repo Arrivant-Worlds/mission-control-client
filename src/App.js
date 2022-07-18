@@ -29,6 +29,7 @@ import {
 } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { AnalyticsProvider } from "./mixpanel.js"
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const theme = createTheme({
@@ -94,10 +95,13 @@ const Content: FC = (connection) => {
   let navigate = useNavigate();
 
   return (
+  <AnalyticsProvider>
     <ThemeProvider theme={theme}>
       <Box className="App">
         {media_query_1000 ?  <MAIN_PAGE/> : <MOBILE_BANNER/>}
       </Box>
     </ThemeProvider>
+  </AnalyticsProvider>
+
   );
 };
