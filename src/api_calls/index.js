@@ -134,6 +134,18 @@ export const verify_twitter = async (payload, query) => {
   }
 };
 
+export const verify_discord = async (headers, token_type, access_token) => {
+  await axios.post(
+      `${BASE_URL}/discord/oauth?token_type=${token_type}&access_token=${access_token}`,
+      {},
+      {
+        headers: {
+          ...headers,
+        },
+      }
+  );
+}
+
 export const submit_email = async (payload, email_string) => {
   try {
     const response = await axios.post(
