@@ -10,18 +10,13 @@ import LEADERBOARD from "./leaderboard.js";
 import REWARDS from "./rewards.js";
 import EGG from "./egg.js";
 import PASSPORT from "./passport.js";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
-  get_user,
-  get_quests,
-  get_rewards,
-  get_leaderboard,
-  verify_twitter,
+ verify_discord,
 } from "./../api_calls";
 import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
-// Drew's changes - twitter and sound
 
 export const BOUNTY_PAGE = (props) => {
   const { wallet, signMessage, publicKey, connect, connected, disconnect } =
@@ -29,7 +24,33 @@ export const BOUNTY_PAGE = (props) => {
   let navigate = useNavigate();
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
+
   const [expanded_tab, change_expanded_tab] = useState("prime");
+
+  const handleLinkDiscord = async (token_type, access_token) => {
+    let header_verification = await props.getWithExpiration("verifyHeader");
+    if (!header_verification) {return}
+    let headers = {
+      signedMsg: header_verification.signedMsg,
+      signature: header_verification.signature,
+      pubkey: header_verification.pubkey,
+    };
+
+    await verify_discord(
+        headers,
+        token_type,
+        access_token
+    );
+  }
+
+  useEffect(() => {
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
+    let discordAccessToken = tokenType && accessToken
+    if (discordAccessToken) {
+      handleLinkDiscord(tokenType, accessToken)
+    }
+  }, [])
 
   // useEffect(() => {
   //   const check_sig = async () => {
