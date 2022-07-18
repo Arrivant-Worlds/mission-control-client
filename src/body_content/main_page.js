@@ -47,7 +47,7 @@ import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
-import {refreshHeaders} from "../wallet/wallet";
+import { refreshHeaders } from "../wallet/wallet";
 
 export const MAIN_PAGE = (props) => {
   const {
@@ -115,14 +115,14 @@ export const MAIN_PAGE = (props) => {
     change_loading_state(true);
     await populate_data();
     change_loading_state(false);
-  }
+  };
 
   useEffect(() => {
     if (!connected) {
-      navigate("/connect")
-      return
+      navigate("/connect");
+      return;
     }
-    loadUserData()
+    loadUserData();
   }, [publicKey]);
 
   const backgroundImageRender = () => {
@@ -134,17 +134,17 @@ export const MAIN_PAGE = (props) => {
   };
 
   const getWithExpiration = async () => {
-    let key = "verifyHeader"
+    let key = "verifyHeader";
     const itemStr = localStorage.getItem(key);
-    if (itemStr === null ) {
-      let data = await refreshHeaders(signMessage, publicKey)
+    if (itemStr === null) {
+      let data = await refreshHeaders(signMessage, publicKey);
       change_wallet_data(data);
       return data;
     }
     const item = JSON.parse(itemStr);
     const now = new Date();
     if (now.getTime() > item.expiry) {
-      let data = await refreshHeaders(signMessage, publicKey)
+      let data = await refreshHeaders(signMessage, publicKey);
       change_wallet_data(data);
       return data;
     }
@@ -152,33 +152,31 @@ export const MAIN_PAGE = (props) => {
   };
 
   const populate_data = async () => {
-    let header = await getWithExpiration()
-    let userPromise = get_user(header).then(
-        user => change_user_data(user)
+    let header = await getWithExpiration();
+    let userPromise = get_user(header).then((user) => change_user_data(user));
+    let leaderboardPromise = get_leaderboard(header).then((leaderboard) =>
+      change_leaderboard_data(leaderboard)
     );
-    let leaderboardPromise = get_leaderboard(header).then(
-        leaderboard => change_leaderboard_data(leaderboard)
-    )
-    let questsPromise = await get_quests(header).then(
-        quests => change_quests_data(quests)
-    )
-    let rewardsPromise = await get_rewards(header).then(
-        rewards => change_rewards_data(rewards)
+    let questsPromise = await get_quests(header).then((quests) =>
+      change_quests_data(quests)
+    );
+    let rewardsPromise = await get_rewards(header).then((rewards) =>
+      change_rewards_data(rewards)
     );
 
     await Promise.all([
       userPromise,
       leaderboardPromise,
       questsPromise,
-      rewardsPromise
-    ])
+      rewardsPromise,
+    ]);
   };
 
   const handleClick = async () => {
     playAurahTheme();
     let header_verification = await getWithExpiration();
     await populate_data(header_verification);
-  }
+  };
 
   const handleMainHover = () => {
     playMainHover();
@@ -249,7 +247,7 @@ export const MAIN_PAGE = (props) => {
     let claim;
     let header_verification = await getWithExpiration();
     claim = await claim_journey_reward(header_verification, reward_id);
-    await populate_data(header_verification)
+    await populate_data(header_verification);
 
     if (claim.length > 0 && type_reward === "soulbound") {
       let buffer = Buffer.from(claim, "base64");
