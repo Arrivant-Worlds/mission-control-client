@@ -44,6 +44,7 @@ export const BOUNTY_PAGE = (props) => {
   }
 
   useEffect(() => {
+    console.log(wallet, "bounty?");
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
     let discordAccessToken = tokenType && accessToken

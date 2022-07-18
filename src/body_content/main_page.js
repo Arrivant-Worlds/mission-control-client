@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { decodeUTF8 } from "tweetnacl-util";
@@ -54,7 +54,8 @@ import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
 import { useAnalytics } from "../mixpanel";
-export default function MAIN_PAGE(props) {
+
+export const MAIN_PAGE = (props) => {
   const {
     wallet,
     signMessage,
@@ -120,33 +121,45 @@ export default function MAIN_PAGE(props) {
     interrupt: true,
     playbackRate,
   });
+  // const { solana } = window;
+  // let response;
   // console.log(wallet, "outside useEffect");
+
+  // useEffect(() => {
+  //   const connect = async () => {
+  //     response = await solana.connect();
+  //   }
+  // }, []);
+  const check_sig = async () => {
+    // console.log(wallet, "???");
+    const { solana } = window;
+    const response = await solana.connect();
+    const publicKey_window = response.publicKey.toString();
+    // console.log(`Wallet connected!, address:, ${publicKey_window}`);
+    let check_headers = await getWithExpiration("verifyHeader");
+    if (publicKey_window && check_headers) {
+      if (window.location.pathname === "/connect") {
+        let gather_data = populate_data(check_headers);
+        navigate("/bounty_main");
+      } else if (window.location.pathname === "/bounty_main") {
+        if (window.location.search.length >= 20) {
+          let twitter_verify = await verify_twitter(check_headers, window.location.search);
+          console.log(twitter_verify, "verify twitter return");
+        }
+        let gather_data = populate_data(check_headers);
+      }
+      return;
+    } else {
+      if (window.location.pathname === "/bounty_main") {
+        navigate("/connect");
+      } else {
+        // check_sig();
+      }
+    }
+  };
 
   useEffect(() => {
     change_loading_state(true);
-    const check_sig = async () => {
-      const { solana } = window;
-      const response = await solana.connect();
-      const publicKey_window = response.publicKey.toString();
-      // console.log(`Wallet connected!, address:, ${publicKey_window}`);
-      let check_headers = await getWithExpiration("verifyHeader");
-      if (publicKey_window && check_headers) {
-        if (window.location.pathname === "/connect") {
-          let gather_data = populate_data(check_headers);
-          navigate("/bounty_main");
-        } else if (window.location.pathname === "/bounty_main") {
-          if (window.location.search.length >= 20) {
-            let twitter_verify = await verify_twitter(check_headers, window.location.search);
-            console.log(twitter_verify, "verify twitter return");
-          }
-          let gather_data = populate_data(check_headers);
-        }
-      } else {
-        if (window.location.pathname === "/bounty_main") {
-          navigate("/connect");
-        }
-      }
-    };
     check_sig();
     change_loading_state(false);
   }, []);
@@ -562,7 +575,7 @@ export default function MAIN_PAGE(props) {
                       },
                     }}
                   >
-                  
+
                   </Box>
                 </Grid>
                 <Grid item xs={2}>
@@ -714,6 +727,8 @@ export default function MAIN_PAGE(props) {
     </Box>
   );
 }
+
+export default memo(MAIN_PAGE);
 
 // <Route path="connect_wallet" element={<CONNECT_WALLET
 // wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
