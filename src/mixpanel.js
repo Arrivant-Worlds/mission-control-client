@@ -5,7 +5,6 @@ import { useLocation } from "react-router";
 
 let MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 const debugAnalytics = true;
-console.log("m token", MIXPANEL_TOKEN)
 type AnalyticsAction = string; // TODO: will remove string in future
 
 interface GenericTrackingAttributes {
