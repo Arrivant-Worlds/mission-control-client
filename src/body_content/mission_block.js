@@ -3,9 +3,12 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Icon from "@mui/material/Icon";
 import styles from "./mission_block_styles.js";
+import { useAnalytics } from "../mixpanel.js";
 
-export const MISSION_BLOCK = (props) => {
-  console.log(props.item_data, "item data?");
+export function MISSION_BLOCK(props) {
+
+  const { track } = useAnalytics()
+  // console.log(props.item_data, "item data?");
   const handleOnClick = () => {
     // console.log("msakjns", props);
     // console.log("firing in mission block click");
@@ -19,6 +22,11 @@ export const MISSION_BLOCK = (props) => {
       })
     }
     props.handleDialogOpen();
+    track('View Mission',{
+      event_category: 'Missions',
+      event_label: `${props.item_data.title}`,
+      current_user_level: `${props.item_data}`
+    })
   };
 
   const handleOnHover = () => {
