@@ -66,7 +66,7 @@ export const MAIN_PAGE = (props) => {
     sendTransaction,
   } = useWallet();
   let navigate = useNavigate();
-  const { track } = useAnalytics()
+  const { track } = useAnalytics();
   const [body_state, change_body_state] = useState("join");
   const [wallet_data, change_wallet_data] = useState(null);
   const [dialog_state, change_dialog_state] = useState(false);
@@ -82,8 +82,8 @@ export const MAIN_PAGE = (props) => {
     type: "",
     type_reward: {
       type: "",
-      url: ""
-    }
+      url: "",
+    },
   });
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
@@ -121,15 +121,15 @@ export const MAIN_PAGE = (props) => {
     interrupt: true,
     playbackRate,
   });
-  // const { solana } = window;
-  // let response;
+  const { solana } = window;
+  let response;
   // console.log(wallet, "outside useEffect");
 
-  // useEffect(() => {
-  //   const connect = async () => {
-  //     response = await solana.connect();
-  //   }
-  // }, []);
+  useEffect(() => {
+    const connect = async () => {
+      response = await solana.connect();
+    }
+  }, []);
   const check_sig = async () => {
     // console.log(wallet, "???");
     const { solana } = window;
@@ -143,7 +143,10 @@ export const MAIN_PAGE = (props) => {
         navigate("/bounty_main");
       } else if (window.location.pathname === "/bounty_main") {
         if (window.location.search.length >= 20) {
-          let twitter_verify = await verify_twitter(check_headers, window.location.search);
+          let twitter_verify = await verify_twitter(
+            check_headers,
+            window.location.search
+          );
           console.log(twitter_verify, "verify twitter return");
         }
         let gather_data = populate_data(check_headers);
@@ -153,7 +156,7 @@ export const MAIN_PAGE = (props) => {
       if (window.location.pathname === "/bounty_main") {
         navigate("/connect");
       } else {
-        // check_sig();
+        check_sig();
       }
     }
   };
@@ -220,8 +223,8 @@ export const MAIN_PAGE = (props) => {
       };
       change_wallet_data(verifyHeader);
       setWithExpiration("verifyHeader", verifyHeader, 3500);
-      track('Sign Message', {
-        event_category: 'Wallet',
+      track("Sign Message", {
+        event_category: "Wallet",
         event_label: pubkey,
       });
     }
@@ -263,11 +266,6 @@ export const MAIN_PAGE = (props) => {
 
   const handleMainHover = () => {
     playMainHover();
-    if (playbackRate > 1.2) {
-      setPlaybackRate(0.7);
-    } else {
-      setPlaybackRate(playbackRate + 0.1);
-    }
   };
 
   const handleConnectHover = () => {
@@ -351,7 +349,6 @@ export const MAIN_PAGE = (props) => {
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
     }
-
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
@@ -373,7 +370,7 @@ export const MAIN_PAGE = (props) => {
       // props.handleRewardsOpen(true);
     }
 
-    console.log("type", type_reward)
+    console.log("type", type_reward);
     if (claim.length > 0 && type_reward === "soulbound") {
       console.log("claim trx", claim);
       let buffer = Buffer.from(claim, "base64");
@@ -413,7 +410,7 @@ export const MAIN_PAGE = (props) => {
           message: "Please connect your wallet and sign!",
           severity: "error",
         });
-        navigate('/connect');
+        navigate("/connect");
       }
     }
     change_dropdown_anchor(null);
@@ -574,9 +571,7 @@ export const MAIN_PAGE = (props) => {
                         fontSize: "26px",
                       },
                     }}
-                  >
-
-                  </Box>
+                  ></Box>
                 </Grid>
                 <Grid item xs={2}>
                   <Box
@@ -726,7 +721,7 @@ export const MAIN_PAGE = (props) => {
       </Box>
     </Box>
   );
-}
+};
 
 export default memo(MAIN_PAGE);
 
