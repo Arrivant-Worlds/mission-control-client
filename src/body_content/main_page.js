@@ -29,7 +29,7 @@ import SG_logo from "../images/PE_SG_logo.png";
 import black_circle from "../images/black_circle.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
-import lore_background from "../images/lore_background.png";
+import lore_background from "../images/floating_island_lore.png";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -379,6 +379,12 @@ export default function MAIN_PAGE(props) {
   };
 
   const handleDropdown_navigate = (path) => {
+    if (path === "/") {
+      window.open("https://www.projecteluune.com");
+      change_dropdown_anchor(null);
+      return;
+    }
+
     if (path === "/bounty_main") {
       if (!wallet || !connected || !wallet_data) {
         setAlertState({
@@ -386,6 +392,7 @@ export default function MAIN_PAGE(props) {
           message: "Please connect your wallet and sign!",
           severity: "error",
         });
+        navigate('/connect');
       }
     }
     change_dropdown_anchor(null);
@@ -498,7 +505,7 @@ export default function MAIN_PAGE(props) {
             }}
           >
             <MenuItem onClick={() => handleDropdown_navigate("/")}>
-              Home
+              Project Elune
             </MenuItem>
             <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>
               Dashboard
@@ -551,7 +558,7 @@ export default function MAIN_PAGE(props) {
                       loop={1}
                       deleteSpeed={0}
                       words={[
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.",
+                        "",
                       ]}
                       cursor
                       cursorStyle="_"

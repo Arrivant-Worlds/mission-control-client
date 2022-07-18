@@ -15,7 +15,7 @@ import {
 export default function ACTION_COMPONENT(props) {
 
   // console.log("oosoosoa", props.rewards_dialog_data);
-  console.log("not asdkaoSD", props.dialog_data);
+  // console.log("not asdkaoSD", props.dialog_data);
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",
@@ -39,7 +39,7 @@ export default function ACTION_COMPONENT(props) {
     if (props.dialog_data.daily_claim_remaining === 0 && props.dialog_data.recurrence !== "prime") {
       return true;
     }
-    
+
     if (props.dialog_data.user_quest_status === "Locked") {
       return true;
     } else if (props.dialog_data.user_quest_status === "Complete" && !props.dialog_data.active_reward) {
