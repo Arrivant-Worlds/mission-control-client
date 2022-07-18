@@ -37,7 +37,7 @@ const PASSPORT = (props) => {
       >
         <Box
           component="img"
-          src={props.user_data.badgeUrl ? default_passport : default_passport}
+          src={props.user_data.badgeUrl ? props.user_data.badgeUrl : default_passport}
           alt="passport_symbol"
           style={styles.passport_image}
         />
