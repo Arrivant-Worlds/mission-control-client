@@ -6,11 +6,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import styles from "./rewards_dialog_styles.js";
+import styles from './rewards_dialog_styles.js';
+import { useAnalytics } from '../mixpanel.js';
+
 
 export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
-
+  const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
   // console.log(props.rewards_dialog_data.id, "Id of current quest for dialog");
 
   const handleOnClick = () => {
@@ -18,6 +20,16 @@ export default function REWARDS_DIALOG(props) {
     if (props.rewards_dialog_data.type === "quest") {
       // console.log(props.rewards_dialog_data, "props??");
       props.handleClaimQuestReward(props.rewards_dialog_data.id);
+      track('Mission Claim',{
+        event_category: 'Missions',
+        event_label:'Claim',
+        xp: props.rewards_dialog_data.xp,
+      })
+      let now = new Date()
+      setPropertyIfNotExists('First Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+      setProperty('Last Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+      setPropertyIfNotExists('Missions done', 0)
+      increment('Missions done', 1);
       //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
       // props.handleRewardsClose();
@@ -26,6 +38,12 @@ export default function REWARDS_DIALOG(props) {
         props.rewards_dialog_data.id,
         props.rewards_dialog_data.type_reward
       );
+      // props.handleClaimJourneyReward(props.rewards_dialog_data.id);
+      let now = new Date()
+      setPropertyIfNotExists('First Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+      setProperty('Last Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+      setPropertyIfNotExists('Journey rewards claimed', 0)
+      increment('Journey rewards claimed', 1);
     }
   };
 

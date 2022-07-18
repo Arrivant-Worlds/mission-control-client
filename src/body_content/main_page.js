@@ -52,7 +52,7 @@ import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
-
+import { useAnalytics } from "../mixpanel";
 export default function MAIN_PAGE(props) {
   const {
     wallet,
@@ -64,6 +64,7 @@ export default function MAIN_PAGE(props) {
     sendTransaction,
   } = useWallet();
   let navigate = useNavigate();
+  const { track } = useAnalytics()
   const [body_state, change_body_state] = useState("join");
   const [wallet_data, change_wallet_data] = useState({});
   const [dialog_state, change_dialog_state] = useState(false);
@@ -185,6 +186,10 @@ export default function MAIN_PAGE(props) {
       };
       change_signed_message(true);
       setWithExpiration("verifyHeader", verifyHeader, 3500);
+      track('Sign Message', {
+        event_category: 'Wallet',
+        event_label: pubkey,
+      });
     }
     change_loading_state(false);
     return verifyHeader;
@@ -314,6 +319,7 @@ export default function MAIN_PAGE(props) {
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
     }
+ 
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
@@ -334,14 +340,16 @@ export default function MAIN_PAGE(props) {
       let retrieve_user = await populate_data(header_verification);
       // props.handleRewardsOpen(true);
     }
-    if (claim.length > 0 && type_reward.type == "soulbound") {
+
+    console.log("type", type_reward)
+    if (claim.length > 0 && type_reward === "soulbound") {
       console.log("claim trx", claim);
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
       // user signs trx
       //await signTransaction(tx);
-      //console.log("signed tx", tx);
-      // broadcast trx to solana
+      
+      console.log("signed tx", tx);
       let sig = await sendTransaction(tx, RPC_CONNECTION);
       console.log("signature", sig);
     } else {
