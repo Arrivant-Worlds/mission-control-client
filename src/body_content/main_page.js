@@ -126,43 +126,33 @@ export const MAIN_PAGE = (props) => {
   // console.log(wallet, "outside useEffect");
 
   useEffect(() => {
-    const connect = async () => {
-      response = await solana.connect();
-    }
-  }, []);
-  const check_sig = async () => {
-    // console.log(wallet, "???");
-    const { solana } = window;
-    const response = await solana.connect();
-    const publicKey_window = response.publicKey.toString();
-    // console.log(`Wallet connected!, address:, ${publicKey_window}`);
-    let check_headers = await getWithExpiration("verifyHeader");
-    if (publicKey_window && check_headers) {
-      if (window.location.pathname === "/connect") {
-        let gather_data = populate_data(check_headers);
-        navigate("/bounty_main");
-      } else if (window.location.pathname === "/bounty_main") {
-        if (window.location.search.length >= 20) {
-          let twitter_verify = await verify_twitter(
-            check_headers,
-            window.location.search
-          );
-          console.log(twitter_verify, "verify twitter return");
-        }
-        let gather_data = populate_data(check_headers);
-      }
-      return;
-    } else {
-      if (window.location.pathname === "/bounty_main") {
-        navigate("/connect");
-      } else {
-        check_sig();
-      }
-    }
-  };
-
-  useEffect(() => {
     change_loading_state(true);
+    const check_sig = async () => {
+      const { solana } = window;
+      const response = await solana.connect();
+      const publicKey_window = response.publicKey.toString();
+      // console.log(`Wallet connected!, address:, ${publicKey_window}`);
+      let check_headers = await getWithExpiration("verifyHeader");
+      if (publicKey_window && check_headers) {
+        if (window.location.pathname === "/connect") {
+          let gather_data = populate_data(check_headers);
+          navigate("/bounty_main");
+        } else if (window.location.pathname === "/bounty_main") {
+          if (window.location.search.length >= 20) {
+            let twitter_verify = await verify_twitter(
+              check_headers,
+              window.location.search
+            );
+            console.log(twitter_verify, "verify twitter return");
+          }
+          let gather_data = populate_data(check_headers);
+        }
+      } else {
+        if (window.location.pathname === "/bounty_main") {
+          navigate("/connect");
+        }
+      }
+    };
     check_sig();
     change_loading_state(false);
   }, []);
