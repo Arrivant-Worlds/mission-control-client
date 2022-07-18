@@ -64,7 +64,7 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
     const integrations = {
       mixpanel: !!MIXPANEL_TOKEN,
     };
-    if (integrations.mixpanel) {
+    if (MIXPANEL_TOKEN) {
       mixpanel.identify(pubkey);
       mixpanel.people.set_once({
         pubkey,
@@ -105,7 +105,7 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
 
   // initialize (goes first no matter what)
   useEffect(() => {
-    if (!trackingInitialized) {
+    if (!trackingInitialized && MIXPANEL_TOKEN) {
       initializeTracking();
     } else if (trackingInitialized) {
       resetTracking();
