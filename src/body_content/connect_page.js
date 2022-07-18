@@ -31,7 +31,6 @@ export default function CONNECT_PAGE(props) {
     // console.log(connected, "connected?");
 
     const check_sig = async () => {
-      // check_headers = await props.getWithExpiration("verifyHeader");
       if (wallet && !props.wallet_data) {
         change_button_text("SIGN MESSAGE");
       }
