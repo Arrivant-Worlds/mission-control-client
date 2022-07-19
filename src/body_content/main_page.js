@@ -10,6 +10,7 @@ import {
   get_leaderboard,
   claim_journey_reward,
   claim_quest_reward,
+  verify_twitter,
   RPC_CONNECTION,
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
