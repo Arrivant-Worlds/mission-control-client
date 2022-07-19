@@ -304,7 +304,7 @@ export const MAIN_PAGE = (props) => {
   };
 
   return (
-    <Box
+    <Box loading="lazy"
       sx={{
         height: "100vh",
         width: "100vw",

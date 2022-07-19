@@ -19,7 +19,7 @@ const styles = {
   passport: {
     textAlign: "left",
     fontWeight: "700",
-    fontSize: "28px",
+    fontSize: "24px",
     lineHeight: "27px",
     letterSpacing: "0.1em",
     textTransform: "uppercase",
@@ -87,11 +87,10 @@ const styles = {
     marginTop: "10px",
   },
   rank_text: {
-    fontWeight: "400",
-    fontSize: "11px",
-    lineHeight: "15px",
-    textAlign: "left",
-    color: "#F6F6F6",
+    fontWeight: "700",
+    fontSize: "14px",
+    lineHeight: "21px",
+    color: "#E6B2B9",
   },
   progress_container: {
     width: "93%",

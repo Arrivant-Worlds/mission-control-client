@@ -76,6 +76,17 @@
   animation: fadeIn 2s 9s forwards;
 }
 
+.MuiBadge-badge {
+  height: 15px !important;
+  min-width: auto !important;
+  width: 15px !important;
+  background-color: #e6b2b9 !important;
+}
+
+.badge_style.Mui-selected {
+  color: #F6F6F6;
+}
+
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }

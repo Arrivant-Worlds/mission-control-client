@@ -96,6 +96,7 @@ export const BOUNTY_PAGE = (props) => {
         {
           color: "#AAAAAA",
           fontWeight: "700",
+          overflow: "visible"
         },
         {
           "&:hover": {
@@ -142,13 +143,20 @@ export const BOUNTY_PAGE = (props) => {
             value={tab1_value}
             onChange={handleChange}
             textColor="primary"
-            style={styles.tab_label}
+            sx={styles.tab_label}
             TabIndicatorProps={{ style: { zIndex: 2 } }}
           >
             <Tab label="MISSIONS" {...a11yProps(0)} />
             <Tab label="LEADERBOARD" {...a11yProps(1)} />
-            <Box sx={{position: "absolute", right: "10px", top: "10px"}}>test?</Box>
-            <Tab label="LOG" {...a11yProps(2)}/>
+            <Tab label={
+              <Badge badgeContent={1} color="primary" {...a11yProps(2)}
+                className="badge_style"
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}>LOG
+              </Badge>}
+            />
           </Tabs>
           <Box style={styles.bottom_border}></Box>
         </Grid>

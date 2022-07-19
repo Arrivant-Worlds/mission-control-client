@@ -42,6 +42,7 @@ export const LOG_BOARD = (props) => {
             {
               props.quests_data.map((item, i) => {
                 if (item.active_reward || item.user_quest_status === "Complete") {
+                  //update the state for every active reward.
                   return (
                     <MISSION_BLOCK
                     item_data={item} key={i}
