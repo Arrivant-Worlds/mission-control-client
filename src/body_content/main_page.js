@@ -1,37 +1,31 @@
 import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { decodeUTF8 } from "tweetnacl-util";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
 import { Transaction } from "@solana/web3.js";
 import {
-  create_user,
   get_user,
   get_quests,
   get_rewards,
   get_leaderboard,
   claim_journey_reward,
   claim_quest_reward,
-  verify_twitter,
   RPC_CONNECTION,
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
-// import CONNECT_WALLET from './connect_wallet.js';
 import BOUNTY_PAGE from "./bounty_page.js";
 import MISSION_DIALOG from "./mission_dialog.js";
 import REWARDS_DIALOG from "./rewards_dialog.js";
 import LORE_PAGE from "./lore_page.js";
 import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
-import { Typewriter, useTypewriter, Cursor } from "react-simple-typewriter";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import SG_logo from "../images/PE_SG_logo.png";
 import black_circle from "../images/black_circle.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
 import lore_background from "../images/floating_island_lore.png";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Menu from "@mui/material/Menu";
@@ -53,21 +47,18 @@ import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
-import { useAnalytics } from "../mixpanel";
+import {refreshHeaders} from "../wallet/wallet";
 
 export const MAIN_PAGE = (props) => {
   const {
     wallet,
     signMessage,
     publicKey,
-    connect,
     connected,
     disconnect,
     sendTransaction,
   } = useWallet();
   let navigate = useNavigate();
-  const { track } = useAnalytics();
-  const [body_state, change_body_state] = useState("join");
   const [wallet_data, change_wallet_data] = useState(null);
   const [dialog_state, change_dialog_state] = useState(false);
   const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
@@ -93,8 +84,6 @@ export const MAIN_PAGE = (props) => {
     message: "",
     severity: undefined,
   });
-  //severity: "success" | "info" | "warning" | "error" | undefined;
-  //state for if user did the action in mission dialog
   const [actionDone, setActionDone] = useState(false);
 
   // Drew's changes - sound hooks
@@ -121,51 +110,20 @@ export const MAIN_PAGE = (props) => {
     interrupt: true,
     playbackRate,
   });
-  const { solana } = window;
-  let response;
-  // console.log(wallet, "outside useEffect");
+
+  const fetchUserData = async () => {
+    populate_data();
+  }
 
   useEffect(() => {
-    const connect = async () => {
-      response = await solana.connect();
+    if (!connected) {
+      navigate("/connect")
+      return
     }
-  }, []);
-  const check_sig = async () => {
-    // console.log(wallet, "???");
-    const { solana } = window;
-    const response = await solana.connect();
-    const publicKey_window = response.publicKey.toString();
-    // console.log(`Wallet connected!, address:, ${publicKey_window}`);
-    let check_headers = await getWithExpiration("verifyHeader");
-    if (publicKey_window && check_headers) {
-      if (window.location.pathname === "/connect") {
-        let gather_data = populate_data(check_headers);
-        navigate("/bounty_main");
-      } else if (window.location.pathname === "/bounty_main") {
-        if (window.location.search.length >= 20) {
-          let twitter_verify = await verify_twitter(
-            check_headers,
-            window.location.search
-          );
-          console.log(twitter_verify, "verify twitter return");
-        }
-        let gather_data = populate_data(check_headers);
-      }
-      return;
-    } else {
-      if (window.location.pathname === "/bounty_main") {
-        navigate("/connect");
-      } else {
-        check_sig();
-      }
-    }
-  };
-
-  useEffect(() => {
     change_loading_state(true);
-    check_sig();
+    fetchUserData();
     change_loading_state(false);
-  }, []);
+  }, [publicKey]);
 
   const backgroundImageRender = () => {
     if (window.location.pathname === "/lore") {
@@ -175,94 +133,54 @@ export const MAIN_PAGE = (props) => {
     }
   };
 
-  const setWithExpiration = async (key, value, ttl) => {
-    const item = {
-      value: value,
-      expiry: new Date().getTime() + ttl * 1000,
-    };
-    localStorage.setItem(key, JSON.stringify(item));
-  };
-
-  const getWithExpiration = async (key) => {
+  const getWithExpiration = async () => {
+    let key = "verifyHeader"
     const itemStr = localStorage.getItem(key);
-    // console.log(`itemStr`, itemStr);
-    // if the item doesn't exist, return null
-    if (itemStr === null) {
-      change_wallet_data(null);
+    if (itemStr === null ) {
+      let data = refreshHeaders(signMessage, publicKey)
+      change_wallet_data(data);
       return null;
     }
     const item = JSON.parse(itemStr);
     const now = new Date();
-    // compare the expiry time of the item with the current time
     if (now.getTime() > item.expiry) {
-      // If the item is expired, delete the item from storage
-      // and return null
-      localStorage.removeItem(key);
-      change_wallet_data(null);
+      let data = refreshHeaders(signMessage, publicKey)
+      change_wallet_data(data);
       return null;
     }
     return item.value;
   };
 
-  const sign_message = async () => {
+  const populate_data = async () => {
     change_loading_state(true);
-    let verifyHeader = await getWithExpiration("verifyHeader");
+    let header = await getWithExpiration()
+    let userPromise = get_user(header).then(
+        user => change_user_data(user)
+    );
+    let leaderboardPromise = get_leaderboard(header).then(
+        leaderboard => change_leaderboard_data(leaderboard)
+    )
+    let questsPromise = await get_quests(header).then(
+        quests => change_quests_data(quests)
+    )
+    let rewardsPromise = await get_rewards(header).then(
+        rewards => change_rewards_data(rewards)
+    );
 
-    if (verifyHeader == null) {
-      const now = Date.now();
-      const message = now.toString();
-      const encodedMessage = decodeUTF8(message);
-      // @ts-ignore
-      let signature = await signMessage(encodedMessage);
-      const pubkey = publicKey.toString();
-      verifyHeader = {
-        signedMsg: message,
-        // @ts-ignore
-        signature: JSON.stringify(Array.from(signature)),
-        pubkey: pubkey,
-      };
-      change_wallet_data(verifyHeader);
-      setWithExpiration("verifyHeader", verifyHeader, 3500);
-      track("Sign Message", {
-        event_category: "Wallet",
-        event_label: pubkey,
-      });
-    }
-    change_loading_state(false);
-    return verifyHeader;
-  };
-
-  const populate_data = async (payload) => {
-    change_loading_state(true);
-    // console.log(payload, "payload?");
-    let user = await get_user(payload);
-    let leaderboard = await get_leaderboard(payload);
-    let quests = await get_quests(payload);
-    let rewards = await get_rewards(payload);
-
-    change_user_data(user);
-    change_leaderboard_data(leaderboard);
-    change_quests_data(quests);
-    change_rewards_data(rewards);
-    change_wallet_data(payload);
+    await Promise.all([
+      userPromise,
+      leaderboardPromise,
+      questsPromise,
+      rewardsPromise
+    ])
     change_loading_state(false);
   };
 
   const handleClick = async () => {
     playAurahTheme();
-
-    if (wallet && connected) {
-      let header_verification = await getWithExpiration("verifyHeader");
-      if (header_verification) {
-        let gather_data = await populate_data(header_verification);
-        navigate("/bounty_main");
-      } else {
-        navigate("/connect");
-      }
-    } else {
-      navigate("/connect");
-    }
-  };
+    let header_verification = await getWithExpiration();
+    await populate_data(header_verification);
+  }
 
   const handleMainHover = () => {
     playMainHover();
@@ -306,13 +224,8 @@ export const MAIN_PAGE = (props) => {
         severity: "success",
       });
     }
-    let header_verification = await getWithExpiration("verifyHeader");
-    if (header_verification) {
-      let gather_data = await populate_data(header_verification);
-    } else {
-      let get_signature = await sign_message();
-      let gather_data = await populate_data(get_signature);
-    }
+    let header_verification = await getWithExpiration();
+    let gather_data = await populate_data(header_verification);
     setActionDone(false);
   };
 
@@ -324,63 +237,27 @@ export const MAIN_PAGE = (props) => {
   const handleRewardsClose = async () => {
     change_rewards_dialog_state(false);
     change_dialog_state(false);
-    let header_verification = await getWithExpiration("verifyHeader");
-    if (header_verification) {
-      let gather_data = await populate_data(header_verification);
-    } else {
-      let get_signature = await sign_message();
-      let gather_data = await populate_data(get_signature);
-    }
+    let header_verification = await getWithExpiration();
+    await populate_data(header_verification);
   };
 
   const handleClaimQuestReward = async (reward_id) => {
-    //to be implemented.
-    let header_verification = await getWithExpiration("verifyHeader");
-    if (header_verification) {
-      let claim = await claim_quest_reward(header_verification, reward_id);
-      //do get request for user data update.
-      let retrieve_user = await populate_data(header_verification);
-      // props.handleRewardsOpen(true);
-      //render rewards pop up for post claiming.
-    } else {
-      let sign_request = await sign_message();
-      // setFormSubmission(true);
-      let claim = await claim_quest_reward(header_verification, reward_id);
-      let retrieve_user = await populate_data(header_verification);
-      // props.handleRewardsOpen(true);
-    }
+    let header_verification = await getWithExpiration();
+    let claim = await claim_quest_reward(header_verification, reward_id);
+    let retrieve_user = await populate_data(header_verification);
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
-    //loading
-    // props.change_loading_state(true);
     let claim;
-    let header_verification = await getWithExpiration("verifyHeader");
-    if (header_verification) {
-      claim = await claim_journey_reward(header_verification, reward_id);
-      //do get request for user data update.
-      let retrieve_user = await populate_data(header_verification);
-      // props.handleRewardsOpen(true);
-      //render rewards pop up for post claiming.
-    } else {
-      let sign_request = await sign_message();
-      // setFormSubmission(true);
-      claim = await claim_journey_reward(header_verification, reward_id);
-      let retrieve_user = await populate_data(header_verification);
-      // props.handleRewardsOpen(true);
-    }
+    let header_verification = await getWithExpiration();
+    claim = await claim_journey_reward(header_verification, reward_id);
+    await populate_data(header_verification)
 
-    console.log("type", type_reward);
     if (claim.length > 0 && type_reward === "soulbound") {
-      console.log("claim trx", claim);
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
-      // user signs trx
-      //await signTransaction(tx);
 
-      console.log("signed tx", tx);
       let sig = await sendTransaction(tx, RPC_CONNECTION);
-      console.log("signature", sig);
     } else {
       console.log("Wrong journey reward type or claim transaction is empty");
     }
@@ -416,59 +293,6 @@ export const MAIN_PAGE = (props) => {
     change_dropdown_anchor(null);
     navigate(path);
   };
-
-  // const renderSwitch = (param) => {
-  //   switch(param) {
-  //     case 'connect':
-  //       return (
-  //         <CONNECT_PAGE body_state={body_state} change_body_state={change_body_state}/>
-  //       );
-  //     case 'connect_wallet':
-  //       return (
-  //         <CONNECT_WALLET body_state={body_state} change_body_state={change_body_state}
-  //         wallet_data={wallet_data} change_wallet_data={change_wallet_data}/>
-  //       );
-  //     case 'bounty_main':
-  //       return (
-  //         <BOUNTY_PAGE body_state={body_state} change_body_state={change_body_state} handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}
-  //         wallet_data={wallet_data} dialog_data={dialog_data} change_dialog_data={change_dialog_data}/>
-  //       );
-  //     default:
-  //       return (
-  //         <Grid container style={styles.grid_container}
-  //         direction="column"
-  //         justifyContent="center" alignItems="center">
-  //           <Grid item xs={4} alignItems="center" justifyContent="center">
-  //             <Box style={{
-  //               textTransform: "uppercase",
-  //               margin: "-20px auto 0 auto",
-  //               fontSize: "18px",
-  //               width: "60%",
-  //               color: "#F6F6F6"}}>
-  //               <Typewriter
-  //                 loop={1}
-  //                 deleteSpeed={0}
-  //                 words={['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia nisi neque, non tempor nibh tempor id. Donec libero urna, tempus eu ante quis, pellentesque bibendum ante.']}
-  //                 cursor
-  //                 cursorStyle='_'
-  //                 typeSpeed={70}
-  //                 delaySpeed={500}
-  //               />
-  //             </Box>
-  //           </Grid>
-  //           <Grid item xs={2}>
-  //             <Box src={SG_logo} alt="SG Logo" style={styles.logo}/>
-  //           </Grid>
-  //           <Grid container item justifyContent="center" alignItems="center" xs={1}>
-  //             <Box style={styles.button_container}>
-  //               <Box src={ripple_diamond} alt="diamond ripple" style={styles.ripple_diamond}/>
-  //               <Button variant="contained" style={styles.button} onClick={() => handleClick("connect")}>JOIN NOW</Button>
-  //             </Box>
-  //           </Grid>
-  //         </Grid>
-  //       );
-  //   }
-  // }
 
   const overlay_css = {
     height: "100%",
@@ -621,8 +445,6 @@ export const MAIN_PAGE = (props) => {
             path="connect"
             element={
               <CONNECT_PAGE
-                sign_message={sign_message}
-                setWithExpiration={setWithExpiration}
                 getWithExpiration={getWithExpiration}
                 populate_data={populate_data}
                 alertState={alertState}
@@ -655,7 +477,6 @@ export const MAIN_PAGE = (props) => {
                 setAlertState={setAlertState}
                 handleRewardsOpen={handleRewardsOpen}
                 handleRewardsClose={handleRewardsClose}
-                sign_message={sign_message}
                 loading_state={loading_state}
                 change_loading_state={change_loading_state}
                 playQuestType={playQuestType}
@@ -699,7 +520,6 @@ export const MAIN_PAGE = (props) => {
           alertState={alertState}
           setAlertState={setAlertState}
           getWithExpiration={getWithExpiration}
-          sign_message={sign_message}
           handleTwitterButton={playClaimPassport}
           handleDialogHover={handleDialogHover}
           handleRewardsOpen={handleRewardsOpen}

@@ -4,79 +4,31 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import {
   WalletMultiButton,
-  WalletDisconnectButton,
 } from "@solana/wallet-adapter-react-ui";
-import Button from "@mui/material/Button";
-import { decodeUTF8 } from "tweetnacl-util";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useNavigate } from "react-router-dom";
 import styles from "./connect_page_styles.js";
-import {
-  auth_twitter,
-  get_twitter_oauth_redirect,
-  verify_twitter,
-} from "../api_calls/index.js";
 
 export const CONNECT_PAGE = (props) => {
   const { wallet, signMessage, publicKey, connect, connected } = useWallet();
   const [button_text, change_button_text] = useState("CONNECT WALLET");
 
   let navigate = useNavigate();
-  let check_headers;
-
-  useEffect(() => {
-    console.log(wallet, "connect");
-    // console.log(props, "why?");
-    // console.log("fired? in connect page");
-    // console.log(!props.signed_message, "props.signed_msg");
-    // console.log(wallet, "wallet");
-    // console.log(connected, "connected?");
-
-    const check_sig = async () => {
-      if (wallet && !props.wallet_data) {
-        change_button_text("SIGN MESSAGE");
-      }
-      // else if (wallet && connected && props.wallet_data) {
-      //   //let gather_data = props.populate_data(check_headers);
-      //   navigate("/bounty_main");
-      // }
-    };
-    check_sig();
-    // if (wallet && connected && !props.signed_message) {
-    // } else if (wallet && connected && props.signed_message) {
-    //   console.log("hittingggg??????");
-    //   let payload = props.sign_message();
-    //   let gather_data = props.populate_data(payload);
-    //   navigate('/bounty_main');
-    // }
-    //check for all three props wallet, connect and sign_message
-    //redirect to dashboard anyways.
-    // console.log(connected, "connected");
-    // // window.localStorage.setItem('signature_time', JSON.stringify(now));
-    // // console.log(window.localStorage.getItem('signature_time'));
-    // let now = Date.now();
-    // let difference = now - window.localStorage.getItem('signature_time');
-  });
 
   const handleClick = async () => {
-    let connect_to_wallet = await connect();
-    if (wallet) {
-      change_button_text("SIGN MESSAGE");
-    }
-    // props.change_body_state(state);
-    // navigate(state);
+
+    await connect();
   };
 
   const handleConnectHover = () => {
     props.handleConnectHover();
   };
 
-  const handleSign = async () => {
-    props.playConnectWallet();
-    let payload = await props.sign_message();
-    let gather_data = await props.populate_data(payload);
-    navigate("/bounty_main");
-  };
+  useEffect(() => {
+    if (connected) {
+      navigate("/bounty_main");
+    }
+  }, [publicKey])
 
   return (
     <Grid
@@ -107,11 +59,7 @@ export const CONNECT_PAGE = (props) => {
         <Box onMouseEnter={() => handleConnectHover()}>
           <WalletMultiButton
             className="wallet_button"
-            onClick={
-              wallet && !check_headers
-                ? () => handleSign()
-                : () => handleClick()
-            }
+            onClick={handleClick}
           >
             {button_text}
           </WalletMultiButton>

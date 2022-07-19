@@ -167,7 +167,6 @@ export const claim_journey_reward = async (payload, reward_id) => {
       {},
       { headers: payload }
     );
-    console.log(response.data);
     return response.data;
   } catch (errors) {
     console.error(errors);
