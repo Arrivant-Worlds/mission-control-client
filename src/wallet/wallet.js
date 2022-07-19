@@ -6,7 +6,6 @@ export const refreshHeaders = async (signMessage, publicKey) => {
     const encodedMessage = decodeUTF8(message);
     let signature = await signMessage(encodedMessage);
     const pubkey = publicKey.toString();
-
     let headers = {
         signedMsg: message,
         signature: JSON.stringify(Array.from(signature)),

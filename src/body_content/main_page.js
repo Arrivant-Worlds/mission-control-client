@@ -111,8 +111,10 @@ export const MAIN_PAGE = (props) => {
     playbackRate,
   });
 
-  const fetchUserData = async () => {
-    populate_data();
+  const loadUserData = async () => {
+    change_loading_state(true);
+    await populate_data();
+    change_loading_state(false);
   }
 
   useEffect(() => {
@@ -120,9 +122,7 @@ export const MAIN_PAGE = (props) => {
       navigate("/connect")
       return
     }
-    change_loading_state(true);
-    fetchUserData();
-    change_loading_state(false);
+    loadUserData()
   }, [publicKey]);
 
   const backgroundImageRender = () => {
@@ -137,22 +137,21 @@ export const MAIN_PAGE = (props) => {
     let key = "verifyHeader"
     const itemStr = localStorage.getItem(key);
     if (itemStr === null ) {
-      let data = refreshHeaders(signMessage, publicKey)
+      let data = await refreshHeaders(signMessage, publicKey)
       change_wallet_data(data);
-      return null;
+      return data;
     }
     const item = JSON.parse(itemStr);
     const now = new Date();
     if (now.getTime() > item.expiry) {
-      let data = refreshHeaders(signMessage, publicKey)
+      let data = await refreshHeaders(signMessage, publicKey)
       change_wallet_data(data);
-      return null;
+      return data;
     }
     return item.value;
   };
 
   const populate_data = async () => {
-    change_loading_state(true);
     let header = await getWithExpiration()
     let userPromise = get_user(header).then(
         user => change_user_data(user)
@@ -173,7 +172,6 @@ export const MAIN_PAGE = (props) => {
       questsPromise,
       rewardsPromise
     ])
-    change_loading_state(false);
   };
 
   const handleClick = async () => {
