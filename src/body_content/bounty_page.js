@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Badge from '@mui/material/Badge';
 import MISSION_BOARD from "./mission_board.js";
 import LOG_BOARD from "./log_board.js";
 import LEADERBOARD from "./leaderboard.js";
@@ -44,7 +45,6 @@ export const BOUNTY_PAGE = (props) => {
   }
 
   useEffect(() => {
-    console.log(wallet, "bounty?");
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
     let discordAccessToken = tokenType && accessToken
@@ -171,7 +171,8 @@ export const BOUNTY_PAGE = (props) => {
           >
             <Tab label="MISSIONS" {...a11yProps(0)} />
             <Tab label="LEADERBOARD" {...a11yProps(1)} />
-            <Tab label="LOG" {...a11yProps(2)} />
+            <Box sx={{position: "absolute", right: "10px", top: "10px"}}>test?</Box>
+            <Tab label="LOG" {...a11yProps(2)}/>
           </Tabs>
           <Box style={styles.bottom_border}></Box>
         </Grid>
