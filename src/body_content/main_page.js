@@ -111,6 +111,20 @@ export const MAIN_PAGE = (props) => {
     playbackRate,
   });
 
+  const handleLinkTwitter = async (query) => {
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (!header_verification) {
+      return;
+    }
+    let headers = {
+      signedMsg: header_verification.signedMsg,
+      signature: header_verification.signature,
+      pubkey: header_verification.pubkey,
+    };
+
+    await verify_twitter(headers, query);
+  };
+
   const loadUserData = async () => {
     change_loading_state(true);
     await populate_data();
@@ -118,6 +132,9 @@ export const MAIN_PAGE = (props) => {
   };
 
   useEffect(() => {
+    // check URL for twitter oauth callback params
+    handleLinkTwitter(window.location.search);
+
     if (!connected) {
       navigate("/connect");
       return;
