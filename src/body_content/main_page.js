@@ -21,7 +21,7 @@ import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
 import SG_logo from "../images/PE_SG_logo.png";
-import black_circle from "../images/black_circle.png";
+import navIcon from "../images/NavIcon_withshadow.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
 import lore_background from "../images/floating_island_lore.png";
@@ -328,8 +328,8 @@ export const MAIN_PAGE = (props) => {
         >
           <Box
             component="img"
-            sx={{ cursor: "pointer" }}
-            src={black_circle}
+            sx={{ cursor: "pointer", width: '80px' }}
+            src={navIcon}
             alt="black_circle_logo"
             onClick={(e) => handleDropdownOpen(e)}
           />
