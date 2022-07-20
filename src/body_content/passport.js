@@ -24,7 +24,7 @@ const PASSPORT = (props) => {
   return (
     <Grid style={styles.passport_container}>
       <Typography style={styles.title}>ELERIAH PIONEER</Typography>
-      <Typography style={styles.passport}>Eluüne Visa</Typography>
+      <Typography style={styles.passport}>ELERIAN I.D.</Typography>
       <Typography style={styles.date}>
         issued: {props.user_data.issued_at}
       </Typography>

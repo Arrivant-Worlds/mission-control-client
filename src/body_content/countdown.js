@@ -7,7 +7,7 @@ export const COUNTDOWN = (props) => {
   // console.log(props.user_data, "user data?");
 
   const calculateTimeLeft = () => {
-    const difference = Math.abs(+new Date("2030-07-18T00:00:00-08:00") - +new Date());
+    const difference = Math.abs(+new Date("2030-07-18T00:00:00-07:00") - +new Date());
     let timeLeft = {};
     if (difference > 0) {
       timeLeft = {
@@ -29,10 +29,7 @@ export const COUNTDOWN = (props) => {
 
 
   return (
-    <Grid container direction="row" justifyContent="space-between">
-      <Typography sx={{fontSize: "14px"}}>
-      {`(${props.user_data.daily_claim_remaining}/2)`}
-      </Typography>
+    <Grid container direction="row" justifyContent="flex-end" alignItems="center">
       <Typography sx={{fontSize: "14px"}}>
         {`${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}
       </Typography>

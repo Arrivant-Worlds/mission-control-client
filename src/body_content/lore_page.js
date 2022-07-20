@@ -43,9 +43,7 @@ export default function LORE_PAGE(props) {
         </SimpleBar>
       </Grid>
       <Typography sx={styles.welcome}>
-      {`WelCome
-        to YOUR
-        ElUüNE VISA`}
+      {`BECOME AN ELERIAN CITIZEN`}
       </Typography>
     </Grid>
   );

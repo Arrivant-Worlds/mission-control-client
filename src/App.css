@@ -34,6 +34,7 @@
   background-color: transparent;
   border: 1px solid #F6F6F6;
   color: #F6F6F6;
+  margin-top: 10px;
 }
 
 .MuiButtonBase-root.MuiButton-root.Mui-disabled{
@@ -81,10 +82,6 @@
   min-width: auto !important;
   width: 15px !important;
   background-color: #e6b2b9 !important;
-}
-
-.badge_style.Mui-selected {
-  color: #F6F6F6;
 }
 
 @keyframes fadeIn {

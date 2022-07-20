@@ -26,9 +26,11 @@ import black_circle from "../images/black_circle.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
 import lore_background from "../images/floating_island_lore.png";
+import {Typewriter} from 'react-simple-typewriter';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import Icon from "@mui/material/Icon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import styles from "./main_page_styles.js";
@@ -87,29 +89,31 @@ export const MAIN_PAGE = (props) => {
   });
   const [actionDone, setActionDone] = useState(false);
 
+  const [volume, setVolume] = useState(1);
   // Drew's changes - sound hooks
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
   const [playAurahTheme] = useSound(AurahTheme, {
     interrupt: true,
     volume: 0.3,
   });
-  const [playQuestOpen] = useSound(QuestOpen, { interrupt: true });
-  const [playQuestClose] = useSound(QuestClose, { interrupt: true });
-  const [playQuestHover] = useSound(QuestHover, { interrupt: true });
-  const [playConnectWallet] = useSound(ConnectWallet, { interrupt: true });
-  const [playClaimPassport] = useSound(ClaimPassport, { interrupt: true });
-  const [playQuestType] = useSound(QuestType, { interrupt: true });
-  const [playMissionsTab] = useSound(MissionsTab, { interrupt: true });
-  const [playLeaderboardTab] = useSound(LeaderboardTab, { interrupt: true });
-  const [playRewardsTab] = useSound(RewardsTab, { interrupt: true });
-  const [playEggTab] = useSound(EggTab, { interrupt: true });
+  const [playQuestOpen] = useSound(QuestOpen, { interrupt: true, volume: volume });
+  const [playQuestClose] = useSound(QuestClose, { interrupt: true, volume: volume });
+  const [playQuestHover] = useSound(QuestHover, { interrupt: true, volume: volume });
+  const [playConnectWallet] = useSound(ConnectWallet, { interrupt: true, volume: volume });
+  const [playClaimPassport] = useSound(ClaimPassport, { interrupt: true, volume: volume });
+  const [playQuestType] = useSound(QuestType, { interrupt: true, volume: volume });
+  const [playMissionsTab] = useSound(MissionsTab, { interrupt: true, volume: volume });
+  const [playLeaderboardTab] = useSound(LeaderboardTab, { interrupt: true, volume: volume });
+  const [playRewardsTab] = useSound(RewardsTab, { interrupt: true, volume: volume });
+  const [playEggTab] = useSound(EggTab, { interrupt: true, volume: volume });
   const [playDisconnectWallet] = useSound(DisconnectWallet, {
-    interrupt: true,
+    interrupt: true, volume: volume
   });
-  const [playDisconnectHover] = useSound(DisconnectHover, { interrupt: true });
+  const [playDisconnectHover] = useSound(DisconnectHover, { interrupt: true, volume: volume });
   const [playMainHover] = useSound(MainHover, {
     interrupt: true,
     playbackRate,
+    volume: volume
   });
 
   const loadUserData = async () => {
@@ -283,7 +287,7 @@ export const MAIN_PAGE = (props) => {
     }
 
     if (path === "/bounty_main") {
-      if (!wallet || !connected || !wallet_data) {
+      if (!wallet || !connected) {
         setAlertState({
           open: true,
           message: "Please connect your wallet and sign!",
@@ -309,6 +313,26 @@ export const MAIN_PAGE = (props) => {
 
     await verify_twitter(headers, query);
   };
+
+  // const toggleEle = (elem, state) => {
+  //   if (state) {
+  //     elem.muted = !state;
+  //     console.log(elem.muted, "conditional");
+  //     elem.play();
+  //   } else {
+  //     elem.muted = !state;
+  //     console.log(elem.muted, "else");
+  //     elem.pause();
+  //   }
+  // }
+
+  const toggle_sound = () => {
+    if (volume === 1) {
+      setVolume(0);
+    } else {
+      setVolume(1);
+    }
+  }
 
   const overlay_css = {
     height: "100%",
@@ -339,16 +363,20 @@ export const MAIN_PAGE = (props) => {
         <Grid
           container
           justifyContent="space-between"
-          alignItems="center"
           sx={{ position: "absolute", top: "40px", width: "90%" }}
         >
-          <Box
-            component="img"
-            sx={{ cursor: "pointer", width: '80px' }}
-            src={navIcon}
-            alt="black_circle_logo"
-            onClick={(e) => handleDropdownOpen(e)}
-          />
+          <Grid container direction="column" alignItems="center" sx={{width:"auto"}}>
+            <Box
+              component="img"
+              sx={{ cursor: "pointer", width: '80px' }}
+              src={navIcon}
+              alt="black_circle_logo"
+              onClick={(e) => handleDropdownOpen(e)}
+            />
+            <Icon className={volume === 0 ? "fa-solid fa-volume-off" : "fa-solid fa-volume-high"}
+              onClick={() => toggle_sound()} sx={{color: "#888888", cursor: "pointer"}}
+            ></Icon>
+          </Grid>
           <Menu
             anchorEl={dropdown_anchor}
             open={dropdown_open}
@@ -411,7 +439,19 @@ export const MAIN_PAGE = (props) => {
                         fontSize: "26px",
                       },
                     }}
-                  ></Box>
+                  >
+                  <Typewriter
+                    loop={1}
+                    deleteSpeed={0}
+                    words={[
+                      "A hidden world found us, and called to us.Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?"
+                    ]}
+                    cursor
+                    cursorStyle="_"
+                    typeSpeed={70}
+                    delaySpeed={500}
+                  />
+                  </Box>
                 </Grid>
                 <Grid item xs={2}>
                   <Box
@@ -560,22 +600,3 @@ export const MAIN_PAGE = (props) => {
 };
 
 export default memo(MAIN_PAGE);
-
-// <Route path="connect_wallet" element={<CONNECT_WALLET
-// wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
-// change_user_data={change_user_data} quests_data={quests_data} change_quests_data={change_quests_data}
-// leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
-// rewards_data={rewards_data} change_rewards_data={change_rewards_data}
-// />}/>
-
-// <Typewriter
-//   loop={1}
-//   deleteSpeed={0}
-//   words={[
-//     "",
-//   ]}
-//   cursor
-//   cursorStyle="_"
-//   typeSpeed={70}
-//   delaySpeed={500}
-// />

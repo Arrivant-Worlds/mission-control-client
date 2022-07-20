@@ -55,9 +55,9 @@ export const MISSION_BOARD = (props) => {
       style={styles.mission_grid_container} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
           onClick={() => handleClick("daily")} alignItems="center">
-          <Typography style={ props.expanded_tab === "daily" ? styles.mission_title : styles.mission_title_not_active }>DAILY MISSIONS
+          <Typography style={ props.expanded_tab === "daily" ? styles.mission_title : styles.mission_title_not_active }>{`DAILY MISSIONS (${props.user_data.daily_claim_remaining}/2)`}
           </Typography>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <COUNTDOWN user_data={props.user_data}/>
           </Grid>
           <Box

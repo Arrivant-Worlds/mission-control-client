@@ -26,6 +26,11 @@ export const BOUNTY_PAGE = (props) => {
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
 
+  useEffect(() => {
+    let allActive = props.quests_data.filter((i)=>i.active_reward)
+    setClaimableCount(allActive.length);
+  }, [props.quests_data]);
+
   const handleLinkDiscord = async (token_type, access_token) => {
     let header_verification = await props.getWithExpiration("verifyHeader");
     if (!header_verification) {return}
@@ -41,6 +46,7 @@ export const BOUNTY_PAGE = (props) => {
         access_token
     );
   }
+
   useEffect(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
@@ -98,7 +104,7 @@ export const BOUNTY_PAGE = (props) => {
         {
           color: "#AAAAAA",
           fontWeight: "700",
-          overflow: "visible"
+          overflow: "visible",
         },
         {
           "&:hover": {
@@ -152,7 +158,7 @@ export const BOUNTY_PAGE = (props) => {
             <Tab label="LEADERBOARD" {...a11yProps(1)} />
             <Tab label={
               <Badge badgeContent={claimableCount} color="primary" {...a11yProps(2)}
-                className="badge_style"
+                sx={{color: tab1_value === 2 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right',
@@ -228,8 +234,6 @@ export const BOUNTY_PAGE = (props) => {
               dialog_data={props.dialog_data}
               set_rewards_dialog_data={props.set_rewards_dialog_data}
               change_dialog_data={props.change_dialog_data}
-              claimableCount={claimableCount}
-              set_claimable_count={setClaimableCount}
             />
           </TabPanel>
         </Grid>
@@ -240,7 +244,9 @@ export const BOUNTY_PAGE = (props) => {
               // height: "10vh",
               cursor: "pointer",
               width: "8vw",
-              marginTop: "-200px"
+              marginTop: "-200px",
+              position: "relative",
+              zIndex: "3",
             }}
             component="img"
             src={loreIcon}

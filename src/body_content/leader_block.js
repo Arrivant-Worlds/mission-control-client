@@ -10,7 +10,7 @@ import passport_symbol from '../images/default_passport_symbol.png';
 import styles from './leader_block_styles.js';
 
 export const LEADER_BLOCK = (props) => {
-  console.log(props, "props?");
+  // console.log(props, "props?");
   const laurel_render = () => {
     if (props.rank === 0) {
       return (
