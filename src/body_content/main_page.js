@@ -285,7 +285,7 @@ export const MAIN_PAGE = (props) => {
     }
 
     if (path === "/bounty_main") {
-      if (!wallet || !connected || !wallet_data) {
+      if (!wallet || !connected) {
         setAlertState({
           open: true,
           message: "Please connect your wallet and sign!",
