@@ -31,7 +31,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import styles from "./main_page_styles.js";
-
+import navIcon from "../images/NavIcon_withshadow.png";
 import AurahTheme from "../audio/AurahTheme.mp3";
 import MainHover from "../audio/MainHover.mp3";
 import QuestOpen from "../audio/QuestOpen.wav";
@@ -326,8 +326,8 @@ export const MAIN_PAGE = (props) => {
         >
           <Box
             component="img"
-            sx={{ cursor: "pointer" }}
-            src={black_circle}
+            sx={{ cursor: "pointer", width: '80px' }}
+            src={navIcon}
             alt="black_circle_logo"
             onClick={(e) => handleDropdownOpen(e)}
           />
