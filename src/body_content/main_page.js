@@ -349,14 +349,25 @@ export const MAIN_PAGE = (props) => {
       "linear-gradient(180deg, #15181B -16.28%, rgba(21, 24, 27, 0) 36.97%)",
   };
 
+  const lore_object = {
+    height: "100vh",
+    width: "100vw",
+    backgroundSize: "cover",
+    backgroundImage: `url(${backgroundImageRender()})`,
+  }
+
   return (
     <Box loading="lazy"
-      sx={{
-        height: "100vh",
-        width: "100vw",
-        backgroundSize: "cover",
-        background: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgroundImageRender()})`,
-      }}
+      sx={window.location.pathname === "/lore" ?
+        lore_object
+        :
+        {
+          height: "100vh",
+          width: "100vw",
+          backgroundSize: "cover",
+          background: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgroundImageRender()})`,
+        }
+      }
     >
       <Box
         style={
