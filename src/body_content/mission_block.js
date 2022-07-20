@@ -16,7 +16,7 @@ export function MISSION_BLOCK(props) {
     props.change_dialog_data(props.item_data);
     if (props.item_data.active_reward) {
       props.set_rewards_dialog_data({
-        id: props.dialog_data.active_reward.id,
+        id: props.item_data.active_reward.id,
         xp: props.item_data.xp,
         type: "quest"
       })
