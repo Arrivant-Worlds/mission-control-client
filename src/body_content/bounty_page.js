@@ -4,24 +4,27 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Badge from '@mui/material/Badge';
 import MISSION_BOARD from "./mission_board.js";
 import LOG_BOARD from "./log_board.js";
 import LEADERBOARD from "./leaderboard.js";
 import REWARDS from "./rewards.js";
 import EGG from "./egg.js";
 import PASSPORT from "./passport.js";
+import loreIcon from "../images/Lore_Icon.png"
 import {
  verify_discord,
 } from "./../api_calls";
 import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
+import { useNavigate } from "react-router";
 
 export const BOUNTY_PAGE = (props) => {
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
-
+  const navigate = useNavigate()
   const [expanded_tab, change_expanded_tab] = useState("prime");
-
+  let [claimableCount, setClaimableCount] = useState(0);
   const handleLinkDiscord = async (token_type, access_token) => {
     let header_verification = await props.getWithExpiration("verifyHeader");
     if (!header_verification) {return}
@@ -37,7 +40,6 @@ export const BOUNTY_PAGE = (props) => {
         access_token
     );
   }
-
   useEffect(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
@@ -95,6 +97,7 @@ export const BOUNTY_PAGE = (props) => {
         {
           color: "#AAAAAA",
           fontWeight: "700",
+          overflow: "visible"
         },
         {
           "&:hover": {
@@ -129,7 +132,7 @@ export const BOUNTY_PAGE = (props) => {
   };
 
   return (
-    <Box sx={styles.tab_label_container}>
+    <Box  sx={styles.tab_label_container}>
       <Grid
         container
         direction="row"
@@ -141,12 +144,20 @@ export const BOUNTY_PAGE = (props) => {
             value={tab1_value}
             onChange={handleChange}
             textColor="primary"
-            style={styles.tab_label}
+            sx={styles.tab_label}
             TabIndicatorProps={{ style: { zIndex: 2 } }}
           >
             <Tab label="MISSIONS" {...a11yProps(0)} />
             <Tab label="LEADERBOARD" {...a11yProps(1)} />
-            <Tab label="LOG" {...a11yProps(2)} />
+            <Tab label={
+              <Badge badgeContent={claimableCount} color="primary" {...a11yProps(2)}
+                className="badge_style"
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}>LOG
+              </Badge>}
+            />
           </Tabs>
           <Box style={styles.bottom_border}></Box>
         </Grid>
@@ -216,10 +227,22 @@ export const BOUNTY_PAGE = (props) => {
               dialog_data={props.dialog_data}
               set_rewards_dialog_data={props.set_rewards_dialog_data}
               change_dialog_data={props.change_dialog_data}
+              set_claimable_count = {setClaimableCount}
             />
           </TabPanel>
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
+          <Box 
+        onClick = {()=>{ navigate('/lore')}}
+        sx={{
+          // height: "10vh",
+          width: "8vw",
+          marginTop: "-200px"
+        }}
+        component="img" 
+        src={loreIcon} 
+        alt="lore_icon"
+        />
           <Box style={styles.center_panel_container}>
             <PASSPORT user_data={props.user_data} />
           </Box>

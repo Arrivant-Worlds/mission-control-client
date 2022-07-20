@@ -42,6 +42,8 @@ export const LOG_BOARD = (props) => {
             {
               props.quests_data.map((item, i) => {
                 if (item.active_reward || item.user_quest_status === "Complete") {
+                  let allActive = props.quests_data.filter((i)=>i.active_reward)
+                  props.set_claimable_count(allActive.length)
                   return (
                     <MISSION_BLOCK
                     item_data={item} key={i}

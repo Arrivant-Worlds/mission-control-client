@@ -12,10 +12,9 @@ const styles = {
   },
   tab_label: {
     textAlign: "left",
-    padding: "0",
     alignItems: "baseline",
     minWidth: "0px",
-    marginRight: "40px",
+    position: "relative",
   },
   center_panel_container: {
     width: "270px",
