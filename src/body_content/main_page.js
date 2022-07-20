@@ -89,30 +89,31 @@ export const MAIN_PAGE = (props) => {
   });
   const [actionDone, setActionDone] = useState(false);
 
-  const [mutedState, setMutedState] = useState(false);
+  const [volume, setVolume] = useState(1);
   // Drew's changes - sound hooks
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
   const [playAurahTheme] = useSound(AurahTheme, {
     interrupt: true,
     volume: 0.3,
   });
-  const [playQuestOpen] = useSound(QuestOpen, { interrupt: true });
-  const [playQuestClose] = useSound(QuestClose, { interrupt: true });
-  const [playQuestHover] = useSound(QuestHover, { interrupt: true });
-  const [playConnectWallet] = useSound(ConnectWallet, { interrupt: true });
-  const [playClaimPassport] = useSound(ClaimPassport, { interrupt: true });
-  const [playQuestType] = useSound(QuestType, { interrupt: true });
-  const [playMissionsTab] = useSound(MissionsTab, { interrupt: true });
-  const [playLeaderboardTab] = useSound(LeaderboardTab, { interrupt: true });
-  const [playRewardsTab] = useSound(RewardsTab, { interrupt: true });
-  const [playEggTab] = useSound(EggTab, { interrupt: true });
+  const [playQuestOpen] = useSound(QuestOpen, { interrupt: true, volume: volume });
+  const [playQuestClose] = useSound(QuestClose, { interrupt: true, volume: volume });
+  const [playQuestHover] = useSound(QuestHover, { interrupt: true, volume: volume });
+  const [playConnectWallet] = useSound(ConnectWallet, { interrupt: true, volume: volume });
+  const [playClaimPassport] = useSound(ClaimPassport, { interrupt: true, volume: volume });
+  const [playQuestType] = useSound(QuestType, { interrupt: true, volume: volume });
+  const [playMissionsTab] = useSound(MissionsTab, { interrupt: true, volume: volume });
+  const [playLeaderboardTab] = useSound(LeaderboardTab, { interrupt: true, volume: volume });
+  const [playRewardsTab] = useSound(RewardsTab, { interrupt: true, volume: volume });
+  const [playEggTab] = useSound(EggTab, { interrupt: true, volume: volume });
   const [playDisconnectWallet] = useSound(DisconnectWallet, {
-    interrupt: true,
+    interrupt: true, volume: volume
   });
-  const [playDisconnectHover] = useSound(DisconnectHover, { interrupt: true });
+  const [playDisconnectHover] = useSound(DisconnectHover, { interrupt: true, volume: volume });
   const [playMainHover] = useSound(MainHover, {
     interrupt: true,
     playbackRate,
+    volume: volume
   });
 
   const loadUserData = async () => {
@@ -326,12 +327,11 @@ export const MAIN_PAGE = (props) => {
   // }
 
   const toggle_sound = () => {
-    // console.log(document.querySelectorAll("video, audio"), "helppp?");
-    // document.querySelectorAll("video, audio").forEach( elem => {
-    //   console.log(elem, "elements?");
-    //   toggleEle(elem, mutedState)
-    // });
-    setMutedState(!mutedState);
+    if (volume === 1) {
+      setVolume(0);
+    } else {
+      setVolume(1);
+    }
   }
 
   const overlay_css = {
@@ -373,7 +373,9 @@ export const MAIN_PAGE = (props) => {
               alt="black_circle_logo"
               onClick={(e) => handleDropdownOpen(e)}
             />
-
+            <Icon className={volume === 0 ? "fa-solid fa-volume-off" : "fa-solid fa-volume-high"}
+              onClick={() => toggle_sound()} sx={{color: "#888888", cursor: "pointer"}}
+            ></Icon>
           </Grid>
           <Menu
             anchorEl={dropdown_anchor}
@@ -598,9 +600,3 @@ export const MAIN_PAGE = (props) => {
 };
 
 export default memo(MAIN_PAGE);
-
-
-
-// <Icon className={mutedState ? "fa-solid fa-volume-off" : "fa-solid fa-volume-high"}
-//   onClick={() => toggle_sound()} sx={{color: "#888888", cursor: "pointer"}}
-// ></Icon>
