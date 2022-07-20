@@ -92,7 +92,7 @@ export const MAIN_PAGE = (props) => {
   const [volume, setVolume] = useState(1);
   // Drew's changes - sound hooks
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
-  const [playAurahTheme] = useSound(AurahTheme, {
+  const [playAurahTheme, {stop}] = useSound(AurahTheme, {
     interrupt: true,
     volume: 0.3,
   });
@@ -127,7 +127,7 @@ export const MAIN_PAGE = (props) => {
       handleLinkTwitter(window.location.search);
     }
     if (!connected) {
-      navigate("/connect")
+      navigate("/")
       return
     }
     loadUserData()
@@ -145,6 +145,7 @@ export const MAIN_PAGE = (props) => {
     let key = "verifyHeader"
     const itemStr = localStorage.getItem(key);
     if (itemStr === null ) {
+      console.log(signMessage, publicKey, "in gwe === null");
       let data = await refreshHeaders(signMessage, publicKey)
       change_wallet_data(data);
       return data;
@@ -184,8 +185,9 @@ export const MAIN_PAGE = (props) => {
 
   const handleClick = async () => {
     playAurahTheme();
-    let header_verification = await getWithExpiration();
-    await populate_data(header_verification);
+    // let header_verification = await getWithExpiration();
+    // await populate_data(header_verification);
+    navigate("/connect");
   }
 
   const handleMainHover = () => {
@@ -280,7 +282,7 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleDropdown_navigate = (path) => {
-    if (path === "/") {
+    if (path === "elune") {
       window.open("https://www.projecteluune.com");
       change_dropdown_anchor(null);
       return;
@@ -329,8 +331,12 @@ export const MAIN_PAGE = (props) => {
   const toggle_sound = () => {
     if (volume === 1) {
       setVolume(0);
+      //stops aurah theme music;
+      stop()
     } else {
       setVolume(1);
+      //plays aurah theme music;
+      playAurahTheme();
     }
   }
 
@@ -390,8 +396,11 @@ export const MAIN_PAGE = (props) => {
               },
             }}
           >
-            <MenuItem onClick={() => handleDropdown_navigate("/")}>
+            <MenuItem onClick={() => handleDropdown_navigate("elune")}>
               Project Elune
+            </MenuItem>
+            <MenuItem onClick={() => handleDropdown_navigate("/")}>
+              Home
             </MenuItem>
             <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>
               Dashboard
@@ -444,7 +453,7 @@ export const MAIN_PAGE = (props) => {
                     loop={1}
                     deleteSpeed={0}
                     words={[
-                      "A hidden world found us, and called to us.Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?"
+                      "A hidden world found us, and called to us. Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?"
                     ]}
                     cursor
                     cursorStyle="_"

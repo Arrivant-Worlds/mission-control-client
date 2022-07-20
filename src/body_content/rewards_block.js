@@ -11,7 +11,7 @@ import styles from "./rewards_block_styles.js";
 
 export const REWARDS_BLOCK = (props) => {
   // props.item_data.claimed_status = "claimable";
-  // console.log(props.item_data, "reward data?");
+  console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
@@ -26,12 +26,13 @@ export const REWARDS_BLOCK = (props) => {
       );
     } else {
       return (
-        <Box
-          component="img"
-          src={grey_chest}
-          alt="chest symbol"
-          style={styles.chest_symbol}
-        />
+        <Icon className={"fa-solid fa-check"}
+          style={{
+          color: "#888888",
+          display: "flex",
+          justifyContent: "center",
+          fontSize: "20px",
+        }}></Icon>
       );
     }
   };
