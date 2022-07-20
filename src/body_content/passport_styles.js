@@ -77,7 +77,7 @@ const styles = {
   assessment_text: {
     textAlign: "left",
     fontWeight: "700",
-    fontSize: "28px",
+    fontSize: "24px",
     lineHeight: "27px",
     letterSpacing: "0.1em",
     textTransform: "uppercase",

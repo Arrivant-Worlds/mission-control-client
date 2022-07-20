@@ -82,7 +82,7 @@ const PASSPORT = (props) => {
         <Grid item xs={2.5}>
           <Typography
             style={styles.rank_text}
-          >{`lvl ${props.user_data.level}`}</Typography>
+          >{`LVL ${props.user_data.level}`}</Typography>
         </Grid>
         <Grid container item xs sx={{ position: "relative" }}>
           <Box style={styles.progress_container}>

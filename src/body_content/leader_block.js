@@ -6,11 +6,11 @@ import Box from '@mui/material/Box';
 import laurel_1 from '../images/laurel_1.png';
 import laurel_2 from '../images/laurel_2.png';
 import laurel_3 from '../images/laurel_3.png';
-import passport_symbol from '../images/passport_symbol.png';
+import passport_symbol from '../images/default_passport_symbol.png';
 import styles from './leader_block_styles.js';
 
 export const LEADER_BLOCK = (props) => {
-
+  console.log(props, "props?");
   const laurel_render = () => {
     if (props.rank === 0) {
       return (
@@ -41,7 +41,10 @@ export const LEADER_BLOCK = (props) => {
             {laurel_render()}
           </Grid>
           <Grid container item xs={6} justifyContent="flex-start">
-            <Box component="img" src={passport_symbol} alt="passport symbol" style={styles.passport_symbol}/>
+            <Box component="img"
+            src={props.item_data.badge_url ?
+              props.item_data.badge_url : passport_symbol}
+              alt="passport symbol" style={styles.passport_symbol}/>
           </Grid>
         </Grid>
         <Grid container item xs={3} sx={

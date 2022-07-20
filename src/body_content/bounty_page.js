@@ -25,6 +25,7 @@ export const BOUNTY_PAGE = (props) => {
   const navigate = useNavigate()
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
+
   const handleLinkDiscord = async (token_type, access_token) => {
     let header_verification = await props.getWithExpiration("verifyHeader");
     if (!header_verification) {return}
@@ -227,22 +228,24 @@ export const BOUNTY_PAGE = (props) => {
               dialog_data={props.dialog_data}
               set_rewards_dialog_data={props.set_rewards_dialog_data}
               change_dialog_data={props.change_dialog_data}
-              set_claimable_count = {setClaimableCount}
+              claimableCount={claimableCount}
+              set_claimable_count={setClaimableCount}
             />
           </TabPanel>
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
           <Box
-        onClick = {()=>{ navigate('/lore')}}
-        sx={{
-          // height: "10vh",
-          width: "8vw",
-          marginTop: "-200px"
-        }}
-        component="img"
-        src={loreIcon}
-        alt="lore_icon"
-        />
+            onClick = {()=>{ navigate('/lore')}}
+            sx={{
+              // height: "10vh",
+              cursor: "pointer",
+              width: "8vw",
+              marginTop: "-200px"
+            }}
+            component="img"
+            src={loreIcon}
+            alt="lore_icon"
+          />
           <Box style={styles.center_panel_container}>
             <PASSPORT user_data={props.user_data} />
           </Box>

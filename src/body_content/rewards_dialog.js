@@ -21,6 +21,7 @@ export default function REWARDS_DIALOG(props) {
     if (props.rewards_dialog_data.type === "quest") {
       // console.log(props.rewards_dialog_data, "props??");
       props.handleClaimQuestReward(props.rewards_dialog_data.id);
+      props.handleRewardsClose();
       track('Mission Claim',{
         event_category: 'Missions',
         event_label:'Claim',
@@ -33,7 +34,6 @@ export default function REWARDS_DIALOG(props) {
       increment('Missions done', 1);
       //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
-      props.handleRewardsClose();
     } else if (props.rewards_dialog_data.type === "journey") {
       props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
