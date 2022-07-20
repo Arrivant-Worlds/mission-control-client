@@ -29,6 +29,7 @@ import lore_background from "../images/floating_island_lore.png";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import Icon from "@mui/material/Icon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import styles from "./main_page_styles.js";
@@ -87,6 +88,7 @@ export const MAIN_PAGE = (props) => {
   });
   const [actionDone, setActionDone] = useState(false);
 
+  const [mutedState, setMutedState] = useState(false);
   // Drew's changes - sound hooks
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
   const [playAurahTheme] = useSound(AurahTheme, {
@@ -310,6 +312,27 @@ export const MAIN_PAGE = (props) => {
     await verify_twitter(headers, query);
   };
 
+  // const toggleEle = (elem, state) => {
+  //   if (state) {
+  //     elem.muted = !state;
+  //     console.log(elem.muted, "conditional");
+  //     elem.play();
+  //   } else {
+  //     elem.muted = !state;
+  //     console.log(elem.muted, "else");
+  //     elem.pause();
+  //   }
+  // }
+
+  const toggle_sound = () => {
+    // console.log(document.querySelectorAll("video, audio"), "helppp?");
+    // document.querySelectorAll("video, audio").forEach( elem => {
+    //   console.log(elem, "elements?");
+    //   toggleEle(elem, mutedState)
+    // });
+    setMutedState(!mutedState);
+  }
+
   const overlay_css = {
     height: "100%",
     display: "flex",
@@ -339,16 +362,18 @@ export const MAIN_PAGE = (props) => {
         <Grid
           container
           justifyContent="space-between"
-          alignItems="center"
           sx={{ position: "absolute", top: "40px", width: "90%" }}
         >
-          <Box
-            component="img"
-            sx={{ cursor: "pointer", width: '80px' }}
-            src={navIcon}
-            alt="black_circle_logo"
-            onClick={(e) => handleDropdownOpen(e)}
-          />
+          <Grid container direction="column" alignItems="center" sx={{width:"auto"}}>
+            <Box
+              component="img"
+              sx={{ cursor: "pointer", width: '80px' }}
+              src={navIcon}
+              alt="black_circle_logo"
+              onClick={(e) => handleDropdownOpen(e)}
+            />
+
+          </Grid>
           <Menu
             anchorEl={dropdown_anchor}
             open={dropdown_open}
@@ -561,13 +586,6 @@ export const MAIN_PAGE = (props) => {
 
 export default memo(MAIN_PAGE);
 
-// <Route path="connect_wallet" element={<CONNECT_WALLET
-// wallet_data={wallet_data} change_wallet_data={change_wallet_data} user_data={user_data}
-// change_user_data={change_user_data} quests_data={quests_data} change_quests_data={change_quests_data}
-// leaderboard_data={leaderboard_data} change_leaderboard_data={change_leaderboard_data}
-// rewards_data={rewards_data} change_rewards_data={change_rewards_data}
-// />}/>
-
 // <Typewriter
 //   loop={1}
 //   deleteSpeed={0}
@@ -579,3 +597,7 @@ export default memo(MAIN_PAGE);
 //   typeSpeed={70}
 //   delaySpeed={500}
 // />
+
+// <Icon className={mutedState ? "fa-solid fa-volume-off" : "fa-solid fa-volume-high"}
+//   onClick={() => toggle_sound()} sx={{color: "#888888", cursor: "pointer"}}
+// ></Icon>

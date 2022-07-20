@@ -104,7 +104,7 @@ export const BOUNTY_PAGE = (props) => {
         {
           color: "#AAAAAA",
           fontWeight: "700",
-          overflow: "visible"
+          overflow: "visible",
         },
         {
           "&:hover": {
@@ -158,7 +158,7 @@ export const BOUNTY_PAGE = (props) => {
             <Tab label="LEADERBOARD" {...a11yProps(1)} />
             <Tab label={
               <Badge badgeContent={claimableCount} color="primary" {...a11yProps(2)}
-                className="badge_style"
+                sx={{color: tab1_value === 2 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right',
@@ -244,7 +244,9 @@ export const BOUNTY_PAGE = (props) => {
               // height: "10vh",
               cursor: "pointer",
               width: "8vw",
-              marginTop: "-200px"
+              marginTop: "-200px",
+              position: "relative",
+              zIndex: "3",
             }}
             component="img"
             src={loreIcon}
