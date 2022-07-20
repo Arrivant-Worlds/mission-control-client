@@ -43,8 +43,8 @@ export default function LORE_PAGE(props) {
         </SimpleBar>
       </Grid>
       <Typography sx={styles.welcome}>
-      {`BECOME AN
-        ELERIAN CITIZEN`}
+      {`BECOME A
+        CITIZEN OF Eluüne`}
       </Typography>
     </Grid>
   );
