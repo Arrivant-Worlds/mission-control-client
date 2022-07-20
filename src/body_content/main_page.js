@@ -26,7 +26,7 @@ import black_circle from "../images/black_circle.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
 import lore_background from "../images/floating_island_lore.png";
-import {Typewriter} from 'react-simple-typewriter';
+import { Typewriter } from "react-simple-typewriter";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -50,7 +50,7 @@ import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
-import {refreshHeaders} from "../wallet/wallet";
+import { refreshHeaders } from "../wallet/wallet";
 
 export const MAIN_PAGE = (props) => {
   const {
@@ -92,45 +92,76 @@ export const MAIN_PAGE = (props) => {
   const [volume, setVolume] = useState(1);
   // Drew's changes - sound hooks
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
-  const [playAurahTheme, {stop}] = useSound(AurahTheme, {
+  const [playAurahTheme, { stop }] = useSound(AurahTheme, {
     interrupt: true,
     volume: 0.3,
   });
-  const [playQuestOpen] = useSound(QuestOpen, { interrupt: true, volume: volume });
-  const [playQuestClose] = useSound(QuestClose, { interrupt: true, volume: volume });
-  const [playQuestHover] = useSound(QuestHover, { interrupt: true, volume: volume });
-  const [playConnectWallet] = useSound(ConnectWallet, { interrupt: true, volume: volume });
-  const [playClaimPassport] = useSound(ClaimPassport, { interrupt: true, volume: volume });
-  const [playQuestType] = useSound(QuestType, { interrupt: true, volume: volume });
-  const [playMissionsTab] = useSound(MissionsTab, { interrupt: true, volume: volume });
-  const [playLeaderboardTab] = useSound(LeaderboardTab, { interrupt: true, volume: volume });
-  const [playRewardsTab] = useSound(RewardsTab, { interrupt: true, volume: volume });
+  const [playQuestOpen] = useSound(QuestOpen, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playQuestClose] = useSound(QuestClose, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playQuestHover] = useSound(QuestHover, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playConnectWallet] = useSound(ConnectWallet, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playClaimPassport] = useSound(ClaimPassport, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playQuestType] = useSound(QuestType, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playMissionsTab] = useSound(MissionsTab, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playLeaderboardTab] = useSound(LeaderboardTab, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playRewardsTab] = useSound(RewardsTab, {
+    interrupt: true,
+    volume: volume,
+  });
   const [playEggTab] = useSound(EggTab, { interrupt: true, volume: volume });
   const [playDisconnectWallet] = useSound(DisconnectWallet, {
-    interrupt: true, volume: volume
+    interrupt: true,
+    volume: volume,
   });
-  const [playDisconnectHover] = useSound(DisconnectHover, { interrupt: true, volume: volume });
+  const [playDisconnectHover] = useSound(DisconnectHover, {
+    interrupt: true,
+    volume: volume,
+  });
   const [playMainHover] = useSound(MainHover, {
     interrupt: true,
     playbackRate,
-    volume: volume
+    volume: volume,
   });
 
   const loadUserData = async () => {
     change_loading_state(true);
     await populate_data();
     change_loading_state(false);
-  }
+  };
 
   useEffect(() => {
     if (window.location.search.length >= 3) {
       handleLinkTwitter(window.location.search);
     }
     if (!connected) {
-      navigate("/")
-      return
+      navigate("/");
+      return;
     }
-    loadUserData()
+    loadUserData();
   }, [publicKey]);
 
   const backgroundImageRender = () => {
@@ -142,18 +173,18 @@ export const MAIN_PAGE = (props) => {
   };
 
   const getWithExpiration = async () => {
-    let key = "verifyHeader"
+    let key = "verifyHeader";
     const itemStr = localStorage.getItem(key);
-    if (itemStr === null ) {
+    if (itemStr === null) {
       console.log(signMessage, publicKey, "in gwe === null");
-      let data = await refreshHeaders(signMessage, publicKey)
+      let data = await refreshHeaders(signMessage, publicKey);
       change_wallet_data(data);
       return data;
     }
     const item = JSON.parse(itemStr);
     const now = new Date();
     if (now.getTime() > item.expiry) {
-      let data = await refreshHeaders(signMessage, publicKey)
+      let data = await refreshHeaders(signMessage, publicKey);
       change_wallet_data(data);
       return data;
     }
@@ -161,26 +192,24 @@ export const MAIN_PAGE = (props) => {
   };
 
   const populate_data = async () => {
-    let header = await getWithExpiration()
-    let userPromise = get_user(header).then(
-        user => change_user_data(user)
+    let header = await getWithExpiration();
+    let userPromise = get_user(header).then((user) => change_user_data(user));
+    let leaderboardPromise = get_leaderboard(header).then((leaderboard) =>
+      change_leaderboard_data(leaderboard)
     );
-    let leaderboardPromise = get_leaderboard(header).then(
-        leaderboard => change_leaderboard_data(leaderboard)
-    )
-    let questsPromise = await get_quests(header).then(
-        quests => change_quests_data(quests)
-    )
-    let rewardsPromise = await get_rewards(header).then(
-        rewards => change_rewards_data(rewards)
+    let questsPromise = await get_quests(header).then((quests) =>
+      change_quests_data(quests)
+    );
+    let rewardsPromise = await get_rewards(header).then((rewards) =>
+      change_rewards_data(rewards)
     );
 
     await Promise.all([
       userPromise,
       leaderboardPromise,
       questsPromise,
-      rewardsPromise
-    ])
+      rewardsPromise,
+    ]);
   };
 
   const handleClick = async () => {
@@ -188,7 +217,7 @@ export const MAIN_PAGE = (props) => {
     // let header_verification = await getWithExpiration();
     // await populate_data(header_verification);
     navigate("/connect");
-  }
+  };
 
   const handleMainHover = () => {
     playMainHover();
@@ -259,7 +288,7 @@ export const MAIN_PAGE = (props) => {
     let claim;
     let header_verification = await getWithExpiration();
     claim = await claim_journey_reward(header_verification, reward_id);
-    await populate_data(header_verification)
+    await populate_data(header_verification);
 
     if (claim.length > 0 && type_reward === "soulbound") {
       let buffer = Buffer.from(claim, "base64");
@@ -332,13 +361,13 @@ export const MAIN_PAGE = (props) => {
     if (volume === 1) {
       setVolume(0);
       //stops aurah theme music;
-      stop()
+      stop();
     } else {
       setVolume(1);
       //plays aurah theme music;
       playAurahTheme();
     }
-  }
+  };
 
   const overlay_css = {
     height: "100%",
@@ -354,7 +383,7 @@ export const MAIN_PAGE = (props) => {
     width: "100vw",
     backgroundSize: "cover",
     backgroundImage: `url(${backgroundImageRender()})`,
-  }
+  };
 
   return (
     <Box loading="lazy"
@@ -385,16 +414,27 @@ export const MAIN_PAGE = (props) => {
           justifyContent="space-between"
           sx={{ position: "absolute", top: "40px", width: "90%" }}
         >
-          <Grid container direction="column" alignItems="center" sx={{width:"auto"}}>
+          <Grid
+            container
+            direction="column"
+            alignItems="center"
+            sx={{ width: "auto" }}
+          >
             <Box
               component="img"
-              sx={{ cursor: "pointer", width: '80px' }}
+              sx={{ cursor: "pointer", width: "80px" }}
               src={navIcon}
               alt="black_circle_logo"
               onClick={(e) => handleDropdownOpen(e)}
             />
-            <Icon className={volume === 0 ? "fa-solid fa-volume-off" : "fa-solid fa-volume-high"}
-              onClick={() => toggle_sound()} sx={{color: "#888888", cursor: "pointer"}}
+            <Icon
+              className={
+                volume === 0
+                  ? "fa-solid fa-volume-off"
+                  : "fa-solid fa-volume-high"
+              }
+              onClick={() => toggle_sound()}
+              sx={{ color: "#888888", cursor: "pointer" }}
             ></Icon>
           </Grid>
           <Menu
@@ -463,17 +503,17 @@ export const MAIN_PAGE = (props) => {
                       },
                     }}
                   >
-                  <Typewriter
-                    loop={1}
-                    deleteSpeed={0}
-                    words={[
-                      "A hidden world found us, and called to us. Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?"
-                    ]}
-                    cursor
-                    cursorStyle="_"
-                    typeSpeed={70}
-                    delaySpeed={500}
-                  />
+                    <Typewriter
+                      loop={1}
+                      deleteSpeed={0}
+                      words={[
+                        "A hidden world found us, and called to us. Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?",
+                      ]}
+                      cursor
+                      cursorStyle="_"
+                      typeSpeed={70}
+                      delaySpeed={500}
+                    />
                   </Box>
                 </Grid>
                 <Grid item xs={2}>
