@@ -355,7 +355,7 @@ export const MAIN_PAGE = (props) => {
         height: "100vh",
         width: "100vw",
         backgroundSize: "cover",
-        backgroundImage: `url(${backgroundImageRender()})`,
+        background: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgroundImageRender()})`,
       }}
     >
       <Box
