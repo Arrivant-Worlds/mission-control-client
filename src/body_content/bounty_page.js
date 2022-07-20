@@ -26,6 +26,11 @@ export const BOUNTY_PAGE = (props) => {
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
 
+  useEffect(() => {
+    let allActive = props.quests_data.filter((i)=>i.active_reward)
+    setClaimableCount(allActive.length);
+  }, [props.quests_data]);
+
   const handleLinkDiscord = async (token_type, access_token) => {
     let header_verification = await props.getWithExpiration("verifyHeader");
     if (!header_verification) {return}
@@ -41,6 +46,7 @@ export const BOUNTY_PAGE = (props) => {
         access_token
     );
   }
+
   useEffect(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
@@ -228,8 +234,6 @@ export const BOUNTY_PAGE = (props) => {
               dialog_data={props.dialog_data}
               set_rewards_dialog_data={props.set_rewards_dialog_data}
               change_dialog_data={props.change_dialog_data}
-              claimableCount={claimableCount}
-              set_claimable_count={setClaimableCount}
             />
           </TabPanel>
         </Grid>

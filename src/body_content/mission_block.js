@@ -12,7 +12,6 @@ export function MISSION_BLOCK(props) {
     // console.log("msakjns", props);
     // console.log("firing in mission block click");
     // props.change_dialog_data({test: "meow meow meow"});
-    console.log(props.item_data, "item_data? why?");
     props.change_dialog_data(props.item_data);
     if (props.item_data.active_reward) {
       props.set_rewards_dialog_data({

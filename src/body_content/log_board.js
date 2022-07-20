@@ -14,10 +14,6 @@ import minus from "../images/minus.png";
 export const LOG_BOARD = (props) => {
   const [expanded_tab, change_expanded_tab] = useState(true);
   // console.log(props.quests_data, "quest data");
-  useEffect(() => {
-    let allActive = props.quests_data.filter((i)=>i.active_reward)
-    props.set_claimable_count(allActive.length);
-  }, []);
   // console.log("egaaev", props);
   const handleClick = (tab) => {
     // console.log(tab, "????");
