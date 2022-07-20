@@ -8,7 +8,7 @@ import { useAnalytics } from "../mixpanel.js";
 export function MISSION_BLOCK(props) {
 
   const { track } = useAnalytics()
-  // console.log(props.item_data, "item data?");
+  console.log(props.item_data, "item data?");
   const handleOnClick = () => {
     // console.log("msakjns", props);
     // console.log("firing in mission block click");
