@@ -45,7 +45,7 @@ export const CONNECT_PAGE = (props) => {
       </Grid>
       <Grid container item xs={1} justifyContent="center" alignItems="center">
         <Typography sx={styles.connect_text}>
-          YOUR BOUNTY WILL BE PLENTIFUL.
+          Become a citizen of a new world
         </Typography>
       </Grid>
       <Grid

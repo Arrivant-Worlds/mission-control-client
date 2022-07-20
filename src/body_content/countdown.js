@@ -29,10 +29,7 @@ export const COUNTDOWN = (props) => {
 
 
   return (
-    <Grid container direction="row" justifyContent="space-between">
-      <Typography sx={{fontSize: "14px"}}>
-      {`(${props.user_data.daily_claim_remaining}/2)`}
-      </Typography>
+    <Grid container direction="row" justifyContent="flex-end" alignItems="center">
       <Typography sx={{fontSize: "14px"}}>
         {`${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}
       </Typography>

@@ -26,6 +26,7 @@ import black_circle from "../images/black_circle.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
 import lore_background from "../images/floating_island_lore.png";
+import {Typewriter} from 'react-simple-typewriter';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -436,7 +437,19 @@ export const MAIN_PAGE = (props) => {
                         fontSize: "26px",
                       },
                     }}
-                  ></Box>
+                  >
+                  <Typewriter
+                    loop={1}
+                    deleteSpeed={0}
+                    words={[
+                      "A hidden world found us, and called to us.Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?"
+                    ]}
+                    cursor
+                    cursorStyle="_"
+                    typeSpeed={70}
+                    delaySpeed={500}
+                  />
+                  </Box>
                 </Grid>
                 <Grid item xs={2}>
                   <Box
@@ -586,17 +599,7 @@ export const MAIN_PAGE = (props) => {
 
 export default memo(MAIN_PAGE);
 
-// <Typewriter
-//   loop={1}
-//   deleteSpeed={0}
-//   words={[
-//     "",
-//   ]}
-//   cursor
-//   cursorStyle="_"
-//   typeSpeed={70}
-//   delaySpeed={500}
-// />
+
 
 // <Icon className={mutedState ? "fa-solid fa-volume-off" : "fa-solid fa-volume-high"}
 //   onClick={() => toggle_sound()} sx={{color: "#888888", cursor: "pointer"}}
