@@ -386,17 +386,19 @@ export const MAIN_PAGE = (props) => {
   };
 
   return (
-    <Box
-      loading="lazy"
-      sx={
-        window.location.pathname === "/lore"
-          ? lore_object
-          : {
-              height: "100vh",
-              width: "100vw",
-              backgroundSize: "cover",
-              background: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgroundImageRender()})`,
-            }
+    <Box loading="lazy"
+      sx={window.location.pathname === "/lore" ?
+        lore_object
+        :
+        {
+          height: "100vh",
+          width: "100vw",
+          background: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgroundImageRender()})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 0",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+        }
       }
     >
       <Box
