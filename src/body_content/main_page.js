@@ -10,6 +10,7 @@ import {
   get_leaderboard,
   claim_journey_reward,
   claim_quest_reward,
+  verify_twitter,
   RPC_CONNECTION,
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
@@ -118,6 +119,9 @@ export const MAIN_PAGE = (props) => {
   }
 
   useEffect(() => {
+    if (window.location.search.length >= 3) {
+      handleLinkTwitter(window.location.search);
+    }
     if (!connected) {
       navigate("/connect")
       return
@@ -290,6 +294,20 @@ export const MAIN_PAGE = (props) => {
     }
     change_dropdown_anchor(null);
     navigate(path);
+  };
+
+  const handleLinkTwitter = async (query) => {
+    let header_verification = await getWithExpiration("verifyHeader");
+    if (!header_verification) {
+      return;
+    }
+    let headers = {
+      signedMsg: header_verification.signedMsg,
+      signature: header_verification.signature,
+      pubkey: header_verification.pubkey,
+    };
+
+    await verify_twitter(headers, query);
   };
 
   const overlay_css = {

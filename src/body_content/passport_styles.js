@@ -37,13 +37,13 @@ const styles = {
   },
   image_container: {
     width: "100%",
-    height: "200px",
+    height: "180px",
     border: "0.6413px solid #6A6A6A",
     borderRadius: "4.58071px",
   },
   passport_image: {
-    width: "120px",
-    height: "120px",
+    width: "100px",
+    height: "100px",
   },
   hr: {
     marginTop: "13px",
