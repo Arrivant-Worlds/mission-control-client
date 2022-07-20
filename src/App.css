@@ -65,18 +65,6 @@
   animation: fadeIn 2s 6s forwards;
 }
 
-.lore_text_7s {
-  animation: fadeIn 2s 7s forwards;
-}
-
-.lore_text_8s {
-  animation: fadeIn 2s 8s forwards;
-}
-
-.lore_text_9s {
-  animation: fadeIn 2s 9s forwards;
-}
-
 .MuiBadge-badge {
   height: 15px !important;
   min-width: auto !important;
