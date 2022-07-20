@@ -66,7 +66,7 @@ export default function REWARDS_DIALOG(props) {
       return (
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
-          sx={{width: "141px", height: "163px"}}
+          sx={{width: "160px", height: "160px"}}
           />
         </Grid>
       )
