@@ -22,7 +22,6 @@ import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
 import SG_logo from "../images/PE_SG_logo.png";
-import black_circle from "../images/black_circle.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
 import lore_background from "../images/floating_island_lore.png";
@@ -176,14 +175,14 @@ export const MAIN_PAGE = (props) => {
     let key = "verifyHeader";
     const itemStr = localStorage.getItem(key);
     if (itemStr === null) {
-      console.log(signMessage, publicKey, "in gwe === null");
       let data = await refreshHeaders(signMessage, publicKey);
       change_wallet_data(data);
       return data;
     }
     const item = JSON.parse(itemStr);
     const now = new Date();
-    if (now.getTime() > item.expiry) {
+
+    if (now.getTime() > item.expiry || publicKey.toString() !== item.value.pubkey) {
       let data = await refreshHeaders(signMessage, publicKey);
       change_wallet_data(data);
       return data;
