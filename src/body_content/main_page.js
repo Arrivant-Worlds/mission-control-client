@@ -282,12 +282,10 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
-    let claim;
     let header_verification = await getWithExpiration();
-    claim = await claim_journey_reward(header_verification, reward_id);
-    await populate_data(header_verification);
+    let claim = await claim_journey_reward(header_verification, reward_id);
 
-    if (claim.length > 0 && type_reward === "soulbound") {
+    if (claim.length > 0 && type_reward.type === "soulbound") {
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
 
@@ -295,6 +293,8 @@ export const MAIN_PAGE = (props) => {
     } else {
       console.log("Wrong journey reward type or claim transaction is empty");
     }
+
+    await populate_data(header_verification);
   };
 
   const handleDropdownOpen = (e) => {

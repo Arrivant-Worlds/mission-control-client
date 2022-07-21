@@ -32,16 +32,10 @@ export const BOUNTY_PAGE = (props) => {
   }, [props.quests_data]);
 
   const handleLinkDiscord = async (token_type, access_token) => {
-    let header_verification = await props.getWithExpiration("verifyHeader");
-    if (!header_verification) {return}
-    let headers = {
-      signedMsg: header_verification.signedMsg,
-      signature: header_verification.signature,
-      pubkey: header_verification.pubkey,
-    };
+    let header_verification = await props.getWithExpiration();
 
     await verify_discord(
-        headers,
+        header_verification,
         token_type,
         access_token
     );
