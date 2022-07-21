@@ -16,8 +16,7 @@ export default function REWARDS_DIALOG(props) {
   // console.log(props.rewards_dialog_data.id, "Id of current quest for dialog");
   // console.log(props.rewards_dialog_data, "rewards");
 
-  const handleOnClick = () => {
-    set_clicked_state(true);
+  const handleOnClick = async () => {
     if (props.rewards_dialog_data.type === "quest") {
       // console.log(props.rewards_dialog_data, "props??");
       props.handleClaimQuestReward(props.rewards_dialog_data.id);
@@ -35,7 +34,7 @@ export default function REWARDS_DIALOG(props) {
       //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
     } else if (props.rewards_dialog_data.type === "journey") {
-      props.handleClaimJourneyReward(
+      await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
         props.rewards_dialog_data.type_reward
       );
@@ -46,6 +45,7 @@ export default function REWARDS_DIALOG(props) {
       setPropertyIfNotExists('Journey rewards claimed', 0)
       increment('Journey rewards claimed', 1);
     }
+    set_clicked_state(true);
   };
 
   const handleOnClose = () => {
