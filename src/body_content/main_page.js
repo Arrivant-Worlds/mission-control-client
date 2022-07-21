@@ -157,7 +157,6 @@ export const MAIN_PAGE = (props) => {
       handleLinkTwitter(window.location.search);
     }
     if (!connected) {
-      navigate("/");
       return;
     }
     loadUserData();
@@ -181,7 +180,6 @@ export const MAIN_PAGE = (props) => {
     }
     const item = JSON.parse(itemStr);
     const now = new Date();
-
     if (now.getTime() > item.expiry || publicKey.toString() !== item.value.pubkey) {
       let data = await refreshHeaders(signMessage, publicKey);
       change_wallet_data(data);
