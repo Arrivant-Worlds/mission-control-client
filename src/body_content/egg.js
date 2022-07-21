@@ -29,7 +29,7 @@ export const EGG = (props) => {
           </Grid>
           <Grid>
             <Typography style={styles.text}>
-              Your elerian egg is on its way. While you wait, keep collecting XP because it may be  helpful when it arrives!
+              Your Elerian egg is on its way. While you wait, keep collecting XP because it may be  helpful when it arrives!
             </Typography>
           </Grid>
         </Grid>

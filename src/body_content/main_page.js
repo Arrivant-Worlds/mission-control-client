@@ -451,7 +451,7 @@ export const MAIN_PAGE = (props) => {
             }}
           >
             <MenuItem onClick={() => handleDropdown_navigate("elune")}>
-              Project Elune
+              Project Eluüne
             </MenuItem>
             <MenuItem onClick={() => handleDropdown_navigate("/")}>
               Home
