@@ -56,7 +56,7 @@ const styles = {
   },
   action_frame: {
     width: "100%",
-    height: "190px",
+    height: "auto",
     border: "1px solid #888888",
   },
   hr: {

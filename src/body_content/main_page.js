@@ -21,7 +21,7 @@ import LORE_PAGE from "./lore_page.js";
 import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
-import SG_logo from "../images/PE_SG_logo.png";
+import MC_logo from "../images/MC_logo.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
 import lore_background from "../images/floating_island_lore.png";
@@ -153,8 +153,22 @@ export const MAIN_PAGE = (props) => {
   };
 
   useEffect(() => {
-    if (window.location.search.length >= 3) {
+      //change this conditional to check for success in oath.
+        //fire with the query parameters?/oauth_token
+        //also trigger conditional for snackbar bar to show up saying twitter auth worked if url says finished?=true
+    if (window.location.search) {
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      });
+      // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
+      let value = params.oauth_token;
       handleLinkTwitter(window.location.search);
+      setAlertState({
+        open: true,
+        message:
+          "Twitter authentication success!",
+        severity: "success",
+      });
     }
     if (!connected) {
       return;
@@ -383,7 +397,7 @@ export const MAIN_PAGE = (props) => {
   };
 
   return (
-    <Box loading="lazy"
+    <Box
       sx={window.location.pathname === "/lore" ?
         lore_object
         :
@@ -485,7 +499,7 @@ export const MAIN_PAGE = (props) => {
                   <Box
                     sx={{
                       textTransform: "uppercase",
-                      margin: "-20px auto 0 auto",
+                      margin: "30px auto 0 auto",
                       fontSize: "18px",
                       width: "60%",
                       color: "#F6F6F6",
@@ -516,16 +530,16 @@ export const MAIN_PAGE = (props) => {
                 <Grid item xs={2}>
                   <Box
                     component="img"
-                    src={SG_logo}
+                    src={MC_logo}
                     alt="SG Logo"
                     sx={{
-                      marginTop: "-30px",
-                      width: "800px",
+                      marginTop: "-60px",
+                      width: "300px",
                       "@media screen and (max-width: 2400px)": {
-                        width: "1000px",
+                        width: "700px",
                       },
                       "@media screen and (max-width: 2100px)": {
-                        width: "900px",
+                        width: "600px",
                       },
                     }}
                   />

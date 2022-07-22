@@ -150,15 +150,7 @@ export const BOUNTY_PAGE = (props) => {
           >
             <Tab label="MISSIONS" {...a11yProps(0)} />
             <Tab label="LEADERBOARD" {...a11yProps(1)} />
-            <Tab label={
-              <Badge badgeContent={claimableCount} color="primary" {...a11yProps(2)}
-                sx={{color: tab1_value === 2 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}>LOG
-              </Badge>}
-            />
+
           </Tabs>
           <Box style={styles.bottom_border}></Box>
         </Grid>
@@ -170,7 +162,15 @@ export const BOUNTY_PAGE = (props) => {
             TabIndicatorProps={{ style: { zIndex: 2 } }}
           >
             <Tab label="REWARDS" {...a11yProps(3)} />
-            <Tab label="EGG" {...a11yProps(4)} />
+            <Tab label={
+              <Badge badgeContent={claimableCount} color="primary" {...a11yProps(4)}
+                sx={{color: tab2_value === 1 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}>LOG
+              </Badge>}
+            />
           </Tabs>
           <Box style={styles.bottom_border}></Box>
         </Grid>
@@ -213,22 +213,6 @@ export const BOUNTY_PAGE = (props) => {
             style={styles.tab_content_container}
           >
             <LEADERBOARD leaderboard_data={props.leaderboard_data} />
-          </TabPanel>
-          <TabPanel
-            value={tab1_value}
-            index={2}
-            style={styles.tab_content_container}
-          >
-            <LOG_BOARD
-              quests_data={props.quests_data}
-              playQuestType={props.playQuestType}
-              handleDialogOpen={props.handleDialogOpen}
-              handleDialogClose={props.handleDialogClose}
-              handleDialogHover={props.handleDialogHover}
-              dialog_data={props.dialog_data}
-              set_rewards_dialog_data={props.set_rewards_dialog_data}
-              change_dialog_data={props.change_dialog_data}
-            />
           </TabPanel>
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
@@ -282,7 +266,16 @@ export const BOUNTY_PAGE = (props) => {
             index={1}
             style={styles.tab_content_container}
           >
-            <EGG />
+            <LOG_BOARD
+              quests_data={props.quests_data}
+              playQuestType={props.playQuestType}
+              handleDialogOpen={props.handleDialogOpen}
+              handleDialogClose={props.handleDialogClose}
+              handleDialogHover={props.handleDialogHover}
+              dialog_data={props.dialog_data}
+              set_rewards_dialog_data={props.set_rewards_dialog_data}
+              change_dialog_data={props.change_dialog_data}
+            />
           </TabPanel>
         </Grid>
       </Grid>

@@ -52,7 +52,7 @@ export default function MISSION_DIALOG(props) {
           background: "rgba(106, 106, 106, 0.3)",
           borderRadius: "5px",
           width: "69%",
-          height: "400px",
+          height: "450px",
           maxHeight: "none",
           maxWidth: "none",
         },

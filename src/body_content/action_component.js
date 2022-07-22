@@ -30,6 +30,7 @@ export default function ACTION_COMPONENT(props) {
   // console.log(props.dialog_data, "dialog data");
 
   const [formValue, setFormValue] = useState("");
+  const [nameFormValue, setNameFormValue] = useState("");
   const [formSubmission, setFormSubmission] = useState(false);
   const [errorState, setErrorState] = useState(false);
   const [helperText, setHelperText] = useState(" ");
@@ -67,6 +68,11 @@ export default function ACTION_COMPONENT(props) {
   const handleInputChange = (e) => {
     const { value } = e.target;
     setFormValue(value);
+  };
+
+  const handleNameInputChange = (e) => {
+    const { value } = e.target;
+    setNameFormValue(value);
   };
 
   const handleTwitterClick = () => {
@@ -118,7 +124,7 @@ export default function ACTION_COMPONENT(props) {
             sx={{ height: "100%", width: "100%", padding: "10px" }}
           >
             <Typography sx={{ fontWeight: "700" }}>VERIFIED!</Typography>
-            <Typography sx={{fontSize: "18px", lineHeight: "25px"}}>
+            <Typography sx={{fontSize: "18px", lineHeight: "25px", marginBottom: "15px"}}>
               Your submission has been verified! Click the button below to claim
               your reward.
             </Typography>
@@ -158,7 +164,7 @@ export default function ACTION_COMPONENT(props) {
               height: "100%",
             }}
           >
-            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>{props.action_data.message}</Typography>
+            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px"}}>{props.action_data.message}</Typography>
             <Button
               variant="contained"
               disabled={disabled_button()}
@@ -187,9 +193,9 @@ export default function ACTION_COMPONENT(props) {
           alignItems="center"
         >
           {formSubmission ? (
-            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>Check your e-mail for verification!</Typography>
+            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px"}}>Check your e-mail for verification!</Typography>
           ) : (
-            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>
+            <Typography sx={{width: "90%", fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px"}}>
               {props.action_data.message}
             </Typography>
           )}
@@ -205,6 +211,23 @@ export default function ACTION_COMPONENT(props) {
                 flexDirection: "column",
               }}
             >
+              <TextField
+                variant="outlined"
+                name="name"
+                label="name"
+                type="text"
+                value={nameFormValue}
+                onChange={handleNameInputChange}
+                sx={{
+                  caretColor: "#F6F6F6",
+                  background: "rgba(106, 106, 106, 0.3)",
+                  width: "90%",
+                  marginBottom: "15px",
+                  input: {
+                    color: "#F6F6F6",
+                  },
+                }}
+              />
               <TextField
                 variant="outlined"
                 name="email"
@@ -266,7 +289,7 @@ export default function ACTION_COMPONENT(props) {
               height: "100%",
             }}
           >
-            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700"}}>{props.action_data.message}</Typography>
+            <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px"}}>{props.action_data.message}</Typography>
             <CONNECT_TWITTER
               disabled={disabled_button()}
               variant="contained"
@@ -290,7 +313,7 @@ export default function ACTION_COMPONENT(props) {
     }
   };
 
-  return <Box sx={{ height: "100%" }}>{type_render()}</Box>;
+  return <Box sx={{ height: "100%", padding: "15px 0px" }}>{type_render()}</Box>;
 }
 
 // <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
