@@ -31,7 +31,7 @@ export const COUNTDOWN = (props) => {
   return (
     <Grid container direction="row" justifyContent="flex-end" alignItems="center">
       <Typography sx={{fontSize: "14px"}}>
-        {`${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}
+        {`${timeLeft.hours < 10 ? "0"+timeLeft.hours : timeLeft.hours}:${timeLeft.minutes < 10 ? "0"+timeLeft.minutes : timeLeft.minutes}:${timeLeft.seconds < 10 ? "0"+timeLeft.seconds : timeLeft.seconds}`}
       </Typography>
     </Grid>
   );
