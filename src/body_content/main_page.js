@@ -156,10 +156,9 @@ export const MAIN_PAGE = (props) => {
     if (window.location.search.length >= 3) {
       handleLinkTwitter(window.location.search);
     }
-    if (!connected) {
-      return;
+    if (connected) {
+      loadUserData();
     }
-    loadUserData();
   }, [publicKey]);
 
   const backgroundImageRender = () => {
