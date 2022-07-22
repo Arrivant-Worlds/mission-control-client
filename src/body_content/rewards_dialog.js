@@ -38,12 +38,14 @@ export default function REWARDS_DIALOG(props) {
         props.rewards_dialog_data.id,
         props.rewards_dialog_data.type_reward
       );
+      set_clicked_state(true);
       // props.handleClaimJourneyReward(props.rewards_dialog_data.id);
       let now = new Date()
       setPropertyIfNotExists('First Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
       setProperty('Last Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
       setPropertyIfNotExists('Journey rewards claimed', 0)
       increment('Journey rewards claimed', 1);
+
     }
     set_clicked_state(true);
   };
@@ -72,7 +74,7 @@ export default function REWARDS_DIALOG(props) {
       )
     }
   }
-
+  console.log("props", props.rewards_dialog_data.type)
   return (
     <Dialog
       open={props.rewards_dialog_state}
