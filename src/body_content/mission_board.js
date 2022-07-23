@@ -17,6 +17,10 @@ export const MISSION_BOARD = (props) => {
 
   const handleClick = (tab) => {
     props.playQuestType();
+    if (tab === props.expanded_tab) {
+      props.change_expanded_tab("none");
+      return
+    }
     props.change_expanded_tab(tab);
   };
 

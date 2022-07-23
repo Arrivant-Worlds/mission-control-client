@@ -15,7 +15,7 @@ import {
 export default function ACTION_COMPONENT(props) {
 
   // console.log("oosoosoa", props.rewards_dialog_data);
-  console.log(props.dialog_data.active_reward === null, "???????");
+  // console.log(props.dialog_data.active_reward === null, "???????");
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",
@@ -44,10 +44,10 @@ export default function ACTION_COMPONENT(props) {
     if (props.dialog_data.user_quest_status === "Locked") {
       return true;
     } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null) {
-      console.log("hitting the correct place");
+      // console.log("hitting the correct place");
       return true;
     } else {
-      console.log("hitting...?");
+      // console.log("hitting...?");
       return false;
     }
   };

@@ -93,7 +93,7 @@ export const MAIN_PAGE = (props) => {
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
   const [playAurahTheme, { stop }] = useSound(AurahTheme, {
     interrupt: true,
-    volume: 0.3,
+    volume: (volume === 1 ? 0.3 : 0),
   });
   const [playQuestOpen] = useSound(QuestOpen, {
     interrupt: true,
@@ -170,10 +170,9 @@ export const MAIN_PAGE = (props) => {
         severity: "success",
       });
     }
-    if (!connected) {
-      return;
+    if (connected) {
+      loadUserData();
     }
-    loadUserData();
   }, [publicKey]);
 
   const backgroundImageRender = () => {
@@ -225,6 +224,7 @@ export const MAIN_PAGE = (props) => {
 
   const handleClick = async () => {
     playAurahTheme();
+    console.log(playAurahTheme, "?????");
     // let header_verification = await getWithExpiration();
     // await populate_data(header_verification);
     navigate("/connect");

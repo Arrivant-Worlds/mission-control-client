@@ -18,6 +18,7 @@ import {
 import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 import { useNavigate } from "react-router";
+import {useWallet} from "@solana/wallet-adapter-react";
 
 export const BOUNTY_PAGE = (props) => {
   const [tab1_value, tab1_setValue] = useState(0);
@@ -25,15 +26,14 @@ export const BOUNTY_PAGE = (props) => {
   const navigate = useNavigate()
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
-
+  const { wallet, publicKey } = useWallet();
   useEffect(() => {
-    let allActive = props.quests_data.filter((i)=>i.active_reward)
+    let allActive = props.quests_data.filter((i)=> i.active_reward)
     setClaimableCount(allActive.length);
   }, [props.quests_data]);
 
   const handleLinkDiscord = async (token_type, access_token) => {
     let header_verification = await props.getWithExpiration();
-
     await verify_discord(
         header_verification,
         token_type,
@@ -45,10 +45,10 @@ export const BOUNTY_PAGE = (props) => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
     let discordAccessToken = tokenType && accessToken
-    if (discordAccessToken) {
+    if (discordAccessToken && publicKey) {
       handleLinkDiscord(tokenType, accessToken)
     }
-  }, [])
+  }, [publicKey])
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0") {
