@@ -17,6 +17,7 @@ export default function REWARDS_DIALOG(props) {
   // console.log(props.rewards_dialog_data, "rewards");
 
   const handleOnClick = async () => {
+    set_clicked_state(true);
     if (props.rewards_dialog_data.type === "quest") {
       // console.log(props.rewards_dialog_data, "props??");
       props.handleClaimQuestReward(props.rewards_dialog_data.id);
@@ -45,7 +46,6 @@ export default function REWARDS_DIALOG(props) {
       setPropertyIfNotExists('Journey rewards claimed', 0)
       increment('Journey rewards claimed', 1);
     }
-    set_clicked_state(true);
   };
 
   const handleOnClose = () => {

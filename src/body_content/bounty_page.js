@@ -121,9 +121,9 @@ export const BOUNTY_PAGE = (props) => {
   };
 
   const container_style = {
-    backgroundImage: `url(${bounty_frame})`,
-    backgroundPosition: "center",
-    backgroundSize: "cover",
+    // backgroundImage: `url(${bounty_frame})`,
+    // backgroundPosition: "center",
+    // backgroundSize: "cover",
     width: "87%",
   };
 

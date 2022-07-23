@@ -24,7 +24,7 @@ import { Routes, Route } from "react-router-dom";
 import MC_logo from "../images/MC_logo.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
-import lore_background from "../images/floating_island_lore.png";
+import lore_background from "../images/lore_background.jpeg";
 import { Typewriter } from "react-simple-typewriter";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
