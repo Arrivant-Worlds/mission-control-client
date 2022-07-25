@@ -1,4 +1,3 @@
-import SelectInput from "@mui/material/Select/SelectInput";
 import axios from "axios";
 import queryString from "query-string";
 import { Connection } from "@solana/web3.js";
@@ -171,6 +170,20 @@ export const claim_journey_reward = async (payload, reward_id) => {
   } catch (errors) {
     console.error(errors);
     return [];
+  }
+};
+
+export const transmit_signed_quest_reward_tx_to_server = async (payload, serializedTX, reward_id) => {
+  try {
+    const response = await axios.post(
+        `${BASE_URL}/journeyRewards/${reward_id}/transmit`,
+        {tx: serializedTX},
+        { headers: payload }
+    );
+    return response
+  } catch (errors) {
+    console.error(errors);
+    return null;
   }
 };
 

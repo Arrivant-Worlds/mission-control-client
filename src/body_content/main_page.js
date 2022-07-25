@@ -11,7 +11,7 @@ import {
   claim_journey_reward,
   claim_quest_reward,
   verify_twitter,
-  RPC_CONNECTION,
+  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server,
 } from "./../api_calls";
 import CONNECT_PAGE from "./connect_page.js";
 import BOUNTY_PAGE from "./bounty_page.js";
@@ -58,7 +58,7 @@ export const MAIN_PAGE = (props) => {
     publicKey,
     connected,
     disconnect,
-    sendTransaction,
+    signTransaction,
   } = useWallet();
   let navigate = useNavigate();
   const [wallet_data, change_wallet_data] = useState(null);
@@ -291,8 +291,8 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimQuestReward = async (reward_id) => {
     let header_verification = await getWithExpiration();
-    let claim = await claim_quest_reward(header_verification, reward_id);
-    let retrieve_user = await populate_data(header_verification);
+    await claim_quest_reward(header_verification, reward_id);
+    await populate_data(header_verification);
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
@@ -302,8 +302,13 @@ export const MAIN_PAGE = (props) => {
     if (claim.length > 0 && type_reward.type === "soulbound") {
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
-
-      let sig = await sendTransaction(tx, RPC_CONNECTION);
+      const signedTX = await signTransaction(tx)
+      const dehydratedTx = signedTX.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false
+      })
+      const serializedTX = dehydratedTx.toString('base64')
+      await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
     } else {
       console.log("Wrong journey reward type or claim transaction is empty");
     }
