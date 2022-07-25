@@ -21,11 +21,16 @@ export function MISSION_BLOCK(props) {
       })
     }
     props.handleDialogOpen();
-    track('View Mission',{
-      event_category: 'Missions',
-      event_label: `${props.item_data.title}`,
-      current_user_level: `${props.item_data}`
-    })
+    try{
+      track('View Mission',{
+        event_category: 'Missions',
+        event_label: `${props.item_data.title}`,
+        current_user_level: `${props.item_data}`
+      })
+    } catch(err){
+      console.log("mixpanel ERR", err)
+    }
+    
   };
 
   const handleOnHover = () => {

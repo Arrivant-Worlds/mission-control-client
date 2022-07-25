@@ -6,20 +6,37 @@ import Icon from "@mui/material/Icon";
 import white_chest from "../images/chest.png";
 import grey_chest from "../images/grey_chest.png";
 import { claim_reward } from "./../api_calls";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import styles from "./rewards_block_styles.js";
 
 export const REWARDS_BLOCK = (props) => {
   // props.item_data.claimed_status = "claimable";
-  // console.log(props.item_data, "reward data?");
+  console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
-    if (state) {
+    console.log("passing", state)
+    if (state === "claimable") {
+      return (
+        <Box
+        component="img"
+        src={white_chest}
+        alt="chest symbol"
+        style={styles.chest_symbol}
+      />
+       
+      );
+      
+    } else if (state === "processing") {
+      console.log("processing")
+      return (
+        <CircularProgress></CircularProgress>
+      )
+    } else if (state === "locked") {
       return (
         <Box
           component="img"
-          src={white_chest}
+          src={grey_chest}
           alt="chest symbol"
           style={styles.chest_symbol}
         />
@@ -27,13 +44,13 @@ export const REWARDS_BLOCK = (props) => {
     } else {
       return (
         <Icon className={"fa-solid fa-check"}
-          style={{
-          color: "#888888",
-          display: "flex",
-          justifyContent: "center",
-          fontSize: "20px",
-        }}></Icon>
-      );
+        style={{
+        color: "#888888",
+        display: "flex",
+        justifyContent: "center",
+        fontSize: "20px",
+      }}></Icon>
+      )
     }
   };
 
@@ -124,7 +141,7 @@ export const REWARDS_BLOCK = (props) => {
           </Typography>
         </Grid>
         <Grid container item xs={1}>
-          {render_chest_image(props.item_data.claimed_status === "claimable")}
+          {render_chest_image(props.item_data.claimed_status)}
         </Grid>
       </Grid>
     </Grid>
