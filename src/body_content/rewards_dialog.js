@@ -137,7 +137,7 @@ export default function REWARDS_DIALOG(props) {
             {
               renderReward()
             }
-            <Typography sx={styles.title}>Claim your Soulbound Badge!</Typography>
+            <Typography sx={styles.title}>Claim your reward!</Typography>
             <Button sx={styles.button} onClick={() => handleOnClick()}>
               CLAIM REWARD
             </Button>
