@@ -95,13 +95,14 @@ export default function ACTION_COMPONENT(props) {
         props.setActionDone(true);
         let email_submission = await submit_email(
           header_verification,
-          formValue
+          formValue,
+          nameFormValue
         );
       } else {
         let sign_request = await props.sign_message();
         setFormSubmission(true);
         props.setActionDone(true);
-        let email_submission = await submit_email(sign_request, formValue);
+        let email_submission = await submit_email(sign_request, formValue, nameFormValue);
       }
     } else {
       setErrorState(true);
