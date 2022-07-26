@@ -254,6 +254,15 @@ export const BOUNTY_PAGE = (props) => {
               top: "-1px"
               }}/>
             <PASSPORT user_data={props.user_data} />
+            <Box sx={{
+              background: "linear-gradient(270deg, rgba(230, 178, 185, 0) 0%, #E6B2B9 25%, #E6B2B9 75%, rgba(230, 178, 185, 0) 100%)",
+              opacity: "0.9",
+              boxShadow: "0px 0px 13.7421px 0.916143px #E6B1B8",
+              height: "1px",
+              width: "100%",
+              position: "absolute",
+              bottom: "-1px"
+              }}/>
             <Box/>
           </Box>
         </Grid>
