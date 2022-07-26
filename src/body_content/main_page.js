@@ -21,6 +21,7 @@ import LORE_PAGE from "./lore_page.js";
 import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
+import Typography from "@mui/material/Typography";
 import MC_logo from "../images/MC_logo.png";
 import ripple_diamond from "../images/ripple_diamond.png";
 import background from "../images/MissionControl_HQ_background.jpg";
@@ -167,7 +168,7 @@ export const MAIN_PAGE = (props) => {
         open: true,
         message:
           "Twitter authentication success!",
-        severity: "success",
+        severity: "warning",
       });
     }
     if (connected) {
@@ -269,7 +270,7 @@ export const MAIN_PAGE = (props) => {
         open: true,
         message:
           "Verification of mission can take up to 60 seconds! Come back and check the Log tab to claim your reward!",
-        severity: "success",
+        severity: "warning",
       });
     }
     let header_verification = await getWithExpiration();
@@ -296,6 +297,12 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
+    setAlertState({
+      open: true,
+      message:
+        "Claiming requires .03 SOL!",
+      severity: "warning",
+    });
     let header_verification = await getWithExpiration();
     let claim = await claim_journey_reward(header_verification, reward_id);
 
@@ -309,6 +316,12 @@ export const MAIN_PAGE = (props) => {
       })
       const serializedTX = dehydratedTx.toString('base64')
       await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+      setAlertState({
+        open: true,
+        message:
+          "Soulbound transactions may take up to one minute!",
+        severity: "warning",
+      });
     } else {
       console.log("Wrong journey reward type or claim transaction is empty");
     }
@@ -397,6 +410,7 @@ export const MAIN_PAGE = (props) => {
   const lore_object = {
     height: "100vh",
     width: "100vw",
+    position: "relative",
     backgroundSize: "cover",
     backgroundImage: `url(${backgroundImageRender()})`,
   };
@@ -407,6 +421,7 @@ export const MAIN_PAGE = (props) => {
         lore_object
         :
         {
+          position: "relative",
           height: "100vh",
           width: "100vw",
           background: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgroundImageRender()})`,
@@ -622,6 +637,7 @@ export const MAIN_PAGE = (props) => {
                 handleDialogHover={handleDialogHover}
                 rewards_dialog_data={rewards_dialog_data}
                 set_rewards_dialog_data={set_rewards_dialog_data}
+                setAlertState={setAlertState}
               />
             }
           />
@@ -673,6 +689,14 @@ export const MAIN_PAGE = (props) => {
           set_rewards_dialog_data={set_rewards_dialog_data}
         />
         <SNACKBAR alertState={alertState} setAlertState={setAlertState} />
+        <Typography sx={{
+          position: "absolute",
+          bottom: "40px",
+          fontSize: "12px",
+          lineHeight: "15px",
+          letterSpacing: "0.1em",
+          color: "#FFFFFF",
+        }}>EARLY ACCESS</Typography>
       </Box>
     </Box>
   );

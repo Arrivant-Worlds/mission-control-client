@@ -47,6 +47,12 @@ export const BOUNTY_PAGE = (props) => {
     let discordAccessToken = tokenType && accessToken
     if (discordAccessToken && publicKey) {
       handleLinkDiscord(tokenType, accessToken)
+      props.setAlertState({
+        open: true,
+        message:
+          "Discord authentication success!",
+        severity: "warning",
+      });
     }
   }, [publicKey])
 
@@ -164,7 +170,7 @@ export const BOUNTY_PAGE = (props) => {
             <Tab label="REWARDS" {...a11yProps(3)} />
             <Tab label={
               <Badge badgeContent={claimableCount} color="primary" {...a11yProps(4)}
-                sx={{color: tab2_value === 1 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}
+                sx={{color: tab2_value === 1 || claimableCount > 0 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right',

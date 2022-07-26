@@ -145,11 +145,11 @@ export const verify_discord = async (headers, token_type, access_token) => {
   );
 }
 
-export const submit_email = async (payload, email_string, name) => {
+export const submit_email = async (payload, email_string, name_string) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/quests/registerEmail`,
-      { email: email_string, name:name },
+      { email: email_string, name: name_string },
       { headers: payload }
     );
     return response.data;

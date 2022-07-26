@@ -32,6 +32,7 @@ export default function CLAIM_SOULBOUND(props) {
     // user signs trx
     await signTransaction(tx);
     console.log("signed tx", tx);
+    //setalert for snackbar that it may take 1 min. 
     // broadcast trx to solana
     let sig = await sendTransaction(tx, connection);
     console.log("signature", sig);
