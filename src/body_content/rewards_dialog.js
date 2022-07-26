@@ -28,10 +28,15 @@ export default function REWARDS_DIALOG(props) {
         xp: props.rewards_dialog_data.xp,
       })
       let now = new Date()
-      setPropertyIfNotExists('First Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
-      setProperty('Last Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
-      setPropertyIfNotExists('Missions done', 0)
-      increment('Missions done', 1);
+      try{
+        setPropertyIfNotExists('First Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+        setProperty('Last Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+        setPropertyIfNotExists('Missions done', 0)
+        increment('Missions done', 1);
+      } catch(err){
+        console.log("MIXPANEL ERR", err)
+      }
+
       //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
     } else if (props.rewards_dialog_data.type === "journey") {
@@ -42,10 +47,15 @@ export default function REWARDS_DIALOG(props) {
       set_clicked_state(true);
       // props.handleClaimJourneyReward(props.rewards_dialog_data.id);
       let now = new Date()
-      setPropertyIfNotExists('First Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
-      setProperty('Last Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
-      setPropertyIfNotExists('Journey rewards claimed', 0)
-      increment('Journey rewards claimed', 1);
+      try{
+        setPropertyIfNotExists('First Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+        setProperty('Last Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+        setPropertyIfNotExists('Journey rewards claimed', 0)
+        increment('Journey rewards claimed', 1);
+      } catch(err){
+        console.log("MIXPANEL ERR", err)
+      }
+
 
     }
   };
@@ -124,10 +134,10 @@ export default function REWARDS_DIALOG(props) {
             justifyContent="space-around"
             alignItems="center"
           >
-            <Typography sx={styles.title}>Congratulations!</Typography>
             {
               renderReward()
             }
+            <Typography sx={styles.title}>Claim your reward!</Typography>
             <Button sx={styles.button} onClick={() => handleOnClick()}>
               CLAIM REWARD
             </Button>
