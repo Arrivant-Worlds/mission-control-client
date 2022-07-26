@@ -297,6 +297,12 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
+    setAlertState({
+      open: true,
+      message:
+        "Claiming requires .03 SOL!",
+      severity: "warning",
+    });
     let header_verification = await getWithExpiration();
     let claim = await claim_journey_reward(header_verification, reward_id);
 
@@ -313,7 +319,7 @@ export const MAIN_PAGE = (props) => {
       setAlertState({
         open: true,
         message:
-          "Souldbound transactions may take up to one minute!",
+          "Soulbound transactions may take up to one minute!",
         severity: "warning",
       });
     } else {

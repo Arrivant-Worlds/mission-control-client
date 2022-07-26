@@ -69,14 +69,23 @@ export default function REWARDS_DIALOG(props) {
   const renderReward = () => {
     if (props.rewards_dialog_data.type === "quest") {
       return (
-        <Typography
-          sx={styles.text}
-        >{`+${props.rewards_dialog_data.xp} xp`}</Typography>
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+          <Typography sx={styles.title}>Claim your reward!</Typography>
+          <Typography
+            sx={styles.text}
+          >{`+${props.rewards_dialog_data.xp} xp`}</Typography>
+        </Grid>
       )
     }
     else {
       return (
         <Grid container direction="column" justifyContent="center" alignItems="center">
+          {
+            props.rewards_dialog_data.type === "soulbound" ?
+            <Typography sx={styles.title}>Claim your Soulbound Badge!</Typography>
+            :
+            null
+          }
           <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
           sx={{width: "160px", height: "160px"}}
           />
@@ -137,7 +146,6 @@ export default function REWARDS_DIALOG(props) {
             {
               renderReward()
             }
-            <Typography sx={styles.title}>Claim your reward!</Typography>
             <Button sx={styles.button} onClick={() => handleOnClick()}>
               CLAIM REWARD
             </Button>
