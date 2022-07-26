@@ -14,7 +14,7 @@ export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
   // console.log(props.rewards_dialog_data.id, "Id of current quest for dialog");
-  // console.log(props.rewards_dialog_data, "rewards");
+  // console.log(props.rewards_dialog_data, "rewards dialog");
 
   const handleOnClick = async () => {
     set_clicked_state(true);
@@ -69,7 +69,7 @@ export default function REWARDS_DIALOG(props) {
   const renderReward = () => {
     if (props.rewards_dialog_data.type === "quest") {
       return (
-        <Grid container direction="column" justifyContent="center" alignItems="center">
+        <Grid container direction="column" justifyContent="space-between" alignItems="center">
           <Typography sx={styles.title}>Claim your reward!</Typography>
           <Typography
             sx={styles.text}
@@ -79,15 +79,15 @@ export default function REWARDS_DIALOG(props) {
     }
     else {
       return (
-        <Grid container direction="column" justifyContent="center" alignItems="center">
+        <Grid container direction="column" justifyContent="space-between" alignItems="center">
           {
-            props.rewards_dialog_data.type === "soulbound" ?
-            <Typography sx={styles.title}>Claim your Soulbound Badge!</Typography>
+            props.rewards_dialog_data.type === "journey" ?
+            <Typography sx={styles.title}>{props.rewards_dialog_data.description}</Typography>
             :
             null
           }
           <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
-          sx={{width: "160px", height: "160px"}}
+          sx={{width: "160px", height: "160px", marginTop: "20px"}}
           />
         </Grid>
       )
@@ -112,7 +112,7 @@ export default function REWARDS_DIALOG(props) {
         },
       }}
     >
-      <DialogContent sx={{ height: "100%" }}>
+      <DialogContent sx={{ height: "350px" }}>
         {clicked_state && props.rewards_dialog_data.type === "journey" ? (
           <Grid
             container
@@ -132,7 +132,7 @@ export default function REWARDS_DIALOG(props) {
             sx={{width: "141px", height: "163px"}}
             />
             <Button sx={styles.button} onClick={() => handleOnClose()}>
-              {props.rewards_dialog_data.rewards.type === "CatchingAbility" ? `LET'S GO`: `BACK TO DASHBOARD`}
+              {props.rewards_dialog_data.type_reward.type === "CatchingAbility" ? `LET'S GO`: `BACK TO DASHBOARD`}
             </Button>
           </Grid>
         ) : (

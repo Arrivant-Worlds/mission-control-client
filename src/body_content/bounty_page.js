@@ -27,10 +27,17 @@ export const BOUNTY_PAGE = (props) => {
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   const { wallet, publicKey } = useWallet();
+
   useEffect(() => {
     let allActive = props.quests_data.filter((i)=> i.active_reward)
     setClaimableCount(allActive.length);
   }, [props.quests_data]);
+
+  useEffect(() => {
+    if (props.welcome_popup) {
+      props.handleWelcomeOpen();
+    }
+  }, [props.welcome_popup])
 
   const handleLinkDiscord = async (token_type, access_token) => {
     let header_verification = await props.getWithExpiration();
@@ -237,7 +244,26 @@ export const BOUNTY_PAGE = (props) => {
             alt="lore_icon"
           />
           <Box style={styles.center_panel_container}>
+            <Box sx={{
+              background: "linear-gradient(270deg, rgba(230, 178, 185, 0) 0%, #E6B2B9 25%, #E6B2B9 75%, rgba(230, 178, 185, 0) 100%)",
+              opacity: "0.9",
+              height: "1px",
+              width: "70%",
+              boxShadow: "0px 0px 13.7421px 0.916143px #E6B1B8",
+              position: "absolute",
+              top: "-1px"
+              }}/>
             <PASSPORT user_data={props.user_data} />
+            <Box sx={{
+              background: "linear-gradient(270deg, rgba(230, 178, 185, 0) 0%, #E6B2B9 25%, #E6B2B9 75%, rgba(230, 178, 185, 0) 100%)",
+              opacity: "0.9",
+              boxShadow: "0px 0px 13.7421px 0.916143px #E6B1B8",
+              height: "1px",
+              width: "100%",
+              position: "absolute",
+              bottom: "-1px"
+              }}/>
+            <Box/>
           </Box>
         </Grid>
         <Grid

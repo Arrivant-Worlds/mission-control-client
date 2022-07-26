@@ -1,10 +1,10 @@
 const styles = {
   passport_container: {
-    width: "260px",
-    height: "387px",
-    border: "1px solid #888888",
+    width: "270px",
+    height: "397px",
+    border: "5px solid grey",
     borderRadius: "4.58071px 61.3816px 4.58071px 4.58071px",
-    marginLeft: "5px",
+    // marginLeft: "5px",
     padding: "10px 23px",
   },
   title: {

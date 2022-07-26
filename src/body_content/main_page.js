@@ -17,6 +17,7 @@ import CONNECT_PAGE from "./connect_page.js";
 import BOUNTY_PAGE from "./bounty_page.js";
 import MISSION_DIALOG from "./mission_dialog.js";
 import REWARDS_DIALOG from "./rewards_dialog.js";
+import WELCOME_DIALOG from "./welcome_dialog.js";
 import LORE_PAGE from "./lore_page.js";
 import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
@@ -88,6 +89,7 @@ export const MAIN_PAGE = (props) => {
     severity: undefined,
   });
   const [actionDone, setActionDone] = useState(false);
+  const [welcome_popup, setWelcome_popup] = useState(false);
 
   const [volume, setVolume] = useState(1);
   // Drew's changes - sound hooks
@@ -204,7 +206,13 @@ export const MAIN_PAGE = (props) => {
 
   const populate_data = async () => {
     let header = await getWithExpiration();
-    let userPromise = get_user(header).then((user) => change_user_data(user));
+    let userPromise = get_user(header).then((user) => {
+      //see what user is?
+      if (user.welcome) {
+        setWelcome_popup(true);
+      }
+      change_user_data(user);
+    });
     let leaderboardPromise = get_leaderboard(header).then((leaderboard) =>
       change_leaderboard_data(leaderboard)
     );
@@ -288,6 +296,14 @@ export const MAIN_PAGE = (props) => {
     change_dialog_state(false);
     let header_verification = await getWithExpiration();
     await populate_data(header_verification);
+  };
+
+  const handleWelcomeOpen = () => {
+    setWelcome_popup(true);
+  };
+
+  const handleWelcomeClose = async () => {
+    setWelcome_popup(false);
   };
 
   const handleClaimQuestReward = async (reward_id) => {
@@ -638,6 +654,8 @@ export const MAIN_PAGE = (props) => {
                 rewards_dialog_data={rewards_dialog_data}
                 set_rewards_dialog_data={set_rewards_dialog_data}
                 setAlertState={setAlertState}
+                welcome_popup={welcome_popup}
+                handleWelcomeOpen={handleWelcomeOpen}
               />
             }
           />
@@ -688,15 +706,19 @@ export const MAIN_PAGE = (props) => {
           rewards_dialog_data={rewards_dialog_data}
           set_rewards_dialog_data={set_rewards_dialog_data}
         />
+        <WELCOME_DIALOG
+          handleWelcomeClose={handleWelcomeClose}
+          welcome_popup={welcome_popup}
+        />
         <SNACKBAR alertState={alertState} setAlertState={setAlertState} />
         <Typography sx={{
           position: "absolute",
           bottom: "40px",
-          fontSize: "12px",
+          fontSize: "20px",
           lineHeight: "15px",
           letterSpacing: "0.1em",
           color: "#FFFFFF",
-        }}>EARLY ACCESS</Typography>
+        }}>EARLY ALPHA ACCESS</Typography>
       </Box>
     </Box>
   );
