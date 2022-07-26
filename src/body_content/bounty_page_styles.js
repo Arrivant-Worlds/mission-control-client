@@ -28,8 +28,10 @@ const styles = {
     marginBottom: "23px",
     marginLeft: "2px",
     display: "flex",
+    flexDirection: "column",
     justiftContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
+    position: "relative",
   },
   tab_label_grid: {
     position: "relative",

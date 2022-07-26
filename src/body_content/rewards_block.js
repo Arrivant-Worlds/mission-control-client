@@ -11,11 +11,11 @@ import styles from "./rewards_block_styles.js";
 
 export const REWARDS_BLOCK = (props) => {
   // props.item_data.claimed_status = "claimable";
-  console.log(props.item_data, "reward data?");
+  // console.log(props.item_data, "reward data?");
   // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
-    console.log("passing", state)
+    // console.log("passing", state)
     if (state === "claimable") {
       return (
         <Box
@@ -24,9 +24,9 @@ export const REWARDS_BLOCK = (props) => {
         alt="chest symbol"
         style={styles.chest_symbol}
       />
-       
+
       );
-      
+
     } else if (state === "processing") {
       console.log("processing")
       return (
@@ -60,7 +60,7 @@ export const REWARDS_BLOCK = (props) => {
       id: props.item_data.id,
       type: "journey",
       type_reward: props.item_data.rewards,
-      // type_reward: props.item_data.rewards.type,
+      description: props.item_data.description,
     });
     props.handleRewardsOpen(true);
   };

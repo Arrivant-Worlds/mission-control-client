@@ -22,9 +22,10 @@ export const get_user = async (payload) => {
     return response.data;
   } catch (errors) {
     //console.error(errors.response.data);
-    if (errors.response.status == 404) {
+    if (errors.response.status == 747) {
       const create_user_call = await create_user(payload);
-      return create_user_call;
+      create_user_call.welcome = true;
+      return create_user_call.data;
     } else {
       return {
         xp: 0,
