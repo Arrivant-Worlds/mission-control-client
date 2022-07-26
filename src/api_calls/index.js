@@ -19,13 +19,15 @@ export const create_user = async (payload) => {
 export const get_user = async (payload) => {
   try {
     const response = await axios.get(`${BASE_URL}/users`, { headers: payload });
-    return response.data;
+    return await response.data;
   } catch (errors) {
     //console.error(errors.response.data);
     if (errors.response.status == 747) {
       const create_user_call = await create_user(payload);
+      console.log(create_user_call, "return from create_user before attempt");
       create_user_call.welcome = true;
-      return create_user_call.data;
+      console.log(create_user_call, "return from create_user after attempt");
+      return await create_user_call;
     } else {
       return {
         xp: 0,
