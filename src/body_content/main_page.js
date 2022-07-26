@@ -167,7 +167,7 @@ export const MAIN_PAGE = (props) => {
         open: true,
         message:
           "Twitter authentication success!",
-        severity: "success",
+        severity: "warning",
       });
     }
     if (connected) {
@@ -269,7 +269,7 @@ export const MAIN_PAGE = (props) => {
         open: true,
         message:
           "Verification of mission can take up to 60 seconds! Come back and check the Log tab to claim your reward!",
-        severity: "success",
+        severity: "warning",
       });
     }
     let header_verification = await getWithExpiration();
@@ -304,6 +304,13 @@ export const MAIN_PAGE = (props) => {
       const tx = Transaction.from(buffer);
 
       let sig = await sendTransaction(tx, RPC_CONNECTION);
+      //might be wrong place?
+      setAlertState({
+        open: true,
+        message:
+          "Souldbound transactions may take up to one minute!",
+        severity: "warning",
+      });
     } else {
       console.log("Wrong journey reward type or claim transaction is empty");
     }

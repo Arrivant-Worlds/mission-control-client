@@ -86,7 +86,7 @@ export default function ACTION_COMPONENT(props) {
   const handleEmailSubmit = async (event) => {
     event.preventDefault();
     let emailForm = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (emailForm.test(formValue)) {
+    if (emailForm.test(formValue) && nameFormValue !== "") {
       setErrorState(false);
       setHelperText(" ");
       let header_verification = await props.getWithExpiration("verifyHeader");
@@ -95,13 +95,14 @@ export default function ACTION_COMPONENT(props) {
         props.setActionDone(true);
         let email_submission = await submit_email(
           header_verification,
-          formValue
+          formValue,
+          nameFormValue
         );
       } else {
         let sign_request = await props.sign_message();
         setFormSubmission(true);
         props.setActionDone(true);
-        let email_submission = await submit_email(sign_request, formValue);
+        let email_submission = await submit_email(sign_request, formValue, nameFormValue);
       }
     } else {
       setErrorState(true);

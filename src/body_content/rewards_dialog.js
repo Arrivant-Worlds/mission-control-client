@@ -67,7 +67,7 @@ export default function REWARDS_DIALOG(props) {
     else {
       return (
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
+          <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
           sx={{width: "160px", height: "160px"}}
           />
         </Grid>
@@ -107,13 +107,13 @@ export default function REWARDS_DIALOG(props) {
               textAlign: "center",
               color: "#F6F6F6",}}
             >
-              SOULBOUND CLAIMED
+              {props.rewards_dialog_data.description !== "" ? props.rewards_dialog_data.description : "KEEP IT UP!"}
             </Typography>
-            <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="badge_img"
+            <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
             sx={{width: "141px", height: "163px"}}
             />
             <Button sx={styles.button} onClick={() => handleOnClose()}>
-              DASHBOARD
+              {props.rewards_dialog_data.rewards.type === "CatchingAbility" ? `LET'S GO`: `BACK TO DASHBOARD`}
             </Button>
           </Grid>
         ) : (
