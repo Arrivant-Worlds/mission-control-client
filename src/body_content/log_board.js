@@ -39,7 +39,7 @@ export const LOG_BOARD = (props) => {
           <Box style={expanded_tab ? styles.content_container : styles.hidden}
           >
             {
-              props.quests_data.map((item, i) => {
+              props.quests_data.filter((a, b) => a.rewards > b.rewards ? 1 : -1).map((item, i) => {
                 if (item.active_reward || item.user_quest_status === "Complete") {
                   return (
                     <MISSION_BLOCK

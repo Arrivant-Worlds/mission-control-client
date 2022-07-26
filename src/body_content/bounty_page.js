@@ -47,6 +47,12 @@ export const BOUNTY_PAGE = (props) => {
     let discordAccessToken = tokenType && accessToken
     if (discordAccessToken && publicKey) {
       handleLinkDiscord(tokenType, accessToken)
+      props.setAlertState({
+        open: true,
+        message:
+          "Discord authentication success!",
+        severity: "warning",
+      });
     }
   }, [publicKey])
 
