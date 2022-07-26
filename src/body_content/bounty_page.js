@@ -51,7 +51,7 @@ export const BOUNTY_PAGE = (props) => {
         open: true,
         message:
           "Discord authentication success!",
-        severity: "warning",
+        severity: "success",
       });
     }
   }, [publicKey])

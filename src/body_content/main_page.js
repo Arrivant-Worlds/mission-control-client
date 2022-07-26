@@ -168,7 +168,7 @@ export const MAIN_PAGE = (props) => {
         open: true,
         message:
           "Twitter authentication success!",
-        severity: "warning",
+        severity: "success",
       });
     }
     if (connected) {
