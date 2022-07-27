@@ -95,8 +95,8 @@ export const MAIN_PAGE = (props) => {
   const [volume, setVolume] = useState(1);
   // Drew's changes - sound hooks
   const [playbackRate, setPlaybackRate] = React.useState(0.7);
-  const [playAurahTheme, { stop }] = useSound(AurahTheme, {
-    interrupt: true,
+  const [playAurahTheme, { pause }] = useSound(AurahTheme, {
+    interrupt: false,
     volume: (volume === 1 ? 0.3 : 0),
   });
   const [playQuestOpen] = useSound(QuestOpen, {
@@ -236,7 +236,6 @@ export const MAIN_PAGE = (props) => {
 
   const handleClick = async () => {
     playAurahTheme();
-    console.log(playAurahTheme, "?????");
     // let header_verification = await getWithExpiration();
     // await populate_data(header_verification);
     navigate("/connect");
@@ -409,7 +408,7 @@ export const MAIN_PAGE = (props) => {
     if (volume === 1) {
       setVolume(0);
       //stops aurah theme music;
-      stop();
+      pause();
     } else {
       setVolume(1);
       //plays aurah theme music;
@@ -503,9 +502,12 @@ export const MAIN_PAGE = (props) => {
             <MenuItem onClick={() => handleDropdown_navigate("elune")}>
               Project Eluüne
             </MenuItem>
-            <MenuItem onClick={() => handleDropdown_navigate("/")}>
+            { window.location.pathname !== "/" ?
+              <MenuItem onClick={() => handleDropdown_navigate("/")}>
               Home
-            </MenuItem>
+              </MenuItem>
+              : null
+            }
             <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>
               Dashboard
             </MenuItem>

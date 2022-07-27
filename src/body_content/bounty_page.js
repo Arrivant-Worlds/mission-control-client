@@ -229,7 +229,7 @@ export const BOUNTY_PAGE = (props) => {
             <LEADERBOARD leaderboard_data={props.leaderboard_data} />
           </TabPanel>
         </Grid>
-        <Grid container item xs={4} justifyContent="center" alignItems="center">
+        <Grid container item xs={4} direction="column" alignItems="center">
           <Box
             onMouseEnter = {props.handleMainHover}
             onClick = {()=>{ navigate('/lore')}}
@@ -237,7 +237,8 @@ export const BOUNTY_PAGE = (props) => {
               // height: "10vh",
               cursor: "pointer",
               width: "8vw",
-              marginTop: "-200px",
+              marginTop: "-100px",
+              marginBottom: "50px",
               position: "relative",
               zIndex: "3",
             }}
