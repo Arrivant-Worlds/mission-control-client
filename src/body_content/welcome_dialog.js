@@ -17,6 +17,10 @@ export default function WELCOME_DIALOG(props) {
 
   const handleOnClick = (state) => {
     if (state === "next") {
+      if (page_state === 2) {
+        props.handleWelcomeClose();
+        return;
+      }
       set_page_state(page_state+1);
     } else {
       set_page_state(page_state-1);
@@ -24,7 +28,7 @@ export default function WELCOME_DIALOG(props) {
   };
 
   const handleOnClose = () => {
-    props.handleRewardsClose();
+    props.handleWelcomeClose();
   };
 
   const renderContent = () => {

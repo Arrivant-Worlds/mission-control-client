@@ -34,10 +34,10 @@ export const BOUNTY_PAGE = (props) => {
   }, [props.quests_data]);
 
   useEffect(() => {
-    if (props.welcome_popup) {
+    if (props.welcome_popup_flag) {
       props.handleWelcomeOpen();
     }
-  }, [props.welcome_popup])
+  }, [props.welcome_popup_flag])
 
   const handleLinkDiscord = async (token_type, access_token) => {
     let header_verification = await props.getWithExpiration();

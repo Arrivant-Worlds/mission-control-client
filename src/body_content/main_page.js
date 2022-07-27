@@ -89,6 +89,7 @@ export const MAIN_PAGE = (props) => {
     severity: undefined,
   });
   const [actionDone, setActionDone] = useState(false);
+  const [welcome_popup_flag, setWelcome_popup_flag] = useState(false);
   const [welcome_popup, setWelcome_popup] = useState(false);
 
   const [volume, setVolume] = useState(1);
@@ -206,28 +207,30 @@ export const MAIN_PAGE = (props) => {
 
   const populate_data = async () => {
     let header = await getWithExpiration();
-    let userPromise = get_user(header).then((user) => {
+    let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
+      console.log(user, "user after get_user");
       if (user.welcome) {
-        setWelcome_popup(true);
+        console.log("hit in user.welcome");
+      setWelcome_popup_flag(true);
       }
       change_user_data(user);
+      let leaderboardPromise = await get_leaderboard(header).then((leaderboard) =>
+        change_leaderboard_data(leaderboard)
+      );
+      let questsPromise = await get_quests(header).then((quests) =>
+        change_quests_data(quests)
+      );
+      let rewardsPromise = await get_rewards(header).then((rewards) =>
+        change_rewards_data(rewards)
+      );
     });
-    let leaderboardPromise = get_leaderboard(header).then((leaderboard) =>
-      change_leaderboard_data(leaderboard)
-    );
-    let questsPromise = await get_quests(header).then((quests) =>
-      change_quests_data(quests)
-    );
-    let rewardsPromise = await get_rewards(header).then((rewards) =>
-      change_rewards_data(rewards)
-    );
 
     await Promise.all([
       userPromise,
-      leaderboardPromise,
-      questsPromise,
-      rewardsPromise,
+      // leaderboardPromise,
+      // questsPromise,
+      // rewardsPromise,
     ]);
   };
 
@@ -654,7 +657,7 @@ export const MAIN_PAGE = (props) => {
                 rewards_dialog_data={rewards_dialog_data}
                 set_rewards_dialog_data={set_rewards_dialog_data}
                 setAlertState={setAlertState}
-                welcome_popup={welcome_popup}
+                welcome_popup_flag={welcome_popup_flag}
                 handleWelcomeOpen={handleWelcomeOpen}
               />
             }
