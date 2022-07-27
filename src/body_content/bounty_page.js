@@ -230,6 +230,7 @@ export const BOUNTY_PAGE = (props) => {
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
           <Box
+            onMouseEnter = {props.handleMainHover}
             onClick = {()=>{ navigate('/lore')}}
             sx={{
               // height: "10vh",

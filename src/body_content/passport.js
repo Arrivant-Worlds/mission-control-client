@@ -29,7 +29,7 @@ const PASSPORT = (props) => {
         issued: {props.user_data.issued_at}
       </Typography>
       <Typography style={styles.date}>
-        Arrival Status: {props.user_data.arrivalStatus}
+        Badge Status: {props.user_data.arrivalStatus}
       </Typography>
       <Grid
         container
