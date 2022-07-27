@@ -183,6 +183,7 @@ export const BOUNTY_PAGE = (props) => {
                   horizontal: 'right',
                 }}>LOG
               </Badge>}
+              {...a11yProps(4)}
             />
           </Tabs>
           <Box style={styles.bottom_border}></Box>
