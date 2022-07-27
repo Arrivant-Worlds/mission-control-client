@@ -209,9 +209,9 @@ export const MAIN_PAGE = (props) => {
     let header = await getWithExpiration();
     let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
-      console.log(user, "user after get_user");
+      // console.log(user, "user after get_user");
       if (user.welcome) {
-        console.log("hit in user.welcome");
+        // console.log("hit in user.welcome");
       setWelcome_popup_flag(true);
       }
       change_user_data(user);
@@ -316,16 +316,16 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
-    setAlertState({
-      open: true,
-      message:
-        "Claiming requires .03 SOL!",
-      severity: "warning",
-    });
     let header_verification = await getWithExpiration();
     let claim = await claim_journey_reward(header_verification, reward_id);
 
     if (claim.length > 0 && type_reward.type === "soulbound") {
+      setAlertState({
+        open: true,
+        message:
+          "Claiming requires .03 SOL!",
+        severity: "warning",
+      });
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
       const signedTX = await signTransaction(tx)
@@ -539,7 +539,6 @@ export const MAIN_PAGE = (props) => {
                     sx={{
                       textTransform: "uppercase",
                       margin: "30px auto 0 auto",
-                      fontSize: "18px",
                       width: "60%",
                       color: "#F6F6F6",
                       "@media screen and (max-width: 2400px)": {
@@ -553,17 +552,7 @@ export const MAIN_PAGE = (props) => {
                       },
                     }}
                   >
-                    <Typewriter
-                      loop={1}
-                      deleteSpeed={0}
-                      words={[
-                        "A hidden world found us, and called to us. Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?",
-                      ]}
-                      cursor
-                      cursorStyle="_"
-                      typeSpeed={70}
-                      delaySpeed={500}
-                    />
+                    <Typography className="lore_text" sx={{opacity: "0", fontSize:"18px"}}>"A hidden world found us, and called to us. Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?"</Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={2}>
@@ -659,6 +648,7 @@ export const MAIN_PAGE = (props) => {
                 setAlertState={setAlertState}
                 welcome_popup_flag={welcome_popup_flag}
                 handleWelcomeOpen={handleWelcomeOpen}
+                handleMainHover={handleMainHover}
               />
             }
           />
@@ -728,3 +718,16 @@ export const MAIN_PAGE = (props) => {
 };
 
 export default memo(MAIN_PAGE);
+
+// //typewriter
+// <Typewriter
+//   loop={1}
+//   deleteSpeed={0}
+//   words={[
+//     "A hidden world found us, and called to us. Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?",
+//   ]}
+//   cursor
+//   cursorStyle="_"
+//   typeSpeed={70}
+//   delaySpeed={500}
+// />

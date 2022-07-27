@@ -30,7 +30,9 @@ export const REWARDS_BLOCK = (props) => {
     } else if (state === "processing") {
       console.log("processing")
       return (
-        <CircularProgress></CircularProgress>
+        <Box sx={{display: "flex"}}>
+          <CircularProgress size={20}/>
+        </Box>
       )
     } else if (state === "locked") {
       return (

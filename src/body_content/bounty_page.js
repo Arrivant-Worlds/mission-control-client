@@ -183,6 +183,7 @@ export const BOUNTY_PAGE = (props) => {
                   horizontal: 'right',
                 }}>LOG
               </Badge>}
+              {...a11yProps(4)}
             />
           </Tabs>
           <Box style={styles.bottom_border}></Box>
@@ -230,6 +231,7 @@ export const BOUNTY_PAGE = (props) => {
         </Grid>
         <Grid container item xs={4} justifyContent="center" alignItems="center">
           <Box
+            onMouseEnter = {props.handleMainHover}
             onClick = {()=>{ navigate('/lore')}}
             sx={{
               // height: "10vh",

@@ -24,9 +24,9 @@ export const get_user = async (payload) => {
     //console.error(errors.response.data);
     if (errors.response.status == 747) {
       const create_user_call = await create_user(payload);
-      console.log(create_user_call, "return from create_user before attempt");
+      // console.log(create_user_call, "return from create_user before attempt");
       create_user_call.welcome = true;
-      console.log(create_user_call, "return from create_user after attempt");
+      // console.log(create_user_call, "return from create_user after attempt");
       return await create_user_call;
     } else {
       return {
