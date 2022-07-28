@@ -125,6 +125,7 @@ export default function MISSION_DIALOG(props) {
                   action_data={props.dialog_data.action}
                   getWithExpiration={props.getWithExpiration}
                   sign_message={props.sign_message}
+                  user_data = {props.user_data}
                   handleTwitterButton={props.handleTwitterButton}
                   handleDialogHover={props.handleDialogHover}
                   actionDone={props.actionDone}
