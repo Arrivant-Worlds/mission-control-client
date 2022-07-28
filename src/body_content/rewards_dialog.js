@@ -129,7 +129,7 @@ export default function REWARDS_DIALOG(props) {
               textAlign: "center",
               color: "#F6F6F6",}}
             >
-              {props.rewards_dialog_data.description !== "" ? props.rewards_dialog_data.description : "KEEP IT UP!"}
+              KEEP IT UP!
             </Typography>
             <Button sx={styles.button} onClick={() => handleOnClose()}>
               {props.rewards_dialog_data.type_reward.type === "CatchingAbility" ? `LET'S GO`: `BACK TO DASHBOARD`}
