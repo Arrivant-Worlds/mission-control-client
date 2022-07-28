@@ -302,6 +302,7 @@ export const BOUNTY_PAGE = (props) => {
             style={styles.tab_content_container}
           >
             <LOG_BOARD
+              user_data={props.user_data}
               quests_data={props.quests_data}
               playQuestType={props.playQuestType}
               handleDialogOpen={props.handleDialogOpen}

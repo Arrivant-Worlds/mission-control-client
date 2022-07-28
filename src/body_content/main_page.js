@@ -440,6 +440,7 @@ export const MAIN_PAGE = (props) => {
         :
         {
           position: "relative",
+          minHeight: "750px",
           height: "100vh",
           width: "100vw",
           background: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), url(${backgroundImageRender()})`,

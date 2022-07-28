@@ -40,7 +40,6 @@ export default function ACTION_COMPONENT(props) {
     if (props.dialog_data.daily_claim_remaining === 0 && props.dialog_data.recurrence !== "prime") {
       return true;
     }
-
     if (props.dialog_data.user_quest_status === "Locked") {
       return true;
     } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null) {

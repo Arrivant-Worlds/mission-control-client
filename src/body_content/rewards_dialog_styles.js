@@ -6,6 +6,7 @@ const styles = {
     textAlign: "center",
     color: "#F6F6F6",
     width: "70%",
+    marginBottom: "20px",
   },
   text: {
     fontWeight: "400",
@@ -18,7 +19,6 @@ const styles = {
     color: "black",
     fontSize: "14px",
     fontWeight: "700",
-    width: "40%",
     backgroundColor: "#F6F6F6",
     "&:hover": { backgroundColor: "rgba(246, 246, 246, 0.4)"}
   }
