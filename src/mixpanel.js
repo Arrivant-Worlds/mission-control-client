@@ -107,9 +107,7 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
   useEffect(() => {
     if (!trackingInitialized && MIXPANEL_TOKEN) {
       initializeTracking();
-    } else if (trackingInitialized) {
-      resetTracking();
-    }
+    } 
     /*eslint-disable*/
 
   }, [trackingInitialized]);
