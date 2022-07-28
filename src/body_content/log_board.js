@@ -14,7 +14,7 @@ import minus from "../images/minus.png";
 export const LOG_BOARD = (props) => {
   const [expanded_tab, change_expanded_tab] = useState(true);
   // console.log(props.quests_data, "quest data");
-  console.log(props.user_data, "user data");
+  // console.log(props.user_data, "user data");
   // console.log("egaaev", props);
   const handleClick = (tab) => {
     // console.log(tab, "????");
@@ -51,6 +51,7 @@ export const LOG_BOARD = (props) => {
                     handleDialogHover={props.handleDialogHover}
                     set_rewards_dialog_data = {props.set_rewards_dialog_data}
                     user_data={props.user_data}
+                    setAlertState={props.setAlertState}
                     />
                   )
                 } else {

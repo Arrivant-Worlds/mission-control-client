@@ -6,7 +6,6 @@ import styles from "./mission_block_styles.js";
 import { useAnalytics } from "../mixpanel.js";
 
 export function MISSION_BLOCK(props) {
-
   const { track } = useAnalytics()
   const handleOnClick = () => {
     // console.log("msakjns", props);
@@ -21,6 +20,13 @@ export function MISSION_BLOCK(props) {
       })
     }
     props.handleDialogOpen();
+    if (props.user_data.daily_claim_remaining === 0 && props.item_data.active_reward !== null) {
+      props.setAlertState({
+        open: true,
+        message: "Daily claim limit reached! Come back tomorrow!",
+        severity: "error",
+      });
+    }
     try{
       track('View Mission',{
         event_category: 'Missions',
@@ -74,7 +80,7 @@ export function MISSION_BLOCK(props) {
       //however if daily limit is at capped
         //render greyed out version.
       if (props.user_data.daily_claim_remaining === 0) {
-        console.log("meow");
+        console.log("locked reward because of claim limit");
       } else {
         let style_name = `claim_${section}`;
         return styles[style_name];

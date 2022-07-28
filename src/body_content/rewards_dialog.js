@@ -14,7 +14,6 @@ export default function REWARDS_DIALOG(props) {
   const [clicked_state, set_clicked_state] = useState(false);
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
   // console.log(props.rewards_dialog_data.id, "Id of current quest for dialog");
-  // console.log(props.rewards_dialog_data, "rewards dialog");
 
   const handleOnClick = async () => {
     set_clicked_state(true);

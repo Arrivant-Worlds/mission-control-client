@@ -219,6 +219,7 @@ export const BOUNTY_PAGE = (props) => {
               handleDialogHover={props.handleDialogHover}
               dialog_data={props.dialog_data}
               change_dialog_data={props.change_dialog_data}
+              setAlertState={props.setAlertState}
             />
           </TabPanel>
           <TabPanel
@@ -311,6 +312,7 @@ export const BOUNTY_PAGE = (props) => {
               dialog_data={props.dialog_data}
               set_rewards_dialog_data={props.set_rewards_dialog_data}
               change_dialog_data={props.change_dialog_data}
+              setAlertState={props.setAlertState}
             />
           </TabPanel>
         </Grid>
