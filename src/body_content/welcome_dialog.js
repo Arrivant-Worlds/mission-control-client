@@ -16,6 +16,7 @@ export default function WELCOME_DIALOG(props) {
   const [page_state, set_page_state] = useState(0);
 
   const handleOnClick = (state) => {
+    props.playQuestOpen();
     if (state === "next") {
       if (page_state === 2) {
         props.handleWelcomeClose();

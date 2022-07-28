@@ -37,7 +37,7 @@ export default function ACTION_COMPONENT(props) {
 
   const disabled_button = () => {
     //need to add or for when a user has claimed 2 for a day already.
-    if (props.dialog_data.daily_claim_remaining === 0 && props.dialog_data.recurrence !== "prime") {
+    if (props.dialog_data.daily_claim_remaining === 0 && props.dialog_data.recurrence === "daily") {
       return true;
     }
     if (props.dialog_data.user_quest_status === "Locked") {

@@ -79,12 +79,12 @@ export function MISSION_BLOCK(props) {
     } else if (props.item_data.active_reward) {
       //however if daily limit is at capped
         //render greyed out version.
-      if (props.user_data.daily_claim_remaining === 0) {
-        console.log("locked reward because of claim limit");
-      } else {
-        let style_name = `claim_${section}`;
-        return styles[style_name];
-      }
+      // if (props.user_data.daily_claim_remaining === 0) {
+      //   console.log("locked reward because of claim limit");
+      // } else {
+      let style_name = `claim_${section}`;
+      return styles[style_name];
+      // }
     } else if (props.item_data.user_quest_status === "Complete" && props.item_data.active_reward === null) {
       let style_name = `complete_${section}`;
       return styles[style_name];
