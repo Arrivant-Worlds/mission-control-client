@@ -69,6 +69,9 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
       mixpanel.people.set_once({
         pubkey,
       });
+      mixpanel.people.set({
+        "Relogin Date": new Date().toString(),
+      });
     }
     if (debugAnalytics) {
       console.log('identify', pubkey, integrations);
