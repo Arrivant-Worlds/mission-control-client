@@ -27,6 +27,7 @@ export const BOUNTY_PAGE = (props) => {
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   const { wallet, publicKey } = useWallet();
+  console.log(props.rewards_data, "in bounty");
 
   useEffect(() => {
     let allActive = props.quests_data.filter((i)=> i.active_reward)

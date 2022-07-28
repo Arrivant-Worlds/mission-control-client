@@ -6,7 +6,10 @@ import SimpleBar from 'simplebar-react';
 import styles from './rewards_styles.js';
 import REWARDS_BLOCK from "./rewards_block.js";
 
+const render_priority = {claimable: 1, default: 2};
+
 export const REWARDS = (props) => {
+
   // console.log(props.user_data);
   // console.log(props.rewards_data);
 
@@ -22,7 +25,13 @@ export const REWARDS = (props) => {
           <Box style={styles.content_container}
           >
             {
-              props.rewards_data.map((item, i) => {
+              [...props.rewards_data].sort((a,b) => {
+                if (a.claimed_status === "claimable" || b.claimed_status === "claimable") {
+                  return (render_priority[a.claimed_status] || render_priority.default) - (render_priority[b.claimed_status] || render_priority.default) || a.claimed_status > b.claimed_status || -(a.claimed_status < b.claimed_status);
+                } else {
+                  return a.requiredLevel - b.requiredLevel;
+                }
+              }).map((item, i) => {
                 return (
                   <REWARDS_BLOCK item_data={item} key={i} user_data={props.user_data} sign_message={props.sign_message}
                   getWithExpiration={props.getWithExpiration} loading_state={props.loading_state} change_loading_state={props.change_loading_state} populate_data={props.populate_data}
