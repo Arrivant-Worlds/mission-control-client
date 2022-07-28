@@ -705,6 +705,7 @@ export const MAIN_PAGE = (props) => {
         <WELCOME_DIALOG
           handleWelcomeClose={handleWelcomeClose}
           welcome_popup={welcome_popup}
+          playQuestOpen={playQuestOpen}
         />
         <SNACKBAR alertState={alertState} setAlertState={setAlertState} />
         <Typography sx={{

@@ -16,20 +16,20 @@ export const LOG_BOARD = (props) => {
   // console.log(props.quests_data, "quest data");
   // console.log(props.user_data, "user data");
   // console.log("egaaev", props);
-  const organized_array = props.quests_data.sort((a, b) => {
-    if (a.active_reward === null) {
-      return 1;
-    }
-
-    if (b.active_reward === null) {
-      return -1;
-    }
-
-    if (a.active_reward === b.active_reward) {
-      return 0;
-    }
-
-    return a.active_reward > b.active_reward ? 1 : -1});
+  // const organized_array = props.quests_data.sort((a, b) => {
+  //   if (a.active_reward === null) {
+  //     return 1;
+  //   }
+  //
+  //   if (b.active_reward === null) {
+  //     return -1;
+  //   }
+  //
+  //   if (a.active_reward === b.active_reward) {
+  //     return 0;
+  //   }
+  //
+  //   return a.active_reward > b.active_reward ? 1 : -1});
 
   const handleClick = (tab) => {
     // console.log(tab, "????");
@@ -55,7 +55,7 @@ export const LOG_BOARD = (props) => {
           <Box style={expanded_tab ? styles.content_container : styles.hidden}
           >
             {
-              organized_array.map((item, i) => {
+              props.quests_data.map((item, i) => {
                 if (item.active_reward || item.user_quest_status === "Complete") {
                   return (
                     <MISSION_BLOCK
