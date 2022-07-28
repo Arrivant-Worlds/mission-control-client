@@ -80,15 +80,15 @@ export default function REWARDS_DIALOG(props) {
     else {
       return (
         <Grid container direction="column" justifyContent="space-between" alignItems="center">
+          <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
+          sx={{width: "200px", height: "200px", marginBottom: "20px"}}
+          />
           {
             props.rewards_dialog_data.type === "journey" ?
             <Typography sx={styles.title}>{props.rewards_dialog_data.description}</Typography>
             :
             null
           }
-          <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
-          sx={{width: "160px", height: "160px", marginTop: "20px"}}
-          />
         </Grid>
       )
     }
@@ -112,14 +112,18 @@ export default function REWARDS_DIALOG(props) {
         },
       }}
     >
-      <DialogContent sx={{ height: "350px" }}>
+      <DialogContent sx={{ height: "100%" }}>
         {clicked_state && props.rewards_dialog_data.type === "journey" ? (
           <Grid
+            sx={{ height: "100%" }}
             container
             direction="column"
             justifyContent="space-around"
             alignItems="center"
           >
+            <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
+            sx={{width: "200px", height: "200px"}}
+            />
             <Typography sx={{fontWeight: "700",
               fontSize: "18px",
               lineHeight: "25px",
@@ -128,9 +132,6 @@ export default function REWARDS_DIALOG(props) {
             >
               {props.rewards_dialog_data.description !== "" ? props.rewards_dialog_data.description : "KEEP IT UP!"}
             </Typography>
-            <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
-            sx={{width: "141px", height: "163px"}}
-            />
             <Button sx={styles.button} onClick={() => handleOnClose()}>
               {props.rewards_dialog_data.type_reward.type === "CatchingAbility" ? `LET'S GO`: `BACK TO DASHBOARD`}
             </Button>
