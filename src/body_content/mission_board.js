@@ -44,8 +44,14 @@ export const MISSION_BOARD = (props) => {
               props.quests_data.map((item, i) => {
                 if (item.recurrence === "prime" && !item.active_reward && item.user_quest_status !== "Complete") {
                   return (
-                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
+                    <MISSION_BLOCK item_data={item} key={i}
+                    handleDialogOpen={props.handleDialogOpen}
+                    dialog_data={props.dialog_data}
+                    change_dialog_data={props.change_dialog_data}
+                    handleDialogHover={props.handleDialogHover}
+                    user_data={props.user_data}
+                    setAlertState={props.setAlertState}
+                    />
                   )
                 } else {
                   return null;
@@ -78,8 +84,15 @@ export const MISSION_BOARD = (props) => {
               props.quests_data.map((item, i) => {
                 if (item.recurrence === "daily" && !item.active_reward && item.user_quest_status !== "Complete") {
                   return (
-                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                    handleDialogClose={props.handleDialogClose} dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
+                    <MISSION_BLOCK item_data={item} key={i}
+                    handleDialogOpen={props.handleDialogOpen}
+                    handleDialogClose={props.handleDialogClose}
+                    dialog_data={props.dialog_data}
+                    change_dialog_data={props.change_dialog_data}
+                    handleDialogHover={props.handleDialogHover}
+                    user_data={props.user_data}
+                    setAlertState={props.setAlertState}
+                    />
                   )
                 } else {
                   return null;
@@ -129,8 +142,14 @@ export const MISSION_BOARD = (props) => {
               props.quests_data.map((item, i) => {
                 if (item.recurrence === "weekly" && !item.active_reward && item.user_quest_status !== "Complete") {
                   return (
-                    <MISSION_BLOCK item_data={item} key={i} handleDialogOpen={props.handleDialogOpen}
-                    dialog_data={props.dialog_data} change_dialog_data={props.change_dialog_data} handleDialogHover={props.handleDialogHover}/>
+                    <MISSION_BLOCK item_data={item} key={i}
+                    handleDialogOpen={props.handleDialogOpen}
+                    dialog_data={props.dialog_data}
+                    change_dialog_data={props.change_dialog_data}
+                    handleDialogHover={props.handleDialogHover}
+                    user_data={props.user_data}
+                    setAlertState={props.setAlertState}
+                    />
                   )
                 } else {
                   return null;

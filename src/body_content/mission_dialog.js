@@ -19,9 +19,6 @@ export default function MISSION_DIALOG(props) {
   //snackbar notifies user it may take some time after click of action button.
   //when they return to mission dialog.
   //quest_user_status is in dialog data.
-  //action component needs 5th state for claim reward mode.
-  //click opens up secondary confirm dialog can test with current dialog?
-  //claim has not been implemented.
 
   const renderIcon = () => {
     if (props.dialog_data.platform === "Discord") {
