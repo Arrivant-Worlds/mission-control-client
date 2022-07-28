@@ -680,6 +680,7 @@ export const MAIN_PAGE = (props) => {
           change_dialog_state={change_dialog_state}
           dialog_data={dialog_data}
           change_dialog_data={change_dialog_data}
+          user_data = {user_data}
           actionDone={actionDone}
           setActionDone={setActionDone}
           alertState={alertState}
