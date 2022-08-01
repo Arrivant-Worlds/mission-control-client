@@ -555,7 +555,7 @@ export const MAIN_PAGE = (props) => {
                       },
                     }}
                   >
-                    <Typography className="lore_text" sx={{opacity: "0", fontSize:"18px"}}>"A hidden world found us, and called to us. Your time has come to found a new nation—a new frontier abound with riches, adventure, and danger. The time has come to leave your mark on a better future. Will you answer the call?"</Typography>
+                    <Typography className="lore_text" sx={{opacity: "0", fontSize:"18px"}}>A hidden world found us — and calls to us. Your time has come. To found a new nation. To brave a new frontier abound with riches, adventure, and danger. The moment has arrived to leave your mark on a better future. Will you answer the call?</Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={2}>
