@@ -90,6 +90,7 @@ export const MAIN_PAGE = (props) => {
   });
   const [actionDone, setActionDone] = useState(false);
   const [welcome_popup_flag, setWelcome_popup_flag] = useState(false);
+  const [claim_tutorial_flag, setClaim_tutorial_flag] = useState(false);
   const [welcome_popup, setWelcome_popup] = useState(false);
 
   const [volume, setVolume] = useState(1);
@@ -213,6 +214,7 @@ export const MAIN_PAGE = (props) => {
       if (user.welcome) {
         // console.log("hit in user.welcome");
       setWelcome_popup_flag(true);
+      setClaim_tutorial_flag(true);
       }
       change_user_data(user);
       let leaderboardPromise = await get_leaderboard(header).then((leaderboard) =>
@@ -652,6 +654,8 @@ export const MAIN_PAGE = (props) => {
                 welcome_popup_flag={welcome_popup_flag}
                 handleWelcomeOpen={handleWelcomeOpen}
                 handleMainHover={handleMainHover}
+                claim_tutorial_flag={claim_tutorial_flag}
+                setClaim_tutorial_flag={setClaim_tutorial_flag}
               />
             }
           />

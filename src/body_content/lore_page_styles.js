@@ -51,8 +51,8 @@ const styles = {
     textTransform: "uppercase",
     color: "#F6F6F6",
     position: "absolute",
-    left: "180px",
-    top: "160px",
+    left: "80px",
+    top: "60px",
     whiteSpace: "pre-line",
   }
 }
