@@ -39,11 +39,11 @@ export default function REWARDS_DIALOG(props) {
       //rework higher level function using this id
       //perhaps split journey reward claim and quest claim and conditional to see which to fire.
     } else if (props.rewards_dialog_data.type === "journey") {
+      // set_clicked_state(true);
       await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
         props.rewards_dialog_data.type_reward
       );
-      set_clicked_state(true);
       // props.handleClaimJourneyReward(props.rewards_dialog_data.id);
       let now = new Date()
       try{

@@ -32,12 +32,26 @@ export const BOUNTY_PAGE = (props) => {
   useEffect(() => {
     let allActive = props.quests_data.filter((i)=> i.active_reward)
     setClaimableCount(allActive.length);
+    if (props.claim_tutorial_flag) {
+      //open snackbar
+        //set flag to false.
+      props.setAlertState({
+        open: true,
+        message:
+          "After your complete missions, check the Log tab to claim rewards!",
+        severity: "success",
+      });
+      props.setClaim_tutorial_flag(false);
+      return;
+    }
   }, [props.quests_data]);
 
   useEffect(() => {
     if (props.welcome_popup_flag) {
       props.handleWelcomeOpen();
+      return;
     }
+
   }, [props.welcome_popup_flag])
 
   const handleLinkDiscord = async (token_type, access_token) => {

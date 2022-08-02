@@ -12,8 +12,10 @@ import minus from "../images/minus.png";
 // import weekly_mission_data from "./weekly_mission_data.js";
 // import prime_mission_data from "./prime_mission_data.js";
 
+const render_priority = ["link_discord","link_email","link_twitter"];
+
 export const MISSION_BOARD = (props) => {
-  // console.log(props.quests_data, "quest data");
+  console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.playQuestType();
@@ -41,7 +43,11 @@ export const MISSION_BOARD = (props) => {
           <Box style={props.expanded_tab === "prime" ? styles.content_container : styles.hidden}
           >
             {
-              props.quests_data.map((item, i) => {
+              [...props.quests_data].sort((a,b) => {
+                    let index1 = render_priority.indexOf(a.type);
+                    let index2 = render_priority.indexOf(b.type);
+                    return index1 == -1 ? 1 : index2 == -1 ? -1 : index1 - index2;
+                }).map((item, i) => {
                 if (item.recurrence === "prime" && !item.active_reward && item.user_quest_status !== "Complete") {
                   return (
                     <MISSION_BLOCK item_data={item} key={i}

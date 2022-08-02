@@ -8,7 +8,7 @@ import styles from "./lore_page_styles.js";
 export default function LORE_PAGE(props) {
 
   return (
-    <Grid container direction="row" justifyContent="flex-end" sx={{width: "90%", marginTop: "50px"}}>
+    <Grid container direction="row" justifyContent="flex-end" sx={{width: "90%", marginTop: "50px", position: "relative"}}>
       <Grid sx={styles.text_container}>
         <SimpleBar style={styles.scroll_container}>
           <Grid sx={styles.inner_text_container} container direction="column" justifyContent="space-between">
@@ -36,7 +36,7 @@ export default function LORE_PAGE(props) {
       <Typography sx={styles.welcome}>
       {`BECOME A
         CITIZEN OF Eluüne`}
-      </Typography>
+        </Typography>
     </Grid>
   );
 }
