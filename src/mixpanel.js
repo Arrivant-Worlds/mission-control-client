@@ -65,9 +65,11 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
       mixpanel: !!MIXPANEL_TOKEN,
     };
     if (MIXPANEL_TOKEN) {
-      mixpanel.identify(pubkey);
       mixpanel.people.set_once({
         pubkey,
+      });
+      mixpanel.people.set({
+        "Relogin Date": new Date().toString(),
       });
     }
     if (debugAnalytics) {
@@ -107,9 +109,7 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
   useEffect(() => {
     if (!trackingInitialized && MIXPANEL_TOKEN) {
       initializeTracking();
-    } else if (trackingInitialized) {
-      resetTracking();
-    }
+    } 
     /*eslint-disable*/
 
   }, [trackingInitialized]);
