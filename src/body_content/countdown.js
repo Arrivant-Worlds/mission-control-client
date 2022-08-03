@@ -7,7 +7,7 @@ export const COUNTDOWN = (props) => {
   // console.log(props.user_data, "user data?");
 
   const calculateTimeLeft = () => {
-    const difference = Math.abs(+new Date("2030-07-18T00:00:00-07:00") - +new Date());
+    const difference = Math.abs(+new Date("2030-07-18T00:00:00+0000") - +new Date());
     let timeLeft = {};
     if (difference > 0) {
       timeLeft = {
