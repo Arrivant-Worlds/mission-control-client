@@ -151,11 +151,24 @@ export const MAIN_PAGE = (props) => {
     volume: volume,
   });
 
+  const [doesLedgerExist, setDoesLedgerExist] = useState(false)
+
   const loadUserData = async () => {
     change_loading_state(true);
+    toggleOnLedger()
     await populate_data();
     change_loading_state(false);
   };
+
+  const toggleOnLedger = () => {
+    setDoesLedgerExist(true);
+    localStorage.setItem("isLedger", true)
+  }
+
+  const toggleOffLedger = () => {
+    setDoesLedgerExist(false);
+    localStorage.setItem("isLedger", false)
+  }
 
   useEffect(() => {
       //change this conditional to check for success in oath.
@@ -188,13 +201,15 @@ export const MAIN_PAGE = (props) => {
     }
   };
 
-  const getWithExpiration = async (ledgerExists) => {
+  const getWithExpiration = async () => {
     let key = "verifyHeader";
+    let ledgerKey = "isLedger"
     const itemStr = localStorage.getItem(key);
     if (itemStr === null) {
       let data
+      let ledgerExists = localStorage.getItem(ledgerKey);
       if(!ledgerExists) data = await refreshHeaders(signMessage, publicKey); 
-      else data = await refreshHeadersLedger(signTransaction, publicKey) 
+      else if(ledgerExists) data = await refreshHeadersLedger(signTransaction, publicKey) 
       change_wallet_data(data);
       return data;
     }
@@ -208,8 +223,9 @@ export const MAIN_PAGE = (props) => {
     return item.value;
   };
 
-  const populate_data = async (doesLedgerExist) => {
-    let header = await getWithExpiration( doesLedgerExist );
+  const populate_data = async () => {
+    let header = await getWithExpiration();
+    
     let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
       // console.log(user, "user after get_user");
