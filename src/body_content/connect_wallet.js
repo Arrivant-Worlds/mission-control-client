@@ -16,12 +16,12 @@ import {
 } from "./../api_calls";
 import { decodeUTF8 } from "tweetnacl-util";
 import styles from "./connect_wallet_styles.js";
-
+import  {createLedgerEmptyTX} from "../wallet/wallet.js"
 export default function CONNECT_WALLET(props) {
   let navigate = useNavigate();
-  const { wallet, signMessage, publicKey, connected } = useWallet();
+  const { wallet, signMessage, signTransaction ,publicKey, connected } = useWallet();
 
-  const getData = async (wal, sig, pkey) => {
+  const getData = async (wal, sig, pkey, signTx) => {
     if (props.wallet_data.signedMsg) {
       //use external function for signing?
       //check local storage/if wallet data exists
@@ -35,13 +35,41 @@ export default function CONNECT_WALLET(props) {
       // // console.log(window.localStorage.getItem('signature_time'));
       let signedMsg = now.toString();
       const encodedMsg = decodeUTF8(signedMsg);
-      const signature = await sig(encodedMsg);
+      let isLedger = window.localStorage.getItem("isLedger");
+      let auto_approve = window.localStorage.getItem("auto_approve");
 
-      const payload = {
-        signedMsg: signedMsg,
-        signature: JSON.stringify(Array.from(signature)),
-        pubkey: pkey.toString(),
-      };
+      let payload;
+      if(isLedger) { 
+        let ledgerTransaction = await createLedgerEmptyTX(pkey)
+        let signedTX = (await signTx(ledgerTransaction)); 
+        const dehydratedTx = signedTX.serialize({
+          requireAllSignatures: false,
+          verifySignatures: false
+        })
+        const serializedTX = dehydratedTx.toString('base64')
+
+        payload = {
+          auto_approve: auto_approve,
+          signedMsg: signedMsg,
+          transaction: serializedTX,
+          isLedger: true,
+          signature: JSON.stringify(Array.from(signedTX.signature)),
+          pubkey: pkey.toString(),
+        };
+      }
+      else {
+        let signature = await sig(encodedMsg)
+        payload = {
+          auto_approve: auto_approve,
+          signedMsg: signedMsg,
+          isLedger: false,
+          signature: JSON.stringify(Array.from(signature)),
+          pubkey: pkey.toString(),
+        };
+      }
+
+
+    
       //get user
       // const user_data = await get_user(payload);
       let user = get_user(payload);
@@ -86,7 +114,7 @@ export default function CONNECT_WALLET(props) {
     <Box style={styles.button_container}>
       {!props.wallet_data.signedMsg ? (
         <WalletMultiButton
-          onClick={() => getData(wallet, signMessage, publicKey)}
+          onClick={() => getData(wallet, signMessage, publicKey, signTransaction)}
           onMouseEnter={() => handleConnectHover()}
         >
           CONNECT WALLET

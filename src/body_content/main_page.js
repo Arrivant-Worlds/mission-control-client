@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
-import { Transaction } from "@solana/web3.js";
+import { Connection, Transaction } from "@solana/web3.js";
 import {
   get_user,
   get_quests,
@@ -51,7 +51,7 @@ import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
-import { refreshHeaders } from "../wallet/wallet";
+import { refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
 
 export const MAIN_PAGE = (props) => {
   const {
@@ -188,11 +188,13 @@ export const MAIN_PAGE = (props) => {
     }
   };
 
-  const getWithExpiration = async () => {
+  const getWithExpiration = async (ledgerExists) => {
     let key = "verifyHeader";
     const itemStr = localStorage.getItem(key);
     if (itemStr === null) {
-      let data = await refreshHeaders(signMessage, publicKey);
+      let data
+      if(!ledgerExists) data = await refreshHeaders(signMessage, publicKey); 
+      else data = await refreshHeadersLedger(signTransaction, publicKey) 
       change_wallet_data(data);
       return data;
     }
@@ -206,8 +208,8 @@ export const MAIN_PAGE = (props) => {
     return item.value;
   };
 
-  const populate_data = async () => {
-    let header = await getWithExpiration();
+  const populate_data = async (doesLedgerExist) => {
+    let header = await getWithExpiration( doesLedgerExist );
     let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
       // console.log(user, "user after get_user");
@@ -285,8 +287,7 @@ export const MAIN_PAGE = (props) => {
         severity: "warning",
       });
     }
-    let header_verification = await getWithExpiration();
-    let gather_data = await populate_data(header_verification);
+    let gather_data = await populate_data();
     setActionDone(false);
   };
 
@@ -313,7 +314,7 @@ export const MAIN_PAGE = (props) => {
   const handleClaimQuestReward = async (reward_id) => {
     let header_verification = await getWithExpiration();
     await claim_quest_reward(header_verification, reward_id);
-    await populate_data(header_verification);
+    await populate_data();
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
@@ -512,7 +513,7 @@ export const MAIN_PAGE = (props) => {
               : null
             }
             <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>
-              Dashboard
+            Dashboard
             </MenuItem>
             <MenuItem onClick={() => handleDropdown_navigate("/lore")}>
               Lore
