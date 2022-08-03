@@ -15,7 +15,7 @@ import minus from "../images/minus.png";
 const render_priority = ["link_discord","link_email","link_twitter"];
 
 export const MISSION_BOARD = (props) => {
-  console.log(props.quests_data, "quest data");
+  // console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.playQuestType();
