@@ -58,6 +58,7 @@ import { refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
 
 export const MAIN_PAGE = (props) => {
   const {
+    name,
     wallet,
     signMessage,
     publicKey,
@@ -154,40 +155,19 @@ export const MAIN_PAGE = (props) => {
     volume: volume,
   });
 
-  const [doesLedgerExist, setDoesLedgerExist] = useState(false)
-
   const loadUserData = async () => {
     change_loading_state(true);
     await populate_data();
     change_loading_state(false);
   };
 
-  const toggleOnLedger = () => {
-    setDoesLedgerExist(true);
-    localStorage.setItem("isLedger", true)
-  }
-
-  const toggleOffLedger = () => {
-    setDoesLedgerExist(false);
-    localStorage.setItem("isLedger", false)
-  }
-
-  const handleLedgerSwitch = (e) => {
-    if (e.target.checked) {
-      toggleOnLedger();
+  const check_ledger = () => {
+    if (wallet.adapter.name === "Ledger") {
+      localStorage.setItem("isLedger", true);
     } else {
-      toggleOffLedger();
+      localStorage.setItem("isLedger", false);
     }
   }
-
-  useEffect(() => {
-    const itemStr = localStorage.getItem("isLedger");
-    if (itemStr === null) {
-      setDoesLedgerExist(false);
-    } else {
-      setDoesLedgerExist(true);
-    }
-  }, [])
 
   useEffect(() => {
       //change this conditional to check for success in oath.
@@ -228,7 +208,9 @@ export const MAIN_PAGE = (props) => {
       let data
       let ledgerExists = localStorage.getItem(ledgerKey);
       if(!ledgerExists) data = await refreshHeaders(signMessage, publicKey);
-      else if(ledgerExists) data = await refreshHeadersLedger(signTransaction, publicKey)
+      else if(ledgerExists) {
+        data = await refreshHeadersLedger(signTransaction, publicKey)
+      }
       change_wallet_data(data);
       return data;
     }
@@ -274,8 +256,6 @@ export const MAIN_PAGE = (props) => {
 
   const handleClick = async () => {
     playAurahTheme();
-    // let header_verification = await getWithExpiration();
-    await populate_data();
     navigate("/connect");
   };
 
@@ -353,7 +333,7 @@ export const MAIN_PAGE = (props) => {
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
     let claim = await claim_journey_reward(header_verification, reward_id);
-
+    console.log("hitting?");
     if (claim.length > 0 && type_reward.type === "soulbound") {
       setAlertState({
         open: true,
@@ -363,7 +343,8 @@ export const MAIN_PAGE = (props) => {
       });
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
-      const signedTX = await signTransaction(tx)
+      const signedTX = await signTransaction(tx);
+      console.log(signedTX, "the return from tx?");
       const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
         verifySignatures: false
@@ -553,15 +534,7 @@ export const MAIN_PAGE = (props) => {
             </MenuItem>
           </Menu>
           <Grid container item direction="row" justifyContent="flex-end"
-          sx={{marginTop: "-80px"}} xs={5}>
-            <Grid container item alignItems="center" xs={3} justifyContent="flex-end">
-              <FormGroup onChange={handleLedgerSwitch}>
-                <FormControlLabel checked={doesLedgerExist}
-                  control={<Switch />}
-                  label="LEDGER"
-                  labelPlacement="start"/>
-              </FormGroup>
-            </Grid>
+          sx={{marginTop: "-40px"}} xs={5}>
             <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
               {wallet ? (
                 <Box onMouseEnter={() => handleConnectHover()}>
@@ -663,6 +636,7 @@ export const MAIN_PAGE = (props) => {
                 handleConnectHover={handleConnectHover}
                 handleDisconnectHover={handleDisconnectHover}
                 playConnectWallet={playConnectWallet}
+                check_ledger={check_ledger}
               />
             }
           />
