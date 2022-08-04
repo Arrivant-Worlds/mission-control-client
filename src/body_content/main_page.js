@@ -34,6 +34,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Icon from "@mui/material/Icon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import styles from "./main_page_styles.js";
 import navIcon from "../images/NavIcon_withshadow.png";
 import AurahTheme from "../audio/AurahTheme.mp3";
@@ -155,7 +158,6 @@ export const MAIN_PAGE = (props) => {
 
   const loadUserData = async () => {
     change_loading_state(true);
-    toggleOnLedger()
     await populate_data();
     change_loading_state(false);
   };
@@ -169,6 +171,23 @@ export const MAIN_PAGE = (props) => {
     setDoesLedgerExist(false);
     localStorage.setItem("isLedger", false)
   }
+
+  const handleLedgerSwitch = (e) => {
+    if (e.target.checked) {
+      toggleOnLedger();
+    } else {
+      toggleOffLedger();
+    }
+  }
+
+  useEffect(() => {
+    const itemStr = localStorage.getItem("isLedger");
+    if (itemStr === null) {
+      setDoesLedgerExist(false);
+    } else {
+      setDoesLedgerExist(true);
+    }
+  }, [])
 
   useEffect(() => {
       //change this conditional to check for success in oath.
@@ -208,8 +227,8 @@ export const MAIN_PAGE = (props) => {
     if (itemStr === null) {
       let data
       let ledgerExists = localStorage.getItem(ledgerKey);
-      if(!ledgerExists) data = await refreshHeaders(signMessage, publicKey); 
-      else if(ledgerExists) data = await refreshHeadersLedger(signTransaction, publicKey) 
+      if(!ledgerExists) data = await refreshHeaders(signMessage, publicKey);
+      else if(ledgerExists) data = await refreshHeadersLedger(signTransaction, publicKey)
       change_wallet_data(data);
       return data;
     }
@@ -225,7 +244,6 @@ export const MAIN_PAGE = (props) => {
 
   const populate_data = async () => {
     let header = await getWithExpiration();
-    
     let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
       // console.log(user, "user after get_user");
@@ -257,7 +275,7 @@ export const MAIN_PAGE = (props) => {
   const handleClick = async () => {
     playAurahTheme();
     // let header_verification = await getWithExpiration();
-    // await populate_data(header_verification);
+    await populate_data();
     navigate("/connect");
   };
 
@@ -315,8 +333,7 @@ export const MAIN_PAGE = (props) => {
   const handleRewardsClose = async () => {
     change_rewards_dialog_state(false);
     change_dialog_state(false);
-    let header_verification = await getWithExpiration();
-    await populate_data(header_verification);
+    await populate_data();
   };
 
   const handleWelcomeOpen = () => {
@@ -363,7 +380,7 @@ export const MAIN_PAGE = (props) => {
       console.log("Wrong journey reward type or claim transaction is empty");
     }
 
-    await populate_data(header_verification);
+    await populate_data();
   };
 
   const handleDropdownOpen = (e) => {
@@ -535,15 +552,29 @@ export const MAIN_PAGE = (props) => {
               Lore
             </MenuItem>
           </Menu>
-          {wallet ? (
-            <Box onMouseEnter={() => handleConnectHover()}>
-              <WalletDisconnectButton
+          <Grid container item direction="row" justifyContent="flex-end"
+          sx={{marginTop: "-80px"}} xs={5}>
+            <Grid container item alignItems="center" xs={3} justifyContent="flex-end">
+              <FormGroup onChange={handleLedgerSwitch}>
+                <FormControlLabel checked={doesLedgerExist}
+                  control={<Switch />}
+                  label="LEDGER"
+                  labelPlacement="start"/>
+              </FormGroup>
+            </Grid>
+            <Grid container item alignItems="center" xs={4} justifyContent="flex-end">
+              {wallet ? (
+                <Box onMouseEnter={() => handleConnectHover()}>
+                <WalletDisconnectButton
                 className="disconnect_button"
                 onClick={() => handleDisconnect()}
                 onMouseEnter={() => handleDisconnectHover()}
-              />
-            </Box>
-          ) : null}
+                />
+                </Box>
+              ) : null}
+            </Grid>
+
+          </Grid>
         </Grid>
         <Routes>
           <Route
