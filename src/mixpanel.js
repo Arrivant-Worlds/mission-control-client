@@ -65,6 +65,7 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
       mixpanel: !!MIXPANEL_TOKEN,
     };
     if (MIXPANEL_TOKEN) {
+      mixpanel.identify(pubkey)
       mixpanel.people.set_once({
         pubkey,
       });
