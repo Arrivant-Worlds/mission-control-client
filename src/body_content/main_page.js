@@ -53,6 +53,8 @@ import LeaderboardTab from "../audio/LeaderboardTab.wav";
 import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
+import RewardFanfare from "../audio/RewardFanfare.wav";
+
 import useSound from "use-sound";
 import { refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
 
@@ -146,6 +148,10 @@ export const MAIN_PAGE = (props) => {
     volume: volume,
   });
   const [playDisconnectHover] = useSound(DisconnectHover, {
+    interrupt: true,
+    volume: volume,
+  });
+  const [playRewardFanfare] = useSound(RewardFanfare, {
     interrupt: true,
     volume: volume,
   });
@@ -332,7 +338,6 @@ export const MAIN_PAGE = (props) => {
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
     let claim = await claim_journey_reward(header_verification, reward_id);
-    console.log("hitting?");
     if (claim.length > 0 && type_reward.type === "soulbound") {
       setAlertState({
         open: true,
@@ -343,7 +348,7 @@ export const MAIN_PAGE = (props) => {
       let buffer = Buffer.from(claim, "base64");
       const tx = Transaction.from(buffer);
       const signedTX = await signTransaction(tx);
-      console.log(signedTX, "the return from tx?");
+      // console.log(signedTX, "?");
       const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
         verifySignatures: false
@@ -712,17 +717,14 @@ export const MAIN_PAGE = (props) => {
           getWithExpiration={getWithExpiration}
           handleTwitterButton={playClaimPassport}
           handleDialogHover={handleDialogHover}
-          handleRewardsOpen={handleRewardsOpen}
-          handleRewardsClose={handleRewardsClose}
-          rewards_dialog_data={rewards_dialog_data}
-          set_rewards_dialog_data={set_rewards_dialog_data}
+          handleClaimQuestReward={handleClaimQuestReward}
+          playRewardFanfare={playRewardFanfare}
         />
         <REWARDS_DIALOG
           rewards_dialog_state={rewards_dialog_state}
           change_rewards_dialog_state={change_rewards_dialog_state}
           handleRewardsOpen={handleRewardsOpen}
           handleRewardsClose={handleRewardsClose}
-          handleClaimQuestReward={handleClaimQuestReward}
           handleClaimJourneyReward={handleClaimJourneyReward}
           rewards_dialog_data={rewards_dialog_data}
           set_rewards_dialog_data={set_rewards_dialog_data}
