@@ -17,7 +17,6 @@ export const CONNECT_PAGE = (props) => {
 
   const handleClick = async () => {
     await connect();
-    props.check_ledger();
   };
 
   const handleConnectHover = () => {

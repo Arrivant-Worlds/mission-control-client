@@ -164,8 +164,10 @@ export const MAIN_PAGE = (props) => {
   const check_ledger = () => {
     if (wallet.adapter.name === "Ledger") {
       localStorage.setItem("isLedger", true);
+      return true;
     } else {
       localStorage.setItem("isLedger", false);
+      return false;
     }
   }
 
@@ -202,14 +204,16 @@ export const MAIN_PAGE = (props) => {
 
   const getWithExpiration = async () => {
     let key = "verifyHeader";
-    let ledgerKey = "isLedger"
+    let ledgerKey = check_ledger();
     const itemStr = localStorage.getItem(key);
     if (itemStr === null) {
       let data
-      let ledgerExists = localStorage.getItem(ledgerKey);
-      if(!ledgerExists) data = await refreshHeaders(signMessage, publicKey);
-      else if(ledgerExists) {
+      // let ledgerExists = localStorage.getItem(ledgerKey);
+      if(ledgerKey) {
         data = await refreshHeadersLedger(signTransaction, publicKey)
+      }
+      else if(!ledgerKey) {
+        data = await refreshHeaders(signMessage, publicKey);
       }
       change_wallet_data(data);
       return data;
@@ -636,7 +640,6 @@ export const MAIN_PAGE = (props) => {
                 handleConnectHover={handleConnectHover}
                 handleDisconnectHover={handleDisconnectHover}
                 playConnectWallet={playConnectWallet}
-                check_ledger={check_ledger}
               />
             }
           />
