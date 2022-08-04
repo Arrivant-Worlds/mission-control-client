@@ -31,7 +31,7 @@ export function MISSION_BLOCK(props) {
       track('View Mission',{
         event_category: 'Missions',
         event_label: `${props.item_data.title}`,
-        current_user_level: `${props.item_data}`
+        current_user_level: `${props.user_data.xp}`
       })
     } catch(err){
       console.log("mixpanel ERR", err)
