@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
-import { Transaction } from "@solana/web3.js";
+import { Connection, Transaction } from "@solana/web3.js";
 import {
   get_user,
   get_quests,
@@ -34,6 +34,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Icon from "@mui/material/Icon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import styles from "./main_page_styles.js";
 import navIcon from "../images/NavIcon_withshadow.png";
 import AurahTheme from "../audio/AurahTheme.mp3";
@@ -51,7 +54,7 @@ import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import useSound from "use-sound";
-import { refreshHeaders } from "../wallet/wallet";
+import { refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
 
 export const MAIN_PAGE = (props) => {
   const {
@@ -151,11 +154,40 @@ export const MAIN_PAGE = (props) => {
     volume: volume,
   });
 
+  const [doesLedgerExist, setDoesLedgerExist] = useState(false)
+
   const loadUserData = async () => {
     change_loading_state(true);
     await populate_data();
     change_loading_state(false);
   };
+
+  const toggleOnLedger = () => {
+    setDoesLedgerExist(true);
+    localStorage.setItem("isLedger", true)
+  }
+
+  const toggleOffLedger = () => {
+    setDoesLedgerExist(false);
+    localStorage.setItem("isLedger", false)
+  }
+
+  const handleLedgerSwitch = (e) => {
+    if (e.target.checked) {
+      toggleOnLedger();
+    } else {
+      toggleOffLedger();
+    }
+  }
+
+  useEffect(() => {
+    const itemStr = localStorage.getItem("isLedger");
+    if (itemStr === null) {
+      setDoesLedgerExist(false);
+    } else {
+      setDoesLedgerExist(true);
+    }
+  }, [])
 
   useEffect(() => {
       //change this conditional to check for success in oath.
@@ -190,9 +222,13 @@ export const MAIN_PAGE = (props) => {
 
   const getWithExpiration = async () => {
     let key = "verifyHeader";
+    let ledgerKey = "isLedger"
     const itemStr = localStorage.getItem(key);
     if (itemStr === null) {
-      let data = await refreshHeaders(signMessage, publicKey);
+      let data
+      let ledgerExists = localStorage.getItem(ledgerKey);
+      if(!ledgerExists) data = await refreshHeaders(signMessage, publicKey);
+      else if(ledgerExists) data = await refreshHeadersLedger(signTransaction, publicKey)
       change_wallet_data(data);
       return data;
     }
@@ -239,7 +275,7 @@ export const MAIN_PAGE = (props) => {
   const handleClick = async () => {
     playAurahTheme();
     // let header_verification = await getWithExpiration();
-    // await populate_data(header_verification);
+    await populate_data();
     navigate("/connect");
   };
 
@@ -285,8 +321,7 @@ export const MAIN_PAGE = (props) => {
         severity: "warning",
       });
     }
-    let header_verification = await getWithExpiration();
-    let gather_data = await populate_data(header_verification);
+    let gather_data = await populate_data();
     setActionDone(false);
   };
 
@@ -298,8 +333,7 @@ export const MAIN_PAGE = (props) => {
   const handleRewardsClose = async () => {
     change_rewards_dialog_state(false);
     change_dialog_state(false);
-    let header_verification = await getWithExpiration();
-    await populate_data(header_verification);
+    await populate_data();
   };
 
   const handleWelcomeOpen = () => {
@@ -313,7 +347,7 @@ export const MAIN_PAGE = (props) => {
   const handleClaimQuestReward = async (reward_id) => {
     let header_verification = await getWithExpiration();
     await claim_quest_reward(header_verification, reward_id);
-    await populate_data(header_verification);
+    await populate_data();
   };
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
@@ -346,7 +380,7 @@ export const MAIN_PAGE = (props) => {
       console.log("Wrong journey reward type or claim transaction is empty");
     }
 
-    await populate_data(header_verification);
+    await populate_data();
   };
 
   const handleDropdownOpen = (e) => {
@@ -512,21 +546,35 @@ export const MAIN_PAGE = (props) => {
               : null
             }
             <MenuItem onClick={() => handleDropdown_navigate("/bounty_main")}>
-              Dashboard
+            Dashboard
             </MenuItem>
             <MenuItem onClick={() => handleDropdown_navigate("/lore")}>
               Lore
             </MenuItem>
           </Menu>
-          {wallet ? (
-            <Box onMouseEnter={() => handleConnectHover()}>
-              <WalletDisconnectButton
+          <Grid container item direction="row" justifyContent="flex-end"
+          sx={{marginTop: "-80px"}} xs={5}>
+            <Grid container item alignItems="center" xs={3} justifyContent="flex-end">
+              <FormGroup onChange={handleLedgerSwitch}>
+                <FormControlLabel checked={doesLedgerExist}
+                  control={<Switch />}
+                  label="LEDGER"
+                  labelPlacement="start"/>
+              </FormGroup>
+            </Grid>
+            <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
+              {wallet ? (
+                <Box onMouseEnter={() => handleConnectHover()}>
+                <WalletDisconnectButton
                 className="disconnect_button"
                 onClick={() => handleDisconnect()}
                 onMouseEnter={() => handleDisconnectHover()}
-              />
-            </Box>
-          ) : null}
+                />
+                </Box>
+              ) : null}
+            </Grid>
+
+          </Grid>
         </Grid>
         <Routes>
           <Route
