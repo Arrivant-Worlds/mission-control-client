@@ -162,11 +162,9 @@ export const MAIN_PAGE = (props) => {
   };
 
   const check_ledger = () => {
-    if (wallet.adapter.name === "Ledger") {
-      localStorage.setItem("isLedger", true);
+    if (wallet && wallet.adapter.name === "Ledger") {
       return true;
-    } else {
-      localStorage.setItem("isLedger", false);
+    } else if(wallet && wallet.adapter.name === "Phantom") {
       return false;
     }
   }
@@ -202,18 +200,14 @@ export const MAIN_PAGE = (props) => {
     }
   };
 
-  const getWithExpiration = async () => {
+  const getWithExpiration = async (isLedger) => {
     let key = "verifyHeader";
-    let ledgerKey = check_ledger();
     const itemStr = localStorage.getItem(key);
     if (itemStr === null) {
       let data
-      // let ledgerExists = localStorage.getItem(ledgerKey);
-      if(ledgerKey) {
+      if(!isLedger) data = await refreshHeaders(signMessage, publicKey);
+      else if(isLedger) {
         data = await refreshHeadersLedger(signTransaction, publicKey)
-      }
-      else if(!ledgerKey) {
-        data = await refreshHeaders(signMessage, publicKey);
       }
       change_wallet_data(data);
       return data;
@@ -229,7 +223,8 @@ export const MAIN_PAGE = (props) => {
   };
 
   const populate_data = async () => {
-    let header = await getWithExpiration();
+    let isLedger = check_ledger()
+    let header = await getWithExpiration(isLedger);
     let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
       // console.log(user, "user after get_user");
