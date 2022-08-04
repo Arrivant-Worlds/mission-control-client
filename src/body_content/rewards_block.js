@@ -28,7 +28,7 @@ export const REWARDS_BLOCK = (props) => {
       );
 
     } else if (state === "processing") {
-      console.log("processing")
+      // console.log("processing")
       return (
         <Box sx={{display: "flex"}}>
           <CircularProgress size={20}/>

@@ -16,7 +16,6 @@ export const CONNECT_PAGE = (props) => {
   let navigate = useNavigate();
 
   const handleClick = async () => {
-
     await connect();
   };
 
