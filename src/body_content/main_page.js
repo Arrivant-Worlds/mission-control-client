@@ -562,7 +562,7 @@ export const MAIN_PAGE = (props) => {
                   labelPlacement="start"/>
               </FormGroup>
             </Grid>
-            <Grid container item alignItems="center" xs={4} justifyContent="flex-end">
+            <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
               {wallet ? (
                 <Box onMouseEnter={() => handleConnectHover()}>
                 <WalletDisconnectButton
