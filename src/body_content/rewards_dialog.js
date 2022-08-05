@@ -3,8 +3,12 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
 import styles from './rewards_dialog_styles.js';
 import { useAnalytics } from '../mixpanel.js';
@@ -16,6 +20,7 @@ export default function REWARDS_DIALOG(props) {
   // console.log(props.rewards_dialog_data.id, "Id of current quest for dialog");
 
   const handleOnClick = async () => {
+    props.playRewardFanfare();
     set_clicked_state(true);
     // if (props.rewards_dialog_data.type === "quest") {
     //   // console.log(props.rewards_dialog_data, "props??");
@@ -66,33 +71,6 @@ export default function REWARDS_DIALOG(props) {
     set_clicked_state(false);
   };
 
-  const renderReward = () => {
-    if (props.rewards_dialog_data.type === "quest") {
-      return (
-        <Grid container direction="column" justifyContent="space-between" alignItems="center">
-          <Typography sx={styles.title}>Claim your reward!</Typography>
-          <Typography
-            sx={styles.text}
-          >{`+${props.rewards_dialog_data.xp} xp`}</Typography>
-        </Grid>
-      )
-    }
-    else {
-      return (
-        <Grid container direction="column" justifyContent="space-between" alignItems="center">
-          <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
-          sx={{width: "200px", height: "200px", marginBottom: "20px"}}
-          />
-          {
-            props.rewards_dialog_data.type === "journey" ?
-            <Typography sx={styles.title}>{props.rewards_dialog_data.description}</Typography>
-            :
-            null
-          }
-        </Grid>
-      )
-    }
-  }
   // console.log("props", props.rewards_dialog_data.type)
   return (
     <Dialog
@@ -106,13 +84,34 @@ export default function REWARDS_DIALOG(props) {
       }}
       PaperProps={{
         style: {
-          background: "#000000",
-          border: "1px solid #E6B2B9",
-          width: "414px",
+          background: "rgba(106, 106, 106, 0.3)",
+          borderRadius: "5px",
+          width: "50%",
+          maxHeight: "none",
+          maxWidth: "none",
         },
       }}
     >
-      <DialogContent sx={{ height: "100%" }}>
+      <DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={() => props.handleRewardsClose()}
+          sx={{
+            position: "absolute",
+            right: 15,
+            top: 0,
+            color: "#6A6A6A",
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent sx={{ background: "rgba(13, 13, 13, 0.9)",
+        borderRadius: "5px",
+        height: "100%",
+        width: "90%",
+        padding: "25px 0px",
+        margin: "0 auto 25px auto", }}>
         {clicked_state && props.rewards_dialog_data.type === "journey" ? (
           <Grid
             sx={{ height: "100%" }}
@@ -138,18 +137,23 @@ export default function REWARDS_DIALOG(props) {
           </Grid>
         ) : (
           <Grid
-            sx={{ height: "100%" }}
+            sx={{ height: "100%", paddingTop: "25px" }}
             container
-            direction="column"
+            direction="row"
             justifyContent="space-around"
             alignItems="center"
           >
-            {
-              renderReward()
-            }
-            <Button sx={styles.button} onClick={() => handleOnClick()}>
+            <Grid container item xs={5} justifyContent="center" alignItems="center">
+              <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
+                sx={{width: "200px", height: "200px"}}
+              />
+            </Grid>
+            <Grid container item xs={5} direction="column" justifyContent="center" alignItems="center">
+              <Typography sx={styles.title}>{props.rewards_dialog_data.description}</Typography>
+              <Button sx={styles.button} onClick={() => handleOnClick()}>
               CLAIM REWARD
-            </Button>
+              </Button>
+            </Grid>
           </Grid>
         )}
       </DialogContent>

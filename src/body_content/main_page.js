@@ -728,6 +728,7 @@ export const MAIN_PAGE = (props) => {
           handleClaimJourneyReward={handleClaimJourneyReward}
           rewards_dialog_data={rewards_dialog_data}
           set_rewards_dialog_data={set_rewards_dialog_data}
+          playRewardFanfare={playRewardFanfare}
         />
         <WELCOME_DIALOG
           handleWelcomeClose={handleWelcomeClose}

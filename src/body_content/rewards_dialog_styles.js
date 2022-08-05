@@ -5,7 +5,7 @@ const styles = {
     lineHeight: "25px",
     textAlign: "center",
     color: "#F6F6F6",
-    width: "70%",
+    width: "100%",
     marginBottom: "20px",
   },
   text: {

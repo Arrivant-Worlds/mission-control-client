@@ -134,6 +134,7 @@ export default function MISSION_DIALOG(props) {
                   setAlertState={props.setAlertState}
                   dialog_data={props.dialog_data}
                   handleClaimQuestReward={props.handleClaimQuestReward}
+                  playRewardFanfare={props.playRewardFanfare}
                 />
               </Box>
             </Grid>

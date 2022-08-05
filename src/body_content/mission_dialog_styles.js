@@ -15,6 +15,8 @@ const styles = {
     borderRadius: "5px",
     width: "90%",
     margin: "0 auto 25px auto",
+    display: "flex",
+    alignItems: "center",
   },
   platform_container: {
     margin: "30px auto 0 auto",
