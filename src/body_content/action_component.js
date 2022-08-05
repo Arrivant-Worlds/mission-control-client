@@ -15,7 +15,8 @@ import {
 } from "./../api_calls";
 
 export default function ACTION_COMPONENT(props) {
-  const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
+  const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
+  const [claimed_state, change_claimed_state] = useState(false);
 
   // console.log("DIALOGG", props.dialog_data);
   // console.log(props.dialog_data.active_reward === null, "???????");
@@ -45,7 +46,7 @@ export default function ACTION_COMPONENT(props) {
     }
     if (props.dialog_data.user_quest_status === "Locked") {
       return true;
-    } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null) {
+    } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null || claimed_state) {
       // console.log("hitting the correct place");
       return true;
     } else {
@@ -60,6 +61,7 @@ export default function ACTION_COMPONENT(props) {
   };
 
   const handleRewardClaim = () => {
+    change_claimed_state(true);
     props.playRewardFanfare();
     props.handleClaimQuestReward(props.dialog_data.active_reward.id);
     track('Mission Claim',{
@@ -165,7 +167,7 @@ export default function ACTION_COMPONENT(props) {
                 backgroundColor: "#F6F6F6",
               }}
             >
-              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null ? <Icon className={"fa-solid fa-check"}></Icon> : "CLAIM REWARD" }
+              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null || claimed_state ? <Icon className={"fa-solid fa-check"}></Icon> : "CLAIM REWARD" }
             </Button>
           </Grid>
         </Grid>
