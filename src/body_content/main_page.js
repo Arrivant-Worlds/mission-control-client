@@ -79,6 +79,7 @@ export const MAIN_PAGE = (props) => {
     xp: "",
     id: "",
     type: "",
+    title: "",
     type_reward: {
       type: "",
       url: "",

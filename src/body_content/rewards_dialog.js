@@ -23,7 +23,7 @@ export default function REWARDS_DIALOG(props) {
       props.handleRewardsClose();
       track('Mission Claim',{
         event_category: 'Missions',
-        event_label:'Claim',
+        event_label:`${props.rewards_dialog_data.title}`,
         xp: props.rewards_dialog_data.xp,
       })
       let now = new Date()

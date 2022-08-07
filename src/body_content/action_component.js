@@ -61,6 +61,7 @@ export default function ACTION_COMPONENT(props) {
     // console.log(props.dialog_data, "dialog data");
     props.set_rewards_dialog_data({
       xp: props.dialog_data.xp,
+      title: props.dialog_data.title,
       id: props.dialog_data.active_reward.id,
       type: "quest",
     });
