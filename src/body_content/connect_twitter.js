@@ -13,7 +13,7 @@ import {
 export default function CONNECT_TWITTER(props) {
   const { publicKey, connected } = useWallet();
   let navigate = useNavigate();
-  console.log(props.disabled, "disbled in twitter button?");
+  // console.log(props.disabled, "disbled in twitter button?");
 
   const handleTwitter = async () => {
     props.handleButtonClick();
@@ -55,7 +55,7 @@ export default function CONNECT_TWITTER(props) {
           height: "55px",
           fontWeight: "700",
           padding: "0",
-          width: "100%", 
+          width: "100%",
           backgroundColor: "#888888",
           color: "rgba(0, 0, 0, 0.26)"
         } : props.style}

@@ -12,15 +12,13 @@ export function MISSION_BLOCK(props) {
     // console.log("firing in mission block click");
     // props.change_dialog_data({test: "meow meow meow"});
     props.change_dialog_data(props.item_data);
-    console.log("ITEM", props.item_data)
-    if (props.item_data.active_reward) {
-      props.set_rewards_dialog_data({
-        id: props.item_data.active_reward.id,
-        title: props.item_data.title,
-        xp: props.item_data.xp,
-        type: "quest"
-      })
-    }
+    // if (props.item_data.active_reward) {
+    //   props.set_rewards_dialog_data({
+    //     id: props.item_data.active_reward.id,
+    //     xp: props.item_data.xp,
+    //     type: "quest"
+    //   })
+    // }
     props.handleDialogOpen();
     if (props.user_data.daily_claim_remaining === 0 && props.item_data.active_reward !== null) {
       props.setAlertState({

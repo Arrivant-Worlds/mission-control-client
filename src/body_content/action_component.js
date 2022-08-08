@@ -4,7 +4,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Icon from "@mui/material/Icon";
 import CONNECT_TWITTER from "./connect_twitter.js";
+import { useAnalytics } from '../mixpanel.js';
 import {
   submit_email,
   auth_twitter,
@@ -13,8 +15,10 @@ import {
 } from "./../api_calls";
 
 export default function ACTION_COMPONENT(props) {
+  const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
+  const [claimed_state, change_claimed_state] = useState(false);
 
-  console.log("DIALOGG", props.dialog_data);
+  // console.log("DIALOGG", props.dialog_data);
   // console.log(props.dialog_data.active_reward === null, "???????");
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
@@ -42,7 +46,7 @@ export default function ACTION_COMPONENT(props) {
     }
     if (props.dialog_data.user_quest_status === "Locked") {
       return true;
-    } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null) {
+    } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null || claimed_state) {
       // console.log("hitting the correct place");
       return true;
     } else {
@@ -57,15 +61,33 @@ export default function ACTION_COMPONENT(props) {
   };
 
   const handleRewardClaim = () => {
-    //open rewards dialog
-    // console.log(props.dialog_data, "dialog data");
-    props.set_rewards_dialog_data({
+    change_claimed_state(true);
+    props.playRewardFanfare();
+    props.handleClaimQuestReward(props.dialog_data.active_reward.id);
+    track('Mission Claim',{
+      event_category: 'Missions',
+      event_label:'Claim',
       xp: props.dialog_data.xp,
-      title: props.dialog_data.title,
-      id: props.dialog_data.active_reward.id,
-      type: "quest",
-    });
-    props.handleRewardsOpen();
+    })
+    let now = new Date()
+    try{
+      setPropertyIfNotExists('First Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+      setProperty('Last Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+      setPropertyIfNotExists('Missions done', 0)
+      increment('Missions done', 1);
+    } catch(err){
+      console.log("MIXPANEL ERR", err)
+    }
+    //claim reward
+      //playfanfare
+      //fire claim reward
+
+    // props.set_rewards_dialog_data({
+    //   xp: props.dialog_data.xp,
+    //   id: props.dialog_data.active_reward.id,
+    //   type: "quest",
+    // });
+    // props.handleRewardsOpen();
   };
 
   const handleInputChange = (e) => {
@@ -145,7 +167,7 @@ export default function ACTION_COMPONENT(props) {
                 backgroundColor: "#F6F6F6",
               }}
             >
-              CLAIM REWARD
+              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null || claimed_state ? <Icon className={"fa-solid fa-check"}></Icon> : "CLAIM REWARD" }
             </Button>
           </Grid>
         </Grid>
@@ -183,7 +205,7 @@ export default function ACTION_COMPONENT(props) {
                 backgroundColor: "#F6F6F6",
               }}
             >
-              {props.action_data.buttonText}
+              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null ? <Icon className={"fa-solid fa-check"}></Icon> : props.action_data.buttonText }
             </Button>
           </Grid>
         </Grid>
@@ -265,7 +287,7 @@ export default function ACTION_COMPONENT(props) {
                   backgroundColor: "#F6F6F6",
                 }}
               >
-                {props.action_data.buttonText}
+                { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null ? <Icon className={"fa-solid fa-check"}></Icon> : props.action_data.buttonText }
               </Button>
             </form>
           )}

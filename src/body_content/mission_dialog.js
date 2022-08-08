@@ -108,7 +108,7 @@ export default function MISSION_DIALOG(props) {
                 <Grid container item direction="column" xs={4}>
                   <Typography style={styles.xp_frequency}>xp</Typography>
                   <Typography style={styles.xp_frequency_content}>
-                    {props.dialog_data.xp}
+                    {`+${props.dialog_data.xp}`}
                   </Typography>
                 </Grid>
                 <Grid container item direction="column" xs={6}>
@@ -133,10 +133,8 @@ export default function MISSION_DIALOG(props) {
                   alertState={props.alertState}
                   setAlertState={props.setAlertState}
                   dialog_data={props.dialog_data}
-                  handleRewardsOpen={props.handleRewardsOpen}
-                  handleRewardsClose={props.handleRewardsClose}
-                  rewards_dialog_data={props.rewards_dialog_data}
-                  set_rewards_dialog_data={props.set_rewards_dialog_data}
+                  handleClaimQuestReward={props.handleClaimQuestReward}
+                  playRewardFanfare={props.playRewardFanfare}
                 />
               </Box>
             </Grid>
