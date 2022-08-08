@@ -61,6 +61,7 @@ export const REWARDS_BLOCK = (props) => {
       xp: "something here",
       id: props.item_data.id,
       type: "journey",
+      title: props.item_data.title,
       type_reward: props.item_data.rewards,
       description: props.item_data.description,
     });

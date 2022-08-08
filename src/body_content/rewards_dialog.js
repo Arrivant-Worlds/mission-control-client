@@ -22,6 +22,7 @@ export default function REWARDS_DIALOG(props) {
   const handleOnClick = async () => {
     props.playRewardFanfare();
     set_clicked_state(true);
+<<<<<<< HEAD
     // if (props.rewards_dialog_data.type === "quest") {
     //   // console.log(props.rewards_dialog_data, "props??");
     //   props.handleClaimQuestReward(props.rewards_dialog_data.id);
@@ -45,6 +46,30 @@ export default function REWARDS_DIALOG(props) {
     //   //perhaps split journey reward claim and quest claim and conditional to see which to fire.
     // } else
      if (props.rewards_dialog_data.type === "journey") {
+=======
+    if (props.rewards_dialog_data.type === "quest") {
+      // console.log(props.rewards_dialog_data, "props??");
+      props.handleClaimQuestReward(props.rewards_dialog_data.id);
+      props.handleRewardsClose();
+      track('Mission Claim',{
+        event_category: 'Missions',
+        event_label:`${props.rewards_dialog_data.title}`,
+        xp: props.rewards_dialog_data.xp,
+      })
+      let now = new Date()
+      try{
+        setPropertyIfNotExists('First Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+        setProperty('Last Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+        setPropertyIfNotExists('Missions done', 0)
+        increment('Missions done', 1);
+      } catch(err){
+        console.log("MIXPANEL ERR", err)
+      }
+
+      //rework higher level function using this id
+      //perhaps split journey reward claim and quest claim and conditional to see which to fire.
+    } else if (props.rewards_dialog_data.type === "journey") {
+>>>>>>> be88ed6afbf7daf377fb167ba592a73c67969b23
       // set_clicked_state(true);
       await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
