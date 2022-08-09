@@ -145,6 +145,3 @@ export default function WELCOME_DIALOG(props) {
     </Dialog>
   );
 }
-
-// <Typography style={props.expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>

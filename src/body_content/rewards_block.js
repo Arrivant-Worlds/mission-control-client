@@ -10,12 +10,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import styles from "./rewards_block_styles.js";
 
 export const REWARDS_BLOCK = (props) => {
-  // props.item_data.claimed_status = "claimable";
-  // console.log(props.item_data, "reward data?");
-  // const [hover_state, change_hover_state] = useState(false);
 
   const render_chest_image = (state) => {
-    // console.log("passing", state)
     if (state === "claimable") {
       return (
         <Box
@@ -152,5 +148,3 @@ export const REWARDS_BLOCK = (props) => {
 }
 
 export default memo(REWARDS_BLOCK);
-
-// sx={[{'&:hover': {border: "0.9px solid #F9F9F9 !important"}}]}

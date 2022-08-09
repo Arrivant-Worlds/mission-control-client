@@ -27,14 +27,11 @@ export const BOUNTY_PAGE = (props) => {
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   const { wallet, publicKey } = useWallet();
-  // console.log(props.rewards_data, "in bounty");
 
   useEffect(() => {
     let allActive = props.quests_data.filter((i)=> i.active_reward)
     setClaimableCount(allActive.length);
     if (props.claim_tutorial_flag) {
-      //open snackbar
-        //set flag to false.
       props.setAlertState({
         open: true,
         message:
@@ -149,9 +146,6 @@ export const BOUNTY_PAGE = (props) => {
   };
 
   const container_style = {
-    // backgroundImage: `url(${bounty_frame})`,
-    // backgroundPosition: "center",
-    // backgroundSize: "cover",
     width: "87%",
   };
 

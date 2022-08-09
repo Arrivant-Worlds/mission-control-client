@@ -8,17 +8,7 @@ import { useAnalytics } from "../mixpanel.js";
 export function MISSION_BLOCK(props) {
   const { track } = useAnalytics()
   const handleOnClick = () => {
-    // console.log("msakjns", props);
-    // console.log("firing in mission block click");
-    // props.change_dialog_data({test: "meow meow meow"});
     props.change_dialog_data(props.item_data);
-    // if (props.item_data.active_reward) {
-    //   props.set_rewards_dialog_data({
-    //     id: props.item_data.active_reward.id,
-    //     xp: props.item_data.xp,
-    //     type: "quest"
-    //   })
-    // }
     props.handleDialogOpen();
     if (props.user_data.daily_claim_remaining === 0 && props.item_data.active_reward !== null) {
       props.setAlertState({
@@ -66,10 +56,6 @@ export function MISSION_BLOCK(props) {
   };
 
   const render_style = (section) => {
-    // console.log(props.item_data.user_quest_status, "uqs");
-    //render different style objects based on
-    // let style_name = `active_${section}`;
-    // return styles[style_name];
     if (props.item_data.user_quest_status === "Available") {
       let style_name = `active_${section}`;
       return styles[style_name];
@@ -77,14 +63,8 @@ export function MISSION_BLOCK(props) {
       let style_name = `inactive_${section}`;
       return styles[style_name];
     } else if (props.item_data.active_reward) {
-      //however if daily limit is at capped
-        //render greyed out version.
-      // if (props.user_data.daily_claim_remaining === 0) {
-      //   console.log("locked reward because of claim limit");
-      // } else {
       let style_name = `claim_${section}`;
       return styles[style_name];
-      // }
     } else if (props.item_data.user_quest_status === "Complete" && props.item_data.active_reward === null) {
       let style_name = `complete_${section}`;
       return styles[style_name];

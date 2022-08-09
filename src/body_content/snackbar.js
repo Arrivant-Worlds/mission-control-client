@@ -4,13 +4,6 @@ import Snackbar from '@mui/material/Snackbar';
 // import styles from './passport_styles.js';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
-// const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-//   props,
-//   ref,
-// ) {
-//   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-// });
-
 export default function SNACKBAR(props) {
   const vertical = "bottom";
   const horizontal = "center";
@@ -33,6 +26,3 @@ export default function SNACKBAR(props) {
     </Snackbar>
   );
 }
-
-// <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>

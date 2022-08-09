@@ -10,9 +10,6 @@ const render_priority = {claimable: 1, default: 2};
 
 export const REWARDS = (props) => {
 
-  // console.log(props.user_data);
-  // console.log(props.rewards_data);
-
   return (
     <Box style={styles.rewards_container}>
       <Grid container item direction="column" justifyContent="space-between"
@@ -51,6 +48,3 @@ export const REWARDS = (props) => {
 }
 
 export default memo(REWARDS);
-
-// <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>
