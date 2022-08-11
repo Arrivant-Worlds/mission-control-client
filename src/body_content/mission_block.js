@@ -21,11 +21,11 @@ export function MISSION_BLOCK(props) {
     // }
     props.handleDialogOpen();
     if (props.user_data.daily_claim_remaining === 0 && props.item_data.active_reward !== null) {
-      // props.setAlertState({
-      //   open: true,
-      //   message: "Daily claim limit reached! Come back tomorrow!",
-      //   severity: "error",
-      // });
+      props.setAlertState({
+        open: true,
+        message: "Daily claim limit reached! Come back tomorrow!",
+        severity: "error",
+      });
     }
     try{
       track('View Mission',{
