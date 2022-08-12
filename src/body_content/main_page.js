@@ -82,6 +82,7 @@ export const MAIN_PAGE = (props) => {
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
   const [rewards_data, change_rewards_data] = useState([]);
+  const [clicked_state, set_clicked_state] = useState(false);
   const [rewards_dialog_data, set_rewards_dialog_data] = useState({
     xp: "",
     id: "",
@@ -341,14 +342,17 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleMessageOpen = (text) => {
-    setWelcome_popup({
+    change_dialog_state(false);
+    change_rewards_dialog_state(false);
+    set_clicked_state(false);
+    set_message_dialog({
       open: true,
       text: text
     });
   };
 
   const handleMessageClose = async () => {
-    setWelcome_popup({
+    set_message_dialog({
       open: false,
       text: "",
     });
@@ -371,8 +375,15 @@ export const MAIN_PAGE = (props) => {
         severity: "warning",
       });
       let buffer = Buffer.from(claim, "base64");
-      const tx = Transaction.from(buffer);
-      const signedTX = await signTransaction(tx);
+      let signedTX;
+      try {
+        const tx = Transaction.from(buffer);
+        signedTX = await signTransaction(tx);
+      } catch (e) {
+        if (e.message === "User rejected the request.") {
+          handleMessageOpen("You must approve the transaction in order to claim!");
+        }
+      }
       // console.log(signedTX, "?");
       const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
@@ -437,18 +448,6 @@ export const MAIN_PAGE = (props) => {
 
     await verify_twitter(headers, query);
   };
-
-  // const toggleEle = (elem, state) => {
-  //   if (state) {
-  //     elem.muted = !state;
-  //     console.log(elem.muted, "conditional");
-  //     elem.play();
-  //   } else {
-  //     elem.muted = !state;
-  //     console.log(elem.muted, "else");
-  //     elem.pause();
-  //   }
-  // }
 
   const toggle_sound = () => {
     if (volume === 1) {
@@ -762,6 +761,8 @@ export const MAIN_PAGE = (props) => {
           rewards_dialog_data={rewards_dialog_data}
           set_rewards_dialog_data={set_rewards_dialog_data}
           playRewardFanfare={playRewardFanfare}
+          clicked_state={clicked_state}
+          set_clicked_state={set_clicked_state}
         />
         <WELCOME_DIALOG
           handleWelcomeClose={handleWelcomeClose}
@@ -769,7 +770,7 @@ export const MAIN_PAGE = (props) => {
           playQuestOpen={playQuestOpen}
         />
         <MESSAGE_DIALOG
-          message_dialog={message_dialog.open}
+          message_dialog={message_dialog}
           handleMessageClose={handleMessageClose}
           playQuestOpen={playQuestOpen}
         />

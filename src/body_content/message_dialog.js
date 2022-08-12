@@ -14,7 +14,7 @@ export default function MESSAGE_DIALOG(props) {
 
   return (
     <Dialog
-      open={props.message_dialog}
+      open={props.message_dialog.open}
       onClose={props.handleMessageClose}
       BackdropProps={{
         style: {
@@ -28,10 +28,12 @@ export default function MESSAGE_DIALOG(props) {
           border: "1px solid #B5CCD5",
           boxShadow: "3px 4px 47px rgba(181, 204, 213, 0.8)",
           borderRadius: "5px",
+          minHeight: "100px",
+          height: "auto",
         },
       }}
     >
-      <DialogContent sx={{ height: "100%" }}>
+      <DialogContent sx={{height: "100px"}}>
         <IconButton
           aria-label="close"
           onClick={() => props.handleMessageClose()}
@@ -44,6 +46,11 @@ export default function MESSAGE_DIALOG(props) {
         >
           <CloseIcon />
         </IconButton>
+        <Box sx={{height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
+          <Typography>
+          {props.message_dialog.text}
+          </Typography>
+        </Box>
       </DialogContent>
     </Dialog>
   );

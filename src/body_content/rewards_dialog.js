@@ -15,12 +15,11 @@ import { useAnalytics } from '../mixpanel.js';
 
 
 export default function REWARDS_DIALOG(props) {
-  const [clicked_state, set_clicked_state] = useState(false);
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
 
   const handleOnClick = async () => {
     props.playRewardFanfare();
-    set_clicked_state(true);
+    props.set_clicked_state(true);
      if (props.rewards_dialog_data.type === "journey") {
       await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
@@ -41,7 +40,7 @@ export default function REWARDS_DIALOG(props) {
   const handleOnClose = () => {
     props.handleRewardsClose();
     //set time out?
-    set_clicked_state(false);
+    props.set_clicked_state(false);
   };
 
   return (
@@ -84,7 +83,7 @@ export default function REWARDS_DIALOG(props) {
         width: "90%",
         padding: "25px 0px",
         margin: "0 auto 25px auto", }}>
-        {clicked_state && props.rewards_dialog_data.type === "journey" ? (
+        {props.clicked_state && props.rewards_dialog_data.type === "journey" ? (
           <Grid
             sx={{ height: "100%" }}
             container
