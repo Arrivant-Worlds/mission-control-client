@@ -34,6 +34,8 @@ export const get_user = async (payload) => {
         badgeName: "",
         survivalAssessment: "",
         badgeUrl: "",
+        level: 0,
+        xp: 0,
       };
     }
   }
