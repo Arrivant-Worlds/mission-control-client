@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import SimpleBar from "simplebar-react";
 import styles from "./log_board_styles.js";
+import TOOLTIP_WRAPPER from "./tooltip.js";
 import MISSION_BLOCK from "./mission_block.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
@@ -50,16 +51,23 @@ export const LOG_BOARD = (props) => {
               }).map((item, i) => {
                 if (item.active_reward || item.user_quest_status === "Complete") {
                   return (
-                    <MISSION_BLOCK
-                    item_data={item} key={i}
-                    handleDialogOpen={props.handleDialogOpen}
-                    dialog_data={props.dialog_data}
-                    change_dialog_data={props.change_dialog_data}
-                    handleDialogHover={props.handleDialogHover}
-                    set_rewards_dialog_data = {props.set_rewards_dialog_data}
-                    user_data={props.user_data}
-                    setAlertState={props.setAlertState}
+                    <TOOLTIP_WRAPPER
+                      key={i}
+                      wrapped_component={
+                        <MISSION_BLOCK
+                        item_data={item} key={i}
+                        handleDialogOpen={props.handleDialogOpen}
+                        dialog_data={props.dialog_data}
+                        change_dialog_data={props.change_dialog_data}
+                        handleDialogHover={props.handleDialogHover}
+                        set_rewards_dialog_data = {props.set_rewards_dialog_data}
+                        user_data={props.user_data}
+                        setAlertState={props.setAlertState}
+                        />
+                      }
+                      text={`TOOLTIP TEST`}
                     />
+
                   )
                 } else {
                   return null;
