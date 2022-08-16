@@ -60,7 +60,7 @@ const styles = {
   },
   claim_title: {
     textOverflow: "ellipsis",
-    color: "#e6b2b9",
+    color: "#F6F6F6",
     overflow: "hidden",
     whiteSpace: "nowrap",
     fontSize: "14px",
@@ -94,7 +94,7 @@ const styles = {
     fontSize: "14px",
     fontWeight: "700",
     textTransform: "uppercase",
-    color: "#e6b2b9",
+    color: "#888888",
   },
   active_xp: {
     marginLeft: "10px",
@@ -143,7 +143,7 @@ const styles = {
     fontSize: "20px",
   },
   claim_icon: {
-    color: "#e6b2b9",
+    color: "#F6F6F6",
     display: "flex",
     justifyContent: "center",
     fontSize: "20px",
