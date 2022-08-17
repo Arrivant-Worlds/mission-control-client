@@ -18,8 +18,6 @@ export default function ACTION_COMPONENT(props) {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [claimed_state, change_claimed_state] = useState(false);
 
-  // console.log("DIALOGG", props.dialog_data);
-  // console.log(props.dialog_data.active_reward === null, "???????");
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",
@@ -29,9 +27,6 @@ export default function ACTION_COMPONENT(props) {
     paddingLeft: "14px",
     paddingRight: "14px",
   };
-  // console.log(props.action_data,"action data!");
-  // console.log(props.rewards_dialog_data, "rewards dialog data");
-  // console.log(props.dialog_data, "dialog data");
 
   const [formValue, setFormValue] = useState("");
   const [nameFormValue, setNameFormValue] = useState("");
@@ -47,10 +42,8 @@ export default function ACTION_COMPONENT(props) {
     if (props.dialog_data.user_quest_status === "Locked") {
       return true;
     } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null || claimed_state) {
-      // console.log("hitting the correct place");
       return true;
     } else {
-      // console.log("hitting...?");
       return false;
     }
   };
@@ -78,16 +71,6 @@ export default function ACTION_COMPONENT(props) {
     } catch(err){
       console.log("MIXPANEL ERR", err)
     }
-    //claim reward
-      //playfanfare
-      //fire claim reward
-
-    // props.set_rewards_dialog_data({
-    //   xp: props.dialog_data.xp,
-    //   id: props.dialog_data.active_reward.id,
-    //   type: "quest",
-    // });
-    // props.handleRewardsOpen();
   };
 
   const handleInputChange = (e) => {
@@ -341,6 +324,3 @@ export default function ACTION_COMPONENT(props) {
 
   return <Box sx={{ height: "100%", padding: "15px 0px" }}>{type_render()}</Box>;
 }
-
-// <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>

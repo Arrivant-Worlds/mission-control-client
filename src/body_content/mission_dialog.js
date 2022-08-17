@@ -15,10 +15,6 @@ import Icon from "@mui/material/Icon";
 import ACTION_COMPONENT from "./action_component.js";
 
 export default function MISSION_DIALOG(props) {
-  // console.log(props.dialog_data, "dialog_data");
-  //snackbar notifies user it may take some time after click of action button.
-  //when they return to mission dialog.
-  //quest_user_status is in dialog data.
 
   const renderIcon = () => {
     if (props.dialog_data.platform === "Discord") {
@@ -145,64 +141,3 @@ export default function MISSION_DIALOG(props) {
     </Dialog>
   );
 }
-
-// <Typography style={props.expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>
-
-// <Mailchimp
-//   action='https://projecteluune.us13.list-manage.com/subscribe/post?u=76cfb9846ba202e2ff8e1f6ba&amp;id=226877539a'
-//   fields={[
-//     {
-//       name: 'EMAIL',
-//       placeholder: 'Email',
-//       type: 'email',
-//       required: true
-//     }
-//   ]}
-// />
-
-// <Box style={styles.hr} />
-// <Typography style={styles.directions}>
-//   TO COMPLETE THIS BOUNTY
-// </Typography>
-// <Grid container direction="column">
-//   <Typography style={styles.guide}>GUIDE</Typography>
-//   <Grid container direction="row">
-//     <Grid item xs={0.5}>
-//       <Typography style={styles.step_number}>{`1.`}</Typography>
-//     </Grid>
-//     <Grid
-//       container
-//       item
-//       direction="column"
-//       xs={10}
-//       style={styles.instructions}
-//     >
-//       <Typography style={styles.friends}>
-//         Invite your friends
-//       </Typography>
-//       <Typography>{`Inviting your friends is the easiest way to get 10 invites. Invite your friends only if you believe that our project has value for them.`}</Typography>
-//     </Grid>
-//   </Grid>
-//   <Grid container direction="row">
-//     <Grid item xs={0.5}>
-//       <Typography style={styles.step_number}>{`2.`}</Typography>
-//     </Grid>
-//     <Grid
-//       container
-//       item
-//       direction="column"
-//       xs={10}
-//       style={styles.instructions}
-//     >
-//       <Typography style={styles.friends}>
-//         Post in Discord Groups
-//       </Typography>
-//       <Typography>{`Share your Discord invitation link in other Discord group. DON’T SPAM, respect the rules of the groups and share your link where it’s appropriate. FIND SERVERS/PLACES WHERE NOBODY ELSE IS POSTING OUR PROJECT. IT’S THE QUICKEST WAY TO GET INVITES!`}</Typography>
-//     </Grid>
-//   </Grid>
-//   <Grid>
-//     <Typography style={styles.submission}>SUBMISSION</Typography>
-//     <Typography>{`Track your invites with the invite tracker in Discord & upload a screenshot of your invites.`}</Typography>
-//   </Grid>
-// </Grid>

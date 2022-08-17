@@ -27,6 +27,3 @@ export default function MOBILE_BANNER(props) {
     </Grid>
   );
 }
-
-// <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>

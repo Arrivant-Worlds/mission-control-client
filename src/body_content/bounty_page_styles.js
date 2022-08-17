@@ -18,7 +18,7 @@ const styles = {
   },
   center_panel_container: {
     width: "270px",
-    height: "397px",
+    height: "417px",
     background: "linear-gradient(180deg, rgba(0, 0, 0, 0.539) 25.01%, rgba(15, 15, 15, 0.285) 120.09%)",
     /* box (blurred) */
     border: "0.916143px solid #6A6A6A",

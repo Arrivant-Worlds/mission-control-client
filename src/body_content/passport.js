@@ -8,18 +8,25 @@ import styles from "./passport_styles.js";
 
 const PASSPORT = (props) => {
   const [exp_value, set_exp_value] = useState(0);
-  //change to props.exp etc in render.
-  // console.log(props.user_data, "user_data");
   useEffect(() => {
     let exp_percent = calculate_progress(props.user_data.xp);
-    // console.log(exp_percent, "????");
-    //change to props.exp etc.
     set_exp_value(Math.round(exp_percent));
   });
 
   const calculate_progress = (exp) => {
     return (100 * exp) / props.user_data.xpToNextLevel;
   };
+
+  const getPointFromLevelAndXP = (level: number, extraXP: number): number => {
+    const base = 1000;
+    let points = 0;
+    if(level === 0) return 0
+    for (let i = 1; i <= level; i++) {
+        points = points + base + ((i - 1) * 300)
+    }
+    points = points + extraXP
+    return points
+  }
 
   return (
     <Grid style={styles.passport_container}>
@@ -105,11 +112,19 @@ const PASSPORT = (props) => {
           >{`${props.user_data.xp}/${props.user_data.xpToNextLevel}`}</Typography>
         </Grid>
       </Grid>
+      <Typography sx={{
+          textAlign: "left",
+          fontStyle: "normal",
+          fontWeight: "400",
+          fontSize: "12px",
+          lineHeight: "140%",
+          color: "#F6F6F6"}}>
+          {
+            `TOTAL XP:${getPointFromLevelAndXP(props.user_data.level, props.user_data.xp)}`
+          }
+      </Typography>
     </Grid>
   );
 };
 
 export default memo(PASSPORT);
-
-// <Typography style={expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>

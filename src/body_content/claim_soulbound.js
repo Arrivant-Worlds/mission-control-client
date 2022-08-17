@@ -24,18 +24,14 @@ export default function CLAIM_SOULBOUND(props) {
       signature: props.wallet_data.signature,
       pubkey: props.wallet_data.pubkey,
     };
-    console.log("payload", payload);
     // get trx from server
     let dehydratedTx = await create_soulbound(payload);
     let buffer = Buffer.from(dehydratedTx, "base64");
     const tx = Transaction.from(buffer);
     // user signs trx
     await signTransaction(tx);
-    console.log("signed tx", tx);
-    //setalert for snackbar that it may take 1 min. 
     // broadcast trx to solana
     let sig = await sendTransaction(tx, connection);
-    console.log("signature", sig);
     // send signature to server to verify completion
     let headers = {
       signedMsg: props.wallet_data.signedMsg,
@@ -43,7 +39,6 @@ export default function CLAIM_SOULBOUND(props) {
       pubkey: props.wallet_data.pubkey,
       transaction: sig,
     };
-    console.log("headers", headers);
     await confirm_soulbound(headers);
   };
 

@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export const COUNTDOWN = (props) => {
-  // console.log(props.user_data, "user data?");
 
   const calculateTimeLeft = () => {
     const difference = Math.abs(+new Date("2030-07-18T00:00:00+0000") - +new Date());

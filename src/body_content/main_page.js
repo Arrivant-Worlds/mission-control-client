@@ -18,6 +18,7 @@ import BOUNTY_PAGE from "./bounty_page.js";
 import MISSION_DIALOG from "./mission_dialog.js";
 import REWARDS_DIALOG from "./rewards_dialog.js";
 import WELCOME_DIALOG from "./welcome_dialog.js";
+import MESSAGE_DIALOG from "./message_dialog.js";
 import LORE_PAGE from "./lore_page.js";
 import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
@@ -71,12 +72,17 @@ export const MAIN_PAGE = (props) => {
   let navigate = useNavigate();
   const [wallet_data, change_wallet_data] = useState(null);
   const [dialog_state, change_dialog_state] = useState(false);
+  const [message_dialog, set_message_dialog] = useState({
+    open: false,
+    text: "",
+  });
   const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState({});
   const [user_data, change_user_data] = useState({});
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
   const [rewards_data, change_rewards_data] = useState([]);
+  const [clicked_state, set_clicked_state] = useState(false);
   const [rewards_dialog_data, set_rewards_dialog_data] = useState({
     xp: "",
     id: "",
@@ -99,6 +105,7 @@ export const MAIN_PAGE = (props) => {
   const [welcome_popup_flag, setWelcome_popup_flag] = useState(false);
   const [claim_tutorial_flag, setClaim_tutorial_flag] = useState(false);
   const [welcome_popup, setWelcome_popup] = useState(false);
+  const [ledger_state, set_ledger_state] = useState(false);
 
   const [volume, setVolume] = useState(1);
   // Drew's changes - sound hooks
@@ -168,8 +175,12 @@ export const MAIN_PAGE = (props) => {
     change_loading_state(false);
   };
 
+  const toggle_ledger_switch = () => {
+    set_ledger_state(!ledger_state);
+  }
+
   const check_ledger = () => {
-    if (wallet && wallet.adapter.name === "Ledger") {
+    if (wallet && wallet.adapter.name === "Ledger" || ledger_state) {
       return true;
     } else if(wallet && wallet.adapter.name === "Phantom") {
       return false;
@@ -330,6 +341,23 @@ export const MAIN_PAGE = (props) => {
     setWelcome_popup(false);
   };
 
+  const handleMessageOpen = (text) => {
+    change_dialog_state(false);
+    change_rewards_dialog_state(false);
+    set_clicked_state(false);
+    set_message_dialog({
+      open: true,
+      text: text
+    });
+  };
+
+  const handleMessageClose = async () => {
+    set_message_dialog({
+      open: false,
+      text: "",
+    });
+  };
+
   const handleClaimQuestReward = async (reward_id) => {
     let header_verification = await getWithExpiration();
     await claim_quest_reward(header_verification, reward_id);
@@ -347,8 +375,15 @@ export const MAIN_PAGE = (props) => {
         severity: "warning",
       });
       let buffer = Buffer.from(claim, "base64");
-      const tx = Transaction.from(buffer);
-      const signedTX = await signTransaction(tx);
+      let signedTX;
+      try {
+        const tx = Transaction.from(buffer);
+        signedTX = await signTransaction(tx);
+      } catch (e) {
+        if (e.message === "User rejected the request.") {
+          handleMessageOpen("You must approve the transaction in order to claim!");
+        }
+      }
       // console.log(signedTX, "?");
       const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
@@ -413,18 +448,6 @@ export const MAIN_PAGE = (props) => {
 
     await verify_twitter(headers, query);
   };
-
-  // const toggleEle = (elem, state) => {
-  //   if (state) {
-  //     elem.muted = !state;
-  //     console.log(elem.muted, "conditional");
-  //     elem.play();
-  //   } else {
-  //     elem.muted = !state;
-  //     console.log(elem.muted, "else");
-  //     elem.pause();
-  //   }
-  // }
 
   const toggle_sound = () => {
     if (volume === 1) {
@@ -539,7 +562,15 @@ export const MAIN_PAGE = (props) => {
             </MenuItem>
           </Menu>
           <Grid container item direction="row" justifyContent="flex-end"
-          sx={{marginTop: "-40px"}} xs={5}>
+          sx={{marginTop: "-100px"}} xs={5}>
+            <Grid container item alignItems="center" xs={4} justifyContent="flex-end">
+              <FormGroup onChange={() => toggle_ledger_switch()}>
+                <FormControlLabel control={<Switch checked={ledger_state} />}
+                label="Ledger"
+                labelPlacement="start"
+                />
+              </FormGroup>
+            </Grid>
             <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
               {wallet ? (
                 <Box onMouseEnter={() => handleConnectHover()}>
@@ -730,10 +761,17 @@ export const MAIN_PAGE = (props) => {
           rewards_dialog_data={rewards_dialog_data}
           set_rewards_dialog_data={set_rewards_dialog_data}
           playRewardFanfare={playRewardFanfare}
+          clicked_state={clicked_state}
+          set_clicked_state={set_clicked_state}
         />
         <WELCOME_DIALOG
           handleWelcomeClose={handleWelcomeClose}
           welcome_popup={welcome_popup}
+          playQuestOpen={playQuestOpen}
+        />
+        <MESSAGE_DIALOG
+          message_dialog={message_dialog}
+          handleMessageClose={handleMessageClose}
           playQuestOpen={playQuestOpen}
         />
         <SNACKBAR alertState={alertState} setAlertState={setAlertState} />

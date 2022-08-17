@@ -8,14 +8,10 @@ import MISSION_BLOCK from "./mission_block.js";
 import COUNTDOWN from "./countdown.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
-// import mission_data from "./mission_data.js";
-// import weekly_mission_data from "./weekly_mission_data.js";
-// import prime_mission_data from "./prime_mission_data.js";
 
 const render_priority = ["link_discord","link_email","link_twitter"];
 
 export const MISSION_BOARD = (props) => {
-  // console.log(props.quests_data, "quest data");
 
   const handleClick = (tab) => {
     props.playQuestType();
@@ -170,6 +166,3 @@ export const MISSION_BOARD = (props) => {
 }
 
 export default memo(MISSION_BOARD);
-
-// <Typography style={props.expanded_tab === "daily" ? styles.minus : styles.plus}>
-// {expanded_tab === "daily" ? "-" : "+"}</Typography>
