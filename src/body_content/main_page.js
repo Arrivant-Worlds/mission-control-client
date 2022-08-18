@@ -13,6 +13,8 @@ import {
   verify_twitter,
   RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server,
 } from "./../api_calls";
+import {LAMPORTS_PER_SOL} from "@solana/web3.js";
+import { useAnalytics } from '../mixpanel.js';
 import CONNECT_PAGE from "./connect_page.js";
 import BOUNTY_PAGE from "./bounty_page.js";
 import MISSION_DIALOG from "./mission_dialog.js";
@@ -70,6 +72,8 @@ export const MAIN_PAGE = (props) => {
     signTransaction,
   } = useWallet();
   let navigate = useNavigate();
+  const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
+
   const [wallet_data, change_wallet_data] = useState(null);
   const [dialog_state, change_dialog_state] = useState(false);
   const [message_dialog, set_message_dialog] = useState({
@@ -356,6 +360,7 @@ export const MAIN_PAGE = (props) => {
       open: false,
       text: "",
     });
+    await populate_data();
   };
 
   const handleClaimQuestReward = async (reward_id) => {
@@ -366,6 +371,12 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
+    let balance_check = await RPC_CONNECTION.getBalance(publicKey);
+    if (LAMPORTS_PER_SOL * balance_check < .005) {
+      handleMessageOpen("You must have more than .005 SOL in your wallet!");
+      return;
+    }
+    // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
     let claim = await claim_journey_reward(header_verification, reward_id);
     if (claim.length > 0 && type_reward.type === "soulbound") {
       setAlertState({
@@ -415,6 +426,13 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleDropdown_navigate = (path) => {
+    if (path === "lore") {
+      track('Lore Drop-Down Menu Click',{
+        event_category: 'Button Click',
+        event_label: "Lore Drop-Down Menu Click",
+      })
+      return;
+    }
     if (path === "elune") {
       window.open("https://www.projecteluune.com");
       change_dropdown_anchor(null);

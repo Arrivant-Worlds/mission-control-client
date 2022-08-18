@@ -57,13 +57,13 @@ export default function ACTION_COMPONENT(props) {
     change_claimed_state(true);
     props.playRewardFanfare();
     props.handleClaimQuestReward(props.dialog_data.active_reward.id);
-    track('Mission Claim',{
-      event_category: 'Missions',
-      event_label:'Claim',
-      xp: props.dialog_data.xp,
-    })
-    let now = new Date()
-    try{
+    try {
+      track('Mission Claim',{
+        event_category: 'Missions',
+        event_label: props.dialog_data.title,
+        xp: props.dialog_data.xp,
+      })
+      let now = new Date()
       setPropertyIfNotExists('First Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
       setProperty('Last Mission Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
       setPropertyIfNotExists('Missions done', 0)
