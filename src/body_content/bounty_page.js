@@ -11,6 +11,7 @@ import LEADERBOARD from "./leaderboard.js";
 import REWARDS from "./rewards.js";
 import EGG from "./egg.js";
 import PASSPORT from "./passport.js";
+import { useAnalytics } from '../mixpanel.js';
 import loreIcon from "../images/Lore_Icon.png"
 import {
  verify_discord,
@@ -21,6 +22,7 @@ import { useNavigate } from "react-router";
 import {useWallet} from "@solana/wallet-adapter-react";
 
 export const BOUNTY_PAGE = (props) => {
+  const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
   const navigate = useNavigate()
@@ -93,6 +95,18 @@ export const BOUNTY_PAGE = (props) => {
       props.playEggTab();
     }
   };
+
+  const handleLoreNavigation = () => {
+    navigate('/lore');
+    try {
+      track('Lore Icon Click',{
+        event_category: 'Button Click',
+        event_label: "Lore Icon Click",
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -242,7 +256,7 @@ export const BOUNTY_PAGE = (props) => {
         <Grid container item xs={4} direction="column" alignItems="center">
           <Box
             onMouseEnter = {props.handleMainHover}
-            onClick = {()=>{ navigate('/lore')}}
+            onClick = {handleLoreNavigation}
             sx={{
               // height: "10vh",
               cursor: "pointer",
