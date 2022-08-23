@@ -20,6 +20,7 @@ import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 import { useNavigate } from "react-router";
 import {useWallet} from "@solana/wallet-adapter-react";
+import { Connection } from "@solana/web3.js";
 
 export const BOUNTY_PAGE = (props) => {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();

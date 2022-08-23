@@ -1,4 +1,4 @@
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import mixpanel from "mixpanel-browser"
 import React, { useContext, useEffect, useState, createContext } from "react"
 import { useLocation } from "react-router";
@@ -37,10 +37,9 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
   const router = useLocation();
   const [trackingInitialized, setTrackingInitialized] = useState(false);
   const [lastPubkeyConnected, setLastPubkeyConnected] = useState(undefined);
-
-  const wallet = useAnchorWallet();
+  const wallet = useAnchorWallet()
+  const allWalletInfo  = useWallet();
   const pubkey = wallet?.publicKey.toBase58();
-
   function initializeTracking() {
     const integrations = {
       mixpanel: !!MIXPANEL_TOKEN,
@@ -117,12 +116,13 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (trackingInitialized) {
-      if (pubkey) {
+      if (pubkey && allWalletInfo) {
         identify();
         track('Wallet Connection Made', {
           event_category: 'Wallet',
           event_label: pubkey,
           pubkey,
+          walletType: allWalletInfo.wallet.adapter.name
         });
       } else if (!pubkey && lastPubkeyConnected) {
         track('Wallet Connection Broken', {
