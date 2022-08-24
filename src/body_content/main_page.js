@@ -22,6 +22,7 @@ import REWARDS_DIALOG from "./rewards_dialog.js";
 import WELCOME_DIALOG from "./welcome_dialog.js";
 import MESSAGE_DIALOG from "./message_dialog.js";
 import LORE_PAGE from "./lore_page.js";
+import ADMIN_PAGE from "./admin_page.js";
 import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
@@ -40,6 +41,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import styles from "./main_page_styles.js";
 import navIcon from "../images/NavIcon_withshadow.png";
 import AurahTheme from "../audio/AurahTheme.mp3";
@@ -578,6 +580,12 @@ export const MAIN_PAGE = (props) => {
             <MenuItem onClick={() => handleDropdown_navigate("/lore")}>
               Lore
             </MenuItem>
+            { user_data.admin ?
+              <MenuItem onClick={() => handleDropdown_navigate("/admin")}>
+              Admin
+              </MenuItem>
+              : null
+            }
           </Menu>
           <Grid container item direction="row" justifyContent="flex-end"
           sx={{marginTop: "-100px"}} xs={5}>
@@ -735,6 +743,7 @@ export const MAIN_PAGE = (props) => {
             }
           />
           <Route path="lore" element={<LORE_PAGE />} />
+          <Route path="admin" element={<ADMIN_PAGE />} />
         </Routes>
         {loading_state ? (
           <Box

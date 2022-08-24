@@ -36,6 +36,7 @@ export const get_user = async (payload) => {
         badgeUrl: "",
         level: 0,
         xp: 0,
+        admin: false,
       };
     }
   }
