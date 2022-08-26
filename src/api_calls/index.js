@@ -3,11 +3,12 @@ import queryString from "query-string";
 import { Connection } from "@solana/web3.js";
 import { BASE_URL, RPC_CONNECTION_URL } from "./constants";
 
-export const create_user = async (payload) => {
+export const create_user = async (payload, user_code) => {
+  const referral_code = user_code || {};
   try {
     const response = await axios.post(
       `${BASE_URL}/users`,
-      {},
+      referral_code,
       { headers: payload }
     );
     return response.data;
@@ -23,11 +24,22 @@ export const get_user = async (payload) => {
   } catch (errors) {
     //console.error(errors.response.data);
     if (errors.response.status == 747) {
-      const create_user_call = await create_user(payload);
-      // console.log(create_user_call, "return from create_user before attempt");
-      create_user_call.welcome = true;
-      // console.log(create_user_call, "return from create_user after attempt");
-      return await create_user_call;
+      if (window.location.search) {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+          get: (searchParams, prop) => searchParams.get(prop),
+        });
+        if (params.inviteCode) {
+          const create_user_call = await create_user(payload, { referral_code: params.inviteCode });
+          create_user_call.welcome = true;
+          return create_user_call;
+        }
+      } else {
+        const create_user_call = await create_user(payload);
+        // console.log(create_user_call, "return from create_user before attempt");
+        create_user_call.welcome = true;
+        // console.log(create_user_call, "return from create_user after attempt");
+        return await create_user_call;
+      }
     } else {
       return {
         xp: 0,
