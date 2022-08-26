@@ -36,11 +36,11 @@ export const LOG_BOARD = (props) => {
           >
             {
               [...props.quests_data].sort((a,b) => {
-                if (a.active_reward === null) {
+                if (a.active_reward.length === 0) {
                   return 1;
                 }
 
-                if (b.active_reward === null) {
+                if (b.active_reward.length === 0) {
                   return -1;
                 }
 
@@ -49,7 +49,7 @@ export const LOG_BOARD = (props) => {
                 }
                 return a.active_reward < b.active_reward ? -1 : 1;
               }).map((item, i) => {
-                if (item.active_reward || item.user_quest_status === "Complete") {
+                if (item.active_reward.length > 0 || item.user_quest_status === "Complete" || item.recurrence === "permanent") {
                   if (item.user_quest_status === "Locked" && item.recurrence === "prime") {
                     return (
                       <Tooltip
@@ -66,6 +66,7 @@ export const LOG_BOARD = (props) => {
                             set_rewards_dialog_data = {props.set_rewards_dialog_data}
                             user_data={props.user_data}
                             setAlertState={props.setAlertState}
+                            from="log"
                           />
                         </Box>
                       </Tooltip>
@@ -81,6 +82,7 @@ export const LOG_BOARD = (props) => {
                         set_rewards_dialog_data = {props.set_rewards_dialog_data}
                         user_data={props.user_data}
                         setAlertState={props.setAlertState}
+                        from="log"
                       />
                     )
                   }

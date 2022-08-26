@@ -32,7 +32,7 @@ export const BOUNTY_PAGE = (props) => {
   const { wallet, publicKey } = useWallet();
 
   useEffect(() => {
-    let allActive = props.quests_data.filter((i)=> i.active_reward)
+    let allActive = props.quests_data.filter((i)=> i.active_reward.length > 0)
     setClaimableCount(allActive.length);
     if (props.claim_tutorial_flag) {
       props.setAlertState({

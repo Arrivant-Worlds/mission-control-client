@@ -41,7 +41,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import styles from "./main_page_styles.js";
 import navIcon from "../images/NavIcon_withshadow.png";
 import AurahTheme from "../audio/AurahTheme.mp3";
@@ -320,7 +319,7 @@ export const MAIN_PAGE = (props) => {
       setAlertState({
         open: true,
         message:
-          "Verification of mission can take up to 60 seconds! Come back and check the Log tab to claim your reward!",
+          "Come back and check the Log tab to claim your reward!",
         severity: "warning",
       });
     }
