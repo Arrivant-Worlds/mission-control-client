@@ -41,13 +41,14 @@ export default function ACTION_COMPONENT(props) {
     // }
     // console.log(props.dialog_data, "dialog props?");
     if (props.dialog_data.recurrence === "permanent") {
-
       if (props.dialog_data.from === "mission" && props.actionDone) {
         return true;
       } else if (props.dialog_data.from === "mission") {
         return false;
       } else if (props.dialog_data.from === "log" && props.dialog_data.active_reward.length === 0) {
         return true;
+      } else {
+        return false;
       }
     }
 
