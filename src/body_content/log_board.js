@@ -49,7 +49,7 @@ export const LOG_BOARD = (props) => {
                 }
                 return a.active_reward < b.active_reward ? -1 : 1;
               }).map((item, i) => {
-                if (item.active_reward.length > 0 || item.user_quest_status === "Complete" || item.recurrence === "permanent") {
+                if (item.active_reward.length > 0 || item.user_quest_status === "Complete" || item.recurrence === "permanent" && item.active_reward.length > 0) {
                   if (item.user_quest_status === "Locked" && item.recurrence === "prime") {
                     return (
                       <Tooltip
