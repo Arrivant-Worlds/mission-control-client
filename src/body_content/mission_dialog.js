@@ -131,6 +131,7 @@ export default function MISSION_DIALOG(props) {
                   dialog_data={props.dialog_data}
                   handleClaimQuestReward={props.handleClaimQuestReward}
                   playRewardFanfare={props.playRewardFanfare}
+                  handleNavigation={props.handleNavigation}
                 />
               </Box>
             </Grid>

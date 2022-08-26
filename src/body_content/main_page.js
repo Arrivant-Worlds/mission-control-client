@@ -280,7 +280,7 @@ export const MAIN_PAGE = (props) => {
 
   const handleClick = async () => {
     playAurahTheme();
-    navigate("/connect");
+    handleNavigation("/connect");
   };
 
   const handleMainHover = () => {
@@ -296,7 +296,7 @@ export const MAIN_PAGE = (props) => {
     let disconnect_wallet = await disconnect();
     localStorage.removeItem("verifyHeader");
     change_wallet_data(null);
-    navigate("/");
+    handleNavigation("/");
   };
 
   const handleDisconnectHover = () => {
@@ -428,6 +428,18 @@ export const MAIN_PAGE = (props) => {
     // navigate('/');
   };
 
+  const handleNavigation = (path) => {
+    if (window.location.search) {
+      navigate({
+        pathname: path,
+        search: `${window.location.search}`,
+      });
+      return;
+    } else {
+      navigate(path);
+    }
+  }
+
   const handleDropdown_navigate = (path) => {
     if (path === "lore") {
       track('Lore Drop-Down Menu Click',{
@@ -449,11 +461,11 @@ export const MAIN_PAGE = (props) => {
           message: "Please connect your wallet and sign!",
           severity: "error",
         });
-        navigate("/connect");
+        handleNavigation("/connect");
       }
     }
     change_dropdown_anchor(null);
-    navigate(path);
+    handleNavigation(path);
   };
 
   const handleLinkTwitter = async (query) => {
@@ -699,6 +711,7 @@ export const MAIN_PAGE = (props) => {
                 handleConnectHover={handleConnectHover}
                 handleDisconnectHover={handleDisconnectHover}
                 playConnectWallet={playConnectWallet}
+                handleNavigation={handleNavigation}
               />
             }
           />
@@ -740,6 +753,7 @@ export const MAIN_PAGE = (props) => {
                 handleMainHover={handleMainHover}
                 claim_tutorial_flag={claim_tutorial_flag}
                 setClaim_tutorial_flag={setClaim_tutorial_flag}
+                handleNavigation={handleNavigation}
               />
             }
           />
@@ -779,6 +793,7 @@ export const MAIN_PAGE = (props) => {
           handleDialogHover={handleDialogHover}
           handleClaimQuestReward={handleClaimQuestReward}
           playRewardFanfare={playRewardFanfare}
+          handleNavigation={handleNavigation}
         />
         <REWARDS_DIALOG
           rewards_dialog_state={rewards_dialog_state}

@@ -12,7 +12,6 @@ import {
 
 export default function CONNECT_TWITTER(props) {
   const { publicKey, connected } = useWallet();
-  let navigate = useNavigate();
 
   const handleTwitter = async () => {
     props.handleButtonClick();
@@ -36,7 +35,7 @@ export default function CONNECT_TWITTER(props) {
         }
       }
     } else {
-      navigate("/connect");
+      props.handleNavigation("/connect");
     }
   };
 

@@ -13,8 +13,6 @@ export const CONNECT_PAGE = (props) => {
   const { wallet, signMessage, publicKey, connect, connected } = useWallet();
   const [button_text, change_button_text] = useState("CONNECT WALLET");
 
-  let navigate = useNavigate();
-
   const handleClick = async () => {
     await connect();
   };
@@ -25,7 +23,7 @@ export const CONNECT_PAGE = (props) => {
 
   useEffect(() => {
     if (connected) {
-      navigate("/bounty_main");
+      props.handleNavigation("/bounty_main");
     }
   }, [publicKey])
 

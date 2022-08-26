@@ -92,7 +92,6 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
 
 const Content: FC = (connection) => {
   const media_query_1000 = useMediaQuery('(min-width:1000px)');
-  let navigate = useNavigate();
 
   return (
   <AnalyticsProvider>
