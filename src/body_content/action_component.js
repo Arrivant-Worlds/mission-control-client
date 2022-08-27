@@ -421,6 +421,7 @@ export default function ACTION_COMPONENT(props) {
               getWithExpiration={props.getWithExpiration}
               buttonText={props.action_data.buttonText}
               handleNavigation={props.handleNavigation}
+              setAlertState = {props.setAlertState}
             />
           </Grid>
         </Grid>
