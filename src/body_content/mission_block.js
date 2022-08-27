@@ -1,5 +1,6 @@
 import React, { useState, useEffect, memo } from "react";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Icon from "@mui/material/Icon";
 import Badge from '@mui/material/Badge';
@@ -93,44 +94,62 @@ export function MISSION_BLOCK(props) {
         onClick={() => handleOnClick()}
         onMouseEnter={() => handleOnHover()}
       >
-          <Grid container item direction="column" xs={11}>
-            <Grid
-              container
-              item
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-            >
+        <Grid container item direction="column" xs={11}>
+          <Grid
+            container
+            item
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <Grid container item direction="row" justifyContent="flex-start" xs={8}>
               <Typography style={render_style("title")}>{props.item_data.title}</Typography>
+            </Grid>
+            <Grid container item justifyContent="center" alignItems="center" xs>
               <Typography
-                style={render_style("xp")}
+              style={render_style("xp")}
               >{`+${props.item_data.xp} XP`}</Typography>
             </Grid>
-            <Typography style={render_style("description")}
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: "2",
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              {props.item_data.description}
-            </Typography>
           </Grid>
-          <Grid container item xs={1} justifyContent="center" alignItems="center">
-            <Badge className="permanent_mission_badge"
-            badgeContent={props.from === "log" && props.item_data.active_reward.length > 0 ? props.item_data.active_reward.length : 0} color="primary"
-              sx={{
-                "& .MuiBadge-badge": {
-                  backgroundColor: "#f6f6f6f6 !important"
-                }
-              }}>
-              {renderIcon()}
-            </Badge>
-          </Grid>
+          <Typography style={render_style("description")}
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "2",
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {props.item_data.description}
+          </Typography>
+        </Grid>
+        <Grid container item xs={1} justifyContent="center" alignItems="center">
+          <Badge
+          badgeContent={props.from === "log" && props.item_data.active_reward.length > 0 ? props.item_data.active_reward.length : 0} color="primary"
+            sx={{
+              "& .MuiBadge-badge": {
+                backgroundColor: "#f6f6f6f6 !important"
+              }
+            }}>
+            {renderIcon()}
+          </Badge>
+        </Grid>
       </Grid>
   );
 }
 
 export default memo(MISSION_BLOCK);
+//
+// <Badge badgeContent={`!`} anchorOrigin={{
+//   vertical: 'top',
+//   horizontal: 'left',
+// }}
+// sx={{
+//   "& .MuiBadge-badge": {
+//     color: "#000000",
+//     fontSize: "16px",
+//     fontWeight: "700 !important",
+//   }
+// }}
+// >
+// </Badge>
