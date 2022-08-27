@@ -5,10 +5,8 @@ import Typography from "@mui/material/Typography";
 import SimpleBar from "simplebar-react";
 import styles from "./mission_board_styles.js";
 import MISSION_BLOCK from "./mission_block.js";
-import COUNTDOWN from "./countdown.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
-
 const render_priority = ["link_discord","link_email","link_twitter"];
 
 export const MISSION_BOARD = (props) => {
@@ -71,9 +69,6 @@ export const MISSION_BOARD = (props) => {
           onClick={() => handleClick("daily")} alignItems="center">
           <Typography style={ props.expanded_tab === "daily" ? styles.mission_title : styles.mission_title_not_active }>{`DAILY MISSIONS (${props.user_data.daily_claim_remaining}/2)`}
           </Typography>
-          <Grid item xs={2}>
-            <COUNTDOWN user_data={props.user_data}/>
-          </Grid>
           <Box
             component="img"
             src={props.expanded_tab === "daily" ? minus : plus}

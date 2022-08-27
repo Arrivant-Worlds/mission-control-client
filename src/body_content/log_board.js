@@ -6,6 +6,7 @@ import SimpleBar from "simplebar-react";
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import styles from "./log_board_styles.js";
 import MISSION_BLOCK from "./mission_block.js";
+import COUNTDOWN from "./countdown.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
 
@@ -23,10 +24,13 @@ export const LOG_BOARD = (props) => {
       style={styles.log_grid_container} sx={{marginBottom: "0px !important"}} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
         onClick={() => handleClick(!expanded_tab)} alignItems="center">
-          <Typography style={styles.log_title}
-            style={styles.log_title}>
-            COMPLETED MISSION LOG
-          </Typography>
+          <Grid item container direction="column" xs={11}>
+            <Typography style={styles.log_title}
+              style={styles.log_title}>
+              COMPLETED MISSION LOG
+            </Typography>
+            <COUNTDOWN user_data={props.user_data}/>
+          </Grid>
           <Box component="img" src={expanded_tab ? minus : plus}
           style={expanded_tab ? styles.minus : styles.plus}/>
         </Grid>
