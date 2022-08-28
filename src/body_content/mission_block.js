@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Icon from "@mui/material/Icon";
 import Badge from '@mui/material/Badge';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import styles from "./mission_block_styles.js";
 import { useAnalytics } from "../mixpanel.js";
 
@@ -85,6 +86,18 @@ export function MISSION_BLOCK(props) {
     }
   }
 
+  const render_tooltip_claim = () => {
+    if (props.from === "log" && props.item_data.active_reward.length > 0) {
+      if (props.item_data.recurrence === "permanent" || props.item_data.recurrence === "daily") {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   return (
       <Grid
         container
@@ -103,7 +116,20 @@ export function MISSION_BLOCK(props) {
             alignItems="center"
           >
             <Grid container item direction="row" justifyContent="flex-start" xs={8}>
-              <Typography style={render_style("title")}>{props.item_data.title}</Typography>
+              <Tooltip
+                placement="top"
+                title={render_tooltip_claim() ? "Claiming this reward counts towards your daily mission cap" : ""}
+              >
+                <Badge
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                badgeContent={render_tooltip_claim() ? `!` : 0}
+                sx={{color: "#000000", textOverflow: "ellipsis", width: "100%"}}>
+                  <Typography style={render_style("title")}>{props.item_data.title}</Typography>
+                </Badge>
+              </Tooltip>
             </Grid>
             <Grid container item justifyContent="center" alignItems="center" xs>
               <Typography
