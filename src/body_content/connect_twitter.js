@@ -27,18 +27,26 @@ export default function CONNECT_TWITTER(props) {
         };
         console.log("headers", headers);
         let oauth_token = await auth_twitter(headers, publicKey.toString());
-        if (oauth_token != null) {
+        if (oauth_token.length !== 0) {
           console.log("oauth_token ", oauth_token);
           let redirect = await get_twitter_oauth_redirect(oauth_token);
           console.log("redirect", redirect);
           window.location.href = redirect;
           await verify_twitter(headers, window.location.search);
-        }
+        } else {
+        console.log("oauth_token is empty");
+        props.setAlertState({
+          open: true,
+          message:
+          "Twitter authentication failed!",
+          severity: "error",
+        });
       }
     } else {
       navigate("/connect");
     }
   };
+}
 
   const handleOnHover = () => {
     props.handleButtonHover();

@@ -315,6 +315,7 @@ export default function ACTION_COMPONENT(props) {
               handleButtonClick={() => handleTwitterClick()}
               getWithExpiration={props.getWithExpiration}
               buttonText={props.action_data.buttonText}
+              setAlertState = {props.setAlertState}
             />
           </Grid>
         </Grid>
