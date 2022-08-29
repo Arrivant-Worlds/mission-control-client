@@ -41,11 +41,11 @@ export default function CONNECT_TWITTER(props) {
             severity: "error",
           });
         }
+      } else {
+        props.handleNavigation("/connect");
       }
-    } else {
-      props.handleNavigation("/connect");
-    }
-  };
+    };
+  }
 
   const handleOnHover = () => {
     props.handleButtonHover();
