@@ -212,11 +212,10 @@ export const claim_quest_reward = async (payload, reward_id) => {
       {},
       { headers: payload }
     );
-    console.log(response.data);
-    return response.data;
+    return response;
   } catch (errors) {
     console.error(errors);
-    return [];
+    return errors.response;
   }
 };
 
