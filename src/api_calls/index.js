@@ -31,6 +31,11 @@ export const get_user = async (payload) => {
         if (params.inviteCode) {
           const create_user_call = await create_user(payload, { referral_code: params.inviteCode });
           create_user_call.welcome = true;
+          let url = window.location.toString();
+          if (url.indexOf("?") > 0) {
+              let clean_url = url.substring(0, url.indexOf("?"));
+              window.history.replaceState(window.history.state, "", clean_url);
+          }
           return create_user_call;
         }
       } else {
