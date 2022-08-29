@@ -41,6 +41,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import styles from "./main_page_styles.js";
 import navIcon from "../images/NavIcon_withshadow.png";
 import AurahTheme from "../audio/AurahTheme.mp3";
@@ -609,14 +610,16 @@ export const MAIN_PAGE = (props) => {
             }
           </Menu>
           <Grid container item direction="row" justifyContent="flex-end"
-          sx={{marginTop: "-100px"}} xs={5}>
+            sx={{marginTop: "-100px"}} xs={5}>
             <Grid container item alignItems="center" xs={4} justifyContent="flex-end">
-              <FormGroup onChange={() => toggle_ledger_switch()}>
-                <FormControlLabel control={<Switch checked={ledger_state} />}
-                label="Ledger"
-                labelPlacement="start"
-                />
-              </FormGroup>
+              <Tooltip title="Switch on if you are using ledger with Phantom">
+                <FormGroup onChange={() => toggle_ledger_switch()}>
+                  <FormControlLabel control={<Switch checked={ledger_state} />}
+                  label="Ledger"
+                  labelPlacement="start"
+                  />
+                </FormGroup>
+              </Tooltip>
             </Grid>
             <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
               {wallet ? (
