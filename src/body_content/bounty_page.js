@@ -26,13 +26,12 @@ export const BOUNTY_PAGE = (props) => {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
-  const navigate = useNavigate()
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   const { wallet, publicKey } = useWallet();
 
   useEffect(() => {
-    let allActive = props.quests_data.filter((i)=> i.active_reward)
+    let allActive = props.quests_data.filter((i)=> i.active_reward.length > 0)
     setClaimableCount(allActive.length);
     if (props.claim_tutorial_flag) {
       props.setAlertState({
@@ -98,7 +97,7 @@ export const BOUNTY_PAGE = (props) => {
   };
 
   const handleLoreNavigation = () => {
-    navigate('/lore');
+    props.handleNavigation("/lore");
     try {
       track('Lore Icon Click',{
         event_category: 'Button Click',

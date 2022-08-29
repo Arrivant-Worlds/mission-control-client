@@ -22,6 +22,7 @@ import REWARDS_DIALOG from "./rewards_dialog.js";
 import WELCOME_DIALOG from "./welcome_dialog.js";
 import MESSAGE_DIALOG from "./message_dialog.js";
 import LORE_PAGE from "./lore_page.js";
+import ADMIN_PAGE from "./admin_page.js";
 import SNACKBAR from "./snackbar.js";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
@@ -199,15 +200,17 @@ export const MAIN_PAGE = (props) => {
       const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
       });
-      // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
-      let value = params.oauth_token;
-      handleLinkTwitter(window.location.search);
-      setAlertState({
-        open: true,
-        message:
+      if (params.oauth_token) {
+        // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
+        let value = params.oauth_token;
+        handleLinkTwitter(window.location.search);
+        setAlertState({
+          open: true,
+          message:
           "Twitter authentication success!",
-        severity: "success",
-      });
+          severity: "success",
+        });
+      }
     }
     if (connected) {
       loadUserData();
@@ -277,7 +280,7 @@ export const MAIN_PAGE = (props) => {
 
   const handleClick = async () => {
     playAurahTheme();
-    navigate("/connect");
+    handleNavigation("/connect");
   };
 
   const handleMainHover = () => {
@@ -293,7 +296,7 @@ export const MAIN_PAGE = (props) => {
     let disconnect_wallet = await disconnect();
     localStorage.removeItem("verifyHeader");
     change_wallet_data(null);
-    navigate("/");
+    handleNavigation("/");
   };
 
   const handleDisconnectHover = () => {
@@ -318,7 +321,7 @@ export const MAIN_PAGE = (props) => {
       setAlertState({
         open: true,
         message:
-          "Verification of mission can take up to 60 seconds! Come back and check the Log tab to claim your reward!",
+          "Come back and check the Log tab to claim your reward!",
         severity: "warning",
       });
     }
@@ -365,7 +368,15 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimQuestReward = async (reward_id) => {
     let header_verification = await getWithExpiration();
-    await claim_quest_reward(header_verification, reward_id);
+    let response = await claim_quest_reward(header_verification, reward_id);
+    if (response.status !== 200) {
+      setAlertState({
+        open: true,
+        message:
+        response.data,
+        severity: "error",
+      });
+    }
     await populate_data();
   };
 
@@ -425,6 +436,18 @@ export const MAIN_PAGE = (props) => {
     // navigate('/');
   };
 
+  const handleNavigation = (path) => {
+    if (window.location.search) {
+      navigate({
+        pathname: path,
+        search: `${window.location.search}`,
+      });
+      return;
+    } else {
+      navigate(path);
+    }
+  }
+
   const handleDropdown_navigate = (path) => {
     if (path === "lore") {
       track('Lore Drop-Down Menu Click',{
@@ -446,11 +469,11 @@ export const MAIN_PAGE = (props) => {
           message: "Please connect your wallet and sign!",
           severity: "error",
         });
-        navigate("/connect");
+        handleNavigation("/connect");
       }
     }
     change_dropdown_anchor(null);
-    navigate(path);
+    handleNavigation(path);
   };
 
   const handleLinkTwitter = async (query) => {
@@ -578,6 +601,12 @@ export const MAIN_PAGE = (props) => {
             <MenuItem onClick={() => handleDropdown_navigate("/lore")}>
               Lore
             </MenuItem>
+            { user_data.admin ?
+              <MenuItem onClick={() => handleDropdown_navigate("/admin")}>
+              Admin
+              </MenuItem>
+              : null
+            }
           </Menu>
           <Grid container item direction="row" justifyContent="flex-end"
           sx={{marginTop: "-100px"}} xs={5}>
@@ -690,6 +719,7 @@ export const MAIN_PAGE = (props) => {
                 handleConnectHover={handleConnectHover}
                 handleDisconnectHover={handleDisconnectHover}
                 playConnectWallet={playConnectWallet}
+                handleNavigation={handleNavigation}
               />
             }
           />
@@ -731,10 +761,12 @@ export const MAIN_PAGE = (props) => {
                 handleMainHover={handleMainHover}
                 claim_tutorial_flag={claim_tutorial_flag}
                 setClaim_tutorial_flag={setClaim_tutorial_flag}
+                handleNavigation={handleNavigation}
               />
             }
           />
           <Route path="lore" element={<LORE_PAGE />} />
+          <Route path="admin" element={<ADMIN_PAGE />} />
         </Routes>
         {loading_state ? (
           <Box
@@ -769,6 +801,7 @@ export const MAIN_PAGE = (props) => {
           handleDialogHover={handleDialogHover}
           handleClaimQuestReward={handleClaimQuestReward}
           playRewardFanfare={playRewardFanfare}
+          handleNavigation={handleNavigation}
         />
         <REWARDS_DIALOG
           rewards_dialog_state={rewards_dialog_state}

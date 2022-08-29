@@ -28,9 +28,9 @@ export const COUNTDOWN = (props) => {
 
 
   return (
-    <Grid container direction="row" justifyContent="flex-end" alignItems="center">
-      <Typography sx={{fontSize: "14px"}}>
-        {`${timeLeft.hours < 10 ? "0"+timeLeft.hours : timeLeft.hours}:${timeLeft.minutes < 10 ? "0"+timeLeft.minutes : timeLeft.minutes}:${timeLeft.seconds < 10 ? "0"+timeLeft.seconds : timeLeft.seconds}`}
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center">
+      <Typography sx={{fontSize: "14px", marginLeft: "8px"}}>
+        {`(${props.user_data.daily_claim_remaining}/2) ${timeLeft.hours < 10 ? "0"+timeLeft.hours : timeLeft.hours}:${timeLeft.minutes < 10 ? "0"+timeLeft.minutes : timeLeft.minutes}:${timeLeft.seconds < 10 ? "0"+timeLeft.seconds : timeLeft.seconds}`}
       </Typography>
     </Grid>
   );

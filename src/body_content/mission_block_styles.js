@@ -35,7 +35,7 @@ const styles = {
     whiteSpace: "nowrap",
     fontSize: "14px",
     fontWeight: "700",
-    maxWidth: "65%",
+    maxWidth: "100%",
     textTransform: "uppercase",
   },
   inactive_title: {
@@ -45,7 +45,7 @@ const styles = {
     whiteSpace: "nowrap",
     fontSize: "14px",
     fontWeight: "700",
-    maxWidth: "65%",
+    maxWidth: "100%",
     textTransform: "uppercase",
   },
   complete_title: {
@@ -55,7 +55,7 @@ const styles = {
     whiteSpace: "nowrap",
     fontSize: "14px",
     fontWeight: "700",
-    maxWidth: "65%",
+    maxWidth: "100%",
     textTransform: "uppercase",
   },
   claim_title: {
@@ -65,7 +65,7 @@ const styles = {
     whiteSpace: "nowrap",
     fontSize: "14px",
     fontWeight: "700",
-    maxWidth: "65%",
+    maxWidth: "100%",
     textTransform: "uppercase",
   },
   active_description: {

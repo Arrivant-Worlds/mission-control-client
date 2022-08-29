@@ -39,9 +39,22 @@ export default function ACTION_COMPONENT(props) {
     // if (props.user_data.daily_claim_remaining === 0 && props.dialog_data.recurrence === "daily") {
     //   return true;
     // }
+    // console.log(props.dialog_data, "dialog props?");
+    if (props.dialog_data.recurrence === "permanent") {
+      if (props.dialog_data.from === "mission" && props.actionDone) {
+        return true;
+      } else if (props.dialog_data.from === "mission") {
+        return false;
+      } else if (props.dialog_data.from === "log" && props.dialog_data.active_reward.length === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     if (props.dialog_data.user_quest_status === "Locked") {
       return true;
-    } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null || claimed_state) {
+    } else if (props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward.length === 0 ||  claimed_state) {
       return true;
     } else {
       return false;
@@ -56,7 +69,7 @@ export default function ACTION_COMPONENT(props) {
   const handleRewardClaim = () => {
     change_claimed_state(true);
     props.playRewardFanfare();
-    props.handleClaimQuestReward(props.dialog_data.active_reward.id);
+    props.handleClaimQuestReward(props.dialog_data.active_reward[0].id);
     try {
       track('Mission Claim',{
         event_category: 'Missions',
@@ -88,6 +101,18 @@ export default function ACTION_COMPONENT(props) {
     props.handleTwitterButton();
   };
 
+  const handleReferralClick = () => {
+    console.log(props, "props??");
+    props.setActionDone(true);
+    navigator.clipboard.writeText(props.action_data.url);
+    props.setAlertState({
+      open: true,
+      message:
+        "Referral link copied!",
+      severity: "success",
+    });
+  };
+
   const handleEmailSubmit = async (event) => {
     event.preventDefault();
     let emailForm = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -116,7 +141,87 @@ export default function ACTION_COMPONENT(props) {
   };
 
   const type_render = () => {
-    if (props.dialog_data.active_reward) {
+    if (props.dialog_data.recurrence === "permanent") {
+      if (props.dialog_data.from === "log") {
+        return (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: "100%", width: "100%" }}
+          >
+            <Grid
+              container
+              direction="column"
+              justifyContent="space-around"
+              alignItems="flex-start"
+              sx={{ height: "100%", width: "100%", padding: "10px" }}
+            >
+              <Typography sx={{ fontWeight: "700" }}>CONGRATULATIONS!</Typography>
+              <Typography sx={{fontSize: "18px", lineHeight: "25px", marginBottom: "15px"}}>
+                Click the button below to claim
+                your reward.
+              </Typography>
+              <Button
+                variant="contained"
+                disabled={disabled_button()}
+                onClick={() => handleRewardClaim()}
+                sx={{
+                  color: "black",
+                  fontSize: "14px",
+                  width: "100%",
+                  height: "55px",
+                  fontWeight: "700",
+                  backgroundColor: "#F6F6F6",
+                }}
+              >
+                { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward.length === 0 || claimed_state ? <Icon className={"fa-solid fa-check"}></Icon> : "CLAIM REWARD" }
+              </Button>
+            </Grid>
+          </Grid>
+        );
+      } else {
+        return (
+          <Grid
+            sx={{ height: "100%", width: "100%" }}
+            container
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Grid
+              container
+              direction="column"
+              justifyContent="space-around"
+              alignItems="flex-start"
+              sx={{
+                width: "90%",
+                height: "100%",
+              }}
+            >
+              <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px", width: "100%", wordWrap: "break-word"}}>{props.action_data.message}</Typography>
+              <Button
+                variant="contained"
+                disabled={disabled_button()}
+                onClick={() => handleReferralClick(props.action_data.url)}
+                sx={{
+                  color: "black",
+                  fontSize: "14px",
+                  width: "100%",
+                  height: "55px",
+                  fontWeight: "700",
+                  padding: "0 20px",
+                  backgroundColor: "#F6F6F6",
+                }}
+              >
+                { props.dialog_data.from === "mission" && props.actionDone ? <Icon className={"fa-solid fa-check"}></Icon> : props.action_data.buttonText }
+              </Button>
+            </Grid>
+          </Grid>
+        );
+      }
+    }
+    if (props.dialog_data.active_reward.length > 0) {
       return (
         <Grid
           container
@@ -150,7 +255,7 @@ export default function ACTION_COMPONENT(props) {
                 backgroundColor: "#F6F6F6",
               }}
             >
-              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null || claimed_state ? <Icon className={"fa-solid fa-check"}></Icon> : "CLAIM REWARD" }
+              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward.length === 0 || claimed_state ? <Icon className={"fa-solid fa-check"}></Icon> : "CLAIM REWARD" }
             </Button>
           </Grid>
         </Grid>
@@ -188,7 +293,7 @@ export default function ACTION_COMPONENT(props) {
                 backgroundColor: "#F6F6F6",
               }}
             >
-              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null ? <Icon className={"fa-solid fa-check"}></Icon> : props.action_data.buttonText }
+              { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward.length === 0 ? <Icon className={"fa-solid fa-check"}></Icon> : props.action_data.buttonText }
             </Button>
           </Grid>
         </Grid>
@@ -270,7 +375,7 @@ export default function ACTION_COMPONENT(props) {
                   backgroundColor: "#F6F6F6",
                 }}
               >
-                { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward === null ? <Icon className={"fa-solid fa-check"}></Icon> : props.action_data.buttonText }
+                { props.dialog_data.user_quest_status === "Complete" && props.dialog_data.active_reward.length === 0 ? <Icon className={"fa-solid fa-check"}></Icon> : props.action_data.buttonText }
               </Button>
             </form>
           )}
@@ -315,6 +420,7 @@ export default function ACTION_COMPONENT(props) {
               handleButtonClick={() => handleTwitterClick()}
               getWithExpiration={props.getWithExpiration}
               buttonText={props.action_data.buttonText}
+              handleNavigation={props.handleNavigation}
               setAlertState = {props.setAlertState}
             />
           </Grid>

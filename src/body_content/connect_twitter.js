@@ -12,9 +12,8 @@ import {
 
 export default function CONNECT_TWITTER(props) {
   const { publicKey, connected } = useWallet();
-  let navigate = useNavigate();
 
-  const handleTwitter = async () => {
+  const handleTwitter = async (n) => {
     props.handleButtonClick();
 
     if (publicKey && connected) {
@@ -34,19 +33,19 @@ export default function CONNECT_TWITTER(props) {
           window.location.href = redirect;
           await verify_twitter(headers, window.location.search);
         } else {
-        console.log("oauth_token is empty");
-        props.setAlertState({
-          open: true,
-          message:
-          "Twitter authentication failed!",
-          severity: "error",
-        });
+          console.log("oauth_token is empty");
+          props.setAlertState({
+            open: true,
+            message:
+            "Twitter authentication failed!",
+            severity: "error",
+          });
+        }
+      } else {
+        props.handleNavigation("/connect");
       }
-    } else {
-      navigate("/connect");
-    }
-  };
-}
+    };
+  }
 
   const handleOnHover = () => {
     props.handleButtonHover();
