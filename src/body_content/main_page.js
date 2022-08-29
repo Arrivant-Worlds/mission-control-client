@@ -368,7 +368,15 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimQuestReward = async (reward_id) => {
     let header_verification = await getWithExpiration();
-    await claim_quest_reward(header_verification, reward_id);
+    let response = await claim_quest_reward(header_verification, reward_id);
+    if (response.status !== 200) {
+      setAlertState({
+        open: true,
+        message:
+        response.data,
+        severity: "error",
+      });
+    }
     await populate_data();
   };
 
