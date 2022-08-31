@@ -259,6 +259,16 @@ export const MAIN_PAGE = (props) => {
       setWelcome_popup_flag(true);
       setClaim_tutorial_flag(true);
       }
+      try{
+        if(user.discord_name){
+          setPropertyIfNotExists("discord_name", user.discord_name);
+        }
+        if(user.twitter_id){
+          setPropertyIfNotExists("twitter_id", user.twitter_id);
+        }
+      } catch(err){
+        console.log("mixpanel discord/twitter insert err", err)
+      }
       change_user_data(user);
       let leaderboardPromise = await get_leaderboard(header).then((leaderboard) =>
         change_leaderboard_data(leaderboard)
