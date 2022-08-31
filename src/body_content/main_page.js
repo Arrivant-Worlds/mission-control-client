@@ -368,6 +368,14 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimQuestReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
+    if(type_reward === "claim_caught_creature_reward"){
+      let balance_check = await RPC_CONNECTION.getBalance(publicKey);
+      console.log("balance", balance_check)
+      if (LAMPORTS_PER_SOL * balance_check < .01) {
+        handleMessageOpen("You must have more than .01 SOL in your wallet!");
+        return;
+      }
+    }
     let response = await claim_quest_reward(header_verification, reward_id);
     if (response.status !== 200) {
       setAlertState({
@@ -379,13 +387,6 @@ export const MAIN_PAGE = (props) => {
     }
     console.log("HERE")
     if(response.data && type_reward === "claim_caught_creature_reward"){
-      let balance_check = await RPC_CONNECTION.getBalance(publicKey);
-    console.log("balance", balance_check)
-    if (LAMPORTS_PER_SOL * balance_check < .005) {
-      handleMessageOpen("You must have more than .01 SOL in your wallet!");
-      return;
-    }
-      console.log("found", response.data)
       let buffer = Buffer.from(response.data, "base64");
       let signedTX;
       try {
