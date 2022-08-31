@@ -18,6 +18,7 @@ import { Transaction } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function ACTION_COMPONENT(props) {
+  console.log(props, "???? AC");
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [claimed_state, change_claimed_state] = useState(false);
   const {signTransaction} = useWallet()
@@ -105,7 +106,6 @@ export default function ACTION_COMPONENT(props) {
   };
 
   const handleReferralClick = () => {
-    console.log(props, "props??");
     props.setActionDone(true);
     navigator.clipboard.writeText(props.action_data.url);
     props.setAlertState({
@@ -206,7 +206,7 @@ export default function ACTION_COMPONENT(props) {
               <Button
                 variant="contained"
                 disabled={disabled_button()}
-                onClick={() => handleReferralClick(props.action_data.url)}
+                onClick={ props.dialog_data.type === "claim_caught_creature_reward" ? () => handleLinkClick(props.action_data.url) : () => handleReferralClick(props.action_data.url)}
                 sx={{
                   color: "black",
                   fontSize: "14px",
