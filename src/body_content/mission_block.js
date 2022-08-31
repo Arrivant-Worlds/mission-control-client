@@ -88,7 +88,7 @@ export function MISSION_BLOCK(props) {
 
   const render_tooltip_claim = () => {
     if (props.from === "log" && props.item_data.active_reward.length > 0) {
-      if (props.item_data.recurrence === "permanent" || props.item_data.recurrence === "daily") {
+      if (props.item_data.recurrence === "permanent" && props.item_data.type !== "claim_caught_creature_reward" || props.item_data.recurrence === "daily") {
         return true;
       } else {
         return false;
