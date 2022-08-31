@@ -12,12 +12,15 @@ import {
   auth_twitter,
   get_twitter_oauth_redirect,
   verify_twitter,
+  transmit_signed_quest_reward_tx_to_server,
 } from "./../api_calls";
+import { Transaction } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function ACTION_COMPONENT(props) {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [claimed_state, change_claimed_state] = useState(false);
-
+  const {signTransaction} = useWallet()
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",
@@ -39,7 +42,6 @@ export default function ACTION_COMPONENT(props) {
     // if (props.user_data.daily_claim_remaining === 0 && props.dialog_data.recurrence === "daily") {
     //   return true;
     // }
-    // console.log(props.dialog_data, "dialog props?");
     if (props.dialog_data.recurrence === "permanent") {
       if (props.dialog_data.from === "mission" && props.actionDone) {
         return true;
@@ -66,10 +68,11 @@ export default function ACTION_COMPONENT(props) {
     window.open(path);
   };
 
-  const handleRewardClaim = () => {
+  const handleRewardClaim = async () => {
     change_claimed_state(true);
     props.playRewardFanfare();
-    props.handleClaimQuestReward(props.dialog_data.active_reward[0].id);
+    console.log("claiming", props.dialog_data.type)
+    await props.handleClaimQuestReward(props.dialog_data.active_reward[0].id, props.dialog_data.type);
     try {
       track('Mission Claim',{
         event_category: 'Missions',

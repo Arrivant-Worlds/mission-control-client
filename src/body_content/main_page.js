@@ -11,7 +11,7 @@ import {
   claim_journey_reward,
   claim_quest_reward,
   verify_twitter,
-  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server,
+  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server,
 } from "./../api_calls";
 import {LAMPORTS_PER_SOL} from "@solana/web3.js";
 import { useAnalytics } from '../mixpanel.js';
@@ -259,6 +259,16 @@ export const MAIN_PAGE = (props) => {
       setWelcome_popup_flag(true);
       setClaim_tutorial_flag(true);
       }
+      try{
+        if(user.discord_name){
+          setPropertyIfNotExists("discord_name", user.discord_name);
+        }
+        if(user.twitter_id){
+          setPropertyIfNotExists("twitter_id", user.twitter_id);
+        }
+      } catch(err){
+        console.log("mixpanel discord/twitter insert err", err)
+      }
       change_user_data(user);
       let leaderboardPromise = await get_leaderboard(header).then((leaderboard) =>
         change_leaderboard_data(leaderboard)
@@ -367,8 +377,16 @@ export const MAIN_PAGE = (props) => {
     await populate_data();
   };
 
-  const handleClaimQuestReward = async (reward_id) => {
+  const handleClaimQuestReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
+    if(type_reward === "claim_caught_creature_reward"){
+      let balance_check = await RPC_CONNECTION.getBalance(publicKey);
+      console.log("balance", balance_check)
+      if (LAMPORTS_PER_SOL * balance_check < .01) {
+        handleMessageOpen("You must have more than .01 SOL in your wallet!");
+        return;
+      }
+    }
     let response = await claim_quest_reward(header_verification, reward_id);
     if (response.status !== 200) {
       setAlertState({
@@ -376,6 +394,32 @@ export const MAIN_PAGE = (props) => {
         message:
         response.data,
         severity: "error",
+      });
+    }
+    console.log("HERE")
+    if(response.data && type_reward === "claim_caught_creature_reward"){
+      let buffer = Buffer.from(response.data, "base64");
+      let signedTX;
+      try {
+        const tx = Transaction.from(buffer);
+        signedTX = await signTransaction(tx);
+      } catch (e) {
+        if (e.message === "User rejected the request.") {
+          handleMessageOpen("You must approve the transaction in order to claim!");
+        }
+      }
+      // console.log(signedTX, "?");
+      const dehydratedTx = signedTX.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false
+      })
+      const serializedTX = dehydratedTx.toString('base64')
+      await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+      setAlertState({
+        open: true,
+        message:
+          "Creature claim transactions may take up to one minute!",
+        severity: "warning",
       });
     }
     await populate_data();
@@ -413,7 +457,7 @@ export const MAIN_PAGE = (props) => {
         verifySignatures: false
       })
       const serializedTX = dehydratedTx.toString('base64')
-      await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+      await transmit_signed_journey_reward_tx_to_server(header_verification, serializedTX, reward_id)
       setAlertState({
         open: true,
         message:
@@ -426,6 +470,7 @@ export const MAIN_PAGE = (props) => {
 
     await populate_data();
   };
+
 
   const handleDropdownOpen = (e) => {
     change_dropdown_anchor(e.currentTarget);
