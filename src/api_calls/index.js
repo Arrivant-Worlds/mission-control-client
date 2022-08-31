@@ -196,10 +196,24 @@ export const claim_journey_reward = async (payload, reward_id) => {
   }
 };
 
-export const transmit_signed_quest_reward_tx_to_server = async (payload, serializedTX, reward_id) => {
+export const transmit_signed_journey_reward_tx_to_server = async (payload, serializedTX, reward_id) => {
   try {
     const response = await axios.post(
         `${BASE_URL}/journeyRewards/${reward_id}/transmit`,
+        {tx: serializedTX},
+        { headers: payload }
+    );
+    return response
+  } catch (errors) {
+    console.error(errors);
+    return null;
+  }
+};
+
+export const transmit_signed_quest_reward_tx_to_server = async (payload, serializedTX, reward_id) => {
+  try {
+    const response = await axios.post(
+        `${BASE_URL}/questRewards/${reward_id}/transmit`,
         {tx: serializedTX},
         { headers: payload }
     );
