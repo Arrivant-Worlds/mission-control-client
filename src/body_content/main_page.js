@@ -382,7 +382,7 @@ export const MAIN_PAGE = (props) => {
     if(type_reward === "claim_caught_creature_reward"){
       let balance_check = await RPC_CONNECTION.getBalance(publicKey);
       console.log("balance", balance_check)
-      if (LAMPORTS_PER_SOL * balance_check < .01) {
+      if (balance_check/LAMPORTS_PER_SOL  < .01) {
         handleMessageOpen("You must have more than .01 SOL in your wallet!");
         return;
       }
@@ -428,7 +428,7 @@ export const MAIN_PAGE = (props) => {
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
     let balance_check = await RPC_CONNECTION.getBalance(publicKey);
-    if (LAMPORTS_PER_SOL * balance_check < .005) {
+    if (balance_check/LAMPORTS_PER_SOL < .005) {
       handleMessageOpen("You must have more than .005 SOL in your wallet!");
       return;
     }
