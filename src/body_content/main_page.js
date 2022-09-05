@@ -262,9 +262,13 @@ export const MAIN_PAGE = (props) => {
       try{
         if(user.discord_name){
           setPropertyIfNotExists("discord_name", user.discord_name);
+          setPropertyIfNotExists("$name", user.discord_name);
         }
         if(user.twitter_id){
           setPropertyIfNotExists("twitter_id", user.twitter_id);
+        }
+        if(user.email){
+          setPropertyIfNotExists("$email", user.email);
         }
       } catch(err){
         console.log("mixpanel discord/twitter insert err", err)
