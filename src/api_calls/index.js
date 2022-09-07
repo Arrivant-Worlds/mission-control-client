@@ -250,4 +250,46 @@ export const get_soulbound = async (payload) => {
   }
 };
 
+export const create_quest = async (payload, headers) => {
+  try {
+    const response = await axios.post(
+        `${BASE_URL}/admin/create`,
+        payload,
+        { headers: headers }
+    );
+    return response
+  } catch (errors) {
+    console.error(errors);
+    return null;
+  }
+};
+
+export const update_quest = async (payload, headers) => {
+  try {
+    const response = await axios.post(
+        `${BASE_URL}/admin/update`,
+        payload,
+        { headers: headers }
+    );
+    return response
+  } catch (errors) {
+    console.error(errors);
+    return null;
+  }
+};
+
+export const validate_quest = async (payload, headers) => {
+  try {
+    const response = await axios.post(
+        `${BASE_URL}/admin/update`,
+        payload,
+        { headers: headers }
+    );
+    return response
+  } catch (errors) {
+    console.error(errors);
+    return null;
+  }
+};
+
 export const RPC_CONNECTION = new Connection(RPC_CONNECTION_URL);

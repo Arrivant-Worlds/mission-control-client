@@ -192,7 +192,7 @@ export const MAIN_PAGE = (props) => {
       return false;
     }
   }
-
+  
   useEffect(() => {
       //change this conditional to check for success in oath.
         //fire with the query parameters?/oauth_token
@@ -874,14 +874,17 @@ export const MAIN_PAGE = (props) => {
           playQuestOpen={playQuestOpen}
         />
         <SNACKBAR alertState={alertState} setAlertState={setAlertState} />
-        <Typography sx={{
-          position: "absolute",
-          bottom: "40px",
-          fontSize: "20px",
-          lineHeight: "15px",
-          letterSpacing: "0.1em",
-          color: "#FFFFFF",
-        }}>EARLY ALPHA ACCESS</Typography>
+        { window.location.pathname === "/admin" ? null : (
+            <Typography sx={{
+              position: "absolute",
+              bottom: "40px",
+              fontSize: "20px",
+              lineHeight: "15px",
+              letterSpacing: "0.1em",
+              color: "#FFFFFF",
+            }}>EARLY ALPHA ACCESS</Typography>
+          )
+        }
       </Box>
     </Box>
   );
