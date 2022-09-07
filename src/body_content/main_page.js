@@ -527,17 +527,12 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleLinkTwitter = async (query) => {
-    let header_verification = await getWithExpiration("verifyHeader");
+    let header_verification = await getWithExpiration();
     if (!header_verification) {
       return;
     }
-    let headers = {
-      signedMsg: header_verification.signedMsg,
-      signature: header_verification.signature,
-      pubkey: header_verification.pubkey,
-    };
 
-    await verify_twitter(headers, query);
+    await verify_twitter(header_verification, query);
   };
 
   const toggle_sound = () => {
