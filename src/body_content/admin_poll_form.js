@@ -46,15 +46,11 @@ const paper_styles = {
 
 export default function ADMIN_POLL(props) {
 
-  const handleDataAbstractionChange = (e) => {
-
-  }
-
   return (
     <Grid sx={{width: "100%"}} container direction="column" justifyContent="flex-start" alignItems="center">
       <TextField
         variant="outlined"
-        label="question"
+        label="Question"
         type="question"
         name="question"
         value={props.data_poll.quiz[0].question}
@@ -71,7 +67,7 @@ export default function ADMIN_POLL(props) {
       />
       <TextField
         variant="outlined"
-        label="choices"
+        label="Choices"
         type="choices"
         name="choices"
         placeholder="ex. cat, dog, bird, platypus, etc."
@@ -89,10 +85,11 @@ export default function ADMIN_POLL(props) {
       />
       <TextField
         variant="outlined"
-        label="description"
-        type="description"
-        name="description"
-        value={props.data_poll.quiz[0].correctAnswer}
+        label="Image Url"
+        type="image_url"
+        name="image_url"
+        placeholder="image url"
+        value={props.data_poll.quiz[0].image_url}
         onChange={props.handleDataPollChange}
         sx={{
           caretColor: "#F6F6F6",

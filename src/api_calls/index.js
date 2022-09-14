@@ -253,7 +253,7 @@ export const get_soulbound = async (payload) => {
 export const create_quest = async (payload, headers) => {
   try {
     const response = await axios.post(
-        `${BASE_URL}/admin/create`,
+        `${BASE_URL}/admin_MC/create`,
         payload,
         { headers: headers }
     );
@@ -267,7 +267,7 @@ export const create_quest = async (payload, headers) => {
 export const update_quest = async (payload, headers) => {
   try {
     const response = await axios.post(
-        `${BASE_URL}/admin/update`,
+        `${BASE_URL}/admin_MC/update`,
         payload,
         { headers: headers }
     );
@@ -281,7 +281,7 @@ export const update_quest = async (payload, headers) => {
 export const validate_quest = async (payload, headers) => {
   try {
     const response = await axios.post(
-        `${BASE_URL}/admin/update`,
+        `${BASE_URL}/admin_MC/update`,
         payload,
         { headers: headers }
     );

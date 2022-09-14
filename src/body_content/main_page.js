@@ -192,7 +192,7 @@ export const MAIN_PAGE = (props) => {
       return false;
     }
   }
-  
+
   useEffect(() => {
       //change this conditional to check for success in oath.
         //fire with the query parameters?/oauth_token
@@ -381,7 +381,7 @@ export const MAIN_PAGE = (props) => {
     let header_verification = await getWithExpiration();
     if(type_reward === "claim_caught_creature_reward"){
       let balance_check = await RPC_CONNECTION.getBalance(publicKey);
-      console.log("balance", balance_check)
+      // console.log("balance", balance_check)
       if (LAMPORTS_PER_SOL * balance_check < .01) {
         handleMessageOpen("You must have more than .01 SOL in your wallet!");
         return;
@@ -396,7 +396,6 @@ export const MAIN_PAGE = (props) => {
         severity: "error",
       });
     }
-    console.log("HERE")
     if(response.data && type_reward === "claim_caught_creature_reward"){
       let buffer = Buffer.from(response.data, "base64");
       let signedTX;
@@ -814,7 +813,7 @@ export const MAIN_PAGE = (props) => {
             }
           />
           <Route path="lore" element={<LORE_PAGE />} />
-          <Route path="admin" element={<ADMIN_PAGE />} />
+          <Route path="admin" element={<ADMIN_PAGE getWithExpiration={getWithExpiration}/>} />
         </Routes>
         {loading_state ? (
           <Box

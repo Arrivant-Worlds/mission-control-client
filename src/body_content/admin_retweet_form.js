@@ -44,74 +44,17 @@ const paper_styles = {
   backgroundColor: "#000000",
 }
 
-export default function ADMIN_QUIZ(props) {
-
-  const handleDataAbstractionChange = (e) => {
-
-  }
-
+export default function TWEET_ID_FORM(props) {
 
   return (
     <Grid sx={{width: "100%"}} container direction="column" justifyContent="flex-start" alignItems="center">
       <TextField
         variant="outlined"
-        label="Question"
-        type="question"
-        name="question"
-        value={props.data_quiz.quiz[0].question}
-        onChange={props.handleDataQuizChange}
-        sx={{
-          caretColor: "#F6F6F6",
-          background: "#000000",
-          width: "90%",
-          margin: "20px 0 15px 0",
-          input: {
-            color: "#F6F6F6",
-          },
-        }}
-      />
-      <TextField
-        variant="outlined"
-        label="Choices"
-        type="choices"
-        name="choices"
-        placeholder="ex. cat, dog, bird, platypus, etc."
-        value={props.data_quiz.quiz[0].choices}
-        onChange={props.handleDataQuizChange}
-        sx={{
-          caretColor: "#F6F6F6",
-          background: "#000000",
-          width: "90%",
-          margin: "20px 0 15px 0",
-          input: {
-            color: "#F6F6F6",
-          },
-        }}
-      />
-      <TextField
-        variant="outlined"
-        label="Correct Answer"
-        type="correctAnswer"
-        name="correctAnswer"
-        value={props.data_quiz.quiz[0].correctAnswer}
-        onChange={props.handleDataQuizChange}
-        sx={{
-          caretColor: "#F6F6F6",
-          background: "#000000",
-          width: "90%",
-          margin: "20px 0 15px 0",
-          input: {
-            color: "#F6F6F6",
-          },
-        }}
-      />
-      <TextField
-        variant="outlined"
-        label="Justification"
-        type="justification"
-        name="justification"
-        value={props.data_quiz.quiz[0].justification}
-        onChange={props.handleDataQuizChange}
+        label="tweet_id"
+        type="tweet_id"
+        name="tweet_id"
+        value={props.tweet_id}
+        onChange={props.setTweet_id}
         sx={{
           caretColor: "#F6F6F6",
           background: "#000000",

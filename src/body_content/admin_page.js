@@ -10,8 +10,13 @@ import InputBase from '@mui/material/InputBase';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Typography from "@mui/material/Typography";
 import SimpleBar from "simplebar-react";
+import Button from "@mui/material/Button";
 import ADMIN_QUIZ from "./admin_quiz_form.js";
 import ADMIN_POLL from "./admin_poll_form.js";
+import RETWEET_FORM from "./admin_retweet_form.js";
+import {get_quests} from "../api_calls";
+
+import {create_quest, update_quest} from "../api_calls";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
@@ -45,24 +50,32 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 const paper_styles = {
   backgroundColor: "#000000",
+  "&.Mui-selected,:hover": {
+    backgroundColor: "#888888",
+  },
+  "&.Mui-selected:hover": {
+    backgroundColor: "#888888",
+  },
 }
 
 export default function ADMIN_PAGE(props) {
   const [action, setAction] = React.useState('');
+  const [missions, setMissions] = React.useState([{title: ""}]);
+  const [selectedMission, setSelectedMission] = React.useState("");
   const [data_poll, setDataPoll] = React.useState({
     type: "poll",
-    xp_penalty:0,
+    xp_penalty: 0,
     quiz: [
       {
         question: "",
         choices: "",
-        image: ""
+        image_url: ""
       }
     ]
   });
   const [data_quiz, setDataQuiz] = React.useState({
       type: "regular",
-      xp_penalty:0,
+      xp_penalty: 0,
       quiz: [
         {
           question: "",
@@ -72,9 +85,10 @@ export default function ADMIN_PAGE(props) {
         }
       ]
     });
+  const [tweet_id, setTweet_id] = React.useState("");
   const [payload, setPayload] = React.useState({
     title: "",
-    xp: "",
+    xp: 0,
     recurrence: "",
     platform: "",
     status: "",
@@ -84,7 +98,12 @@ export default function ADMIN_PAGE(props) {
   });
 
 
-  const handleChangeAction = (event) => {
+  const handleChangeAction = async (event) => {
+    if (event.target.value === "update") {
+      let headers = await props.getWithExpiration();
+      let retrievedMissions = await get_quests(headers);
+      setMissions(retrievedMissions);
+    }
     setAction(event.target.value);
   };
 
@@ -106,13 +125,126 @@ export default function ADMIN_PAGE(props) {
     setDataPoll(new_payload);
   }
 
-  const handleSubmit = () => {
+  const handleMissionSelect = (e) => {
+    setSelectedMission(e.target.value);
+      //set data
+    let quest_index;
+    for (let i=0;i<missions.length;i++) {
+      if (missions[i].id === e.target.value) {
+        quest_index = i;
+        break;
+      }
+    }
+    let mission_obj = missions[quest_index];
+    let quest_obj = {
+      title: mission_obj.title,
+      xp: mission_obj.xp,
+      recurrence: mission_obj.recurrence,
+      platform: mission_obj.platform,
+      status: mission_obj.status,
+      type: mission_obj.type,
+      description: mission_obj.description,
+      consumesDailyClaim: mission_obj.consumesDailyclaim === true ? true : false,
+    }
+    if (mission_obj.type === "retweet") {
+      setTweet_id(mission_obj.data.tweet_id);
+    } else if (mission_obj.type === "quiz") {
+      if (mission_obj.data.type === "regular") {
+        setDataQuiz(mission_obj.data);
+      } else {
+        setDataPoll(mission_obj.data);
+      }
+    }
+    setPayload(quest_obj);
+  }
 
+  const handleSubmit = async () => {
+    let data_obj = {}
+    if (payload.type === "poll") {
+      payload.type = "quiz";
+      payload.platform = "Discord";
+      let string_array = data_poll.quiz[0].choices.split(",");
+      data_poll.quiz[0].choices = string_array;
+      data_obj = data_poll;
+    } else if (payload.type === "quiz") {
+      payload.platform = "Discord";
+      let string_array = data_quiz.quiz[0].choices.split(",");
+      data_quiz.quiz[0].choices = string_array;
+      data_obj = data_quiz;
+    } else if (payload.type === "retweet") {
+      data_obj = {tweet_id: tweet_id};
+      payload.platform = "twitter";
+    } else if (payload.type === "event") {
+      payload.platform = "Discord"
+    }
+
+    let quest_obj = {
+      title: payload.title,
+      type: payload.type,
+      xp: payload.xp,
+      recurrence: payload.recurrence,
+      status: payload.status,
+      platform: payload.platform,
+      description: payload.description,
+      consumesDailyClaim: payload.consumesDailyClaim,
+      data: data_obj
+    }
+    let headers = await props.getWithExpiration();
+
+    if (action === "create") {
+      //add snackbar for completions?
+      await create_quest(quest_obj, headers);
+      handleReset();
+    } else if (action === "update") {
+      quest_obj.id = selectedMission;
+      console.log(quest_obj, "in update");
+      await update_quest(quest_obj, headers);
+      handleReset();
+    }
+  }
+
+  const handleReset = () => {
+    setAction("");
+    setSelectedMission("");
+    setPayload({
+      title: "",
+      xp: 0,
+      recurrence: "",
+      platform: "",
+      status: "",
+      type: "",
+      description: "",
+      consumesDailyClaim: "",
+    })
+    setTweet_id("");
+    setDataPoll({
+      type: "poll",
+      xp_penalty:0,
+      quiz: [
+        {
+          question: "",
+          choices: "",
+          image: ""
+        }
+      ]
+    })
+    setDataQuiz({
+      type: "regular",
+      xp_penalty:0,
+      quiz: [
+        {
+          question: "",
+          choices: "",
+          correctAnswer: "",
+          justification: ""
+        }
+      ]
+    })
   }
 
   return (
     <Grid sx={{height: "100%", width: "90%"}} container alignItems="center" justifyContent="center">
-      <Grid sx={{height: "80%", width: "80%"}} container direction="column" justifyContent="flex-start"
+      <Grid sx={{height: "80%", width: "80%"}} container direction="column" justifyContent="center"
         alignItems="center">
         <SimpleBar style={{ height: '80%', width: "100%"}}>
           <Box sx={{ minWidth: 120, maxWidth: 200, margin: "20px auto 0 auto" }}>
@@ -130,11 +262,38 @@ export default function ADMIN_PAGE(props) {
                >
                 <MenuItem sx={paper_styles} value={"create"}>Create</MenuItem>
                 <MenuItem sx={paper_styles} value={"update"}>Update</MenuItem>
-                <MenuItem sx={paper_styles} value={"validate"}>Validate</MenuItem>
               </Select>
             </FormControl>
           </Box>
-          {action !== "" ? (
+          {action === "update" ? (
+            <Box sx={{ minWidth: 120, maxWidth: 200, margin: "20px auto 0 auto" }}>
+              <FormControl fullWidth>
+                <InputLabel id="mission">Mission</InputLabel>
+                <Select
+                  autoWidth
+                  name="mission"
+                  labelId="mission"
+                  id="mission"
+                  value={selectedMission}
+                  label="Mission"
+                  input={<BootstrapInput />}
+                  onChange={handleMissionSelect}
+                >
+                  {
+                    missions.map((item, i) => {
+
+                      return (
+                        <MenuItem sx={paper_styles} key={i} value={item.id}>{item.title}</MenuItem>
+                      )
+                    })
+                  }
+                </Select>
+              </FormControl>
+            </Box>
+          )
+          : null
+          }
+          {action !== "" && action !== "update"? (
             <Box sx={{ minWidth: 120, maxWidth: 200, margin: "20px auto 0 auto" }}>
               <FormControl fullWidth>
                 <InputLabel id="type">Type</InputLabel>
@@ -161,7 +320,7 @@ export default function ADMIN_PAGE(props) {
           {payload.type !== "" ? (
             <TextField
               variant="outlined"
-              label="title"
+              label="Title"
               type="text"
               name="title"
               value={payload.title}
@@ -182,7 +341,7 @@ export default function ADMIN_PAGE(props) {
           {payload.type !== "" ? (
             <TextField
               variant="outlined"
-              label="xp"
+              label="XP"
               type="xp"
               name="xp"
               value={payload.xp}
@@ -203,7 +362,7 @@ export default function ADMIN_PAGE(props) {
           {payload.type !== "" ? (
             <TextField
               variant="outlined"
-              label="description"
+              label="Description"
               type="description"
               name="description"
               value={payload.description}
@@ -277,7 +436,7 @@ export default function ADMIN_PAGE(props) {
                   labelId="consumesDailyClaim"
                   id="consumesDailyClaim"
                   value={payload.consumesDailyClaim}
-                  label="consumeDailyClaim"
+                  label="consumesDailyClaim"
                   input={<BootstrapInput />}
                   onChange={handlePayloadChange}
                 >
@@ -298,7 +457,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.type === "poll" && payload.consumeDailyClaim !== "" ? (
+          {payload.type === "poll" && payload.consumesDailyClaim !== "" ? (
             <ADMIN_POLL
             handleDataPollChange={handleDataPollChange}
             payload={payload}
@@ -307,8 +466,45 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
+          {payload.type === "retweet" && payload.consumesDailyClaim !== "" ? (
+            <RETWEET_FORM
+            payload={payload}
+            tweet_id={tweet_id}
+            setTweet_id={setTweet_id}
+            />
+          )
+          : null
+          }
         </SimpleBar>
+      </Grid>
+      <Grid container justifyContent="center" alignItems="center">
+        <Button
+          sx={{
+            color: "black",
+            fontSize: "14px",
+            width: "20px",
+            margin: "0 20px",
+            height: "30px",
+            fontWeight: "700",
+            padding: "0 20px",
+            backgroundColor: "#F6F6F6",
+          }}
+          onClick={() => handleSubmit()}>Submit</Button>
+        <Button
+          sx={{
+            color: "black",
+            fontSize: "14px",
+            width: "20px",
+            margin: "0 20px",
+            height: "30px",
+            fontWeight: "700",
+            padding: "0 20px",
+            backgroundColor: "#F6F6F6",
+          }}
+        onClick={() => handleReset()}>Reset</Button>
       </Grid>
     </Grid>
   );
 }
+
+// <MenuItem sx={paper_styles} value={"validate"}>Validate</MenuItem>
