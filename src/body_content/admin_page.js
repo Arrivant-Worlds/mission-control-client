@@ -262,10 +262,11 @@ export default function ADMIN_PAGE(props) {
                >
                 <MenuItem sx={paper_styles} value={"create"}>Create</MenuItem>
                 <MenuItem sx={paper_styles} value={"update"}>Update</MenuItem>
+                <MenuItem sx={paper_styles} value={"validate"}>Validate</MenuItem>
               </Select>
             </FormControl>
           </Box>
-          {action === "update" ? (
+          {action === "update" || action === "validate" ? (
             <Box sx={{ minWidth: 120, maxWidth: 200, margin: "20px auto 0 auto" }}>
               <FormControl fullWidth>
                 <InputLabel id="mission">Mission</InputLabel>
@@ -506,5 +507,3 @@ export default function ADMIN_PAGE(props) {
     </Grid>
   );
 }
-
-// <MenuItem sx={paper_styles} value={"validate"}>Validate</MenuItem>

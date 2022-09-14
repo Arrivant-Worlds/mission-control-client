@@ -75,7 +75,7 @@ export default function ADMIN_QUIZ(props) {
         label="Choices"
         type="choices"
         name="choices"
-        placeholder="ex. cat, dog, bird, platypus, etc."
+        placeholder="ex. cat,dog,bird,platypus,etc."
         value={props.data_quiz.quiz[0].choices}
         onChange={props.handleDataQuizChange}
         sx={{
