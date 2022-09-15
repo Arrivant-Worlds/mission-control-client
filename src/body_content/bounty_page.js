@@ -28,11 +28,14 @@ export const BOUNTY_PAGE = (props) => {
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
+  let [journeyRewardClaimableCount, setJourneyRewardClaimableCount] = useState(0);
   const { wallet, publicKey } = useWallet();
 
   useEffect(() => {
-    let allActive = props.quests_data.filter((i)=> i.active_reward.length > 0)
-    setClaimableCount(allActive.length);
+    let allActiveQuestRewards = props.quests_data.filter((i)=> i.active_reward.length > 0)
+    let allActiveJourneyRewards = props.rewards_data.filter((r)=>r.claimed_status === "claimable")
+    setClaimableCount(allActiveQuestRewards.length);
+    setJourneyRewardClaimableCount(allActiveJourneyRewards.length);
     if (props.claim_tutorial_flag) {
       props.setAlertState({
         open: true,
@@ -197,7 +200,13 @@ export const BOUNTY_PAGE = (props) => {
             textColor="primary"
             TabIndicatorProps={{ style: { zIndex: 2 } }}
           >
-            <Tab label="REWARDS" {...a11yProps(3)} />
+            <Tab label= {<Badge badgeContent={journeyRewardClaimableCount} color="primary" {...a11yProps(4)}
+                sx={{color: tab2_value === 1 || claimableCount > 0 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}>REWARDS
+              </Badge>} {...a11yProps(3)} />
             <Tab label={
               <Badge badgeContent={claimableCount} color="primary" {...a11yProps(4)}
                 sx={{color: tab2_value === 1 || claimableCount > 0 ? "#F6F6F6" : "#AAAAAA", fontWeight: "700"}}

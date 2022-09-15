@@ -42,7 +42,6 @@ export default function REWARDS_DIALOG(props) {
     //set time out?
     props.set_clicked_state(false);
   };
-
   return (
     <Dialog
       open={props.rewards_dialog_state}
@@ -84,28 +83,7 @@ export default function REWARDS_DIALOG(props) {
         padding: "25px 0px",
         margin: "0 auto 25px auto", }}>
         {props.clicked_state && props.rewards_dialog_data.type === "journey" ? (
-          <Grid
-            sx={{ height: "100%" }}
-            container
-            direction="column"
-            justifyContent="space-around"
-            alignItems="center"
-          >
-            <Box component="img" src={props.rewards_dialog_data.type_reward.url} alt="reward_img"
-            sx={{width: "200px", height: "200px"}}
-            />
-            <Typography sx={{fontWeight: "700",
-              fontSize: "18px",
-              lineHeight: "25px",
-              textAlign: "center",
-              color: "#F6F6F6",}}
-            >
-              KEEP IT UP!
-            </Typography>
-            <Button sx={styles.button} onClick={() => handleOnClose()}>
-              {props.rewards_dialog_data.type_reward.type === "CatchingAbility" ? `LET'S GO`: `BACK TO DASHBOARD`}
-            </Button>
-          </Grid>
+          handleOnClose()
         ) : (
           <Grid
             sx={{ height: "100%", paddingTop: "25px" }}
@@ -120,8 +98,13 @@ export default function REWARDS_DIALOG(props) {
               />
             </Grid>
             <Grid container item xs={5} direction="column" justifyContent="center" alignItems="center">
-              <Typography sx={styles.title}>{props.rewards_dialog_data.description}</Typography>
-              <Button sx={styles.button} onClick={() => handleOnClick()}>
+              <Typography sx={styles.title}>{props.rewards_dialog_data.title}</Typography>
+              <Typography sx={styles.text}>{props.rewards_dialog_data.description}</Typography>
+              <Button 
+                sx={styles.button} 
+                disabled = {props.rewards_dialog_data.status === "claimable" ? false : true} 
+                onClick={() => handleOnClick()}
+              >
               CLAIM REWARD
               </Button>
             </Grid>

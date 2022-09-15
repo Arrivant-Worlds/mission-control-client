@@ -57,9 +57,10 @@ export const REWARDS_BLOCK = (props) => {
       xp: "something here",
       id: props.item_data.id,
       type: "journey",
-      title: props.item_data.title,
+      title: props.item_data.name,
       type_reward: props.item_data.rewards,
       description: props.item_data.description,
+      status: props.item_data.claimed_status
     });
     props.handleRewardsOpen(true);
   };
@@ -75,9 +76,7 @@ export const REWARDS_BLOCK = (props) => {
           : styles.rewards_block_container
       }
       onClick={
-        props.item_data.claimed_status === "claimable"
-          ? handleOpenRewardDialog
-          : null
+       handleOpenRewardDialog
       }
     >
       <Grid
