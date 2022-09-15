@@ -9,8 +9,8 @@ const styles = {
     marginBottom: "20px",
   },
   text: {
-    fontWeight: "400",
-    fontSize: "18px",
+    fontWeight: "300",
+    fontSize: "15px",
     lineHeight: "25px",
     textAlign: "center",
     color: "#F6F6F6",

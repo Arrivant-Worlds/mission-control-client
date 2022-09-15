@@ -116,20 +116,7 @@ export function MISSION_BLOCK(props) {
             alignItems="center"
           >
             <Grid container item direction="row" justifyContent="flex-start" xs={8}>
-              <Tooltip
-                placement="top"
-                title={render_tooltip_claim() ? "Claiming this reward counts towards your daily mission cap" : ""}
-              >
-                <Badge
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                badgeContent={render_tooltip_claim() ? `!` : 0}
-                sx={{color: "#000000", textOverflow: "ellipsis", width: "100%"}}>
-                  <Typography style={render_style("title")}>{props.item_data.title}</Typography>
-                </Badge>
-              </Tooltip>
+              <Typography style={render_style("title")}>{props.item_data.title}</Typography>
             </Grid>
             <Grid container item justifyContent="center" alignItems="center" xs>
               <Typography
