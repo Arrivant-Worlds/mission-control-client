@@ -42,7 +42,6 @@ export default function REWARDS_DIALOG(props) {
     //set time out?
     props.set_clicked_state(false);
   };
-  console.log("REWARDS_DIALOG", props);
   return (
     <Dialog
       open={props.rewards_dialog_state}
