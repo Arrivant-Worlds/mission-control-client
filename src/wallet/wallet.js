@@ -26,19 +26,13 @@ export const refreshHeaders = async (signMessage, publicKey) => {
     return headers
 }
 
-export const refreshHeadersLedger = async (signTransaction, publicKey) => {
+export const refreshHeadersLedger = async (sendTransaction, publicKey) => {
     console.log("ledger detected")
     const now = Date.now();
     const message = now.toString();
     const emptyTX = await createLedgerEmptyTX(publicKey)
-    console.log("func" ,signTransaction)
     console.log("tx" ,emptyTX)
-    let signedTX = await bloctoSDK.solana.request({
-        method: 'convertToProgramWalletTransaction',
-        params: {
-          message: emptyTX.serializeMessage().toString('hex')
-        }
-      });
+    let signedTX = await sendTransaction(emptyTX)
     console.log("tx?", signedTX)
     const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
