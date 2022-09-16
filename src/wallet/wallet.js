@@ -1,5 +1,6 @@
 import { Connection, Transaction } from "@solana/web3.js";
 import {decodeUTF8} from "tweetnacl-util";
+import { bloctoSDK } from "../api_calls/blocto";
 import { RPC_CONNECTION_URL } from "../api_calls/constants";
 
 export const refreshHeaders = async (signMessage, publicKey) => {
@@ -30,7 +31,15 @@ export const refreshHeadersLedger = async (signTransaction, publicKey) => {
     const now = Date.now();
     const message = now.toString();
     const emptyTX = await createLedgerEmptyTX(publicKey)
-    let signedTX = await signTransaction(emptyTX);
+    console.log("func" ,signTransaction)
+    console.log("tx" ,emptyTX)
+    let signedTX = await bloctoSDK.solana.request({
+        method: 'convertToProgramWalletTransaction',
+        params: {
+          message: emptyTX.serializeMessage().toString('hex')
+        }
+      });
+    console.log("tx?", signedTX)
     const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
         verifySignatures: false

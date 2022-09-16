@@ -62,6 +62,7 @@ import RewardFanfare from "../audio/RewardFanfare.wav";
 
 import useSound from "use-sound";
 import { refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
+import { bloctoSDK } from "../api_calls/blocto";
 
 export const MAIN_PAGE = (props) => {
   const {
@@ -72,6 +73,7 @@ export const MAIN_PAGE = (props) => {
     connected,
     disconnect,
     signTransaction,
+    sendTransaction
   } = useWallet();
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
@@ -186,7 +188,7 @@ export const MAIN_PAGE = (props) => {
   }
 
   const check_ledger = () => {
-    if (wallet && wallet.adapter.name === "Ledger" || ledger_state) {
+    if (wallet && wallet.adapter.name === "Ledger" || wallet.adapter.name === "Blocto" || ledger_state) {
       return true;
     } else if(wallet && wallet.adapter.name === "Phantom") {
       return false;
@@ -233,7 +235,7 @@ export const MAIN_PAGE = (props) => {
       let data
       if(!isLedger) data = await refreshHeaders(signMessage, publicKey);
       else if(isLedger) {
-        data = await refreshHeadersLedger(signTransaction, publicKey)
+        data = await refreshHeadersLedger(sendTransaction, publicKey)
       }
       change_wallet_data(data);
       return data;
