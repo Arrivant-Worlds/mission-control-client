@@ -192,6 +192,9 @@ export const claim_journey_reward = async (payload, reward_id) => {
     return response.data;
   } catch (errors) {
     console.error(errors);
+    if(errors.response.data.error === "User not eligible for whitelist"){
+      return {error: "You are not eligible to claim this reward"}
+    }
     return [];
   }
 };

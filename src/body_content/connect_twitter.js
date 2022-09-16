@@ -17,21 +17,16 @@ export default function CONNECT_TWITTER(props) {
     props.handleButtonClick();
 
     if (publicKey && connected) {
-      let header_verification = await props.getWithExpiration("verifyHeader");
+      let header_verification = await props.getWithExpiration();
       if (header_verification) {
-        let headers = {
-          signedMsg: header_verification.signedMsg,
-          signature: header_verification.signature,
-          pubkey: header_verification.pubkey,
-        };
-        console.log("headers", headers);
-        let oauth_token = await auth_twitter(headers, publicKey.toString());
+        console.log("headers", header_verification);
+        let oauth_token = await auth_twitter(header_verification, publicKey.toString());
         if (oauth_token.length !== 0) {
           console.log("oauth_token ", oauth_token);
           let redirect = await get_twitter_oauth_redirect(oauth_token);
           console.log("redirect", redirect);
           window.location.href = redirect;
-          await verify_twitter(headers, window.location.search);
+          await verify_twitter(header_verification, window.location.search);
         } else {
           console.log("oauth_token is empty");
           props.setAlertState({

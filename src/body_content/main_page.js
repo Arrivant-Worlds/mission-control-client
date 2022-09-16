@@ -262,9 +262,13 @@ export const MAIN_PAGE = (props) => {
       try{
         if(user.discord_name){
           setPropertyIfNotExists("discord_name", user.discord_name);
+          setPropertyIfNotExists("$name", user.discord_name);
         }
         if(user.twitter_id){
           setPropertyIfNotExists("twitter_id", user.twitter_id);
+        }
+        if(user.email){
+          setPropertyIfNotExists("$email", user.email);
         }
       } catch(err){
         console.log("mixpanel discord/twitter insert err", err)
@@ -348,7 +352,6 @@ export const MAIN_PAGE = (props) => {
   const handleRewardsClose = async () => {
     change_rewards_dialog_state(false);
     change_dialog_state(false);
-    await populate_data();
   };
 
   const handleWelcomeOpen = () => {
@@ -381,8 +384,8 @@ export const MAIN_PAGE = (props) => {
     let header_verification = await getWithExpiration();
     if(type_reward === "claim_caught_creature_reward"){
       let balance_check = await RPC_CONNECTION.getBalance(publicKey);
-      // console.log("balance", balance_check)
-      if (LAMPORTS_PER_SOL * balance_check < .01) {
+      console.log("balance", balance_check)
+      if (balance_check/LAMPORTS_PER_SOL  < .01) {
         handleMessageOpen("You must have more than .01 SOL in your wallet!");
         return;
       }
@@ -426,10 +429,12 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
-    let balance_check = await RPC_CONNECTION.getBalance(publicKey);
-    if (LAMPORTS_PER_SOL * balance_check < .005) {
-      handleMessageOpen("You must have more than .005 SOL in your wallet!");
-      return;
+    if(type_reward.type === "soulbound"){
+      let balance_check = await RPC_CONNECTION.getBalance(publicKey);
+      if (balance_check/LAMPORTS_PER_SOL < .005) {
+        handleMessageOpen("You must have more than .005 SOL in your wallet!");
+        return;
+      }
     }
     // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
     let claim = await claim_journey_reward(header_verification, reward_id);
@@ -464,10 +469,12 @@ export const MAIN_PAGE = (props) => {
         severity: "warning",
       });
     } else {
+      if(claim.error){
+        handleMessageOpen(claim.error);
+      }
       console.log("Wrong journey reward type or claim transaction is empty");
     }
-
-    await populate_data();
+    await populate_data()
   };
 
 
@@ -522,17 +529,12 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleLinkTwitter = async (query) => {
-    let header_verification = await getWithExpiration("verifyHeader");
+    let header_verification = await getWithExpiration();
     if (!header_verification) {
       return;
     }
-    let headers = {
-      signedMsg: header_verification.signedMsg,
-      signature: header_verification.signature,
-      pubkey: header_verification.pubkey,
-    };
 
-    await verify_twitter(headers, query);
+    await verify_twitter(header_verification, query);
   };
 
   const toggle_sound = () => {
@@ -864,6 +866,7 @@ export const MAIN_PAGE = (props) => {
           playRewardFanfare={playRewardFanfare}
           clicked_state={clicked_state}
           set_clicked_state={set_clicked_state}
+          loadUserData = {loadUserData}
         />
         <WELCOME_DIALOG
           handleWelcomeClose={handleWelcomeClose}
