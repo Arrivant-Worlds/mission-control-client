@@ -95,7 +95,7 @@ export const REWARDS_BLOCK = (props) => {
           xs={1}
         >
           {
-            props.item_data.name === "Claim Whitelist Spot" ? (
+            props.item_data.name === "Claim Aurahma Whitelist Spot" ? (
               <div />
             ) : (
               <Typography
