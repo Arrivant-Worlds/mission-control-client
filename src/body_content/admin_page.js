@@ -16,7 +16,7 @@ import ADMIN_POLL from "./admin_poll_form.js";
 import RETWEET_FORM from "./admin_retweet_form.js";
 import {get_quests} from "../api_calls";
 
-import {create_quest, update_quest} from "../api_calls";
+import {create_quest, update_quest, validate_quest} from "../api_calls";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
@@ -62,6 +62,7 @@ export default function ADMIN_PAGE(props) {
   const [action, setAction] = React.useState('');
   const [missions, setMissions] = React.useState([{title: ""}]);
   const [selectedMission, setSelectedMission] = React.useState("");
+  const [playerNames, setPlayerNames] = React.useState("");
   const [data_poll, setDataPoll] = React.useState({
     type: "poll",
     xp_penalty: 0,
@@ -99,7 +100,7 @@ export default function ADMIN_PAGE(props) {
 
 
   const handleChangeAction = async (event) => {
-    if (event.target.value === "update") {
+    if (event.target.value === "update" || event.target.value === "validate") {
       let headers = await props.getWithExpiration();
       let retrievedMissions = await get_quests(headers);
       setMissions(retrievedMissions);
@@ -123,6 +124,10 @@ export default function ADMIN_PAGE(props) {
     let new_payload = {...data_poll};
     new_payload.quiz[0][e.target.name] = e.target.value;
     setDataPoll(new_payload);
+  }
+
+  const handlePlayerNamesChange = (e) => {
+    setPlayerNames(e.target.value);
   }
 
   const handleMissionSelect = (e) => {
@@ -193,18 +198,52 @@ export default function ADMIN_PAGE(props) {
 
     if (action === "create") {
       //add snackbar for completions?
-      await create_quest(quest_obj, headers);
+      let create_quest_call = await create_quest(quest_obj, headers);
+      if (create_quest_call.status === 200) {
+        props.setAlertState({
+          open: true,
+          message: "quest created!",
+          severity: "success",
+        })
+      } else {
+        props.setAlertState({
+          open: true,
+          message: "quest failed to create!",
+          severity: "error",
+        })
+      }
       handleReset();
     } else if (action === "update") {
       quest_obj.id = selectedMission;
-      console.log(quest_obj, "in update");
-      await update_quest(quest_obj, headers);
+      let update_quest_call = await update_quest(quest_obj, headers);
+      if (update_quest_call.status === 200) {
+        props.setAlertState({
+          open: true,
+          message: "quest updated!",
+          severity: "success",
+        })
+      } else {
+        props.setAlertState({
+          open: true,
+          message: "quest failed to update!",
+          severity: "error",
+        })
+      }
+      handleReset();
+    } else if (action === "validate") {
+      let names_array = playerNames.split(",");
+      let validate_obj = {
+        quest_id: selectedMission,
+        discord_names: names_array
+      }
+      await validate_quest(validate_obj, headers);
       handleReset();
     }
   }
 
   const handleReset = () => {
     setAction("");
+    setPlayerNames("");
     setSelectedMission("");
     setPayload({
       title: "",
@@ -282,10 +321,17 @@ export default function ADMIN_PAGE(props) {
                 >
                   {
                     missions.map((item, i) => {
-
-                      return (
-                        <MenuItem sx={paper_styles} key={i} value={item.id}>{item.title}</MenuItem>
-                      )
+                      if (action === "validate" && item.type === "event") {
+                        return (
+                          <MenuItem sx={paper_styles} key={i} value={item.id}>{item.title}</MenuItem>
+                        )
+                      } else if (action === "validate") {
+                        return null;
+                      } else {
+                        return (
+                          <MenuItem sx={paper_styles} key={i} value={item.id}>{item.title}</MenuItem>
+                        )
+                      }
                     })
                   }
                 </Select>
@@ -294,7 +340,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {action !== "" && action !== "update"? (
+          {action !== "" && action === "create" ? (
             <Box sx={{ minWidth: 120, maxWidth: 200, margin: "20px auto 0 auto" }}>
               <FormControl fullWidth>
                 <InputLabel id="type">Type</InputLabel>
@@ -318,7 +364,29 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.type !== "" ? (
+          {action === "validate" && selectedMission !== "" ? (
+            <TextField
+              variant="outlined"
+              label="Discord Names"
+              type="text"
+              name="playerNames"
+              placeholder="ex. nami,chopper,luffy,zoro,etc."
+              value={playerNames}
+              onChange={handlePlayerNamesChange}
+              sx={{
+                caretColor: "#F6F6F6",
+                background: "#000000",
+                width: "90%",
+                margin: "20px 0 15px 0",
+                input: {
+                  color: "#F6F6F6",
+                },
+              }}
+            />
+          )
+          : null
+          }
+          {payload.type !== "" && action !== "validate" ? (
             <TextField
               variant="outlined"
               label="Title"
@@ -339,7 +407,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.type !== "" ? (
+          {payload.type !== "" && action !== "validate" ? (
             <TextField
               variant="outlined"
               label="XP"
@@ -360,7 +428,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.type !== "" ? (
+          {payload.type !== "" && action !== "validate" ? (
             <TextField
               variant="outlined"
               label="Description"
@@ -381,7 +449,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.description !== "" ? (
+          {payload.description !== "" && action !== "validate" ? (
             <Box sx={{ minWidth: 120, maxWidth: 200, margin: "20px auto 0 auto" }}>
               <FormControl fullWidth>
                 <InputLabel id="recurrence">Recurrence</InputLabel>
@@ -405,7 +473,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.recurrence !== "" ? (
+          {payload.recurrence !== "" && action !== "validate" ? (
             <Box sx={{ minWidth: 120, maxWidth: 200, margin: "20px auto 0 auto" }}>
               <FormControl fullWidth>
                 <InputLabel id="status">Status</InputLabel>
@@ -427,7 +495,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.status !== "" ? (
+          {payload.status !== "" && action !== "validate" ? (
             <Box sx={{ minWidth: 200, maxWidth: 200, margin: "20px auto 0 auto" }}>
               <FormControl fullWidth>
                 <InputLabel id="consumesDailyClaim">Consumes Daily Claim</InputLabel>
@@ -449,7 +517,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.type === "quiz" && payload.consumesDailyClaim !== "" ? (
+          {payload.type === "quiz" && payload.consumesDailyClaim !== "" && action !== "validate"  ? (
             <ADMIN_QUIZ
             handleDataQuizChange={handleDataQuizChange}
             payload={payload}
@@ -458,7 +526,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.type === "poll" && payload.consumesDailyClaim !== "" ? (
+          {payload.type === "poll" && payload.consumesDailyClaim !== "" && action !== "validate" ? (
             <ADMIN_POLL
             handleDataPollChange={handleDataPollChange}
             payload={payload}
@@ -467,7 +535,7 @@ export default function ADMIN_PAGE(props) {
           )
           : null
           }
-          {payload.type === "retweet" && payload.consumesDailyClaim !== "" ? (
+          {payload.type === "retweet" && payload.consumesDailyClaim !== "" && action !== "validate" ? (
             <RETWEET_FORM
             payload={payload}
             tweet_id={tweet_id}

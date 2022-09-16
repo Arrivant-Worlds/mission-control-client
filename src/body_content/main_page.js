@@ -813,7 +813,10 @@ export const MAIN_PAGE = (props) => {
             }
           />
           <Route path="lore" element={<LORE_PAGE />} />
-          <Route path="admin" element={<ADMIN_PAGE getWithExpiration={getWithExpiration}/>} />
+          <Route path="admin" element={<ADMIN_PAGE
+            getWithExpiration={getWithExpiration}
+            setAlertState={setAlertState}
+            />} />
         </Routes>
         {loading_state ? (
           <Box

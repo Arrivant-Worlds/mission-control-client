@@ -281,7 +281,7 @@ export const update_quest = async (payload, headers) => {
 export const validate_quest = async (payload, headers) => {
   try {
     const response = await axios.post(
-        `${BASE_URL}/admin_MC/update`,
+        `${BASE_URL}/admin_MC/validate`,
         payload,
         { headers: headers }
     );

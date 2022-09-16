@@ -70,7 +70,7 @@ export default function ADMIN_POLL(props) {
         label="Choices"
         type="choices"
         name="choices"
-        placeholder="ex. cat, dog, bird, platypus, etc."
+        placeholder="ex. cat,dog,bird,platypus,etc."
         value={props.data_poll.quiz[0].choices}
         onChange={props.handleDataPollChange}
         sx={{
