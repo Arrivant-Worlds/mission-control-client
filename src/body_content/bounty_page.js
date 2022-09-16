@@ -250,7 +250,7 @@ export const BOUNTY_PAGE = (props) => {
             index={1}
             style={styles.tab_content_container}
           >
-            <LEADERBOARD leaderboard_data={props.leaderboard_data} />
+            <LEADERBOARD leaderboard_data={props.leaderboard_data} user_data={props.user_data}/>
           </TabPanel>
         </Grid>
         <Grid container item xs={4} direction="column" alignItems="center">

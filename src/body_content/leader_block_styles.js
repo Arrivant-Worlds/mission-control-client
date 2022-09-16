@@ -3,6 +3,11 @@ const styles = {
     marginTop: "10px",
     width: "100%",
   },
+  leader_block_container_active: {
+    marginTop: "10px",
+    width: "100%",
+    background:"rgba(230, 177, 184, .4"
+  },
   name: {
     fontSize: "12px",
     fontWeight: "700",

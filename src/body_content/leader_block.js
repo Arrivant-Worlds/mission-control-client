@@ -31,7 +31,8 @@ export const LEADER_BLOCK = (props) => {
   }
 
   return (
-    <Grid container direction="row" justifyContent="space-between" style={styles.leader_block_container}
+    <Grid container direction="row" justifyContent="space-between"
+      style={props.item_data.user_name === props.user_data.discord_name ? styles.leader_block_container_active : styles.leader_block_container}
       sx={[{'&:hover': {background:"rgba(230, 177, 184, .4)"}}]}
     >
       <Grid container item direction="row" justifyContent="space-between" alignItems="center" sx={{width: "100%"}}>
