@@ -41,6 +41,7 @@ export default function REWARDS_DIALOG(props) {
     props.handleRewardsClose();
     //set time out?
     props.set_clicked_state(false);
+    props.loadUserData()
   };
   return (
     <Dialog

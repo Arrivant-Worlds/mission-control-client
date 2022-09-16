@@ -352,7 +352,6 @@ export const MAIN_PAGE = (props) => {
   const handleRewardsClose = async () => {
     change_rewards_dialog_state(false);
     change_dialog_state(false);
-    await populate_data();
   };
 
   const handleWelcomeOpen = () => {
@@ -431,10 +430,12 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
-    let balance_check = await RPC_CONNECTION.getBalance(publicKey);
-    if (balance_check/LAMPORTS_PER_SOL < .005) {
-      handleMessageOpen("You must have more than .005 SOL in your wallet!");
-      return;
+    if(type_reward.type === "soulbound"){
+      let balance_check = await RPC_CONNECTION.getBalance(publicKey);
+      if (balance_check/LAMPORTS_PER_SOL < .005) {
+        handleMessageOpen("You must have more than .005 SOL in your wallet!");
+        return;
+      }
     }
     // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
     let claim = await claim_journey_reward(header_verification, reward_id);
@@ -469,10 +470,12 @@ export const MAIN_PAGE = (props) => {
         severity: "warning",
       });
     } else {
+      if(claim.error){
+        handleMessageOpen(claim.error);
+      }
       console.log("Wrong journey reward type or claim transaction is empty");
     }
-
-    await populate_data();
+    await populate_data()
   };
 
 
@@ -861,6 +864,7 @@ export const MAIN_PAGE = (props) => {
           playRewardFanfare={playRewardFanfare}
           clicked_state={clicked_state}
           set_clicked_state={set_clicked_state}
+          loadUserData = {loadUserData}
         />
         <WELCOME_DIALOG
           handleWelcomeClose={handleWelcomeClose}

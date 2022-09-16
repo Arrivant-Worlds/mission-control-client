@@ -94,15 +94,22 @@ export const REWARDS_BLOCK = (props) => {
           justifyContent="space-between"
           xs={1}
         >
-          <Typography
-            style={
-              props.item_data.claimed_status === "claimable"
-                ? styles.name
-                : styles.name_inactive
-            }
-          >
-            LVL
-          </Typography>
+          {
+            props.item_data.name === "Claim Whitelist Spot" ? (
+              <div />
+            ) : (
+              <Typography
+              style={
+                props.item_data.claimed_status === "claimable"
+                  ? styles.name
+                  : styles.name_inactive
+              }
+            >
+              LVL
+            </Typography>
+            )
+          }
+     
           <Typography
             style={
               props.item_data.claimed_status === "claimable"
