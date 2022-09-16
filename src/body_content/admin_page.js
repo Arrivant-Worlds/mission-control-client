@@ -236,7 +236,20 @@ export default function ADMIN_PAGE(props) {
         quest_id: selectedMission,
         discord_names: names_array
       }
-      await validate_quest(validate_obj, headers);
+      let validate_quest_call = await validate_quest(validate_obj, headers);
+      if (validate_quest_call.status === 200) {
+        props.setAlertState({
+          open: true,
+          message: "quest validated!",
+          severity: "success",
+        })
+      } else {
+        props.setAlertState({
+          open: true,
+          message: "quest failed to validate!",
+          severity: "error",
+        })
+      }
       handleReset();
     }
   }
