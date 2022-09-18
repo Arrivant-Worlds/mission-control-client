@@ -222,6 +222,7 @@ export const MAIN_PAGE = (props) => {
     }
     if (connected) {
       loadUserData();
+      handleNavigation("/bounty_main");
     }
   }, [publicKey]);
 
