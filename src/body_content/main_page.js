@@ -420,13 +420,16 @@ export const MAIN_PAGE = (props) => {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
-      // console.log(signedTX, "?");
-      const dehydratedTx = signedTX.serialize({
-        requireAllSignatures: false,
-        verifySignatures: false
-      })
-      const serializedTX = dehydratedTx.toString('base64')
-      await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+      if(signedTX){
+        const dehydratedTx = signedTX.serialize({
+          requireAllSignatures: false,
+          verifySignatures: false
+        })
+        const serializedTX = dehydratedTx.toString('base64')
+        await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+      } else{
+        await transmit_signed_quest_reward_tx_to_server(header_verification, null, reward_id)
+      }
       setAlertState({
         open: true,
         message:
