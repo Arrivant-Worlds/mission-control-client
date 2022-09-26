@@ -45,7 +45,7 @@ const paper_styles = {
 }
 
 export default function TWEET_ID_FORM(props) {
-
+  console.log("props in retweet form", props);
   return (
     <Grid sx={{width: "100%"}} container direction="column" justifyContent="flex-start" alignItems="center">
       <TextField
@@ -54,7 +54,7 @@ export default function TWEET_ID_FORM(props) {
         type="tweet_id"
         name="tweet_id"
         value={props.tweet_id}
-        onChange={props.setTweet_id}
+        onChange={props.handleTweetDataChange}
         sx={{
           caretColor: "#F6F6F6",
           background: "#000000",

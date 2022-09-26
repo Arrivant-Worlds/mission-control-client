@@ -58,6 +58,8 @@ const paper_styles = {
   },
 }
 
+const validAdminQuests = ["quiz", "poll", "retweet", "event"];
+
 export default function ADMIN_PAGE(props) {
   const [action, setAction] = React.useState('');
   const [missions, setMissions] = React.useState([{title: ""}]);
@@ -80,7 +82,7 @@ export default function ADMIN_PAGE(props) {
       quiz: [
         {
           question: "",
-          choices: "",
+          choices: [],
           correctAnswer: "",
           justification: ""
         }
@@ -103,7 +105,16 @@ export default function ADMIN_PAGE(props) {
     if (event.target.value === "update" || event.target.value === "validate") {
       let headers = await props.getWithExpiration();
       let retrievedMissions = await get_quests(headers);
-      setMissions(retrievedMissions);
+      let onlyActiveMissions = retrievedMissions.filter((mission)=>{
+        if(
+          mission.status === "active" &&
+          validAdminQuests.includes(mission.type)
+        ){
+          return mission
+        }
+      })
+
+      setMissions(onlyActiveMissions);
     }
     setAction(event.target.value);
   };
@@ -118,6 +129,10 @@ export default function ADMIN_PAGE(props) {
     let new_payload = {...data_quiz};
     new_payload.quiz[0][e.target.name] = e.target.value;
     setDataQuiz(new_payload);
+  }
+
+  const handleTweetDataChange = (e) => {
+    setTweet_id(e.target.value);
   }
 
   const handleDataPollChange = (e) => {
@@ -152,6 +167,7 @@ export default function ADMIN_PAGE(props) {
       consumesDailyClaim: mission_obj.consumesDailyclaim === true ? true : false,
     }
     if (mission_obj.type === "retweet") {
+      console.log("TWEET GOT", mission_obj.data.tweet_id);
       setTweet_id(mission_obj.data.tweet_id);
     } else if (mission_obj.type === "quiz") {
       if (mission_obj.data.type === "regular") {
@@ -164,17 +180,15 @@ export default function ADMIN_PAGE(props) {
   }
 
   const handleSubmit = async () => {
+    console.log("data poll", data_poll)
+    console.log("data quiz", data_quiz)
     let data_obj = {}
-    if (payload.type === "poll") {
+    if (payload.type === "poll" && action !== "validate") {
       payload.type = "quiz";
       payload.platform = "Discord";
-      let string_array = data_poll.quiz[0].choices.split(",");
-      data_poll.quiz[0].choices = string_array;
       data_obj = data_poll;
-    } else if (payload.type === "quiz") {
+    } else if (payload.type === "quiz" && action !== "validate") {
       payload.platform = "Discord";
-      let string_array = data_quiz.quiz[0].choices.split(",");
-      data_quiz.quiz[0].choices = string_array;
       data_obj = data_quiz;
     } else if (payload.type === "retweet") {
       data_obj = {tweet_id: tweet_id};
@@ -293,7 +307,8 @@ export default function ADMIN_PAGE(props) {
       ]
     })
   }
-
+  console.log("settweetid", setTweet_id);
+  console.log("tweet_id", tweet_id);
   return (
     <Grid sx={{height: "100%", width: "90%"}} container alignItems="center" justifyContent="center">
       <Grid sx={{height: "80%", width: "80%"}} container direction="column" justifyContent="center"
@@ -334,12 +349,10 @@ export default function ADMIN_PAGE(props) {
                 >
                   {
                     missions.map((item, i) => {
-                      if (action === "validate" && item.type === "event") {
+                      if (action === "validate") {
                         return (
                           <MenuItem sx={paper_styles} key={i} value={item.id}>{item.title}</MenuItem>
                         )
-                      } else if (action === "validate") {
-                        return null;
                       } else {
                         return (
                           <MenuItem sx={paper_styles} key={i} value={item.id}>{item.title}</MenuItem>
@@ -380,10 +393,10 @@ export default function ADMIN_PAGE(props) {
           {action === "validate" && selectedMission !== "" ? (
             <TextField
               variant="outlined"
-              label="Discord Names"
+              label="Discord IDs"
               type="text"
               name="playerNames"
-              placeholder="ex. nami,chopper,luffy,zoro,etc."
+              placeholder="ex. 569485319561543680,800894271737561121,etc."
               value={playerNames}
               onChange={handlePlayerNamesChange}
               sx={{
@@ -552,7 +565,7 @@ export default function ADMIN_PAGE(props) {
             <RETWEET_FORM
             payload={payload}
             tweet_id={tweet_id}
-            setTweet_id={setTweet_id}
+            handleTweetDataChange = {handleTweetDataChange}
             />
           )
           : null
