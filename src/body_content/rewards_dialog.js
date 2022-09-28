@@ -27,6 +27,11 @@ export default function REWARDS_DIALOG(props) {
       );
       let now = new Date()
       try{
+        console.log("props.", props.rewards_dialog_data)
+        track('Claim Journey Reward',{
+          event_category: 'Journey',
+          event_label: `${props.rewards_dialog_data.title}`,
+        })
         setPropertyIfNotExists('First Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
         setProperty('Last Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
         setPropertyIfNotExists('Journey rewards claimed', 0)

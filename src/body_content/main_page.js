@@ -186,7 +186,14 @@ export const MAIN_PAGE = (props) => {
   }
 
   const check_ledger = () => {
-    if (wallet && wallet.adapter.name === "Ledger" || ledger_state) {
+    let ledgerState = JSON.parse(localStorage.getItem("verifyHeader"));
+    if (
+      wallet && (
+        wallet.adapter.name === "Ledger" || 
+        ledger_state ||
+        ledgerState?.value?.isLedger 
+      )
+      ) {
       return true;
     } else if(wallet && wallet.adapter.name === "Phantom") {
       return false;
@@ -215,6 +222,7 @@ export const MAIN_PAGE = (props) => {
     }
     if (connected) {
       loadUserData();
+      handleNavigation("/bounty_main");
     }
   }, [publicKey]);
 
@@ -250,6 +258,7 @@ export const MAIN_PAGE = (props) => {
 
   const populate_data = async () => {
     let isLedger = check_ledger()
+    set_ledger_state(isLedger);
     let header = await getWithExpiration(isLedger);
     let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
@@ -410,13 +419,16 @@ export const MAIN_PAGE = (props) => {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
-      // console.log(signedTX, "?");
-      const dehydratedTx = signedTX.serialize({
-        requireAllSignatures: false,
-        verifySignatures: false
-      })
-      const serializedTX = dehydratedTx.toString('base64')
-      await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+      if(signedTX){
+        const dehydratedTx = signedTX.serialize({
+          requireAllSignatures: false,
+          verifySignatures: false
+        })
+        const serializedTX = dehydratedTx.toString('base64')
+        await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+      } else{
+        await transmit_signed_quest_reward_tx_to_server(header_verification, null, reward_id)
+      }
       setAlertState({
         open: true,
         message:
