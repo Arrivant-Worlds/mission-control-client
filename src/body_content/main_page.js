@@ -408,7 +408,6 @@ export const MAIN_PAGE = (props) => {
         severity: "error",
       });
     }
-    console.log("HERE")
     if(response.data && type_reward === "claim_caught_creature_reward"){
       let buffer = Buffer.from(response.data, "base64");
       let signedTX;
@@ -828,7 +827,10 @@ export const MAIN_PAGE = (props) => {
             }
           />
           <Route path="lore" element={<LORE_PAGE />} />
-          <Route path="admin" element={<ADMIN_PAGE />} />
+          <Route path="admin" element={<ADMIN_PAGE
+            getWithExpiration={getWithExpiration}
+            setAlertState={setAlertState}
+            />} />
         </Routes>
         {loading_state ? (
           <Box
@@ -889,14 +891,17 @@ export const MAIN_PAGE = (props) => {
           playQuestOpen={playQuestOpen}
         />
         <SNACKBAR alertState={alertState} setAlertState={setAlertState} />
-        <Typography sx={{
-          position: "absolute",
-          bottom: "40px",
-          fontSize: "20px",
-          lineHeight: "15px",
-          letterSpacing: "0.1em",
-          color: "#FFFFFF",
-        }}>EARLY ALPHA ACCESS</Typography>
+        { window.location.pathname === "/admin" ? null : (
+            <Typography sx={{
+              position: "absolute",
+              bottom: "40px",
+              fontSize: "20px",
+              lineHeight: "15px",
+              letterSpacing: "0.1em",
+              color: "#FFFFFF",
+            }}>EARLY ALPHA ACCESS</Typography>
+          )
+        }
       </Box>
     </Box>
   );

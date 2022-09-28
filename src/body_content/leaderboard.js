@@ -34,7 +34,7 @@ export const LEADERBOARD = (props)=> {
             {
               props.leaderboard_data.map((item, i) => {
                 return (
-                  <LEADER_BLOCK item_data={item} key={i} rank={i}/>
+                  <LEADER_BLOCK item_data={item} user_data={props.user_data} key={i} rank={i}/>
                 )
               })
             }
