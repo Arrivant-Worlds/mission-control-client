@@ -222,7 +222,7 @@ export default function ADMIN_PAGE(props) {
       } else {
         props.setAlertState({
           open: true,
-          message: "quest failed to create!",
+          message: create_quest_call,
           severity: "error",
         })
       }
@@ -239,7 +239,7 @@ export default function ADMIN_PAGE(props) {
       } else {
         props.setAlertState({
           open: true,
-          message: "quest failed to update!",
+          message: update_quest_call,
           severity: "error",
         })
       }
@@ -260,7 +260,7 @@ export default function ADMIN_PAGE(props) {
       } else {
         props.setAlertState({
           open: true,
-          message: "quest failed to validate!",
+          message: validate_quest_call,
           severity: "error",
         })
       }

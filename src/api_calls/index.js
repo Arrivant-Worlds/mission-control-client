@@ -171,7 +171,7 @@ export const verify_discord = async (headers, token_type, access_token) => {
 export const submit_email = async (payload, email_string, name_string) => {
   try {
     const response = await axios.post(
-      `${BASE_URL}/quests/registerEmail`,
+      `${BASE_URL}/users/registerEmail`,
       { email: email_string, name: name_string },
       { headers: payload }
     );
@@ -263,7 +263,7 @@ export const create_quest = async (payload, headers) => {
     return response
   } catch (errors) {
     console.error(errors);
-    return null;
+    return errors.response.data;
   }
 };
 
@@ -277,7 +277,7 @@ export const update_quest = async (payload, headers) => {
     return response
   } catch (errors) {
     console.error(errors);
-    return null;
+    return errors.response.data;
   }
 };
 
@@ -291,7 +291,7 @@ export const validate_quest = async (payload, headers) => {
     return response
   } catch (errors) {
     console.error(errors);
-    return null;
+    return errors.response.data;
   }
 };
 
