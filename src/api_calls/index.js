@@ -263,7 +263,8 @@ export const create_quest = async (payload, headers) => {
     return response
   } catch (errors) {
     console.error(errors);
-    return errors.response.data;
+    if(errors.response.data === typeof(String)) return errors.response.data;
+    else { return "Failed"}
   }
 };
 
@@ -277,7 +278,9 @@ export const update_quest = async (payload, headers) => {
     return response
   } catch (errors) {
     console.error(errors);
-    return errors.response.data;
+    if(errors.response.data === typeof(String)) return errors.response.data;
+    else { return "Failed"}
+
   }
 };
 
@@ -291,7 +294,8 @@ export const validate_quest = async (payload, headers) => {
     return response
   } catch (errors) {
     console.error(errors);
-    return errors.response.data;
+    if(errors.response.data === typeof(String)) return errors.response.data;
+    else { return "Failed"}
   }
 };
 
