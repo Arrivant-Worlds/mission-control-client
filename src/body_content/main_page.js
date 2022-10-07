@@ -480,13 +480,15 @@ export const MAIN_PAGE = (props) => {
           "Soulbound transactions may take up to one minute!",
         severity: "warning",
       });
-    } else {
-      if(claim.error){
-        handleMessageOpen(claim.error);
+    } 
+    else {
+      if(claim.data.message){
+        handleMessageOpen(claim.data.message);
       }
       console.log("Wrong journey reward type or claim transaction is empty");
     }
     await populate_data()
+    return claim
   };
 
 
@@ -679,6 +681,7 @@ export const MAIN_PAGE = (props) => {
                 </FormGroup>
               </Tooltip>
             </Grid>
+          
             <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
               {wallet ? (
                 <Box onMouseEnter={() => handleConnectHover()}>
@@ -816,7 +819,6 @@ export const MAIN_PAGE = (props) => {
                 handleDialogHover={handleDialogHover}
                 rewards_dialog_data={rewards_dialog_data}
                 set_rewards_dialog_data={set_rewards_dialog_data}
-                setAlertState={setAlertState}
                 welcome_popup_flag={welcome_popup_flag}
                 handleWelcomeOpen={handleWelcomeOpen}
                 handleMainHover={handleMainHover}
