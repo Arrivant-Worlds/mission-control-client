@@ -223,6 +223,16 @@ export const MAIN_PAGE = (props) => {
     if (connected) {
       loadUserData();
       handleNavigation("/bounty_main");
+      if(quests_data){
+        let allActiveQuestRewards = quests_data.filter((i)=> i.active_reward.length > 0)
+        if(allActiveQuestRewards.length > 0){
+          setAlertState({
+            open: true,
+            message: "You have xp ready to be claimed in LOG",
+            severity: "info",
+          })
+        }
+      }
     }
   }, [publicKey]);
 
