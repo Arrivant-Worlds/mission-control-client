@@ -21,21 +21,22 @@ export default function REWARDS_DIALOG(props) {
     props.playRewardFanfare();
     props.set_clicked_state(true);
      if (props.rewards_dialog_data.type === "journey") {
-      await props.handleClaimJourneyReward(
+      let claim = await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
         props.rewards_dialog_data.type_reward
       );
       let now = new Date()
       try{
-        console.log("props.", props.rewards_dialog_data)
-        track('Claim Journey Reward',{
-          event_category: 'Journey',
-          event_label: `${props.rewards_dialog_data.title}`,
-        })
-        setPropertyIfNotExists('First Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
-        setProperty('Last Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
-        setPropertyIfNotExists('Journey rewards claimed', 0)
-        increment('Journey rewards claimed', 1);
+        if(claim.status === 200){
+          track('Claim Journey Reward',{
+            event_category: 'Journey',
+            event_label: `${props.rewards_dialog_data.title}`,
+          })
+          setPropertyIfNotExists('First Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+          setProperty('Last Journey Reward Claim', `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`)
+          setPropertyIfNotExists('Journey rewards claimed', 0)
+          increment('Journey rewards claimed', 1);
+        }
       } catch(err){
         console.log("MIXPANEL ERR", err)
       }

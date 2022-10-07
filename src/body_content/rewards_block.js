@@ -14,12 +14,9 @@ export const REWARDS_BLOCK = (props) => {
   const render_chest_image = (state) => {
     if (state === "claimable") {
       return (
-        <Box
-        component="img"
-        src={white_chest}
-        alt="chest symbol"
-        style={styles.chest_symbol}
-      />
+        <Box sx = {{display: "flex", marginRight: "10px"}}>
+          <Typography sx = {{color: "white", fontSize: "0.75rem", padding: "5px", fontWeight: "bold", marginRight: "0.5rem", border: "solid", borderColor: "#e6b2b9", borderRadius: "0.5rem"}}>CLAIM</Typography> 
+        </Box>
 
       );
 
@@ -145,7 +142,7 @@ export const REWARDS_BLOCK = (props) => {
             {props.item_data.name}
           </Typography>
         </Grid>
-        <Grid container item xs={1}>
+        <Grid container item xs={2}>
           {render_chest_image(props.item_data.claimed_status)}
         </Grid>
       </Grid>
