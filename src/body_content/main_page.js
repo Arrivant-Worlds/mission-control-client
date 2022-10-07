@@ -451,7 +451,7 @@ export const MAIN_PAGE = (props) => {
 
   const handleClaimJourneyReward = async (reward_id, type_reward) => {
     let header_verification = await getWithExpiration();
-    if(type_reward.type === "soulbound"){
+    if(type_reward.type === "soulbound" || type_reward.type === "trait_pack"){
       let balance_check = await RPC_CONNECTION.getBalance(publicKey);
       if (balance_check/LAMPORTS_PER_SOL < .005) {
         handleMessageOpen("You must have more than .005 SOL in your wallet!");
@@ -459,15 +459,16 @@ export const MAIN_PAGE = (props) => {
       }
     }
     // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
+    
     let claim = await claim_journey_reward(header_verification, reward_id);
-    if (claim.length > 0 && type_reward.type === "soulbound") {
+    if (claim.data && (type_reward.type === "soulbound")) {
       setAlertState({
         open: true,
         message:
           "Claiming requires .03 SOL!",
         severity: "warning",
       });
-      let buffer = Buffer.from(claim, "base64");
+      let buffer = Buffer.from(claim.data, "base64");
       let signedTX;
       try {
         const tx = Transaction.from(buffer);
@@ -487,7 +488,7 @@ export const MAIN_PAGE = (props) => {
       setAlertState({
         open: true,
         message:
-          "Soulbound transactions may take up to one minute!",
+          "Nft transactions may take up to one minute!",
         severity: "warning",
       });
     } 
