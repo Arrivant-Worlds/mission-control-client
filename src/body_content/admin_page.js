@@ -107,7 +107,6 @@ export default function ADMIN_PAGE(props) {
       let retrievedMissions = await get_quests(headers);
       let onlyActiveMissions = retrievedMissions.filter((mission)=>{
         if(
-          mission.status === "active" &&
           validAdminQuests.includes(mission.type)
         ){
           return mission
