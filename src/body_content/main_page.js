@@ -269,7 +269,10 @@ export const MAIN_PAGE = (props) => {
   const populate_data = async () => {
     let isLedger = check_ledger()
     set_ledger_state(isLedger);
+    handleMessageOpen("Authenticate your wallet by signing the message");
+
     let header = await getWithExpiration(isLedger);
+    set_message_dialog(false)
     let userPromise = await get_user(header).then(async (user) => {
       //see what user is?
       // console.log(user, "user after get_user");
@@ -293,6 +296,7 @@ export const MAIN_PAGE = (props) => {
         console.log("mixpanel discord/twitter insert err", err)
       }
       change_user_data(user);
+      change_loading_state(false);
       let leaderboardPromise = await get_leaderboard(header).then((leaderboard) =>
         change_leaderboard_data(leaderboard)
       );
@@ -459,9 +463,8 @@ export const MAIN_PAGE = (props) => {
       }
     }
     // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
-    
     let claim = await claim_journey_reward(header_verification, reward_id);
-    if (claim.data && (type_reward.type === "soulbound")) {
+    if (claim.data && (type_reward.type === "soulbound" || type_reward.type === "trait_pack")) {
       setAlertState({
         open: true,
         message:
