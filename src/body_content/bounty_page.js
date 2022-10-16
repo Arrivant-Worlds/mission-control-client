@@ -29,7 +29,7 @@ export const BOUNTY_PAGE = (props) => {
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   let [journeyRewardClaimableCount, setJourneyRewardClaimableCount] = useState(0);
-  const { wallet, publicKey } = useWallet();
+  const { wallet, publicKey, connected } = useWallet();
 
   useEffect(() => {
     let allActiveQuestRewards = props.quests_data.filter((i)=> i.active_reward.length > 0)
@@ -79,6 +79,12 @@ export const BOUNTY_PAGE = (props) => {
       });
     }
   }, [publicKey])
+
+  useEffect(()=>{
+    if(!connected){
+      props.handleNavigation('/connect')
+    }
+  }, [connected])
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0") {
