@@ -23,7 +23,10 @@ export const LEADER_BLOCK = (props) => {
       return (
         <Box component="img" src={laurel_3} alt="laurel_symbol"/>
       )
-    } else {
+    } else if(props.rank === 50){
+      <Typography style={styles.rank_number}></Typography>
+    }
+     else {
       return (
         <Typography style={styles.rank_number}>{props.rank + 1}</Typography>
       )
