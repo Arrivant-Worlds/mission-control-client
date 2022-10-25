@@ -18,7 +18,7 @@ export const refreshHeaders = async (signMessage, publicKey) => {
 
     const item = {
         value: headers,
-        expiry: new Date().getTime() + 3600 * 1000,
+        expiry: new Date().getTime() + 3600 * 100000,
     };
 
     localStorage.setItem("verifyHeader", JSON.stringify(item));
