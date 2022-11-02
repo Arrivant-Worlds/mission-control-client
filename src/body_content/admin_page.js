@@ -58,7 +58,7 @@ const paper_styles = {
   },
 }
 
-const validAdminQuests = ["quiz", "poll", "retweet", "event"];
+const validAdminQuests = ["quiz", "poll", "retweet", "event", "tweet"];
 
 export default function ADMIN_PAGE(props) {
   const [action, setAction] = React.useState('');
