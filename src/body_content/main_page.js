@@ -487,9 +487,13 @@ export const MAIN_PAGE = (props) => {
       tx.feePayer = userKey;
       let sig = await sendTransaction(tx, connection);
       set_message_dialog({
-        open: false,
-        text: 'Claiming requires .03 SOL'
+        open: true,
+        text: 'Confirming transaction...'
       });
+      await connection.confirmTransaction(sig, { commitment: "confirmed" })
+      set_message_dialog({
+        open: false,
+      })
       console.log(sig)
     }
     // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
@@ -533,6 +537,9 @@ export const MAIN_PAGE = (props) => {
       console.log("Wrong journey reward type or claim transaction is empty");
     }
     await populate_data()
+    setTimeout(() => {
+      populate_data()
+    }, 10000)
     return claim
   };
 
