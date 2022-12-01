@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
-import { Connection, Transaction } from "@solana/web3.js";
+import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
   get_user,
   get_quests,
@@ -59,9 +59,9 @@ import RewardsTab from "../audio/RewardsTab.wav";
 import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import RewardFanfare from "../audio/RewardFanfare.wav";
-
 import useSound from "use-sound";
-import { refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
+import { getOrCreateUserAssociatedTokenAccountTX, refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
+import { RPC_CONNECTION_URL } from "../api_calls/constants";
 
 export const MAIN_PAGE = (props) => {
   const {
@@ -97,7 +97,8 @@ export const MAIN_PAGE = (props) => {
     type_reward: {
       type: "",
       url: "",
-    },
+      mint: ""
+    }
   });
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
@@ -450,18 +451,49 @@ export const MAIN_PAGE = (props) => {
     await populate_data();
   };
 
-  const handleClaimJourneyReward = async (reward_id, type_reward) => {
+  const handleClaimJourneyReward = async (
+    reward_id, 
+    reward, 
+    userKey, 
+    signTransaction, 
+    sendTransaction
+  ) => {
     let header_verification = await getWithExpiration();
-    if(type_reward.type === "soulbound" || type_reward.type === "trait_pack"){
+    if(reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack"){
       let balance_check = await RPC_CONNECTION.getBalance(publicKey);
       if (balance_check/LAMPORTS_PER_SOL < .005) {
         handleMessageOpen("You must have more than .005 SOL in your wallet!");
         return;
       }
     }
+    console.log("hereee", reward)
+    if(reward.type_reward.type === "trait_pack"){
+      console.log("IN IF STATEMENT")
+      let connection = new Connection(RPC_CONNECTION_URL)
+      //create associated token acc for user
+      let tx = new Transaction()
+      await getOrCreateUserAssociatedTokenAccountTX(
+        userKey,
+        new PublicKey(reward.mint),
+        tx
+      )
+      console.log("IM IN")
+      setAlertState({
+        open: true,
+        message:
+          "Claiming requires .03 SOL!",
+        severity: "warning",
+      });
+      let commitment = "confirmed"
+      let block = await connection.getLatestBlockhash(commitment)
+      tx.recentBlockhash = block.blockhash;
+      tx.feePayer = userKey;
+      let sig = await sendTransaction(tx, connection);
+      console.log(sig)
+    }
     // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
     let claim = await claim_journey_reward(header_verification, reward_id);
-    if (claim.data && (type_reward.type === "soulbound" || type_reward.type === "trait_pack")) {
+    if (claim.data && reward.type_reward.type === "soulbound") {
       setAlertState({
         open: true,
         message:

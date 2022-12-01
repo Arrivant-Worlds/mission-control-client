@@ -12,18 +12,23 @@ import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
 import styles from './rewards_dialog_styles.js';
 import { useAnalytics } from '../mixpanel.js';
+import { useWallet } from "@solana/wallet-adapter-react";
 
 
 export default function REWARDS_DIALOG(props) {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
-
+  const {signTransaction, sendTransaction, publicKey} = useWallet();
   const handleOnClick = async () => {
     props.playRewardFanfare();
     props.set_clicked_state(true);
      if (props.rewards_dialog_data.type === "journey") {
+      console.log("journey", props.rewards_dialog_data)
       let claim = await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
-        props.rewards_dialog_data.type_reward
+        props.rewards_dialog_data,
+        publicKey,
+        signTransaction,
+        sendTransaction
       );
       let now = new Date()
       try{

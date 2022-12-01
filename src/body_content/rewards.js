@@ -18,7 +18,7 @@ export const REWARDS = (props) => {
       return "Gain ability to catch creatures using Soulbound at level 2";
     }
   }
-
+  console.log("REWARDS ITEM", props)
   return (
     <Box style={styles.rewards_container}>
       <Grid container item direction="column" justifyContent="space-between"

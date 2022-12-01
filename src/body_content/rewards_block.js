@@ -55,6 +55,7 @@ export const REWARDS_BLOCK = (props) => {
       id: props.item_data.id,
       type: "journey",
       title: props.item_data.name,
+      mint: props.item_data.mint,
       type_reward: props.item_data.rewards,
       description: props.item_data.description,
       status: props.item_data.claimed_status
