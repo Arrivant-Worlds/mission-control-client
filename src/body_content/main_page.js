@@ -466,9 +466,7 @@ export const MAIN_PAGE = (props) => {
         return;
       }
     }
-    console.log("hereee", reward)
     if(reward.type_reward.type === "trait_pack"){
-      console.log("IN IF STATEMENT")
       let connection = new Connection(RPC_CONNECTION_URL)
       //create associated token acc for user
       let tx = new Transaction()
@@ -478,17 +476,20 @@ export const MAIN_PAGE = (props) => {
         tx
       )
       console.log("IM IN")
-      setAlertState({
+      set_message_dialog({
         open: true,
-        message:
-          "Claiming requires .03 SOL!",
-        severity: "warning",
+        text: 'Claiming requires .03 SOL'
       });
+
       let commitment = "confirmed"
       let block = await connection.getLatestBlockhash(commitment)
       tx.recentBlockhash = block.blockhash;
       tx.feePayer = userKey;
       let sig = await sendTransaction(tx, connection);
+      set_message_dialog({
+        open: false,
+        text: 'Claiming requires .03 SOL'
+      });
       console.log(sig)
     }
     // console.log(RPC_CONNECTION.getBalance(publicKey), "connection to wallet?");
