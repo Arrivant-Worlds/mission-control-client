@@ -539,7 +539,7 @@ export const MAIN_PAGE = (props) => {
     await populate_data()
     setTimeout(() => {
       populate_data()
-    }, 10000)
+    }, 15000)
     return claim
   };
 
