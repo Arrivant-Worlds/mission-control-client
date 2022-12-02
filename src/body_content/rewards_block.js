@@ -11,14 +11,21 @@ import styles from "./rewards_block_styles.js";
 
 export const REWARDS_BLOCK = (props) => {
 
-  const render_chest_image = (state) => {
+  const render_chest_image = (state, type) => {
     if (state === "claimable") {
-      return (
-        <Box sx = {{display: "flex", marginRight: "10px"}}>
-          <Typography sx = {{color: "white", fontSize: "0.75rem", padding: "5px", fontWeight: "bold", marginRight: "0.5rem", border: "solid", borderColor: "#e6b2b9", borderRadius: "0.5rem"}}>CLAIM</Typography> 
-        </Box>
-
-      );
+      if(type === 'trait_pack'){
+        return (
+          <Box sx = {{display: "flex", marginRight: "10px"}}>
+            <Typography sx = {{color: "white", fontSize: "0.75rem", padding: "5px", fontWeight: "bold", marginRight: "0.5rem", border: "solid", borderColor: "#BD825C", borderRadius: "0.5rem"}}>CLAIM</Typography> 
+          </Box>
+        );
+      } else {
+        return (
+          <Box sx = {{display: "flex", marginRight: "10px"}}>
+            <Typography sx = {{color: "white", fontSize: "0.75rem", padding: "5px", fontWeight: "bold", marginRight: "0.5rem", border: "solid", borderColor: "#e6b2b9", borderRadius: "0.5rem"}}>CLAIM</Typography> 
+          </Box>
+        );
+      }
 
     } else if (state === "processing") {
       // console.log("processing")
@@ -62,16 +69,26 @@ export const REWARDS_BLOCK = (props) => {
     });
     props.handleRewardsOpen(true);
   };
-
+  console.log(props.item_data)
   return (
     <Grid
       container
       direction="row"
       justifyContent="space-between"
       style={
-        props.item_data.claimed_status === "claimable"
-          ? styles.rewards_block_container_active
-          : styles.rewards_block_container
+        props.item_data.rewards.type === "trait_pack" ? (
+          props.item_data.claimed_status === "claimable" ? (
+            styles.rewards_block_container_active_important
+          ) : (
+            styles.rewards_block_container_important
+          ) 
+          ) : (
+          props.item_data.claimed_status === "locked" ? (
+            styles.rewards_block_container
+          ) : (
+            styles.rewards_block_container_active
+          )
+          )
       }
       onClick={
        handleOpenRewardDialog
@@ -98,9 +115,19 @@ export const REWARDS_BLOCK = (props) => {
             ) : (
               <Typography
               style={
-                props.item_data.claimed_status === "claimable"
-                  ? styles.name
-                  : styles.name_inactive
+                props.item_data.rewards.type === "trait_pack" ? (
+                  props.item_data.claimed_status === "claimable" ? (
+                    styles.name_active_important
+                  ) : (
+                    styles.name_active_important
+                  )
+                ) : (
+                  props.item_data.claimed_status === "locked" ? (
+                    styles.name_inactive
+                  ) : (
+                    styles.name
+                  )
+                )
               }
             >
               LVL
@@ -110,9 +137,19 @@ export const REWARDS_BLOCK = (props) => {
      
           <Typography
             style={
-              props.item_data.claimed_status === "claimable"
-                ? styles.name
-                : styles.name_inactive
+              props.item_data.rewards.type === "trait_pack" ? (
+                props.item_data.claimed_status === "claimable" ? (
+                  styles.name_active_important
+                ) : (
+                  styles.name_active_important
+                )
+              ) : (
+                props.item_data.claimed_status === "locked" ? (
+                  styles.name_inactive
+                ) : (
+                  styles.name
+                )
+              )
             }
           >
             {props.item_data.requiredLevel}
@@ -135,16 +172,26 @@ export const REWARDS_BLOCK = (props) => {
         >
           <Typography
             style={
-              props.item_data.claimed_status === "claimable"
-                ? styles.title
-                : styles.name_inactive
+              props.item_data.rewards.type === "trait_pack" ? (
+                props.item_data.claimed_status === "claimable" ? (
+                  styles.title_important
+                ) : (
+                  styles.title_important
+                )
+              ) : (
+                props.item_data.claimed_status === "locked" ? (
+                  styles.name_inactive
+                ) : (
+                  styles.title
+                )
+              )
             }
           >
             {props.item_data.name}
           </Typography>
         </Grid>
         <Grid container item xs={2}>
-          {render_chest_image(props.item_data.claimed_status)}
+          {render_chest_image(props.item_data.claimed_status, props.item_data.rewards.type)}
         </Grid>
       </Grid>
     </Grid>
