@@ -1,6 +1,11 @@
 import { Connection, Transaction } from "@solana/web3.js";
 import {decodeUTF8} from "tweetnacl-util";
 import { RPC_CONNECTION_URL } from "../api_calls/constants";
+import {
+    getAssociatedTokenAddress, ASSOCIATED_TOKEN_PROGRAM_ID, 
+    TOKEN_PROGRAM_ID, getAccount, createAssociatedTokenAccountInstruction,
+    TokenAccountNotFoundError, TokenInvalidAccountOwnerError} 
+from "@solana/spl-token"
 
 export const refreshHeaders = async (signMessage, publicKey) => {
     const now = Date.now();
@@ -54,6 +59,49 @@ export const refreshHeadersLedger = async (signTransaction, publicKey) => {
     return headers
 }
 
+export const getOrCreateUserAssociatedTokenAccountTX = async (
+    publicKey,
+    mint,
+    tx
+  ) => {
+
+    const connection = new Connection(RPC_CONNECTION_URL);
+
+    const associatedToken = await getAssociatedTokenAddress(
+      mint,
+      publicKey,
+      false,
+      TOKEN_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID
+    );
+  
+    try {
+      await getAccount(connection, associatedToken, TOKEN_PROGRAM_ID);
+    } catch (error) {
+      if (
+        error instanceof TokenAccountNotFoundError ||
+        error instanceof TokenInvalidAccountOwnerError
+      ) {
+        // As this isn't atomic, it's possible others can create associated accounts meanwhile.
+        try {
+          const transaction = tx.add(
+            createAssociatedTokenAccountInstruction(
+              publicKey,
+              associatedToken,
+              publicKey,
+              mint,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            )
+          );
+          return transaction;
+        } catch (error) {
+          console.log("e", error);
+        }
+      }
+    }
+  };
+  
 
 export const createLedgerEmptyTX = async (
     publicKey,
