@@ -61,7 +61,7 @@ import DisconnectHover from "../audio/QuestHover.mp3";
 import RewardFanfare from "../audio/RewardFanfare.wav";
 import useSound from "use-sound";
 import { getOrCreateUserAssociatedTokenAccountTX, refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
-import { RPC_CONNECTION_URL } from "../api_calls/constants";
+import { RPC_CONNECTION_URL, PRELUDE_URL } from "../api_calls/constants";
 
 export const MAIN_PAGE = (props) => {
   const {
@@ -685,6 +685,23 @@ export const MAIN_PAGE = (props) => {
               onClick={() => toggle_sound()}
               sx={{ color: "#888888", cursor: "pointer" }}
             ></Icon>
+            <a href = {PRELUDE_URL}>
+            <Button
+              sx = {{
+                cursor: "pointer",
+                width: "7vw",
+                position: "relative",
+                marginTop: "15px",
+                color: "white",
+                boxShadow: '0 0 20px #E6B1B8',
+                fontSize: "14px",
+                borderColor: 'white',
+                height: "50px",
+                fontWeight: "700",
+              }}
+              variant = "outlined"
+            >PRELUDE</Button>
+            </a>
           </Grid>
           <Menu
             anchorEl={dropdown_anchor}
