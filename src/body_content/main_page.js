@@ -299,7 +299,7 @@ export const MAIN_PAGE = (props) => {
         change_leaderboard_data(leaderboard)
       );
       let questsPromise = await get_quests(header).then((quests) =>
-        change_quests_data(quests)
+        change_quests_data(quests.active)
       );
       let rewardsPromise = await get_rewards(header).then((rewards) =>
         change_rewards_data(rewards)

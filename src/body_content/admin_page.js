@@ -105,15 +105,15 @@ export default function ADMIN_PAGE(props) {
     if (event.target.value === "update" || event.target.value === "validate") {
       let headers = await props.getWithExpiration();
       let retrievedMissions = await get_quests(headers);
-      let onlyActiveMissions = retrievedMissions.filter((mission)=>{
+      const allMissionsConcat = retrievedMissions.active.concat(retrievedMissions.disabled);
+      let onlyValidMissions = allMissionsConcat.filter((mission)=>{
         if(
           validAdminQuests.includes(mission.type)
         ){
           return mission
         }
       })
-
-      setMissions(onlyActiveMissions);
+      setMissions(onlyValidMissions);
     }
     setAction(event.target.value);
   };
