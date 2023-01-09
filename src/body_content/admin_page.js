@@ -161,7 +161,7 @@ export default function ADMIN_PAGE(props) {
       recurrence: mission_obj.recurrence,
       platform: mission_obj.platform,
       status: mission_obj.status,
-      type: mission_obj.type,
+      type: mission_obj.data.type === "poll" ? "poll": mission_obj.type,
       description: mission_obj.description,
       consumesDailyClaim: mission_obj.consumesDailyclaim === true ? true : false,
     }
