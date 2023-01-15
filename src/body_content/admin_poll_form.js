@@ -87,9 +87,9 @@ export default function ADMIN_POLL(props) {
         variant="outlined"
         label="Image Url"
         type="image_url"
-        name="image_url"
+        name="image"
         placeholder="image url"
-        value={props.data_poll.quiz[0].image_url}
+        value={props.data_poll.quiz[0].image}
         onChange={props.handleDataPollChange}
         sx={{
           caretColor: "#F6F6F6",

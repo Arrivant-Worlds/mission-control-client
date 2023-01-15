@@ -71,8 +71,8 @@ export default function ADMIN_PAGE(props) {
     quiz: [
       {
         question: "",
-        choices: "",
-        image_url: ""
+        choices: [],
+        image: ""
       }
     ]
   });
@@ -126,7 +126,12 @@ export default function ADMIN_PAGE(props) {
 
   const handleDataQuizChange = (e) => {
     let new_payload = {...data_quiz};
-    new_payload.quiz[0][e.target.name] = e.target.value;
+
+    if(e.target.name === "choices"){
+      new_payload.quiz[0].choices = e.target.value.split(",");
+    } else {
+      new_payload.quiz[0][e.target.name] = e.target.value;
+    }
     setDataQuiz(new_payload);
   }
 
@@ -136,7 +141,12 @@ export default function ADMIN_PAGE(props) {
 
   const handleDataPollChange = (e) => {
     let new_payload = {...data_poll};
-    new_payload.quiz[0][e.target.name] = e.target.value;
+
+    if(e.target.name === "choices"){
+      new_payload.quiz[0].choices = e.target.value.split(",");
+    } else {
+      new_payload.quiz[0][e.target.name] = e.target.value;
+    }
     setDataPoll(new_payload);
   }
 
