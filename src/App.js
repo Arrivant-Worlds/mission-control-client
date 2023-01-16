@@ -21,6 +21,7 @@ import {
     SolletExtensionWalletAdapter,
     SolletWalletAdapter,
     TorusWalletAdapter,
+    FractalWalletAdapter
 } from '@solana/wallet-adapter-wallets';
 import {
     WalletModalProvider,
@@ -77,6 +78,7 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
       new LedgerWalletAdapter(),
       new SolletWalletAdapter({ network }),
       new SolletExtensionWalletAdapter({ network }),
+      new FractalWalletAdapter({ network })
     ],
     [network]
   );
