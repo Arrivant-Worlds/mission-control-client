@@ -22,19 +22,10 @@ export const CONNECT_PAGE = (props) => {
     let r = await getUserInfo()
     console.log("INFO", r)
   };
-  const handleLogout = async () => {
-    logout()
-  }
 
   const handleConnectHover = () => {
     props.handleConnectHover();
   };
-
-  useEffect(() => {
-    if (connected) {
-      props.handleNavigation("/bounty_main");
-    }
-  }, [publicKey])
 
   return (
     <Grid
@@ -64,16 +55,12 @@ export const CONNECT_PAGE = (props) => {
       >
         <Box onMouseEnter={() => handleConnectHover()}>
           <Button
-            className="wallet_button"
+            styles={styles.button}
             onClick={handleLogin}
+            type = "button"
+            variant="outlined"
           >
             {button_text}
-          </Button>
-          <Button
-            className="wallet_button"
-            onClick={handleLogout}
-          >
-            Log out
           </Button>
         </Box>
       </Grid>

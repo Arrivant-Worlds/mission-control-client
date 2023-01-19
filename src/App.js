@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import MAIN_PAGE from "./body_content/main_page.js";
 import MOBILE_BANNER from "./body_content/mobile_banner.js";
-import React, { createContext, FC, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { SolanaWallet } from "@web3auth/solana-provider";
@@ -34,7 +34,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { AnalyticsProvider } from "./mixpanel.js"
 import { Web3Auth } from "@web3auth/modal";
 import { CHAIN_NAMESPACES } from "@web3auth/base";
+import { SolanaWalletConnectorPlugin } from "@web3auth/solana-wallet-connector-plugin";
 import RPC from "./solanaRPC.js"
+
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const theme = createTheme({
@@ -94,39 +96,58 @@ const Context = ({ children }) => {
   );
 
   useEffect(() => {
-    const init = async () => {
-      try {
-
-        const web3auth = new Web3Auth({
-          clientId, 
-          web3AuthNetwork: "testnet", // mainnet, aqua, celeste, cyan or testnet
-          chainConfig: {
-            chainNamespace: CHAIN_NAMESPACES.SOLANA,
-            chainId: "0x3", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
-            rpcTarget: "https://few-wider-smoke.solana-devnet.quiknode.pro/9693e676796c6186c530ae5eeead60af2a7852e6/", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-          },
-        });
-
-
-        setWeb3auth(web3auth);
-
-        await web3auth.initModal();
-
-        if (web3auth.provider) {
-            setProvider(web3auth.provider);
-            const solanaWallet = new SolanaWallet(web3auth.provider);
-            setWallet(solanaWallet)
-            const accounts = await solanaWallet.requestAccounts()
-            setPublicKey(accounts[0])
-        };
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     init();
   }, []);
+
+  const init = useCallback(async () => {
+    try {
+
+      const web3auth = new Web3Auth({
+        clientId, 
+        web3AuthNetwork: "testnet", // mainnet, aqua, celeste, cyan or testnet
+        chainConfig: {
+          chainNamespace: CHAIN_NAMESPACES.SOLANA,
+          chainId: "0x3", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
+          rpcTarget: "https://few-wider-smoke.solana-devnet.quiknode.pro/9693e676796c6186c530ae5eeead60af2a7852e6/", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+        },
+      });
+
+
+      setWeb3auth(web3auth);
+
+      await web3auth.initModal();
+
+      if (web3auth.provider) {
+          const solanaWallet = new SolanaWallet(web3auth.provider);
+          const accounts = await solanaWallet.requestAccounts()
+          setPublicKey(accounts[0])
+          setWallet(solanaWallet)
+          setProvider(web3auth.provider);
+
+      };
+
+      const torusPlugin = new SolanaWalletConnectorPlugin({
+        torusWalletOpts: {},
+        walletInitOptions: {
+          whiteLabel: {
+            name: "Whitelabel Demo",
+            theme: { isDark: true, colors: { torusBrand1: "#00a8ff" } },
+            logoDark: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
+            logoLight: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
+            topupHide: true,
+            defaultLanguage: "en",
+          },
+          useWalletConnect: true,
+          enableLogging: true,
+        },
+      });
+      await web3auth.addPlugin(torusPlugin);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
 
   const login = async () => {
     if (!web3auth) {
@@ -135,6 +156,7 @@ const Context = ({ children }) => {
     }
     const web3authProvider = await web3auth.connect();
     setProvider(web3authProvider);
+    init()
 
   };
 
@@ -234,7 +256,7 @@ const Context = ({ children }) => {
         publicKey,
         getPrivateKey,
         sendTransaction,
-        signTransaction
+        signTransaction,
       }}
     >
     <ConnectionProvider endpoint={endpoint}>

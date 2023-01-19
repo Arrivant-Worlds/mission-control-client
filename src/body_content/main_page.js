@@ -67,24 +67,19 @@ import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 
 
 export const MAIN_PAGE = (props) => {
-  const {
-    name,
-    connected,
-    disconnect,
-    signTransaction,
-  } = useWallet();
 
   const {
     provider,
     signMessage,
     wallet,
+    signTransaction,
+    sendTransaction,
     authenticateUser,
     publicKey,
     getPrivateKey,
     getUserInfo,
     logout
   } = useWeb3Wallet()
-  console.log("provider", provider)
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [wallet_data, change_wallet_data] = useState(null);
@@ -238,7 +233,7 @@ export const MAIN_PAGE = (props) => {
     if (provider) {
       console.log("got wallet", wallet)
       console.log("got", publicKey)
-      loadUserData();
+      loadUserData()
       handleNavigation("/bounty_main");
       if(quests_data){
         let allActiveQuestRewards = quests_data.filter((i)=> i.active_reward.length > 0)
@@ -253,6 +248,7 @@ export const MAIN_PAGE = (props) => {
     }
   }, [provider]);
 
+
   const backgroundImageRender = () => {
     if (window.location.pathname === "/lore") {
       return lore_background;
@@ -263,7 +259,7 @@ export const MAIN_PAGE = (props) => {
 
   const getAuthHeaders = async () => {
     let u = await getUserInfo()
-    console.log("I HAVE THIS", u)
+    if(!wallet) return
     let headers = {}
     //if user is using external wallet, use wallet pkey for auth
     if(Object.entries(u).length === 0){
@@ -280,7 +276,6 @@ export const MAIN_PAGE = (props) => {
     }
     //if user is using SSO use it for auth
     const app_scoped_privkey = await getPrivateKey()
-    console.log("got priv key", app_scoped_privkey)
     const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
     const app_pub_key = ed25519Key.pk.toString("hex");
     const token = await authenticateUser();
@@ -296,7 +291,6 @@ export const MAIN_PAGE = (props) => {
   const populate_data = async () => {
     // let isLedger = check_ledger()
     // set_ledger_state(isLedger);
-    if(!wallet || !provider) return
     let payload = await getAuthHeaders();
     console.log("payload", payload)
     let userPromise = await get_user(payload).then(async (user) => {
@@ -341,6 +335,7 @@ export const MAIN_PAGE = (props) => {
       questsPromise,
       rewardsPromise,
     ]);
+    console.log("all promises resolved")
 
   };
 
@@ -483,8 +478,6 @@ export const MAIN_PAGE = (props) => {
   const handleClaimJourneyReward = async (
     reward_id, 
     reward, 
-    signPlsTransaction, 
-    sendTransaction
   ) => {
     const userKey = new PublicKey(publicKey);
     let header_verification = await getAuthHeaders();
@@ -540,7 +533,7 @@ export const MAIN_PAGE = (props) => {
       try {
         const tx = Transaction.from(buffer);
         console.log("created teX", tx)
-        signedTX = await signPlsTransaction(tx);
+        signedTX = await signTransaction(tx);
       } catch (e) {
         if (e.message === "User rejected the request.") {
           handleMessageOpen("You must approve the transaction in order to claim!");
@@ -612,7 +605,7 @@ export const MAIN_PAGE = (props) => {
     }
 
     if (path === "/bounty_main") {
-      if (!wallet || !connected) {
+      if (!wallet || !provider) {
         setAlertState({
           open: true,
           message: "Please connect your wallet and sign!",

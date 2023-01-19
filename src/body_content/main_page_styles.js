@@ -36,8 +36,8 @@ const styles = {
     color: "black",
     fontSize: "16px",
     fontWeight: "700",
-    width: "198px",
-    height: "56px",
+    width: "140px",
+    height: "40px",
     backgroundColor: "#F6F6F6",
   },
   ripple_diamond: {

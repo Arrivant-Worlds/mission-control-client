@@ -17,7 +17,7 @@ import { useWeb3Wallet } from "../App.js";
 
 export default function REWARDS_DIALOG(props) {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
-  const { signTransaction, sendTransaction, publicKey } = useWeb3Wallet()
+  const { publicKey } = useWeb3Wallet()
   const handleOnClick = async () => {
     props.playRewardFanfare();
     props.set_clicked_state(true);
@@ -27,8 +27,6 @@ export default function REWARDS_DIALOG(props) {
       let claim = await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
         props.rewards_dialog_data,
-        signTransaction,
-        sendTransaction
       );
       let now = new Date()
       try{

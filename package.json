@@ -19,6 +19,7 @@
     "@walletconnect/client": "^1.8.0",
     "@web3auth/base": "^4.2.2",
     "@web3auth/modal": "^4.2.3",
+    "@web3auth/solana-wallet-connector-plugin": "^4.2.2",
     "assert": "^2.0.0",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
