@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
@@ -62,20 +62,31 @@ import RewardFanfare from "../audio/RewardFanfare.wav";
 import useSound from "use-sound";
 import { getOrCreateUserAssociatedTokenAccountTX, refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
 import { RPC_CONNECTION_URL, PRELUDE_URL } from "../api_calls/constants";
+import { useWeb3Wallet } from "../App";
+import { getED25519Key } from "@toruslabs/openlogin-ed25519";
+
 
 export const MAIN_PAGE = (props) => {
   const {
     name,
-    wallet,
-    signMessage,
-    publicKey,
     connected,
     disconnect,
     signTransaction,
   } = useWallet();
+
+  const {
+    provider,
+    signMessage,
+    wallet,
+    authenticateUser,
+    publicKey,
+    getPrivateKey,
+    getUserInfo,
+    logout
+  } = useWeb3Wallet()
+  console.log("provider", provider)
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
-
   const [wallet_data, change_wallet_data] = useState(null);
   const [dialog_state, change_dialog_state] = useState(false);
   const [message_dialog, set_message_dialog] = useState({
@@ -201,6 +212,8 @@ export const MAIN_PAGE = (props) => {
     }
   }
 
+
+
   useEffect(() => {
       //change this conditional to check for success in oath.
         //fire with the query parameters?/oauth_token
@@ -221,7 +234,10 @@ export const MAIN_PAGE = (props) => {
         });
       }
     }
-    if (connected) {
+
+    if (provider) {
+      console.log("got wallet", wallet)
+      console.log("got", publicKey)
       loadUserData();
       handleNavigation("/bounty_main");
       if(quests_data){
@@ -235,7 +251,7 @@ export const MAIN_PAGE = (props) => {
         }
       }
     }
-  }, [publicKey]);
+  }, [provider]);
 
   const backgroundImageRender = () => {
     if (window.location.pathname === "/lore") {
@@ -245,35 +261,48 @@ export const MAIN_PAGE = (props) => {
     }
   };
 
-  const getWithExpiration = async (isLedger) => {
-    let key = "verifyHeader";
-    const itemStr = localStorage.getItem(key);
-    if (itemStr === null) {
-      let data
-      if(!isLedger) data = await refreshHeaders(signMessage, publicKey);
-      else if(isLedger) {
-        data = await refreshHeadersLedger(signTransaction, publicKey)
+  const getAuthHeaders = async () => {
+    let u = await getUserInfo()
+    console.log("I HAVE THIS", u)
+    let headers = {}
+    //if user is using external wallet, use wallet pkey for auth
+    if(Object.entries(u).length === 0){
+      const address = (await wallet.requestAccounts())[0];
+      console.log("got address", address)
+      const token = await authenticateUser();
+      headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Pubkey: address,
+        Login: 'external'
       }
-      change_wallet_data(data);
-      return data;
+      return headers
     }
-    const item = JSON.parse(itemStr);
-    const now = new Date();
-    if (now.getTime() > item.expiry || publicKey.toString() !== item.value.pubkey) {
-      let data = await refreshHeaders(signMessage, publicKey);
-      change_wallet_data(data);
-      return data;
+    //if user is using SSO use it for auth
+    const app_scoped_privkey = await getPrivateKey()
+    console.log("got priv key", app_scoped_privkey)
+    const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
+    const app_pub_key = ed25519Key.pk.toString("hex");
+    const token = await authenticateUser();
+    headers =  {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Pubkey: app_pub_key,
+        Login: 'sso'
     }
-    return item.value;
-  };
+    return headers
+  }
 
   const populate_data = async () => {
-    let isLedger = check_ledger()
-    set_ledger_state(isLedger);
-    let header = await getWithExpiration(isLedger);
-    let userPromise = await get_user(header).then(async (user) => {
+    // let isLedger = check_ledger()
+    // set_ledger_state(isLedger);
+    if(!wallet || !provider) return
+    let payload = await getAuthHeaders();
+    console.log("payload", payload)
+    let userPromise = await get_user(payload).then(async (user) => {
       //see what user is?
       // console.log(user, "user after get_user");
+      console.log("got user", user)
       if (user.welcome) {
         // console.log("hit in user.welcome");
       setWelcome_popup_flag(true);
@@ -295,23 +324,24 @@ export const MAIN_PAGE = (props) => {
       }
       change_user_data(user);
       change_loading_state(false);
-      let leaderboardPromise = await get_leaderboard(header).then((leaderboard) =>
-        change_leaderboard_data(leaderboard)
-      );
-      let questsPromise = await get_quests(header).then((quests) =>
-        change_quests_data(quests.active)
-      );
-      let rewardsPromise = await get_rewards(header).then((rewards) =>
-        change_rewards_data(rewards)
-      );
-    });
 
+    });
+    let leaderboardPromise = await get_leaderboard(payload).then((leaderboard) =>
+    change_leaderboard_data(leaderboard)
+  );
+  let questsPromise = await get_quests(payload).then((quests) =>
+    change_quests_data(quests.active)
+  );
+  let rewardsPromise = await get_rewards(payload).then((rewards) =>
+    change_rewards_data(rewards)
+  );
     await Promise.all([
       userPromise,
-      // leaderboardPromise,
-      // questsPromise,
-      // rewardsPromise,
+      leaderboardPromise,
+      questsPromise,
+      rewardsPromise,
     ]);
+
   };
 
   const handleClick = async () => {
@@ -329,8 +359,7 @@ export const MAIN_PAGE = (props) => {
 
   const handleDisconnect = async () => {
     playDisconnectWallet();
-    let disconnect_wallet = await disconnect();
-    localStorage.removeItem("verifyHeader");
+    await logout()
     change_wallet_data(null);
     handleNavigation("/");
   };
@@ -402,7 +431,7 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleClaimQuestReward = async (reward_id, type_reward) => {
-    let header_verification = await getWithExpiration();
+    let header_verification = await getAuthHeaders();
     if(type_reward === "claim_caught_creature_reward"){
       let balance_check = await RPC_CONNECTION.getBalance(publicKey);
       console.log("balance", balance_check)
@@ -454,13 +483,13 @@ export const MAIN_PAGE = (props) => {
   const handleClaimJourneyReward = async (
     reward_id, 
     reward, 
-    userKey, 
-    signTransaction, 
+    signPlsTransaction, 
     sendTransaction
   ) => {
-    let header_verification = await getWithExpiration();
+    const userKey = new PublicKey(publicKey);
+    let header_verification = await getAuthHeaders();
     if(reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack"){
-      let balance_check = await RPC_CONNECTION.getBalance(publicKey);
+      let balance_check = await RPC_CONNECTION.getBalance(userKey);
       if (balance_check/LAMPORTS_PER_SOL < .005) {
         handleMessageOpen("You must have more than .005 SOL in your wallet!");
         return;
@@ -506,16 +535,18 @@ export const MAIN_PAGE = (props) => {
         severity: "warning",
       });
       let buffer = Buffer.from(claim.data, "base64");
+      console.log("HAVE CLAIM DATA", claim.data)
       let signedTX;
       try {
         const tx = Transaction.from(buffer);
-        signedTX = await signTransaction(tx);
+        console.log("created teX", tx)
+        signedTX = await signPlsTransaction(tx);
       } catch (e) {
         if (e.message === "User rejected the request.") {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
-      // console.log(signedTX, "?");
+      console.log(signedTX, "?");
       const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
         verifySignatures: false
@@ -595,7 +626,7 @@ export const MAIN_PAGE = (props) => {
   };
 
   const handleLinkTwitter = async (query) => {
-    let header_verification = await getWithExpiration();
+    let header_verification = await getAuthHeaders();
     if (!header_verification) {
       return;
     }
@@ -752,13 +783,15 @@ export const MAIN_PAGE = (props) => {
             </Grid>
           
             <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
-              {wallet ? (
+              {provider ? (
                 <Box onMouseEnter={() => handleConnectHover()}>
-                <WalletDisconnectButton
-                className="disconnect_button"
+                <Button
+                style={styles.buttonDisconnect}
                 onClick={() => handleDisconnect()}
                 onMouseEnter={() => handleDisconnectHover()}
-                />
+                >
+                  Disconnect
+                </Button>
                 </Box>
               ) : null}
             </Grid>
@@ -845,7 +878,7 @@ export const MAIN_PAGE = (props) => {
             path="connect"
             element={
               <CONNECT_PAGE
-                getWithExpiration={getWithExpiration}
+                getAuthHeaders={getAuthHeaders}
                 populate_data={populate_data}
                 alertState={alertState}
                 setAlertState={setAlertState}
@@ -873,7 +906,7 @@ export const MAIN_PAGE = (props) => {
                 rewards_data={rewards_data}
                 change_rewards_data={change_rewards_data}
                 populate_data={populate_data}
-                getWithExpiration={getWithExpiration}
+                getAuthHeaders={getAuthHeaders}
                 alertState={alertState}
                 setAlertState={setAlertState}
                 handleRewardsOpen={handleRewardsOpen}
@@ -899,7 +932,7 @@ export const MAIN_PAGE = (props) => {
           />
           <Route path="lore" element={<LORE_PAGE />} />
           <Route path="admin" element={<ADMIN_PAGE
-            getWithExpiration={getWithExpiration}
+            getAuthHeaders={getAuthHeaders}
             setAlertState={setAlertState}
             />} />
         </Routes>
@@ -931,7 +964,7 @@ export const MAIN_PAGE = (props) => {
           setActionDone={setActionDone}
           alertState={alertState}
           setAlertState={setAlertState}
-          getWithExpiration={getWithExpiration}
+          getAuthHeaders={getAuthHeaders}
           handleTwitterButton={playClaimPassport}
           handleDialogHover={handleDialogHover}
           handleClaimQuestReward={handleClaimQuestReward}

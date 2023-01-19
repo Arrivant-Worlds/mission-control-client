@@ -5,6 +5,7 @@ import { BASE_URL, RPC_CONNECTION_URL } from "./constants";
 
 export const create_user = async (payload, user_code) => {
   const referral_code = user_code || {};
+  console.log("trying to create user")
   try {
     const response = await axios.post(
       `${BASE_URL}/users`,
@@ -19,9 +20,11 @@ export const create_user = async (payload, user_code) => {
 
 export const get_user = async (payload) => {
   try {
-    const response = await axios.get(`${BASE_URL}/users`, { headers: payload });
+    const response = await axios.get(`${BASE_URL}/users`, {headers: payload});
+    console.log("response", response)
     return await response.data;
   } catch (errors) {
+    console.log("response err", errors)
     //console.error(errors.response.data);
     if (errors.response.status == 747) {
       if (window.location.search) {
@@ -29,7 +32,9 @@ export const get_user = async (payload) => {
           get: (searchParams, prop) => searchParams.get(prop),
         });
         if (params.inviteCode) {
-          const create_user_call = await create_user(payload, { referral_code: params.inviteCode });
+          const create_user_call = await create_user(payload, 
+            { referral_code: params.inviteCode }
+          );
           create_user_call.welcome = true;
           let url = window.location.toString();
           if (url.indexOf("?") > 0) {
@@ -183,6 +188,7 @@ export const submit_email = async (payload, email_string, name_string) => {
 };
 
 export const claim_journey_reward = async (payload, reward_id) => {
+  console.log("j reward header", payload)
   try {
     const response = await axios.put(
       `${BASE_URL}/journeyRewards/${reward_id}/claim`,

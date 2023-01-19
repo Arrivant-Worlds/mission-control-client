@@ -8,14 +8,23 @@ import {
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useNavigate } from "react-router-dom";
 import styles from "./connect_page_styles.js";
+import { Web3Auth } from "@web3auth/modal";
+import { CHAIN_NAMESPACES } from "@web3auth/base";
+import { Button } from "@mui/material";
+import { useWeb3Wallet } from "../App.js";
 
 export const CONNECT_PAGE = (props) => {
   const { wallet, signMessage, publicKey, connect, connected } = useWallet();
-  const [button_text, change_button_text] = useState("CONNECT WALLET");
-
-  const handleClick = async () => {
-    await connect();
+  const [button_text, change_button_text] = useState("SIGN IN");
+  const { login, logout, getUserInfo } = useWeb3Wallet()
+  const handleLogin = async () => {
+    await login()
+    let r = await getUserInfo()
+    console.log("INFO", r)
   };
+  const handleLogout = async () => {
+    logout()
+  }
 
   const handleConnectHover = () => {
     props.handleConnectHover();
@@ -54,12 +63,18 @@ export const CONNECT_PAGE = (props) => {
         alignItems="center"
       >
         <Box onMouseEnter={() => handleConnectHover()}>
-          <WalletMultiButton
+          <Button
             className="wallet_button"
-            onClick={handleClick}
+            onClick={handleLogin}
           >
             {button_text}
-          </WalletMultiButton>
+          </Button>
+          <Button
+            className="wallet_button"
+            onClick={handleLogout}
+          >
+            Log out
+          </Button>
         </Box>
       </Grid>
     </Grid>

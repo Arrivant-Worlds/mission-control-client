@@ -11,8 +11,10 @@ export const refreshHeaders = async (signMessage, publicKey) => {
     const now = Date.now();
     const message = now.toString();
     const encodedMessage = decodeUTF8(message);
-    let signature = await signMessage(encodedMessage);
-    const pubkey = publicKey.toString();
+    console.log("signing message")
+    let signature = await signMessage();
+    console.log("signed message", signature.toString())
+    const pubkey = publicKey;
     let headers = {
         auto_approve: false,
         isLedger: false,
