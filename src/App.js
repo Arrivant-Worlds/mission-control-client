@@ -68,7 +68,7 @@ const Context = ({ children }) => {
         web3AuthNetwork: "testnet", // mainnet, aqua, celeste, cyan or testnet
         chainConfig: {
           chainNamespace: CHAIN_NAMESPACES.SOLANA,
-          chainId: "0x3", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
+          chainId: "0x1", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
           rpcTarget: RPC_CONNECTION_URL, // This is the public RPC we have added, please pass on your own endpoint while creating an app
         },
       });
@@ -83,8 +83,10 @@ const Context = ({ children }) => {
             defaultLanguage: "en",
             dark: true, // whether to enable dark mode. defaultValue: false
           },
-        },
+        }
       });
+
+      console.log("openloginAdapter", openloginAdapter)
 
       web3auth.configureAdapter(openloginAdapter);
 
