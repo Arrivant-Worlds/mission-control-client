@@ -103,7 +103,7 @@ export default function ADMIN_PAGE(props) {
 
   const handleChangeAction = async (event) => {
     if (event.target.value === "update" || event.target.value === "validate") {
-      let headers = await props.getWithExpiration();
+      let headers = await props.getAuthHeaders();
       let retrievedMissions = await get_quests(headers);
       const allMissionsConcat = retrievedMissions.active.concat(retrievedMissions.disabled);
       let onlyValidMissions = allMissionsConcat.filter((mission)=>{
@@ -217,7 +217,7 @@ export default function ADMIN_PAGE(props) {
       consumesDailyClaim: payload.consumesDailyClaim,
       data: data_obj
     }
-    let headers = await props.getWithExpiration();
+    let headers = await props.getAuthHeaders();
 
     if (action === "create") {
       //add snackbar for completions?

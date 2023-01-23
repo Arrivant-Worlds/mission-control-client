@@ -30,6 +30,16 @@ const styles = {
     height: "56px",
     backgroundColor: "#F6F6F6",
   },
+  buttonDisconnect: {
+    gridColumn: "1",
+    gridRow: "1",
+    color: "black",
+    fontSize: "16px",
+    fontWeight: "700",
+    width: "140px",
+    height: "40px",
+    backgroundColor: "#F6F6F6",
+  },
   ripple_diamond: {
     margin: "0 auto",
     gridColumn: "1",

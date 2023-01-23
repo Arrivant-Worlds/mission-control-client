@@ -5,6 +5,7 @@ import { BASE_URL, RPC_CONNECTION_URL } from "./constants";
 
 export const create_user = async (payload, user_code) => {
   const referral_code = user_code || {};
+  console.log("trying to create user")
   try {
     const response = await axios.post(
       `${BASE_URL}/users`,
@@ -19,17 +20,20 @@ export const create_user = async (payload, user_code) => {
 
 export const get_user = async (payload) => {
   try {
-    const response = await axios.get(`${BASE_URL}/users`, { headers: payload });
+    const response = await axios.get(`${BASE_URL}/users`, {headers: payload});
     return await response.data;
   } catch (errors) {
     //console.error(errors.response.data);
-    if (errors.response.status == 747) {
+    if (errors.response.status === 747) {
+      console.log("HIT ERROR 747")
       if (window.location.search) {
         const params = new Proxy(new URLSearchParams(window.location.search), {
           get: (searchParams, prop) => searchParams.get(prop),
         });
         if (params.inviteCode) {
-          const create_user_call = await create_user(payload, { referral_code: params.inviteCode });
+          const create_user_call = await create_user(payload, 
+            { referral_code: params.inviteCode }
+          );
           create_user_call.welcome = true;
           let url = window.location.toString();
           if (url.indexOf("?") > 0) {
@@ -39,22 +43,16 @@ export const get_user = async (payload) => {
           return create_user_call;
         }
       } else {
+        console.log("CALLING CREATE USER")
         const create_user_call = await create_user(payload);
         // console.log(create_user_call, "return from create_user before attempt");
         create_user_call.welcome = true;
         // console.log(create_user_call, "return from create_user after attempt");
         return await create_user_call;
       }
+      console.log("sss", errors.response.status)
     } else {
-      return {
-        xp: 0,
-        badgeName: "",
-        survivalAssessment: "",
-        badgeUrl: "",
-        level: 0,
-        xp: 0,
-        admin: false,
-      };
+      throw new Error("User exists on a different wallet");
     }
   }
 };
@@ -183,6 +181,7 @@ export const submit_email = async (payload, email_string, name_string) => {
 };
 
 export const claim_journey_reward = async (payload, reward_id) => {
+  console.log("j reward header", payload)
   try {
     const response = await axios.put(
       `${BASE_URL}/journeyRewards/${reward_id}/claim`,

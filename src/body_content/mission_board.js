@@ -20,7 +20,6 @@ export const MISSION_BOARD = (props) => {
     }
     props.change_expanded_tab(tab);
   };
-
   return (
     <Box style={styles.mission_board_container}>
       <Grid container item direction="column" justifyContent="space-between"

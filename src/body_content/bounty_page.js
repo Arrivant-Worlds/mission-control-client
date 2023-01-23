@@ -21,6 +21,7 @@ import styles from "./bounty_page_styles.js";
 import { useNavigate } from "react-router";
 import {useWallet} from "@solana/wallet-adapter-react";
 import { Connection } from "@solana/web3.js";
+import { useWeb3Wallet } from "../App.js";
 
 export const BOUNTY_PAGE = (props) => {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
@@ -29,8 +30,8 @@ export const BOUNTY_PAGE = (props) => {
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   let [journeyRewardClaimableCount, setJourneyRewardClaimableCount] = useState(0);
-  const { wallet, publicKey, connected } = useWallet();
-
+  const { wallet, publicKey } = useWallet();
+  const { provider } = useWeb3Wallet()
   useEffect(() => {
     let allActiveQuestRewards = props.quests_data.filter((i)=> i.active_reward.length > 0)
     let allActiveJourneyRewards = props.rewards_data.filter((r)=>r.claimed_status === "claimable")
@@ -57,7 +58,7 @@ export const BOUNTY_PAGE = (props) => {
   }, [props.welcome_popup_flag])
 
   const handleLinkDiscord = async (token_type, access_token) => {
-    let header_verification = await props.getWithExpiration();
+    let header_verification = await props.getAuthHeaders();
     await verify_discord(
         header_verification,
         token_type,
@@ -81,10 +82,11 @@ export const BOUNTY_PAGE = (props) => {
   }, [publicKey])
 
   useEffect(()=>{
-    if(!connected){
+    console.log("CHECKING PROV", provider)
+    if(!provider){
       props.handleNavigation('/connect')
     }
-  }, [connected])
+  }, [provider])
 
   const handleChange = (event, newValue) => {
     if (event.target.id === "tab0") {
@@ -326,7 +328,7 @@ export const BOUNTY_PAGE = (props) => {
               user_data={props.user_data}
               handleRewardsOpen={props.handleRewardsOpen}
               handleRewardsClose={props.handleRewardsClose}
-              getWithExpiration={props.getWithExpiration}
+              getAuthHeaders={props.getAuthHeaders}
               sign_message={props.sign_message}
               loading_state={props.loading_state}
               change_loading_state={props.change_loading_state}

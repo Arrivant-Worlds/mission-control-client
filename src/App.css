@@ -22,18 +22,15 @@
   width: 3px !important;
 }
 
-.wallet-adapter-button.wallet_button {
+.disconnect_button {
+  grid-column: 1;
+  grid-row: 1;
+  color: #111111;
   font-size: 16px;
-  background-color: transparent;
-  border: 1px solid #F6F6F6;
-  color: #F6F6F6;
-}
-
-.wallet-adapter-button.disconnect_button {
-  font-size: 16px;
-  background-color: transparent;
-  border: 1px solid #F6F6F6;
-  color: #F6F6F6;
+  font-weight: 700;
+  width: 198px;
+  height: 56px;
+  background-color: #F6F6F6;
 }
 
 .MuiButtonBase-root.MuiButton-root.Mui-disabled{

@@ -69,7 +69,6 @@ export const REWARDS_BLOCK = (props) => {
     });
     props.handleRewardsOpen(true);
   };
-  console.log(props.item_data)
   return (
     <Grid
       container
