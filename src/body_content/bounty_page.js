@@ -58,7 +58,7 @@ export const BOUNTY_PAGE = (props) => {
   }, [props.welcome_popup_flag])
 
   const handleLinkDiscord = async (token_type, access_token) => {
-    let header_verification = await props.getWithExpiration();
+    let header_verification = await props.getAuthHeaders();
     await verify_discord(
         header_verification,
         token_type,
@@ -328,7 +328,7 @@ export const BOUNTY_PAGE = (props) => {
               user_data={props.user_data}
               handleRewardsOpen={props.handleRewardsOpen}
               handleRewardsClose={props.handleRewardsClose}
-              getWithExpiration={props.getWithExpiration}
+              getAuthHeaders={props.getAuthHeaders}
               sign_message={props.sign_message}
               loading_state={props.loading_state}
               change_loading_state={props.change_loading_state}

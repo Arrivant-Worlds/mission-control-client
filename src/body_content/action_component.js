@@ -122,7 +122,7 @@ export default function ACTION_COMPONENT(props) {
     if (emailForm.test(formValue) && nameFormValue !== "") {
       setErrorState(false);
       setHelperText(" ");
-      let header_verification = await props.getWithExpiration("verifyHeader");
+      let header_verification = await props.getAuthHeaders();
       if (header_verification) {
         setFormSubmission(true);
         props.setActionDone(true);
@@ -421,7 +421,7 @@ export default function ACTION_COMPONENT(props) {
               }}
               handleButtonHover={() => props.handleDialogHover()}
               handleButtonClick={() => handleTwitterClick()}
-              getWithExpiration={props.getWithExpiration}
+              getAuthHeaders={props.getAuthHeaders}
               buttonText={props.action_data.buttonText}
               handleNavigation={props.handleNavigation}
               setAlertState = {props.setAlertState}

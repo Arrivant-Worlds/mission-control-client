@@ -45,7 +45,8 @@ export const REWARDS = (props) => {
                         <REWARDS_BLOCK item_data={item} key={i}
                           user_data={props.user_data}
                           sign_message={props.sign_message}
-                          getWithExpiration={props.getWithExpiration} loading_state={props.loading_state} change_loading_state={props.change_loading_state} populate_data={props.populate_data}
+                          getAuthHeaders={props.getAuthHeaders} 
+                          loading_state={props.loading_state} change_loading_state={props.change_loading_state} populate_data={props.populate_data}
                           rewards_dialog_data={props.rewards_dialog_data}
                           set_rewards_dialog_data={props.set_rewards_dialog_data}
                           handleRewardsOpen={props.handleRewardsOpen}
@@ -59,7 +60,8 @@ export const REWARDS = (props) => {
                     <REWARDS_BLOCK item_data={item} key={i}
                       user_data={props.user_data}
                       sign_message={props.sign_message}
-                      getWithExpiration={props.getWithExpiration} loading_state={props.loading_state} change_loading_state={props.change_loading_state} populate_data={props.populate_data}
+                      getAuthHeaders={props.getAuthHeaders} 
+                      loading_state={props.loading_state} change_loading_state={props.change_loading_state} populate_data={props.populate_data}
                       rewards_dialog_data={props.rewards_dialog_data}
                       set_rewards_dialog_data={props.set_rewards_dialog_data}
                       handleRewardsOpen={props.handleRewardsOpen}

@@ -119,7 +119,7 @@ export default function MISSION_DIALOG(props) {
               <Box style={styles.action_frame}>
                 <ACTION_COMPONENT
                   action_data={props.dialog_data.action}
-                  getWithExpiration={props.getWithExpiration}
+                  getAuthHeaders={props.getAuthHeaders}
                   sign_message={props.sign_message}
                   user_data = {props.user_data}
                   handleTwitterButton={props.handleTwitterButton}

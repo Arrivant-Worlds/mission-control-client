@@ -32,11 +32,11 @@ import { SolanaWallet } from "@web3auth/solana-provider";
           method: "solana_provider_config",
           params: [],
         });
+        console.log("rpc target", connectionConfig.rpcTarget)
         const conn = new Connection(connectionConfig.rpcTarget);
   
         const accounts = await solanaWallet.requestAccounts();
         const balance = await conn.getBalance(new PublicKey(accounts[0]));
-  
         return balance.toString();
       } catch (error) {
         return error

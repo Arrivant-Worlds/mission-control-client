@@ -17,7 +17,7 @@ export default function CONNECT_TWITTER(props) {
     props.handleButtonClick();
 
     if (publicKey && connected) {
-      let header_verification = await props.getWithExpiration();
+      let header_verification = await props.getAuthHeaders();
       if (header_verification) {
         console.log("headers", header_verification);
         let oauth_token = await auth_twitter(header_verification, publicKey.toString());

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletDisconnectButton } from "@solana/wallet-adapter-react-ui";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
   get_user,
@@ -78,11 +76,11 @@ export const MAIN_PAGE = (props) => {
     publicKey,
     getPrivateKey,
     getUserInfo,
+    getBalance,
     logout
   } = useWeb3Wallet()
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
-  const [wallet_data, change_wallet_data] = useState(null);
   const [dialog_state, change_dialog_state] = useState(false);
   const [message_dialog, set_message_dialog] = useState({
     open: false,
@@ -293,49 +291,48 @@ export const MAIN_PAGE = (props) => {
     // set_ledger_state(isLedger);
     let payload = await getAuthHeaders();
     console.log("payload", payload)
-    let userPromise = await get_user(payload).then(async (user) => {
-      //see what user is?
-      // console.log(user, "user after get_user");
-      console.log("got user", user)
-      if (user.welcome) {
-        // console.log("hit in user.welcome");
-      setWelcome_popup_flag(true);
-      setClaim_tutorial_flag(true);
-      }
-      try{
-        if(user.discord_name){
-          setPropertyIfNotExists("discord_name", user.discord_name);
-          setPropertyIfNotExists("$name", user.discord_name);
-        }
-        if(user.twitter_id){
-          setPropertyIfNotExists("twitter_id", user.twitter_id);
-        }
-        if(user.email){
-          setPropertyIfNotExists("$email", user.email);
-        }
-      } catch(err){
-        console.log("mixpanel discord/twitter insert err", err)
-      }
-      change_user_data(user);
-      change_loading_state(false);
+    try{
+    let user = await get_user(payload)
 
-    });
-    let leaderboardPromise = await get_leaderboard(payload).then((leaderboard) =>
-    change_leaderboard_data(leaderboard)
-  );
-  let questsPromise = await get_quests(payload).then((quests) =>
-    change_quests_data(quests.active)
-  );
-  let rewardsPromise = await get_rewards(payload).then((rewards) =>
-    change_rewards_data(rewards)
-  );
-    await Promise.all([
-      userPromise,
-      leaderboardPromise,
-      questsPromise,
-      rewardsPromise,
-    ]);
-    console.log("all promises resolved")
+    console.log("got user", user)
+    if (user.welcome) {
+        // console.log("hit in user.welcome");
+    setWelcome_popup_flag(true);
+    setClaim_tutorial_flag(true);
+    }
+    try{
+      if(user.discord_name){
+        setPropertyIfNotExists("discord_name", user.discord_name);
+        setPropertyIfNotExists("$name", user.discord_name);
+      }
+      if(user.twitter_id){
+        setPropertyIfNotExists("twitter_id", user.twitter_id);
+      }
+      if(user.email){
+        setPropertyIfNotExists("$email", user.email);
+      }
+    } catch(err){
+      console.log("mixpanel discord/twitter insert err", err)
+    }
+
+    if(user){
+      let leaderboard = await get_leaderboard(payload)
+      change_leaderboard_data(leaderboard)
+      let quests = await get_quests(payload)
+      console.log("got quests", quests)
+      change_quests_data(quests.active)
+      let rewards = await get_rewards(payload)
+      change_rewards_data(rewards)
+    }
+   
+    change_user_data(user);
+    change_loading_state(false);
+    } catch(err){
+      console.log(err)
+      console.log("err in get user");
+      handleMessageOpen(err.message)
+    }
+
 
   };
 
@@ -355,7 +352,6 @@ export const MAIN_PAGE = (props) => {
   const handleDisconnect = async () => {
     playDisconnectWallet();
     await logout()
-    change_wallet_data(null);
     handleNavigation("/");
   };
 
@@ -422,13 +418,12 @@ export const MAIN_PAGE = (props) => {
       open: false,
       text: "",
     });
-    await populate_data();
   };
 
   const handleClaimQuestReward = async (reward_id, type_reward) => {
     let header_verification = await getAuthHeaders();
     if(type_reward === "claim_caught_creature_reward"){
-      let balance_check = await RPC_CONNECTION.getBalance(publicKey);
+      let balance_check = await getBalance();
       console.log("balance", balance_check)
       if (balance_check/LAMPORTS_PER_SOL  < .01) {
         handleMessageOpen("You must have more than .01 SOL in your wallet!");
@@ -482,7 +477,7 @@ export const MAIN_PAGE = (props) => {
     const userKey = new PublicKey(publicKey);
     let header_verification = await getAuthHeaders();
     if(reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack"){
-      let balance_check = await RPC_CONNECTION.getBalance(userKey);
+      let balance_check = await getBalance();
       if (balance_check/LAMPORTS_PER_SOL < .005) {
         handleMessageOpen("You must have more than .005 SOL in your wallet!");
         return;
@@ -874,6 +869,7 @@ export const MAIN_PAGE = (props) => {
                 getAuthHeaders={getAuthHeaders}
                 populate_data={populate_data}
                 alertState={alertState}
+                handleMessageOpen = {handleMessageOpen}
                 setAlertState={setAlertState}
                 handleConnectHover={handleConnectHover}
                 handleDisconnectHover={handleDisconnectHover}
@@ -888,7 +884,6 @@ export const MAIN_PAGE = (props) => {
               <BOUNTY_PAGE
                 handleDialogOpen={handleDialogOpen}
                 handleDialogClose={handleDialogClose}
-                wallet_data={wallet_data}
                 dialog_data={dialog_data}
                 change_dialog_data={change_dialog_data}
                 quests_data={quests_data}
