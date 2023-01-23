@@ -4,13 +4,12 @@ import './index.css';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Gleam from "./gleam"
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/gleamcompetition" element={<Gleam />}/>
         <Route path="*" element={<App />}/>
       </Routes>
     </BrowserRouter>
