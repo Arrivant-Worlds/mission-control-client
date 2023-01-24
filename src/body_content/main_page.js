@@ -424,11 +424,21 @@ export const MAIN_PAGE = (props) => {
     let header_verification = await getAuthHeaders();
     if(type_reward === "claim_caught_creature_reward"){
       let balance_check = await getBalance();
-      console.log("balance", balance_check)
-      if (balance_check/LAMPORTS_PER_SOL  < .01) {
-        handleMessageOpen("You must have more than .01 SOL in your wallet!");
-        return;
+      let u = await getUserInfo()
+      if(Object.entries(u).length !== 0){
+        //user is using a web wallet
+        if (balance_check/LAMPORTS_PER_SOL  < .01) {
+          handleMessageOpen(`Please fund your web wallet with more than 0.01 SOL, or sign in with an external crypto wallet.`);
+          return;
+        }
+      } else {
+        //user is using an external crypto wallet
+        if (balance_check/LAMPORTS_PER_SOL < .01) {
+          handleMessageOpen("You must have more than .01 SOL in your wallet!");
+          return;
+        }
       }
+      
     }
     let response = await claim_quest_reward(header_verification, reward_id);
     if (response.status !== 200) {
@@ -450,6 +460,7 @@ export const MAIN_PAGE = (props) => {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
+      
       if(signedTX){
         const dehydratedTx = signedTX.serialize({
           requireAllSignatures: false,

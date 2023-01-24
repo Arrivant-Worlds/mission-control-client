@@ -3,20 +3,19 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import styles from "./mission_board_styles.js";
 import { useNavigate } from "react-router-dom";
-import { useWallet } from "@solana/wallet-adapter-react";
 import {
   auth_twitter,
   get_twitter_oauth_redirect,
   verify_twitter,
 } from "../api_calls/index.js";
+import { useWeb3Wallet } from "../App.js";
 
 export default function CONNECT_TWITTER(props) {
-  const { publicKey, connected } = useWallet();
-
+  const { publicKey } = useWeb3Wallet()
   const handleTwitter = async (n) => {
     props.handleButtonClick();
 
-    if (publicKey && connected) {
+    if (publicKey) {
       let header_verification = await props.getAuthHeaders();
       if (header_verification) {
         console.log("headers", header_verification);

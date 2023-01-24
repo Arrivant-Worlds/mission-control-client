@@ -1,7 +1,8 @@
-import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import mixpanel from "mixpanel-browser"
 import React, { useContext, useEffect, useState, createContext } from "react"
 import { useLocation } from "react-router";
+import { useWeb3Wallet } from "./App";
 
 let MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 const debugAnalytics = true;
@@ -73,12 +74,11 @@ const AnalyticsContext = createContext(null);
 
 
 export function AnalyticsProvider(props: { children: React.ReactNode }) {
+  const {publicKey} = useWeb3Wallet()
   const router = useLocation();
   const [trackingInitialized, setTrackingInitialized] = useState(false);
   const [lastPubkeyConnected, setLastPubkeyConnected] = useState(undefined);
-  const wallet = useAnchorWallet()
-  const allWalletInfo  = useWallet();
-  const pubkey = wallet?.publicKey.toBase58();
+  const pubkey = publicKey
   function initializeTracking() {
     const integrations = {
       mixpanel: !!MIXPANEL_TOKEN,

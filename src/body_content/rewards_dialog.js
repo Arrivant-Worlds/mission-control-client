@@ -12,7 +12,6 @@ import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
 import styles from './rewards_dialog_styles.js';
 import { useAnalytics } from '../mixpanel.js';
-import { useWallet } from "@solana/wallet-adapter-react";
 import { useWeb3Wallet } from "../App.js";
 
 export default function REWARDS_DIALOG(props) {

@@ -33,7 +33,7 @@ export default function MESSAGE_DIALOG(props) {
         },
       }}
     >
-      <DialogContent sx={{height: "100px"}}>
+      <DialogContent sx={{height: "150px"}}>
         <IconButton
           aria-label="close"
           onClick={() => props.handleMessageClose()}

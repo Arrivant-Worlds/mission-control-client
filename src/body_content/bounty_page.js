@@ -19,18 +19,17 @@ import {
 import bounty_frame from "../images/bounty_frame.png";
 import styles from "./bounty_page_styles.js";
 import { useNavigate } from "react-router";
-import {useWallet} from "@solana/wallet-adapter-react";
 import { Connection } from "@solana/web3.js";
 import { useWeb3Wallet } from "../App.js";
 
 export const BOUNTY_PAGE = (props) => {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
+  const { publicKey } = useWeb3Wallet()
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   let [journeyRewardClaimableCount, setJourneyRewardClaimableCount] = useState(0);
-  const { wallet, publicKey } = useWallet();
   const { provider } = useWeb3Wallet()
   useEffect(() => {
     let allActiveQuestRewards = props.quests_data.filter((i)=> i.active_reward.length > 0)

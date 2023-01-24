@@ -5,8 +5,6 @@ import 'simplebar-react/dist/simplebar.min.css';
 import MAIN_PAGE from "./body_content/main_page.js";
 import MOBILE_BANNER from "./body_content/mobile_banner.js";
 import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { SolanaWallet } from "@web3auth/solana-provider";
 import { SolflareAdapter } from "@web3auth/solflare-adapter";
 import { PhantomAdapter } from "@web3auth/phantom-adapter";

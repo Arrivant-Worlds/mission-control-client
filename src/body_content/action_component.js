@@ -15,13 +15,11 @@ import {
   transmit_signed_quest_reward_tx_to_server,
 } from "./../api_calls";
 import { Transaction } from "@solana/web3.js";
-import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function ACTION_COMPONENT(props) {
   console.log(props, "???? AC");
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [claimed_state, change_claimed_state] = useState(false);
-  const {signTransaction} = useWallet()
   const helper_style = {
     backgroundColor: "rgba(13, 13, 13, 0.9)",
     marginTop: "0px",

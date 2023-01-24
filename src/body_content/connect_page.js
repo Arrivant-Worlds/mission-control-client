@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import {
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { useNavigate } from "react-router-dom";
 import styles from "./connect_page_styles.js";
 import { Web3Auth } from "@web3auth/modal";
@@ -14,7 +13,6 @@ import { Button } from "@mui/material";
 import { useWeb3Wallet } from "../App.js";
 
 export const CONNECT_PAGE = (props) => {
-  const { wallet, signMessage, publicKey, connect, connected } = useWallet();
   const [button_text, change_button_text] = useState("SIGN IN");
   const { login, logout, getUserInfo } = useWeb3Wallet()
   const handleLogin = async () => {
