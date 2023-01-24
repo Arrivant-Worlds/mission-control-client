@@ -88,15 +88,18 @@ const Context = ({ children }) => {
 
       web3auth.configureAdapter(openloginAdapter);
 
+
+      const phantomAdapter = new PhantomAdapter({
+        sessionTime: 86400,
+        clientId,
+      });
+      web3auth.configureAdapter(phantomAdapter);
+
       const solflareAdapter = new SolflareAdapter({
         clientId,
       });
       web3auth.configureAdapter(solflareAdapter);
 
-      const phantomAdapter = new PhantomAdapter({
-        clientId,
-      });
-      web3auth.configureAdapter(phantomAdapter);
 
       const torusPlugin = new SolanaWalletConnectorPlugin({
         torusWalletOpts: {},

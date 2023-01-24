@@ -181,9 +181,13 @@ export const MAIN_PAGE = (props) => {
   });
 
   const loadUserData = async () => {
-    change_loading_state(true);
-    await populate_data();
-    change_loading_state(false);
+    try{
+      change_loading_state(true);
+      await populate_data();
+      change_loading_state(false);
+    } catch(err){
+      change_loading_state(false);
+    }
   };
 
   const toggle_ledger_switch = () => {
@@ -194,13 +198,12 @@ export const MAIN_PAGE = (props) => {
     let ledgerState = JSON.parse(localStorage.getItem("verifyHeader"));
     if (
       wallet && (
-        wallet.adapter.name === "Ledger" || 
         ledger_state ||
         ledgerState?.value?.isLedger 
       )
       ) {
       return true;
-    } else if(wallet && wallet.adapter.name === "Phantom") {
+    } else {
       return false;
     }
   }
@@ -263,6 +266,20 @@ export const MAIN_PAGE = (props) => {
     if(Object.entries(u).length === 0){
       const address = (await wallet.requestAccounts())[0];
       console.log("got address", address)
+      //if ledger do literally fucking everything
+      let isLedger = check_ledger()
+      if(isLedger){
+        let key = "verifyHeader";
+        const itemStr = localStorage.getItem(key);
+        if(itemStr === null){
+          headers = await refreshHeadersLedger(signTransaction, new PublicKey(address))
+        } else {
+          const item = JSON.parse(itemStr);
+          headers = item.value;
+          return headers
+        }
+        return headers
+      }
       const token = await authenticateUser();
       headers = {
         "Content-Type": "application/json",
@@ -352,6 +369,7 @@ export const MAIN_PAGE = (props) => {
   const handleDisconnect = async () => {
     playDisconnectWallet();
     await logout()
+    localStorage.removeItem("verifyHeader");
     handleNavigation("/");
   };
 

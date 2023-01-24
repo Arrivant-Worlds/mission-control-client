@@ -51,6 +51,7 @@ export const refreshHeadersLedger = async (signTransaction, publicKey) => {
         signedMsg: message,
         signature: JSON.stringify(Array.from(signedTX.signature)),
         pubkey: pubkey,
+        login: 'transaction'
     };
     const item = {
         value: headers,
