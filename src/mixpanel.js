@@ -156,13 +156,12 @@ export function AnalyticsProvider(props: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (trackingInitialized) {
-      if (pubkey && allWalletInfo) {
+      if (pubkey) {
         identify();
         track('Wallet Connection Made', {
           event_category: 'Wallet',
           event_label: pubkey,
-          pubkey,
-          walletType: allWalletInfo.wallet.adapter.name
+          pubkey
         });
       } else if (!pubkey && lastPubkeyConnected) {
         track('Wallet Connection Broken', {
