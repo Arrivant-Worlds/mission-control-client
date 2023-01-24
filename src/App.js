@@ -254,6 +254,7 @@ const Context = ({ children }) => {
     const rpc = new RPC(provider);
     const receipt = await rpc.sendTransaction(transaction);
     console.log(receipt);
+    return receipt
   };
 
   const signTransaction = async (transaction) => {

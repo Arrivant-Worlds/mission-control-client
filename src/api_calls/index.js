@@ -223,6 +223,12 @@ export const transmit_signed_quest_reward_tx_to_server = async (payload, seriali
   }
 };
 
+export function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 export const claim_quest_reward = async (payload, reward_id) => {
   try {
     const response = await axios.put(

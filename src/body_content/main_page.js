@@ -9,7 +9,7 @@ import {
   claim_journey_reward,
   claim_quest_reward,
   verify_twitter,
-  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server,
+  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep,
 } from "./../api_calls";
 import {LAMPORTS_PER_SOL} from "@solana/web3.js";
 import { useAnalytics } from '../mixpanel.js';
@@ -268,26 +268,32 @@ export const MAIN_PAGE = (props) => {
       console.log("got address", address)
       //if ledger do literally fucking everything
       let isLedger = check_ledger()
-      if(isLedger){
-        let key = "verifyHeader";
-        const itemStr = localStorage.getItem(key);
-        if(itemStr === null){
-          headers = await refreshHeadersLedger(signTransaction, new PublicKey(address))
-        } else {
+      let key = "verifyHeader";
+      const itemStr = localStorage.getItem(key);
+      if(itemStr === null){
+          if(isLedger){
+            headers = await refreshHeadersLedger(signTransaction, new PublicKey(address))
+          } else {
+            const token = await authenticateUser();
+            headers = {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              Pubkey: address,
+              Login: 'external'
+            }
+            const item = {
+              value: headers,
+              expiry: new Date().getTime() + 3600 * 1000,
+            };
+            localStorage.setItem("verifyHeader", JSON.stringify(item));
+            return headers
+          }
+          } else {
           const item = JSON.parse(itemStr);
           headers = item.value;
           return headers
-        }
-        return headers
-      }
-      const token = await authenticateUser();
-      headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Pubkey: address,
-        Login: 'external'
-      }
-      return headers
+          }
+      
     }
     //if user is using SSO use it for auth
     const app_scoped_privkey = await getPrivateKey()
@@ -536,7 +542,7 @@ export const MAIN_PAGE = (props) => {
         open: true,
         text: 'Confirming transaction...'
       });
-      await connection.confirmTransaction(sig, { commitment: "confirmed" })
+      await sleep(3000)
       set_message_dialog({
         open: false,
       })
