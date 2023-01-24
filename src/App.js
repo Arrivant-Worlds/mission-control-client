@@ -13,7 +13,7 @@ import { clusterApiUrl } from '@solana/web3.js';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AnalyticsProvider } from "./mixpanel.js"
 import { Web3Auth } from "@web3auth/modal";
-import { CHAIN_NAMESPACES } from "@web3auth/base";
+import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
 import { SolanaWalletConnectorPlugin } from "@web3auth/solana-wallet-connector-plugin";
 import RPC from "./solanaRPC.js"
 import { RPC_CONNECTION_URL } from './api_calls/constants';
@@ -69,6 +69,12 @@ const Context = ({ children }) => {
           chainId: "0x1", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
           rpcTarget: RPC_CONNECTION_URL, // This is the public RPC we have added, please pass on your own endpoint while creating an app
         },
+        uiConfig: {
+          theme: "dark",
+          appLogo: "https://aurahma-bucket.s3.eu-north-1.amazonaws.com/favicon.ico",
+          appName: "Mission Control",
+          loginMethodsOrder: ["google", "twitter", "discord"]
+        }
       });
 
       const openloginAdapter = new OpenloginAdapter({
@@ -80,9 +86,13 @@ const Context = ({ children }) => {
             logoDark: "https://aurahma-bucket.s3.eu-north-1.amazonaws.com/favicon.ico",
             defaultLanguage: "en",
             dark: true, // whether to enable dark mode. defaultValue: false
-          },
+          }
+        },
+        loginSettings: {
+          loginProvider: ['discord'],
         }
       });
+
 
       console.log("openloginAdapter", openloginAdapter)
 
@@ -120,7 +130,62 @@ const Context = ({ children }) => {
       let isInit = await web3auth.addPlugin(torusPlugin);
 
       setWeb3auth(web3auth);
-      await web3auth.initModal();
+      await web3auth.initModal({
+        modalConfig: {
+          [WALLET_ADAPTERS.OPENLOGIN]: {
+            label: "openlogin",
+            loginMethods: {
+              google: {
+                name: "google login",
+                logoDark: "url to your custom logo which will shown in dark mode",
+              },
+              facebook: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "facebook login",
+                showOnModal: false,
+              },
+              reddit: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "reddit login",
+                showOnModal: false,
+              },
+              apple: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "twitter login",
+                showOnModal: false,
+              },
+              line: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "twitter login",
+                showOnModal: false,
+              },
+              github: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "twitter login",
+                showOnModal: false,
+              },
+              kakao: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "twitter login",
+                showOnModal: false,
+              },
+              weibo: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "twitter login",
+                showOnModal: false,
+              },
+              email_passwordless: {
+                // it will hide the facebook option from the Web3Auth modal.
+                name: "twitter login",
+                showOnModal: false,
+              },
+
+            },
+            // setting it to false will hide all social login methods from modal.
+            showOnModal: true,
+          },
+        },
+      });
 
       if (web3auth.provider) {
         const solanaWallet = new SolanaWallet(web3auth.provider);
