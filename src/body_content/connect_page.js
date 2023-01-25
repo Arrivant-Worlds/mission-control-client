@@ -17,8 +17,6 @@ export const CONNECT_PAGE = (props) => {
   const { login, logout, getUserInfo } = useWeb3Wallet()
   const handleLogin = async () => {
     await login()
-    let r = await getUserInfo()
-    console.log("INFO", r)
   };
 
   const handleConnectHover = () => {

@@ -76,6 +76,7 @@ export const MAIN_PAGE = (props) => {
     publicKey,
     getPrivateKey,
     getUserInfo,
+    login,
     getBalance,
     logout
   } = useWeb3Wallet()
@@ -360,7 +361,8 @@ export const MAIN_PAGE = (props) => {
 
   const handleClick = async () => {
     playAurahTheme();
-    handleNavigation("/connect");
+    //run login modal
+    await login()
   };
 
   const handleMainHover = () => {
@@ -640,7 +642,7 @@ export const MAIN_PAGE = (props) => {
           message: "Please connect your wallet and sign!",
           severity: "error",
         });
-        handleNavigation("/connect");
+        handleNavigation("/");
       }
     }
     change_dropdown_anchor(null);

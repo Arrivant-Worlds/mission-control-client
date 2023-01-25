@@ -36,7 +36,7 @@ export default function CONNECT_TWITTER(props) {
           });
         }
       } else {
-        props.handleNavigation("/connect");
+        props.handleNavigation("/");
       }
     };
   }

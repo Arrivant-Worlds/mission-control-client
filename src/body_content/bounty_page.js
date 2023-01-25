@@ -83,7 +83,7 @@ export const BOUNTY_PAGE = (props) => {
   useEffect(()=>{
     console.log("CHECKING PROV", provider)
     if(!provider){
-      props.handleNavigation('/connect')
+      props.handleNavigation('/')
     }
   }, [provider])
 
