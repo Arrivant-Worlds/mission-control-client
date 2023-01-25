@@ -36,7 +36,7 @@ const theme = createTheme({
   overrides: {
   }
 });
-const clientId = "BJ5pQR_65We--rYeJK4OBJm8Czpc36xJLhPAvIwaOm-hSSaVcCMW3rqIYvNa5bb2R7mCQsxBS9Ju_RdtKYo_Pfo"
+const clientId = "BKm_sswQ9xirQNu6wNjUvprZ0_n1EISbnx_IrFqKP55scoZvuuEUfIgsNzJM3Psnzrc5o83bAZ-Nyzo4BzMVROY"
 const WalletContext = createContext(null);
 
 const App = ()=> {
@@ -63,8 +63,7 @@ const Context = ({ children }) => {
     try {
       const web3auth = new Web3Auth({
         clientId, 
-        authMode: 'DAPP',
-        web3AuthNetwork: "mainnet", // mainnet, aqua, celeste, cyan or testnet
+        web3AuthNetwork: "testnet", // mainnet, aqua, celeste, cyan or testnet
         chainConfig: {
           chainNamespace: CHAIN_NAMESPACES.SOLANA,
           chainId: "0x1", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
@@ -129,6 +128,8 @@ const Context = ({ children }) => {
         },
       });
       let isInit = await web3auth.addPlugin(torusPlugin);
+
+      setWeb3auth(web3auth);
       await web3auth.initModal({
         modalConfig: {
           [WALLET_ADAPTERS.OPENLOGIN]: {
@@ -183,9 +184,8 @@ const Context = ({ children }) => {
             // setting it to false will hide all social login methods from modal.
             showOnModal: true,
           },
-        }
+        },
       });
-      setWeb3auth(web3auth);
 
       if (web3auth.provider) {
         const solanaWallet = new SolanaWallet(web3auth.provider);
@@ -223,7 +223,6 @@ const Context = ({ children }) => {
     }
     await web3auth.logout();
     setProvider(null);
-    setWallet(null)
   };
 
   const authenticateUser = async () => {
@@ -285,6 +284,7 @@ const Context = ({ children }) => {
     }
     const rpc = new RPC(provider);
     const privateKey = await rpc.getPrivateKey();
+    console.log("THIS IS PRIVATE", privateKey);
     return privateKey
   };
 
