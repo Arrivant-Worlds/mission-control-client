@@ -231,9 +231,8 @@ export const MAIN_PAGE = (props) => {
       }
     }
 
-    if (provider) {
+    if (provider && wallet) {
       console.log("got wallet", wallet)
-      console.log("got", publicKey)
       loadUserData()
       handleNavigation("/bounty_main");
       if(quests_data){
@@ -247,7 +246,7 @@ export const MAIN_PAGE = (props) => {
         }
       }
     }
-  }, [provider]);
+  }, [provider, wallet]);
 
 
   const backgroundImageRender = () => {

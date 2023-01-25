@@ -52,7 +52,7 @@ export const get_user = async (payload) => {
       }
       console.log("sss", errors.response.status)
     } else {
-      throw new Error("User exists on a different wallet");
+      throw new Error("There was an error, please login again.");
     }
   }
 };
