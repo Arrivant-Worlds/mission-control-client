@@ -291,10 +291,25 @@ export const MAIN_PAGE = (props) => {
           } else {
           const item = JSON.parse(itemStr);
           headers = item.value;
+          if(headers.pubkey !== address){
+            const token = await authenticateUser();
+            headers = {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              Pubkey: address,
+              Login: 'external'
+            }
+            const item = {
+              value: headers,
+              expiry: new Date().getTime() + 3600 * 1000,
+            };
+            localStorage.setItem("verifyHeader", JSON.stringify(item));
+          }
           return headers
           }
       
     }
+    
     //if user is using SSO use it for auth
     const app_scoped_privkey = await getPrivateKey()
     const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
@@ -375,7 +390,11 @@ export const MAIN_PAGE = (props) => {
 
   const handleDisconnect = async () => {
     playDisconnectWallet();
-    await logout()
+    try{
+      await logout()
+    } catch(err){
+      console.log(err)
+    }
     localStorage.removeItem("verifyHeader");
     handleNavigation("/");
   };

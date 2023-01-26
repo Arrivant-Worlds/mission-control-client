@@ -264,9 +264,7 @@ export const create_quest = async (payload, headers) => {
     );
     return response
   } catch (errors) {
-    console.error(errors);
-    if(errors.response.data === typeof(String)) return errors.response.data;
-    else { return "Failed"}
+    return errors.response.data;
   }
 };
 
