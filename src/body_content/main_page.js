@@ -367,6 +367,7 @@ export const MAIN_PAGE = (props) => {
     change_loading_state(false);
     } catch(err){
       console.log(err)
+      await logout()
       console.log("err in get user");
       handleMessageOpen(err.message)
     }
