@@ -51,10 +51,7 @@ export const get_user = async (payload) => {
         return await create_user_call;
       }
       console.log("sss", errors.response.status)
-    } else if(errors.response.status === 400) {
-      throw new Error("Please login using an external wallet, SSO is only supported for new users")
-    }
-    else {
+    } else {
       throw new Error("There was an error, please login again.");
     }
   }

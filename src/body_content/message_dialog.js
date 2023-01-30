@@ -29,7 +29,6 @@ export default function MESSAGE_DIALOG(props) {
           boxShadow: "3px 4px 47px rgba(181, 204, 213, 0.8)",
           borderRadius: "5px",
           minHeight: "100px",
-          width: 'auto',
           height: "auto",
         },
       }}
@@ -48,7 +47,7 @@ export default function MESSAGE_DIALOG(props) {
           <CloseIcon />
         </IconButton>
         <Box sx={{height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
-          <Typography style = {{whiteSpace: "nowrap"}}>
+          <Typography>
           {props.message_dialog.text}
           </Typography>
         </Box>
