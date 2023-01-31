@@ -9,15 +9,16 @@ import CONNECT_TWITTER from "./connect_twitter.js";
 import { useAnalytics } from '../mixpanel.js';
 import {
   submit_email,
-  auth_twitter,
-  get_twitter_oauth_redirect,
-  verify_twitter,
-  transmit_signed_quest_reward_tx_to_server,
+  update_wallet,
 } from "./../api_calls";
 import { Transaction } from "@solana/web3.js";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { decodeUTF8 } from "tweetnacl-util";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function ACTION_COMPONENT(props) {
   console.log(props, "???? AC");
+  const SolanaWallet = useWallet()
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [claimed_state, change_claimed_state] = useState(false);
   const helper_style = {
@@ -35,7 +36,7 @@ export default function ACTION_COMPONENT(props) {
   const [formSubmission, setFormSubmission] = useState(false);
   const [errorState, setErrorState] = useState(false);
   const [helperText, setHelperText] = useState(" ");
-
+  const [isWalletUpdateInProgress, setIsWalletUpdateInProgress]= useState(false)
   const disabled_button = () => {
     //need to add or for when a user has claimed 2 for a day already.
     // if (props.user_data.daily_claim_remaining === 0 && props.dialog_data.recurrence === "daily") {
@@ -93,6 +94,48 @@ export default function ACTION_COMPONENT(props) {
     setFormValue(value);
   };
 
+  const setWalletUpdating = async () => {
+    console.log("is wallet connected?", SolanaWallet.connected)
+    setIsWalletUpdateInProgress("Sign Message")
+    if(SolanaWallet.connected){
+      const now = Date.now();
+      const message = now.toString();
+      const encodedMessage = decodeUTF8(message);
+      let signature = await SolanaWallet.signMessage(encodedMessage);
+      console.log(signature)
+      let authHeaders = await props.getAuthHeaders();
+      console.log("auth headers", authHeaders) 
+      console.log("wallet", SolanaWallet.publicKey.toBase58())
+      try{
+        await update_wallet(authHeaders, SolanaWallet.publicKey.toBase58())
+        setIsWalletUpdateInProgress("Success!")
+        props.setAlertState({
+          open: true,
+          message: "Successfully updated wallet linked to this account",
+          severity: "success",
+        })
+      } catch(err){
+        console.log("ERR IN UPDATE WALLET", err.response)
+        if(err.response.status === 400){
+          setIsWalletUpdateInProgress("Error: Wallet already linked")
+          props.setAlertState({
+            open: true,
+            message: "The wallet you provided is already linked to a different account",
+            severity: "error",
+          })
+        } else {
+          setIsWalletUpdateInProgress("There was an error")
+          props.setAlertState({
+            open: true,
+            message: "Error occured",
+            severity: "error",
+          })
+        }
+      }
+    }
+  }
+
+
   const handleNameInputChange = (e) => {
     const { value } = e.target;
     setNameFormValue(value);
@@ -140,7 +183,7 @@ export default function ACTION_COMPONENT(props) {
       setHelperText("Incorrect email format");
     }
   };
-
+  console.log("dialog data", props.dialog_data)
   const type_render = () => {
     if (props.dialog_data.recurrence === "permanent") {
       if (props.dialog_data.from === "log") {
@@ -150,7 +193,7 @@ export default function ACTION_COMPONENT(props) {
             direction="column"
             justifyContent="center"
             alignItems="center"
-            sx={{ height: "100%", width: "100%" }}
+            sx={{ height: "100%", width: "100%", position: 'relative', zIndex: 1 }}
           >
             <Grid
               container
@@ -382,17 +425,12 @@ export default function ACTION_COMPONENT(props) {
           )}
         </Grid>
       );
-    } else if (props.action_data.type === "message") {
-      <Typography>{props.action_data.message}</Typography>;
-    } else if (props.action_data.type === "linkTwitter") {
-      //twitter oauth component
-      return (
-        <Grid
-          sx={{ height: "100%", width: "100%" }}
+    }  else if(props.action_data.type === "updateWallet"){
+       return (<Grid
+          sx={{ height: "100%", width: "100%", position: "relative", zIndex: 1 }}
           container
-          direction="column"
-          justifyContent="space-around"
           alignItems="center"
+          justifyContent="center"
         >
           <Grid
             container
@@ -405,30 +443,73 @@ export default function ACTION_COMPONENT(props) {
             }}
           >
             <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px"}}>{props.action_data.message}</Typography>
-            <CONNECT_TWITTER
-              disabled={disabled_button()}
+            <WalletMultiButton
               variant="contained"
-              style={{
+              disabled={disabled_button()}
+              onClick={() => setWalletUpdating()}
+              sx={{
                 color: "black",
-                fontSize: "14px",
+                fontSize: "10px",
                 width: "100%",
-                height: "55px",
+                height: "100%",
                 fontWeight: "700",
                 backgroundColor: "#F6F6F6",
-                padding: "0",
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden'
               }}
-              handleButtonHover={() => props.handleDialogHover()}
-              handleButtonClick={() => handleTwitterClick()}
-              getAuthHeaders={props.getAuthHeaders}
-              buttonText={props.action_data.buttonText}
-              handleNavigation={props.handleNavigation}
-              setAlertState = {props.setAlertState}
-            />
+            >
+              { isWalletUpdateInProgress ? (isWalletUpdateInProgress) : (props.action_data.buttonText)  }
+            </WalletMultiButton>
           </Grid>
         </Grid>
-      );
-    }
+        )
+          } else if (props.action_data.type === "linkTwitter") {
+          //twitter oauth component
+          return (
+            <Grid
+              sx={{ height: "100%", width: "100%" }}
+              container
+              direction="column"
+              justifyContent="space-around"
+              alignItems="center"
+            >
+              <Grid
+                container
+                direction="column"
+                justifyContent="space-around"
+                alignItems="flex-start"
+                sx={{
+                  width: "90%",
+                  height: "100%",
+                }}
+              >
+                <Typography sx={{fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px"}}>{props.action_data.message}</Typography>
+                <CONNECT_TWITTER
+                  disabled={disabled_button()}
+                  variant="contained"
+                  style={{
+                    color: "black",
+                    fontSize: "14px",
+                    width: "100%",
+                    height: "55px",
+                    fontWeight: "700",
+                    backgroundColor: "#F6F6F6",
+                    padding: "0",
+                  }}
+                  handleButtonHover={() => props.handleDialogHover()}
+                  handleButtonClick={() => handleTwitterClick()}
+                  getAuthHeaders={props.getAuthHeaders}
+                  buttonText={props.action_data.buttonText}
+                  handleNavigation={props.handleNavigation}
+                  setAlertState = {props.setAlertState}
+                />
+              </Grid>
+            </Grid>
+          );
+          }
+    
   };
 
-  return <Box sx={{ height: "100%", padding: "15px 0px" }}>{type_render()}</Box>;
+  return <Box sx={{ height: "100%", padding: "15px 0px"}}>{type_render()}</Box>;
 }
