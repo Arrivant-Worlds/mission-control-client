@@ -36,7 +36,7 @@ const theme = createTheme({
   overrides: {
   }
 });
-const clientId = "BKm_sswQ9xirQNu6wNjUvprZ0_n1EISbnx_IrFqKP55scoZvuuEUfIgsNzJM3Psnzrc5o83bAZ-Nyzo4BzMVROY"
+const clientId = "BJ5pQR_65We--rYeJK4OBJm8Czpc36xJLhPAvIwaOm-hSSaVcCMW3rqIYvNa5bb2R7mCQsxBS9Ju_RdtKYo_Pfo"
 const WalletContext = createContext(null);
 
 const App = ()=> {
@@ -63,7 +63,7 @@ const Context = ({ children }) => {
     try {
       const web3auth = new Web3Auth({
         clientId, 
-        web3AuthNetwork: "testnet", // mainnet, aqua, celeste, cyan or testnet
+        web3AuthNetwork: "cyan", // mainnet, aqua, celeste, cyan or testnet
         chainConfig: {
           chainNamespace: CHAIN_NAMESPACES.SOLANA,
           chainId: "0x1", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
