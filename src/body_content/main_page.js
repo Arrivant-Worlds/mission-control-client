@@ -64,6 +64,7 @@ import { useWeb3Wallet } from "../App";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { decodeUTF8 } from "tweetnacl-util";
+import WalletWidget from "./wallet_widget";
 
 
 export const MAIN_PAGE = (props) => {
@@ -477,7 +478,7 @@ export const MAIN_PAGE = (props) => {
       if(Object.entries(u).length !== 0){
         //user is using a web wallet
         if (balance_check/LAMPORTS_PER_SOL  < .01) {
-          handleMessageOpen(`Please fund your web wallet with more than 0.01 SOL, or sign in with an external crypto wallet.`);
+          handleMessageOpen(`Please connect with your a crypto wallet to claim`);
           return;
         }
       } else {
@@ -538,9 +539,17 @@ export const MAIN_PAGE = (props) => {
     let header_verification = await getAuthHeaders();
     if(reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack"){
       let balance_check = await getBalance();
-      if (balance_check/LAMPORTS_PER_SOL < .005) {
-        handleMessageOpen("You must have more than .005 SOL in your wallet!");
-        return;
+      let u = await getUserInfo()
+      if(Object.entries(u).length !== 0){
+        //user is using a web wallet
+        handleMessageOpen(`Please connect with your a crypto wallet to claim`);
+        return
+      } else {
+        //user is using an external crypto wallet
+        if (balance_check/LAMPORTS_PER_SOL < .01) {
+          handleMessageOpen("You must have more than .01 SOL in your wallet!");
+          return;
+        }
       }
     }
     if(reward.type_reward.type === "trait_pack"){
@@ -781,6 +790,7 @@ export const MAIN_PAGE = (props) => {
               variant = "outlined"
             >PRELUDE</Button>
             </a>
+            <WalletWidget connected={provider} publicKey = {publicKey}/>
           </Grid>
           <Menu
             anchorEl={dropdown_anchor}

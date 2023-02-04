@@ -117,24 +117,6 @@ const Context = ({ children }) => {
       web3auth.configureAdapter(solflareAdapter);
 
 
-      const torusPlugin = new SolanaWalletConnectorPlugin({
-        torusWalletOpts: {},
-        walletInitOptions: {
-          whiteLabel: {
-            name: "Mission Control",
-            theme: { isDark: true, colors: { torusBrand1: "#00a8ff" } },
-            logoDark: "https://aurahma-bucket.s3.eu-north-1.amazonaws.com/favicon.ico",
-            logoLight: "https://aurahma-bucket.s3.eu-north-1.amazonaws.com/favicon.ico",
-            topupHide: true,
-            defaultLanguage: "en",
-          },
-          useWalletConnect: true,
-          enableLogging: true,
-          apiKey: clientId,
-        },
-      });
-      let isInit = await web3auth.addPlugin(torusPlugin);
-
       setWeb3auth(web3auth);
       await web3auth.initModal({
         modalConfig: {
@@ -201,10 +183,6 @@ const Context = ({ children }) => {
         setProvider(web3auth.provider);
 
     };
-      console.log("Torus Plugin", torusPlugin)
-      let initiatedTopUp = await torusPlugin.initiateTopup('moonpay')
-      console.log("initiated ToppUp", initiatedTopUp)
-
     } catch (error) {
       console.error(error);
     }
