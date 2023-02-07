@@ -5,6 +5,7 @@ import 'simplebar-react/dist/simplebar.min.css';
 import MAIN_PAGE from "./body_content/main_page.js";
 import MOBILE_BANNER from "./body_content/mobile_banner.js";
 import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
 import { SolanaWallet } from "@web3auth/solana-provider";
 import { SolflareAdapter } from "@web3auth/solflare-adapter";
 import { PhantomAdapter } from "@web3auth/phantom-adapter";
@@ -17,6 +18,10 @@ import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
 import { SolanaWalletConnectorPlugin } from "@web3auth/solana-wallet-connector-plugin";
 import RPC from "./solanaRPC.js"
 import { RPC_CONNECTION_URL } from './api_calls/constants';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { FractalWalletAdapter, LedgerWalletAdapter, PhantomWalletAdapter, SlopeWalletAdapter, SolflareWalletAdapter, SolletExtensionWalletAdapter, SolletWalletAdapter, TorusWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -106,28 +111,11 @@ const Context = ({ children }) => {
       web3auth.configureAdapter(phantomAdapter);
 
       const solflareAdapter = new SolflareAdapter({
+        sessionTime: 86400,
         clientId,
       });
       web3auth.configureAdapter(solflareAdapter);
 
-
-      const torusPlugin = new SolanaWalletConnectorPlugin({
-        torusWalletOpts: {},
-        walletInitOptions: {
-          whiteLabel: {
-            name: "Mission Control",
-            theme: { isDark: true, colors: { torusBrand1: "#00a8ff" } },
-            logoDark: "https://aurahma-bucket.s3.eu-north-1.amazonaws.com/favicon.ico",
-            logoLight: "https://aurahma-bucket.s3.eu-north-1.amazonaws.com/favicon.ico",
-            topupHide: true,
-            defaultLanguage: "en",
-          },
-          useWalletConnect: true,
-          enableLogging: true,
-          apiKey: clientId,
-        },
-      });
-      let isInit = await web3auth.addPlugin(torusPlugin);
 
       setWeb3auth(web3auth);
       await web3auth.initModal({
@@ -195,10 +183,6 @@ const Context = ({ children }) => {
         setProvider(web3auth.provider);
 
     };
-      console.log("Torus Plugin", torusPlugin)
-      let initiatedTopUp = await torusPlugin.initiateTopup('moonpay')
-      console.log("initiated ToppUp", initiatedTopUp)
-
     } catch (error) {
       console.error(error);
     }
@@ -221,6 +205,7 @@ const Context = ({ children }) => {
       console.log("web3auth not initialized yet");
       return;
     }
+    console.log("LOGGIN OUT")
     await web3auth.logout();
     setProvider(null);
   };
@@ -230,7 +215,14 @@ const Context = ({ children }) => {
       console.log("web3auth not initialized yet");
       return;
     }
-    const idToken = await web3auth.authenticateUser();
+    console.log("trying to auth")
+    let idToken;
+    try{
+      idToken = await web3auth.authenticateUser();
+    } catch(err){
+      console.log(err)
+    }
+    console.log("sucessfully authed")
     console.log(idToken);
     return idToken.idToken
   };
@@ -311,6 +303,7 @@ const Context = ({ children }) => {
   };
 
   return (
+    <SolanaWalletContext>
     <WalletContext.Provider
       value={{
         provider,
@@ -330,6 +323,7 @@ const Context = ({ children }) => {
     >
       {children}
     </WalletContext.Provider>
+    </SolanaWalletContext>
   );
 };
 
@@ -341,6 +335,38 @@ export function useWeb3Wallet() {
   return context;
 }
 
+
+export const SolanaWalletContext: FC<{ children: ReactNode }> = ({ children }) => {
+  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
+  const network = WalletAdapterNetwork.Devnet;
+
+  // You can also provide a custom RPC endpoint.
+  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
+  // Only the wallets you configure here will be compiled into your application, and only the dependencies
+  // of wallets that your users connect to will be loaded.
+  const wallets = useMemo(
+    () => [
+      new PhantomWalletAdapter(),
+      new SlopeWalletAdapter(),
+      new SolflareWalletAdapter({ network }),
+      new TorusWalletAdapter(),
+      new LedgerWalletAdapter(),
+      new SolletWalletAdapter({ network }),
+      new SolletExtensionWalletAdapter({ network }),
+      new FractalWalletAdapter({ network })
+    ],
+    [network]
+  );
+
+  return (
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets}>
+        <WalletModalProvider>{children}</WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
+  );
+};
 
 const Content = () => {
   const media_query_1000 = useMediaQuery('(min-width:1000px)');

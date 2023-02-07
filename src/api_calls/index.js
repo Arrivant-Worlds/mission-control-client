@@ -180,6 +180,16 @@ export const submit_email = async (payload, email_string, name_string) => {
   }
 };
 
+export const update_wallet = async (payload, wallet) => {
+    console.log("sending", wallet)
+    const response = await axios.post(
+      `${BASE_URL}/users/updateWallet`,
+      { wallet },
+      { headers: payload }
+    );
+    return response.data;
+};
+
 export const claim_journey_reward = async (payload, reward_id) => {
   console.log("j reward header", payload)
   try {

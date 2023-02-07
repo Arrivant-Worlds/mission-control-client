@@ -37,7 +37,8 @@ export default function MISSION_DIALOG(props) {
       BackdropProps={{
         style: {
           background: "rgba(26, 32, 38, 0.8)",
-          opacity: "0.8",
+          zIndex: 1,
+          position: 'relative',
         },
       }}
       PaperProps={{
@@ -49,6 +50,9 @@ export default function MISSION_DIALOG(props) {
           maxHeight: "none",
           maxWidth: "none",
         },
+      }}
+      sx = {{
+        zIndex: 0
       }}
     >
       <DialogTitle style={styles.title_container}>

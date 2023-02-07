@@ -9,7 +9,7 @@ import {
   claim_journey_reward,
   claim_quest_reward,
   verify_twitter,
-  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep,
+  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet,
 } from "./../api_calls";
 import {LAMPORTS_PER_SOL} from "@solana/web3.js";
 import { useAnalytics } from '../mixpanel.js';
@@ -62,10 +62,12 @@ import { getOrCreateUserAssociatedTokenAccountTX, refreshHeaders, refreshHeaders
 import { RPC_CONNECTION_URL, PRELUDE_URL } from "../api_calls/constants";
 import { useWeb3Wallet } from "../App";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { decodeUTF8 } from "tweetnacl-util";
+import WalletWidget from "./wallet_widget";
 
 
 export const MAIN_PAGE = (props) => {
-
   const {
     provider,
     signMessage,
@@ -80,6 +82,7 @@ export const MAIN_PAGE = (props) => {
     getBalance,
     logout
   } = useWeb3Wallet()
+  const SolanaWallet = useWallet()
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [dialog_state, change_dialog_state] = useState(false);
@@ -89,7 +92,7 @@ export const MAIN_PAGE = (props) => {
   });
   const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState({});
-  const [user_data, change_user_data] = useState({});
+  let [user_data, change_user_data] = useState({});
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
   const [rewards_data, change_rewards_data] = useState([]);
@@ -209,7 +212,7 @@ export const MAIN_PAGE = (props) => {
     }
   }
 
-
+  
 
   useEffect(() => {
       //change this conditional to check for success in oath.
@@ -274,6 +277,7 @@ export const MAIN_PAGE = (props) => {
           if(isLedger){
             headers = await refreshHeadersLedger(signTransaction, new PublicKey(address))
           } else {
+            console.log("authenticating token")
             const token = await authenticateUser();
             headers = {
               "Content-Type": "application/json",
@@ -285,6 +289,7 @@ export const MAIN_PAGE = (props) => {
               value: headers,
               expiry: new Date().getTime() + 3600 * 1000,
             };
+            console.log("got token", token)
             localStorage.setItem("verifyHeader", JSON.stringify(item));
             return headers
           }
@@ -330,9 +335,9 @@ export const MAIN_PAGE = (props) => {
     let payload = await getAuthHeaders();
     console.log("payload", payload)
     try{
+      console.log("getting user", payload)
     let user = await get_user(payload)
 
-    console.log("got user", user)
     if (user.welcome) {
         // console.log("hit in user.welcome");
     setWelcome_popup_flag(true);
@@ -364,14 +369,13 @@ export const MAIN_PAGE = (props) => {
     }
    
     change_user_data(user);
+    console.log("user data", user_data)
     change_loading_state(false);
     } catch(err){
       console.log(err)
       console.log("err in get user");
       handleMessageOpen(err.message)
     }
-
-
   };
 
   const handleClick = async () => {
@@ -392,6 +396,9 @@ export const MAIN_PAGE = (props) => {
     playDisconnectWallet();
     try{
       await logout()
+      if(SolanaWallet.connected){
+        await SolanaWallet.disconnect()
+      }
     } catch(err){
       console.log(err)
     }
@@ -472,7 +479,7 @@ export const MAIN_PAGE = (props) => {
       if(Object.entries(u).length !== 0){
         //user is using a web wallet
         if (balance_check/LAMPORTS_PER_SOL  < .01) {
-          handleMessageOpen(`Please fund your web wallet with more than 0.01 SOL, or sign in with an external crypto wallet.`);
+          handleMessageOpen(`Please connect with your a crypto wallet to claim`);
           return;
         }
       } else {
@@ -533,9 +540,17 @@ export const MAIN_PAGE = (props) => {
     let header_verification = await getAuthHeaders();
     if(reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack"){
       let balance_check = await getBalance();
-      if (balance_check/LAMPORTS_PER_SOL < .005) {
-        handleMessageOpen("You must have more than .005 SOL in your wallet!");
-        return;
+      let u = await getUserInfo()
+      if(Object.entries(u).length !== 0){
+        //user is using a web wallet
+        handleMessageOpen(`Please connect with your a crypto wallet to claim`);
+        return
+      } else {
+        //user is using an external crypto wallet
+        if (balance_check/LAMPORTS_PER_SOL < .01) {
+          handleMessageOpen("You must have more than .01 SOL in your wallet!");
+          return;
+        }
       }
     }
     if(reward.type_reward.type === "trait_pack"){
@@ -776,6 +791,7 @@ export const MAIN_PAGE = (props) => {
               variant = "outlined"
             >PRELUDE</Button>
             </a>
+            <WalletWidget connected={provider} user = {user_data}/>
           </Grid>
           <Menu
             anchorEl={dropdown_anchor}

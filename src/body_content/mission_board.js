@@ -7,7 +7,7 @@ import styles from "./mission_board_styles.js";
 import MISSION_BLOCK from "./mission_block.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
-const render_priority = ["link_discord","link_email","link_twitter"];
+const render_priority = ["link_discord","link_email","link_twitter", "update_wallet"];
 
 export const MISSION_BOARD = (props) => {
   // console.log(props.quests_data, "quests?");

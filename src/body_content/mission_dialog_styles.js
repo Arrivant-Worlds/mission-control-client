@@ -60,6 +60,8 @@ const styles = {
     width: "100%",
     height: "auto",
     border: "1px solid #888888",
+    zIndex: 10,
+    position: 'relative'
   },
   hr: {
     width: "100%",
