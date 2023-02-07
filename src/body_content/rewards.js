@@ -10,12 +10,12 @@ import REWARDS_BLOCK from "./rewards_block.js";
 const render_priority = {claimable: 1, default: 2};
 
 export const REWARDS = (props) => {
-  console.log("FULL PROPS", props)
   const render_tooltip_text = (type) => {
     console.log("TYPE", type)
     if (type === "soulbound" || "trait_pack") {
       return "Wallet required to claim";
-    } else if (type === "catch_ability") {
+    } 
+    else if (type === "catch_ability") {
       return "Gain ability to catch creatures using Soulbound at level 2";
     }
   }
@@ -38,7 +38,7 @@ export const REWARDS = (props) => {
                   return a.requiredLevel - b.requiredLevel;
                 }
               }).map((item, i) => {
-                if ((item.claimed_status === "locked" && item.name === "Claim Soulbound") || (item.claimed_status === "locked" && item.name === "Creature catching Ability")) {
+                if ((item.claimed_status === "locked" && (item.rewards.type === "soulbound" ||  item.rewards.type === "trait_pack"))) {
                   return (
                     <Tooltip key={i}
                       title={render_tooltip_text(item.rewards.type)}>

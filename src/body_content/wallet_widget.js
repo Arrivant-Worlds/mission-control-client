@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-export default function WalletWidget({connected, publicKey}) {
+export default function WalletWidget({connected, user}) {
   return (
     <div className="wallet-display"
     style= {{
@@ -19,9 +19,9 @@ export default function WalletWidget({connected, publicKey}) {
       <div style = {{padding: "5px"}} className="text-sm font-medium text-white">
           Wallet:
       </div>
-      { connected ? (
+      { connected && user?.wallet ? (
         <div className="text-sm font-medium text-white">
-          {String(publicKey).slice(0, 5)}...{String(publicKey).slice(-5)}
+          {String(user.wallet).slice(0, 5)}...{String(user.wallet).slice(-5)}
         </div>
       ) : (
       <div  className="wallet-display">

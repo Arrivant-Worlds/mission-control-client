@@ -92,7 +92,7 @@ export const MAIN_PAGE = (props) => {
   });
   const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState({});
-  const [user_data, change_user_data] = useState({});
+  let [user_data, change_user_data] = useState({});
   const [quests_data, change_quests_data] = useState([]);
   const [leaderboard_data, change_leaderboard_data] = useState([]);
   const [rewards_data, change_rewards_data] = useState([]);
@@ -369,6 +369,7 @@ export const MAIN_PAGE = (props) => {
     }
    
     change_user_data(user);
+    console.log("user data", user_data)
     change_loading_state(false);
     } catch(err){
       console.log(err)
@@ -790,7 +791,7 @@ export const MAIN_PAGE = (props) => {
               variant = "outlined"
             >PRELUDE</Button>
             </a>
-            <WalletWidget connected={provider} publicKey = {publicKey}/>
+            <WalletWidget connected={provider} user = {user_data}/>
           </Grid>
           <Menu
             anchorEl={dropdown_anchor}
