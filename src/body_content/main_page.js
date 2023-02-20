@@ -276,6 +276,7 @@ export const MAIN_PAGE = (props) => {
       if(itemStr === null){
           if(isLedger){
             headers = await refreshHeadersLedger(signTransaction, new PublicKey(address))
+            return headers
           } else {
             console.log("authenticating token")
             const token = await authenticateUser();
@@ -828,34 +829,31 @@ export const MAIN_PAGE = (props) => {
               : null
             }
           </Menu>
-          <Grid container item direction="row" justifyContent="flex-end"
-            sx={{marginTop: "-100px"}} xs={5}>
-            <Grid container item alignItems="center" xs={4} justifyContent="flex-end">
-              <Tooltip title="Switch on if you are using ledger with Phantom">
-                <FormGroup onChange={() => toggle_ledger_switch()}>
-                  <FormControlLabel control={<Switch checked={ledger_state} />}
-                  label="Ledger"
-                  labelPlacement="start"
-                  />
-                </FormGroup>
-              </Tooltip>
-            </Grid>
-          
-            <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
-              {provider ? (
-                <Box onMouseEnter={() => handleConnectHover()}>
-                <Button
-                style={styles.buttonDisconnect}
-                onClick={() => handleDisconnect()}
-                onMouseEnter={() => handleDisconnectHover()}
-                >
-                  Disconnect
-                </Button>
-                </Box>
-              ) : null}
-            </Grid>
+          <Grid container item direction="row" justifyContent="flex-end" alignItems="flex-start" xs={5} sx = {{marginTop: "-20px"}}>
+  <Grid container item alignItems="center" xs={1} justifyContent="flex-end">
+    <Tooltip title="Switch on if you are using ledger with Phantom">
+      <FormGroup onChange={() => toggle_ledger_switch()}>
+        <FormControlLabel control={<Switch checked={ledger_state} />} label="Ledger" labelPlacement="start" />
+      </FormGroup>
+    </Tooltip>
+  </Grid>
+  
+  <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
+    {provider ? (
+      <Box onMouseEnter={() => handleConnectHover()}>
+      <Button
+        style={styles.buttonDisconnect}
+        onClick={() => handleDisconnect()}
+        onMouseEnter={() => handleDisconnectHover()}
+      >
+        Disconnect
+      </Button>
+      </Box>
+    ) : null}
+  </Grid>
+</Grid>
 
-          </Grid>
+
         </Grid>
         <Routes>
           <Route
