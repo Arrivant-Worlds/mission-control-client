@@ -9,7 +9,7 @@ import {
   claim_journey_reward,
   claim_quest_reward,
   verify_twitter,
-  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet,
+  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet, claim_all_quest_rewards,
 } from "./../api_calls";
 import {LAMPORTS_PER_SOL} from "@solana/web3.js";
 import { useAnalytics } from '../mixpanel.js';
@@ -471,7 +471,21 @@ export const MAIN_PAGE = (props) => {
       text: "",
     });
   };
-
+  const handleClaimAllQRewards = async (
+  ) => {
+    let header_verification = await getAuthHeaders();
+    let questsDataWithRewards = quests_data.filter((a) => {
+      return a.active_reward.length > 0
+    });
+    console.log("questsDataWithRewards", questsDataWithRewards);
+    let rewardIDs = questsDataWithRewards.map((a) => a.active_reward[0].id);
+    let a = await claim_all_quest_rewards(
+      header_verification, 
+      rewardIDs
+    );
+    await populate_data();
+    
+  }
   const handleClaimQuestReward = async (reward_id, type_reward) => {
     let header_verification = await getAuthHeaders();
     if(type_reward === "claim_caught_creature_reward"){
@@ -962,6 +976,7 @@ export const MAIN_PAGE = (props) => {
                 leaderboard_data={leaderboard_data}
                 rewards_data={rewards_data}
                 change_rewards_data={change_rewards_data}
+                handleClaimAllQuestRewards={handleClaimAllQRewards}
                 populate_data={populate_data}
                 getAuthHeaders={getAuthHeaders}
                 alertState={alertState}

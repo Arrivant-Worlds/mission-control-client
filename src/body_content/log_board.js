@@ -8,15 +8,31 @@ import styles from "./log_board_styles.js";
 import MISSION_BLOCK from "./mission_block.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
-
+import { Button } from "@mui/material";
+import Icon from "@mui/material/Icon";
 export const LOG_BOARD = (props) => {
   const [expanded_tab, change_expanded_tab] = useState(true);
-
+  const [isClaimAllClicked, setIsClaimAllClicked] = useState(false);
   const handleClick = (tab) => {
     props.playQuestType();
     change_expanded_tab(tab);
   };
+  const display_data = [...props.quests_data].sort((a,b) => {
+    if (a.active_reward.length === 0) {
+      return 1;
+    }
 
+    if (b.active_reward.length === 0) {
+      return -1;
+    }
+
+    if (a.active_reward === b.active_reward) {
+      return 0;
+    }
+    return a.active_reward < b.active_reward ? -1 : 1;
+  })
+
+  const anyActiveRewards = display_data.some((item) => item.active_reward.length > 0);
   return (
     <Box style={styles.log_board_container}>
       <Grid container item direction="column" justifyContent="space-between"
@@ -32,25 +48,26 @@ export const LOG_BOARD = (props) => {
           <Box component="img" src={expanded_tab ? minus : plus}
           style={expanded_tab ? styles.minus : styles.plus}/>
         </Grid>
+        <Button
+            variant="outlined"
+            style = {{ 
+              display: anyActiveRewards ? "block" : "none",
+              disabled: isClaimAllClicked,
+              width: "40%",
+              height: "30%",
+              margin: "auto",
+            }}
+            onClick = {() => {
+              setIsClaimAllClicked(true)
+              props.handleClaimAllQuestRewards()
+            }}
+        > {isClaimAllClicked ? <Icon className={"fa-solid fa-check"}></Icon>: "Claim ALL"}  </Button>
         <Box style={expanded_tab ? styles.hr : styles.hidden}/>
         <SimpleBar style={ expanded_tab ? { height: '534px', width: "100%" } : styles.hidden}>
           <Box style={expanded_tab ? styles.content_container : styles.hidden}
           >
             {
-              [...props.quests_data].sort((a,b) => {
-                if (a.active_reward.length === 0) {
-                  return 1;
-                }
-
-                if (b.active_reward.length === 0) {
-                  return -1;
-                }
-
-                if (a.active_reward === b.active_reward) {
-                  return 0;
-                }
-                return a.active_reward < b.active_reward ? -1 : 1;
-              }).map((item, i) => {
+              display_data.map((item, i) => {
                 if (item.active_reward.length > 0 || item.user_quest_status === "Complete" || item.recurrence === "permanent" && item.active_reward.length > 0) {
                   if (item.user_quest_status === "Locked" && item.recurrence === "prime") {
                     return (
