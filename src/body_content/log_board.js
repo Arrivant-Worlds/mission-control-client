@@ -39,7 +39,7 @@ export const LOG_BOARD = (props) => {
       style={styles.log_grid_container} sx={{marginBottom: "0px !important"}} alignItems="center">
         <Grid container item direction="row" justifyContent="space-between"
         onClick={() => handleClick(!expanded_tab)} alignItems="center">
-          <Grid item container direction="column" xs={11}>
+          <Grid item container direction="column" xs={11} sx = {{padding: "3px"}}>
             <Typography style={styles.log_title}
               style={styles.log_title}>
               COMPLETED MISSION LOG
@@ -54,6 +54,7 @@ export const LOG_BOARD = (props) => {
               display: anyActiveRewards ? "block" : "none",
               disabled: isClaimAllClicked,
               width: "40%",
+              fontWeight: "500",
               height: "30%",
               margin: "auto",
             }}
