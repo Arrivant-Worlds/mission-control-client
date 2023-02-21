@@ -479,10 +479,26 @@ export const MAIN_PAGE = (props) => {
     });
     console.log("questsDataWithRewards", questsDataWithRewards);
     let rewardIDs = questsDataWithRewards.map((a) => a.active_reward[0].id);
-    let a = await claim_all_quest_rewards(
+    let res = await claim_all_quest_rewards(
       header_verification, 
       rewardIDs
     );
+    if(res.status === 200){
+      setAlertState({
+        open: true,
+        message: "Rewards claimed",
+        severity: "info",
+      })
+    } else {
+      if(res.data){
+        setAlertState({
+          open: true,
+          message: res.data,
+          severity: "error",
+        })
+      }
+    }
+
     await populate_data();
     
   }

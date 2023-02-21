@@ -8,7 +8,7 @@ import styles from "./log_board_styles.js";
 import MISSION_BLOCK from "./mission_block.js";
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import Icon from "@mui/material/Icon";
 export const LOG_BOARD = (props) => {
   const [expanded_tab, change_expanded_tab] = useState(true);
@@ -32,7 +32,7 @@ export const LOG_BOARD = (props) => {
     return a.active_reward < b.active_reward ? -1 : 1;
   })
 
-  const anyActiveRewards = display_data.some((item) => item.active_reward.length > 0);
+  const anyActiveRewards = display_data.some((item) => item.user_quest_status !== "Locked" && item.active_reward.length > 0);
   return (
     <Box style={styles.log_board_container}>
       <Grid container item direction="column" justifyContent="space-between"
@@ -61,7 +61,8 @@ export const LOG_BOARD = (props) => {
               setIsClaimAllClicked(true)
               props.handleClaimAllQuestRewards()
             }}
-        > {isClaimAllClicked ? <Icon className={"fa-solid fa-check"}></Icon>: "Claim ALL"}  </Button>
+        > {isClaimAllClicked ?     <CircularProgress size = {20}/>
+        : "Claim ALL"}  </Button>
         <Box style={expanded_tab ? styles.hr : styles.hidden}/>
         <SimpleBar style={ expanded_tab ? { height: '534px', width: "100%" } : styles.hidden}>
           <Box style={expanded_tab ? styles.content_container : styles.hidden}
