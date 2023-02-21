@@ -477,8 +477,11 @@ export const MAIN_PAGE = (props) => {
     let questsDataWithRewards = quests_data.filter((a) => {
       return a.active_reward.length > 0
     });
-    console.log("questsDataWithRewards", questsDataWithRewards);
-    let rewardIDs = questsDataWithRewards.map((a) => a.active_reward[0].id);
+    let allFlattened = [];
+    questsDataWithRewards.forEach((a) => {
+      allFlattened = allFlattened.concat(a.active_reward);
+    });
+    let rewardIDs = allFlattened.map((a) => a.id);
     let res = await claim_all_quest_rewards(
       header_verification, 
       rewardIDs
