@@ -345,6 +345,7 @@ export const BOUNTY_PAGE = (props) => {
               user_data={props.user_data}
               quests_data={props.quests_data}
               playQuestType={props.playQuestType}
+              handleClaimAllQuestRewards = {props.handleClaimAllQuestRewards}
               handleDialogOpen={props.handleDialogOpen}
               handleDialogClose={props.handleDialogClose}
               handleDialogHover={props.handleDialogHover}
