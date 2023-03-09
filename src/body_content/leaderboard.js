@@ -14,7 +14,13 @@ export const LEADERBOARD = (props)=> {
         <Grid container item direction="row" justifyContent="space-between" alignItems="center">
           <Typography style={styles.leader_title}>LEADERBOARD</Typography>
         </Grid>
+        <Grid container item direction="row" justifyContent="space-between" alignItems="center">
+    <Typography style={styles.leader_counter_text}>Legion missions claimed</Typography>
+    <Typography style={styles.leader_counter}>{500000}</Typography>
+  </Grid>
+
         <Box style={styles.hr}/>
+
         <Grid container item direction="row" justifyContent="space-between" alignItems="center"
           style={styles.category_container}
         >
@@ -32,7 +38,7 @@ export const LEADERBOARD = (props)=> {
           <Box style={styles.content_container}
           >
             {
-              props.leaderboard_data.map((item, i) => {
+              props.leaderboard_data.userStats.map((item, i) => {
                 return (
                   <LEADER_BLOCK item_data={item} user_data={props.user_data} key={i} rank={i}/>
                 )
