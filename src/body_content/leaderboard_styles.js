@@ -35,7 +35,7 @@ const styles = {
   leader_counter_text: {
     color: 'white',
     margin: '0 auto',
-    fontSize: '20px',
+    fontSize: '16px',
     whiteSpace: 'nowrap',
   },
   hr: {

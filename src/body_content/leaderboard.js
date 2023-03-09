@@ -16,7 +16,7 @@ export const LEADERBOARD = (props)=> {
         </Grid>
         <Grid container item direction="row" justifyContent="space-between" alignItems="center">
     <Typography style={styles.leader_counter_text}>Legion missions claimed</Typography>
-    <Typography style={styles.leader_counter}>{500000}</Typography>
+    <Typography style={styles.leader_counter}>{props.leaderboard_data.claimStats}</Typography>
   </Grid>
 
         <Box style={styles.hr}/>
