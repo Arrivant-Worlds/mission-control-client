@@ -20,6 +20,23 @@ const styles = {
   leader_title: {
     fontSize: "20px",
     fontWeight: "700",
+    marginLeft: '30%',
+    textAlign: 'center'
+  },
+  leader_counter: {
+    alignItems: 'center',
+    border: '1px solid pink',
+    display: 'flex',
+    fontSize: '18px',
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    padding: '5px'
+  },
+  leader_counter_text: {
+    color: 'white',
+    margin: '0 auto',
+    fontSize: '20px',
+    whiteSpace: 'nowrap',
   },
   hr: {
     marginTop: "7px",

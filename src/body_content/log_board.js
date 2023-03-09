@@ -41,7 +41,7 @@ export const LOG_BOARD = (props) => {
         onClick={() => handleClick(!expanded_tab)} alignItems="center">
           <Grid item container direction="column" xs={11} sx = {{padding: "3px"}}>
             <Typography style={styles.log_title}
-              style={styles.log_title}>
+              >
               COMPLETED MISSION LOG
             </Typography>
           </Grid>
