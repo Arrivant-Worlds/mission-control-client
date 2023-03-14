@@ -84,7 +84,7 @@ export const MAIN_PAGE = () => {
   } = useWeb3Wallet()
   const SolanaWallet = useWallet()
   let navigate = useNavigate();
-  const { track, setPropertyIfNotExists} = useAnalytics();
+  const { track, setPropertyIfNotExists } = useAnalytics();
   const [dialog_state, change_dialog_state] = useState(false);
   const [message_dialog, set_message_dialog] = useState<MessageDialog>({
     open: false,
@@ -189,6 +189,7 @@ export const MAIN_PAGE = () => {
 
   const check_ledger = () => {
     let ledgerState = JSON.parse(localStorage.getItem("verifyHeader") || "{}");
+    console.log("Ledger state", ledgerState)
     if (
       wallet && (
         ledger_state ||
@@ -224,21 +225,27 @@ export const MAIN_PAGE = () => {
       if (provider && wallet) {
         console.log("got wallet", wallet)
         await loadUserData()
-        handleNavigation("/bounty_main");
-        if (quests_data) {
-          let allActiveQuestRewards = quests_data.filter((i) => i.active_reward!.length > 0)
-          if (allActiveQuestRewards.length > 0) {
-            setAlertState({
-              open: true,
-              message: "You have xp ready to be claimed in LOG",
-              severity: "info",
-            })
-          }
-        }
+      } else {
+        handleNavigation("/");
       }
     }
     load();
   }, [provider, wallet]);
+
+  useEffect(()=>{
+    if (quests_data && user_data) {
+      console.log("I GOT", quests_data, user_data)
+      handleNavigation("/bounty_main");
+      let allActiveQuestRewards = quests_data.filter((i) => i.active_reward!.length > 0)
+      if (allActiveQuestRewards.length > 0) {
+        setAlertState({
+          open: true,
+          message: "You have xp ready to be claimed in LOG",
+          severity: "info",
+        })
+      }
+    }
+  },[quests_data, user_data])
 
 
   const backgroundImageRender = () => {
@@ -255,6 +262,7 @@ export const MAIN_PAGE = () => {
     console.log("authenticating token")
     const token = await authenticateUser();
     console.log("token?", token)
+    if(!token) return
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -271,51 +279,55 @@ export const MAIN_PAGE = () => {
   }
 
   const getAuthHeaders = async (): Promise<PayloadHeaders | undefined> => {
-    let u = await getUserInfo()
-    if (!wallet || !u) return
-    let headers: PayloadHeaders | undefined = {
-      "Content-Type": "application/json",
-    }
-    //if user is using external wallet, use wallet pkey for auth
-    if (Object.entries(u).length === 0) {
-      const address = (await wallet.requestAccounts())[0];
-      console.log("got address", address)
-      //if ledger do literally fucking everything
-      let isLedger = check_ledger()
-      let key = "verifyHeader";
-      const itemStr = localStorage.getItem(key);
-      console.log("is ledger", isLedger)
-      if (itemStr === null) {
-        if (isLedger) {
-          headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
-        } else {
-          headers = (await authUserStandard(address)) as PayloadHeaders
+    try{
+      let u = await getUserInfo()
+      if (!wallet || !u) return
+      let headers: PayloadHeaders | undefined = {
+        "Content-Type": "application/json",
+      }
+      //if user is using external wallet, use wallet pkey for auth
+      if (Object.entries(u).length === 0) {
+        const address = (await wallet.requestAccounts())[0];
+        console.log("got address", address)
+        //if ledger do literally fucking everything
+        let isLedger = check_ledger()
+        let key = "verifyHeader";
+        const itemStr = localStorage.getItem(key);
+        console.log("is ledger", isLedger)
+        console.log("item str?", itemStr)
+        if (itemStr === null) {
+          if (isLedger) {
+            headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
+          } else {
+            headers = (await authUserStandard(address)) as PayloadHeaders
+          }
         }
-      } else {
-        headers = (await authUserStandard(address)) as PayloadHeaders
+        return itemStr ? JSON.parse(itemStr).value : headers
+      }
+  
+      //if user is using SSO use it for auth
+      const app_scoped_privkey = await getPrivateKey() as string
+      const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
+      const app_pub_key = ed25519Key.pk.toString("hex");
+      const token = await authenticateUser();
+      headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Pubkey: app_pub_key,
+        Login: 'sso'
       }
       return headers
+    } catch(err){
+      logout()
     }
-
-    //if user is using SSO use it for auth
-    const app_scoped_privkey = await getPrivateKey() as string
-    const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
-    const app_pub_key = ed25519Key.pk.toString("hex");
-    const token = await authenticateUser();
-    headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      Pubkey: app_pub_key,
-      Login: 'sso'
-    }
-    return headers
+    
   }
 
   const populate_data = async () => {
     // let isLedger = check_ledger()
     // set_ledger_state(isLedger);
     let payload = await getAuthHeaders();
-    if(!payload) return
+    if (!payload) return null
     console.log("payload", payload)
     try {
       console.log("getting user", payload)
@@ -343,10 +355,10 @@ export const MAIN_PAGE = () => {
 
       if (user) {
         let leaderboard = await get_leaderboard(payload)
-        if(!leaderboard) return;
+        if (!leaderboard) return;
         change_leaderboard_data(leaderboard)
         let quests = await get_quests(payload)
-        if(!quests) return;
+        if (!quests) return;
         change_quests_data(quests.active)
         let rewards = await get_rewards(payload)
         change_rewards_data(rewards)
@@ -359,6 +371,7 @@ export const MAIN_PAGE = () => {
       console.log("err in get user");
       //@ts-ignore
       handleMessageOpen(err.message)
+      return null
     }
   };
 
@@ -449,7 +462,7 @@ export const MAIN_PAGE = () => {
   const handleClaimAllQRewards = async (
   ) => {
     let header_verification = await getAuthHeaders();
-    if(!header_verification) return;
+    if (!header_verification) return;
     let questsDataWithRewards = quests_data.filter((a) => {
       return a.active_reward.length > 0
     });
@@ -483,11 +496,11 @@ export const MAIN_PAGE = () => {
   }
   const handleClaimQuestReward = async (reward_id: string, type_reward: RewardTypes) => {
     let header_verification = await getAuthHeaders();
-    if(!header_verification) return;
+    if (!header_verification) return;
     if (type_reward === RewardTypes.claim_caught_creature_reward) {
       let balance_check = await getBalance();
       let u = await getUserInfo()
-      if(!u) return
+      if (!u) return
       if (Object.entries(u).length !== 0 && balance_check) {
         //user is using a web wallet
         if (balance_check / LAMPORTS_PER_SOL < .01) {
@@ -550,7 +563,7 @@ export const MAIN_PAGE = () => {
     reward_id: string,
     reward: RewardsDialogData
   ) => {
-    if(!publicKey) return
+    if (!publicKey) return
     const userKey = new PublicKey(publicKey);
     let header_verification = await getAuthHeaders();
     console.log("THE MAIN", reward)
@@ -558,7 +571,7 @@ export const MAIN_PAGE = () => {
       let balance_check = await getBalance();
       let u = await getUserInfo()
       console.log("got s", u)
-      if(!u) return
+      if (!u) return
       if (Object.entries(u).length !== 0) {
         //user is using a web wallet
         handleMessageOpen(`Please connect with your a crypto wallet to claim`);
@@ -600,7 +613,7 @@ export const MAIN_PAGE = () => {
       })
       console.log(sig)
     }
-    if(!header_verification) return
+    if (!header_verification) return
     let claim = await claim_journey_reward(header_verification, reward_id);
     if (claim.data && reward.type_reward.type === "soulbound") {
       setAlertState({
@@ -1020,7 +1033,7 @@ export const MAIN_PAGE = () => {
             <CircularProgress />
           </Box>
         ) : null}
-          <MISSION_DIALOG
+        <MISSION_DIALOG
           handleDialogClose={handleDialogClose}
           handleDialogOpen={handleDialogOpen}
           dialog_state={dialog_state}
@@ -1037,7 +1050,7 @@ export const MAIN_PAGE = () => {
           playRewardFanfare={playRewardFanfare}
           handleNavigation={handleNavigation}
         />
-          <REWARDS_DIALOG
+        <REWARDS_DIALOG
           rewards_dialog_state={rewards_dialog_state}
           handleRewardsClose={handleRewardsClose}
           handleClaimJourneyReward={handleClaimJourneyReward}
@@ -1046,7 +1059,7 @@ export const MAIN_PAGE = () => {
           clicked_state={clicked_state}
           set_clicked_state={set_clicked_state}
           loadUserData={loadUserData}
-        />        
+        />
         <WELCOME_DIALOG
           handleWelcomeClose={handleWelcomeClose}
           welcome_popup={welcome_popup}
