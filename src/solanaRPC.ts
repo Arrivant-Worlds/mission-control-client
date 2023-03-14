@@ -71,12 +71,8 @@ import { SafeEventEmitterProvider } from "@web3auth/base";
   
     signTransaction = async (solanaWallet: SolanaWallet, transaction: Transaction) => {
         console.log("PASSING", transaction)
-      try {
         const signedTx = await solanaWallet.signTransaction(transaction);
         return signedTx
-      } catch (error) {
-        return error
-      }
     };
   
     getPrivateKey = async (): Promise<unknown> => {
