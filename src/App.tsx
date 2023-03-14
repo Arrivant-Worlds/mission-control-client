@@ -73,7 +73,7 @@ const Context = ({ children }) => {
   const [provider, setProvider] = useState<any>(null);
   const [wallet, setWallet] = useState<any>(null);
   const [publicKey, setPublicKey] = useState<string | null>(null);
-
+  const [isLoggedin, setIsLoggedin] = useState<boolean>(false);
   useEffect(() => {
     const init = async () => {
       try {
@@ -180,7 +180,6 @@ const Context = ({ children }) => {
             },
           },
         });
-  
         if (web3auth.provider) {
           const solanaWallet = new SolanaWallet(web3auth.provider);
           const accounts = await solanaWallet.requestAccounts()
@@ -193,7 +192,7 @@ const Context = ({ children }) => {
       }
     }
     init();
-  }, []);
+  }, [isLoggedin]);
 
 
   const login = async (): Promise<void> => {
@@ -203,11 +202,7 @@ const Context = ({ children }) => {
     }
     const web3authProvider = await web3auth.connect();
     if(web3authProvider){
-      setProvider(web3authProvider);
-      let solanaWallet = new SolanaWallet(web3authProvider)
-      setWallet(solanaWallet)
-      const accounts = await solanaWallet.requestAccounts()
-      setPublicKey(accounts[0])
+      setIsLoggedin(true)
     }
   };
 
@@ -220,6 +215,8 @@ const Context = ({ children }) => {
     await web3auth.logout();
     setProvider(null);
     setWallet(null)
+    setPublicKey(null)
+    setIsLoggedin(false)
   };
 
   const authenticateUser = async (): Promise<string | undefined> => {
