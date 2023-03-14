@@ -204,7 +204,10 @@ const Context = ({ children }) => {
     const web3authProvider = await web3auth.connect();
     if(web3authProvider){
       setProvider(web3authProvider);
-      setWallet(new SolanaWallet(web3authProvider))
+      let solanaWallet = new SolanaWallet(web3authProvider)
+      setWallet(solanaWallet)
+      const accounts = await solanaWallet.requestAccounts()
+      setPublicKey(accounts[0])
     }
   };
 
@@ -264,6 +267,7 @@ const Context = ({ children }) => {
     }
     const rpc = new RPC(provider);
     const signature = await rpc.signTransaction(solanaWallet, transaction);
+    console.log("SIgned with sig", signature)
     return signature
   }
 

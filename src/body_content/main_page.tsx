@@ -553,9 +553,11 @@ export const MAIN_PAGE = () => {
     if(!publicKey) return
     const userKey = new PublicKey(publicKey);
     let header_verification = await getAuthHeaders();
+    console.log("THE MAIN", reward)
     if (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack") {
       let balance_check = await getBalance();
       let u = await getUserInfo()
+      console.log("got s", u)
       if(!u) return
       if (Object.entries(u).length !== 0) {
         //user is using a web wallet
@@ -614,25 +616,25 @@ export const MAIN_PAGE = () => {
         const tx = Transaction.from(buffer);
         console.log("created teX", tx)
         signedTX = await signTransaction(wallet, tx);
+        console.log(signedTX, "?");
+        //@ts-ignore
+        const dehydratedTx = signedTX.serialize({
+          requireAllSignatures: false,
+          verifySignatures: false
+        })
+        const serializedTX = dehydratedTx.toString('base64')
+        await transmit_signed_journey_reward_tx_to_server(header_verification, serializedTX, reward_id)
+        setAlertState({
+          open: true,
+          message:
+            "Nft transactions may take up to one minute!",
+          severity: "warning",
+        });
       } catch (e: any) {
         if (e.message === "User rejected the request.") {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
-      console.log(signedTX, "?");
-      //@ts-ignore
-      const dehydratedTx = signedTX.serialize({
-        requireAllSignatures: false,
-        verifySignatures: false
-      })
-      const serializedTX = dehydratedTx.toString('base64')
-      await transmit_signed_journey_reward_tx_to_server(header_verification, serializedTX, reward_id)
-      setAlertState({
-        open: true,
-        message:
-          "Nft transactions may take up to one minute!",
-        severity: "warning",
-      });
     }
     else {
       console.log("claim", claim.data.message)
