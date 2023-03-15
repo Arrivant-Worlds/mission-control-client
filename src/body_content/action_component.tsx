@@ -320,6 +320,7 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
         </Grid>
       );
     } else if (props.action_data?.type === "link") {
+      console.log("sending to link",props.action_data?.url!)
       return (
         <Grid
           sx={{ height: "100%", width: "100%" }}

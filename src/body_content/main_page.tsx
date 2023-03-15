@@ -251,9 +251,7 @@ export const MAIN_PAGE = () => {
       if (provider && wallet) {
         console.log("got wallet", wallet)
         await loadUserData()
-      } else {
-        handleNavigation("/");
-      }
+      } 
     }
     load();
   }, [provider, wallet]);
