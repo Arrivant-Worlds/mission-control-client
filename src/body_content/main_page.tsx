@@ -251,7 +251,11 @@ export const MAIN_PAGE = () => {
       if (provider && wallet) {
         console.log("got wallet", wallet)
         await loadUserData()
-      } 
+      } else {
+        if(!window.location.hash){
+          handleNavigation("/");
+        }
+      }
     }
     load();
   }, [provider, wallet]);
