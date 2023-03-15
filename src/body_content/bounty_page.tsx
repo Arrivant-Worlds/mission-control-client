@@ -99,13 +99,6 @@ export const BOUNTY_PAGE = (props: BountyProps) => {
         severity: "success",
       });
     }
-  }, [publicKey])
-
-  useEffect(() => {
-    console.log("CHECKING PROV", provider)
-    if (!provider) {
-      props.handleNavigation('/')
-    }
   }, [provider])
 
   const handleChange = (event: any, newValue: any) => {
