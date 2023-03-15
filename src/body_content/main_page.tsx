@@ -295,14 +295,13 @@ export const MAIN_PAGE = () => {
         const itemStr = localStorage.getItem(key);
         console.log("is ledger", isLedger)
         console.log("item str?", itemStr)
-        if (itemStr === null) {
           if (isLedger) {
             headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
+            return headers
           } else {
             headers = (await authUserStandard(address)) as PayloadHeaders
+            return headers
           }
-        }
-        return itemStr ? JSON.parse(itemStr).value : headers
       }
   
       //if user is using SSO use it for auth
