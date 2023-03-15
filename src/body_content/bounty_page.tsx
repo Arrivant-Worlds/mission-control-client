@@ -75,31 +75,6 @@ export const BOUNTY_PAGE = (props: BountyProps) => {
 
   }, [props.welcome_popup_flag])
 
-  const handleLinkDiscord = async (token_type: string, access_token: string) => {
-    let header_verification = await props.getAuthHeaders();
-    if (!header_verification) return;
-    await verify_discord(
-      header_verification,
-      token_type,
-      access_token
-    );
-  }
-
-  useEffect(() => {
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
-    let discordAccessToken = tokenType && accessToken
-    if (discordAccessToken && publicKey) {
-      //@ts-ignore
-      handleLinkDiscord(tokenType, accessToken)
-      props.setAlertState({
-        open: true,
-        message:
-          "Discord authentication success!",
-        severity: "success",
-      });
-    }
-  }, [provider])
 
   const handleChange = (event: any, newValue: any) => {
     if (event.target.id === "tab0") {

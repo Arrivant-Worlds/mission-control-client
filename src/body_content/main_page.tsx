@@ -9,7 +9,7 @@ import {
   claim_journey_reward,
   claim_quest_reward,
   verify_twitter,
-  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet, claim_all_quest_rewards,
+  RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet, claim_all_quest_rewards, verify_discord,
 } from "../api_calls";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useAnalytics } from '../mixpanel';
@@ -202,6 +202,16 @@ export const MAIN_PAGE = () => {
     }
   };
 
+  const handleLinkDiscord = async (token_type: string, access_token: string) => {
+    let header_verification = await getAuthHeaders();
+    if (!header_verification) return;
+    await verify_discord(
+      header_verification,
+      token_type,
+      access_token
+    );
+  }
+
   useEffect(() => {
     //change this conditional to check for success in oath.
     //also trigger conditional for snackbar bar to show up saying twitter auth worked if url says finished?=true
@@ -217,6 +227,22 @@ export const MAIN_PAGE = () => {
           open: true,
           message:
             "Twitter authentication success!",
+          severity: "success",
+        });
+      }
+    } else if(window.location.hash) {
+      const fragment = new URLSearchParams(window.location.hash.slice(1));
+      console.log("entered frag", fragment)
+      const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
+      let discordAccessToken = tokenType && accessToken
+      if (discordAccessToken) {
+        console.log("LINKING")
+        //@ts-ignore
+        handleLinkDiscord(tokenType, accessToken)
+        setAlertState({
+          open: true,
+          message:
+            "Discord authentication success!",
           severity: "success",
         });
       }
