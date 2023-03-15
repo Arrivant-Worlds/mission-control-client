@@ -100,6 +100,7 @@ export const MAIN_PAGE = () => {
   const [loading_state, change_loading_state] = useState(false);
   const [dropdown_anchor, change_dropdown_anchor] = useState(null);
   const dropdown_open = Boolean(dropdown_anchor);
+  const [shouldShowDisconnect, setShouldShowDisconnect] = useState(false);
   const [alertState, setAlertState] = useState<AlertState>({
     open: false,
     message: "",
@@ -230,7 +231,7 @@ export const MAIN_PAGE = () => {
           severity: "success",
         });
       }
-    } else if(window.location.hash) {
+    } else if (window.location.hash) {
       const fragment = new URLSearchParams(window.location.hash.slice(1));
       console.log("entered frag", fragment)
       const [tokenType, accessToken] = [fragment.get('token_type'), fragment.get('access_token')];
@@ -250,17 +251,18 @@ export const MAIN_PAGE = () => {
     async function load() {
       if (provider && wallet) {
         console.log("got wallet", wallet)
+        setShouldShowDisconnect(true);
         await loadUserData()
       } else {
         if(!window.location.hash){
           handleNavigation("/");
         }
-      }
+    }
     }
     load();
   }, [provider, wallet]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (quests_data && user_data) {
       console.log("I GOT", quests_data, user_data)
       handleNavigation("/bounty_main");
@@ -273,7 +275,7 @@ export const MAIN_PAGE = () => {
         })
       }
     }
-  },[quests_data, user_data])
+  }, [quests_data, user_data])
 
 
   const backgroundImageRender = () => {
@@ -290,7 +292,7 @@ export const MAIN_PAGE = () => {
     console.log("authenticating token")
     const token = await authenticateUser();
     console.log("token?", token)
-    if(!token) return
+    if (!token) return
     let headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -307,7 +309,7 @@ export const MAIN_PAGE = () => {
   }
 
   const getAuthHeaders = async (): Promise<PayloadHeaders | undefined> => {
-    try{
+    try {
       let u = await getUserInfo()
       if (!wallet || !u) return
       let headers: PayloadHeaders | undefined = {
@@ -323,15 +325,15 @@ export const MAIN_PAGE = () => {
         const itemStr = localStorage.getItem(key);
         console.log("is ledger", isLedger)
         console.log("item str?", itemStr)
-          if (isLedger) {
-            headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
-            return headers
-          } else {
-            headers = (await authUserStandard(address)) as PayloadHeaders
-            return headers
-          }
+        if (isLedger) {
+          headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
+          return headers
+        } else {
+          headers = (await authUserStandard(address)) as PayloadHeaders
+          return headers
+        }
       }
-  
+
       //if user is using SSO use it for auth
       const app_scoped_privkey = await getPrivateKey() as string
       const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
@@ -344,10 +346,10 @@ export const MAIN_PAGE = () => {
         Login: 'sso'
       }
       return headers
-    } catch(err){
+    } catch (err) {
       logout()
     }
-    
+
   }
 
   const populate_data = async () => {
@@ -418,16 +420,13 @@ export const MAIN_PAGE = () => {
 
   const handleDisconnect = async () => {
     playDisconnectWallet();
-    try {
-      await logout()
-      if (SolanaWallet.connected) {
-        await SolanaWallet.disconnect()
-      }
-    } catch (err) {
-      console.log(err)
-    }
     localStorage.removeItem("verifyHeader");
+    setShouldShowDisconnect(false)
     handleNavigation("/");
+    await logout()
+    if (SolanaWallet.connected) {
+      await SolanaWallet.disconnect()
+    }
   };
 
   const handleDisconnectHover = () => {
@@ -896,7 +895,7 @@ export const MAIN_PAGE = () => {
             </Grid>
 
             <Grid container item alignItems="center" xs={5} justifyContent="flex-end">
-              {provider ? (
+              {shouldShowDisconnect ? (
                 <Box onMouseEnter={() => handleConnectHover()}>
                   <Button
                     style={styles.buttonDisconnect}
