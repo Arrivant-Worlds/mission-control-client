@@ -21,6 +21,7 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { FractalWalletAdapter, LedgerWalletAdapter, PhantomWalletAdapter, SlopeWalletAdapter, SolflareWalletAdapter, SolletExtensionWalletAdapter, SolletWalletAdapter, TorusWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+import { WalletKitProvider } from "@mysten/wallet-kit";
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -65,7 +66,6 @@ export interface WalletContextInterface {
   sendTransaction: (solanaWallet: SolanaWallet, transaction: Transaction) => Promise<unknown>;
   signTransaction: (solanaWallet: SolanaWallet, transaction: Transaction) => Promise<unknown>;
 }
-
 
 // @ts-ignore
 const Context = ({ children }) => {
@@ -192,7 +192,7 @@ const Context = ({ children }) => {
       }
     }
     init();
-  }, [isLoggedin]);
+  }, []);
 
 
   const login = async (): Promise<void> => {
@@ -311,7 +311,6 @@ const Context = ({ children }) => {
     const signedMessage = await rpc.signMessage(solanaWallet);
     return signedMessage
   };
-
   return (
     <SolanaWalletContext>
     <WalletContext.Provider
@@ -370,11 +369,13 @@ export const SolanaWalletContext: FC<{ children: ReactNode }> = ({ children }) =
   );
 
   return (
+    <WalletKitProvider>
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
+    </WalletKitProvider>
   );
 };
 
@@ -389,6 +390,5 @@ const Content = () => {
       </Box>
     </ThemeProvider>
   </AnalyticsProvider>
-
   );
 };

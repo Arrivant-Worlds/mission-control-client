@@ -12,6 +12,7 @@ import {
   RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet, claim_all_quest_rewards, verify_discord,
 } from "../api_calls";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { RawSigner } from "@mysten/sui.js";
 import { useAnalytics } from '../mixpanel';
 import CONNECT_PAGE from "./connect_page";
 import BOUNTY_PAGE from "./bounty_page";
@@ -58,15 +59,15 @@ import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import RewardFanfare from "../audio/RewardFanfare.wav";
 import useSound from "use-sound";
-import { getOrCreateUserAssociatedTokenAccountTX, refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
+import { getOrCreateUserAssociatedTokenAccountTX, refreshHeadersSolanaWallet, refreshHeadersSuiWallet, refreshHeadersLedger } from "../wallet/wallet";
 import { RPC_CONNECTION_URL, PRELUDE_URL } from "../api_calls/constants";
 import { useWeb3Wallet } from "../App";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { decodeUTF8 } from "tweetnacl-util";
 import WalletWidget from "./wallet_widget";
 import { AlertState, DialogData, JourneyRewardResponseDTO, LeaderboardResponse, MessageDialog, PayloadHeaders, QuestResponse, questResponseDTO, RewardsDialogData, RewardTypes, TwitterSearchParams, userResponseDTO } from "interfaces";
-
+import * as SuiSDK from "@mysten/sui.js";
+import { useWalletKit } from "@mysten/wallet-kit";
 export const MAIN_PAGE = () => {
   const {
     provider,
@@ -83,6 +84,7 @@ export const MAIN_PAGE = () => {
     logout
   } = useWeb3Wallet()
   const SolanaWallet = useWallet()
+  const SuiWallet = useWalletKit()
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists } = useAnalytics();
   const [dialog_state, change_dialog_state] = useState(false);
@@ -249,9 +251,11 @@ export const MAIN_PAGE = () => {
       }
     }
     async function load() {
-      if (provider && wallet) {
-        console.log("got wallet", wallet)
+      console.log("r we connected?", SuiWallet.isConnected)
+      if ((provider && wallet) || SolanaWallet.connected || SuiWallet.isConnected) {
+        console.log("got wallet")
         setShouldShowDisconnect(true);
+        console.log("user data?", user_data)
         await loadUserData()
       } else {
         if(!window.location.hash){
@@ -260,7 +264,7 @@ export const MAIN_PAGE = () => {
     }
     }
     load();
-  }, [provider, wallet]);
+  }, [provider, wallet, SolanaWallet.connected, SuiWallet.isConnected]);
 
   useEffect(() => {
     if (quests_data && user_data) {
@@ -310,6 +314,21 @@ export const MAIN_PAGE = () => {
 
   const getAuthHeaders = async (): Promise<PayloadHeaders | undefined> => {
     try {
+      if (SolanaWallet.connected) {
+        let headers = await refreshHeadersSolanaWallet(
+          SolanaWallet.signMessage,
+          SolanaWallet.publicKey,
+        )
+        return headers
+      }
+      if(SuiWallet.isConnected){
+        console.log("SUI", SuiWallet)
+        let headers = await refreshHeadersSuiWallet(
+          SuiWallet.signAndExecuteTransaction,
+          SuiWallet.accounts[0]
+        )
+        return headers
+      }
       let u = await getUserInfo()
       if (!wallet || !u) return
       let headers: PayloadHeaders | undefined = {
@@ -318,13 +337,8 @@ export const MAIN_PAGE = () => {
       //if user is using external wallet, use wallet pkey for auth
       if (Object.entries(u).length === 0) {
         const address = (await wallet.requestAccounts())[0];
-        console.log("got address", address)
         //if ledger do literally fucking everything
         let isLedger = check_ledger()
-        let key = "verifyHeader";
-        const itemStr = localStorage.getItem(key);
-        console.log("is ledger", isLedger)
-        console.log("item str?", itemStr)
         if (isLedger) {
           headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
           return headers
@@ -347,6 +361,7 @@ export const MAIN_PAGE = () => {
       }
       return headers
     } catch (err) {
+      console.log("we got", err)
       logout()
     }
 
@@ -407,7 +422,7 @@ export const MAIN_PAGE = () => {
   const handleClick = async () => {
     playAurahTheme();
     //run login modal
-    await login()
+    handleNavigation('/connect')
   };
 
   const handleMainHover = () => {

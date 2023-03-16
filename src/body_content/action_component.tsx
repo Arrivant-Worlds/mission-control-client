@@ -473,7 +473,6 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
                 backgroundColor: "#F6F6F6",
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
-                overflow: 'hidden'
               }}
             >
               { isWalletUpdateInProgress ? (isWalletUpdateInProgress) : (props.action_data.buttonText)  }
