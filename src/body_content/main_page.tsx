@@ -578,7 +578,7 @@ export const MAIN_PAGE = () => {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
-
+      console.log("signed tx", signedTX)
       if (signedTX) {
         //@ts-ignore
         const dehydratedTx = signedTX.serialize({
@@ -586,7 +586,8 @@ export const MAIN_PAGE = () => {
           verifySignatures: false
         })
         const serializedTX = dehydratedTx.toString('base64')
-        await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+        console.log("sending", serializedTX)
+        await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id, serializedTX)
       } else {
         await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id)
       }
