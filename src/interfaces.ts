@@ -30,7 +30,7 @@ export interface PayloadHeaders {
     "Content-Type"?: "application/json",
     Authorization?: `Bearer ${string}`,
     Pubkey?: string,
-    Login?: 'sso' | 'external' | 'transaction',
+    Login?: 'sso' | 'external' | 'transaction' | 'solana' | 'sui',
     auto_approve?: boolean,
     isLedger?: boolean,
     transaction?: string,
