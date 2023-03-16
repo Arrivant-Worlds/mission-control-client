@@ -496,6 +496,21 @@ export const MAIN_PAGE = () => {
     questsDataWithRewards.forEach((a) => {
       allFlattened = allFlattened.concat(a.active_reward);
     });
+    //cut off at 1000 xp max
+    let totalXP = allFlattened.reduce((a, b) => a + b.xp, 0);
+    console.log("OLD TOTAL", totalXP)
+    if (totalXP > 1000) {
+      //slice allFlattened to 1000 xp
+      let xp = 0;
+      let i = 0;
+      while (xp < 1000) {
+        xp += allFlattened[i].xp;
+        i++;
+      }
+      allFlattened = allFlattened.slice(0, i - 1);
+    }
+    let newTotal = allFlattened.reduce((a, b) => a + b.xp, 0);
+    console.log("NEW TOTAL", newTotal)
     let rewardIDs = allFlattened.map((a) => a.id);
     let res = await claim_all_quest_rewards(
       header_verification,
