@@ -73,8 +73,6 @@ const Context = ({ children }) => {
   const [provider, setProvider] = useState<any>(null);
   const [wallet, setWallet] = useState<any>(null);
   const [publicKey, setPublicKey] = useState<string | null>(null);
-  const [isLoggedin, setIsLoggedin] = useState<boolean>(false);
-  useEffect(() => {
     const init = async () => {
       try {
         const web3auth = new Web3Auth({
@@ -191,6 +189,7 @@ const Context = ({ children }) => {
         console.error(error);
       }
     }
+  useEffect(() => {
     init();
   }, []);
 
@@ -201,9 +200,7 @@ const Context = ({ children }) => {
       return;
     }
     const web3authProvider = await web3auth.connect();
-    if(web3authProvider){
-      setIsLoggedin(true)
-    }
+    await init()
   };
 
   const logout = async (): Promise<void> => {
@@ -216,7 +213,6 @@ const Context = ({ children }) => {
     setProvider(null);
     setWallet(null)
     setPublicKey(null)
-    setIsLoggedin(false)
   };
 
   const authenticateUser = async (): Promise<string | undefined> => {

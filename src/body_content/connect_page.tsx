@@ -16,6 +16,7 @@ import { ConnectButton, useWalletKit } from "@mysten/wallet-kit";
 
 interface ConnectPageProps {
   handleConnectHover: () => void;
+  loginChange: () => void;
 }
 
 export const CONNECT_PAGE = (props: ConnectPageProps) => {

@@ -12,8 +12,12 @@ import {
   Ed25519Keypair,
   JsonRpcProvider,
   MoveCallTransaction,
+  PaySui,
   RawSigner,
   Transaction,
+  TransferObject,
+  TransferSuiTransaction,
+  TransferSuiTx,
 } from '@mysten/sui.js';
 
 export const refreshHeadersSolanaWallet = async (
@@ -45,25 +49,29 @@ export const refreshHeadersSolanaWallet = async (
 }
 
 export const refreshHeadersSuiWallet = async (
-  signAndExecuteTransaction: any,
+  signTransaction: any,
   publicKey: any
 ) => {
   console.log("tx executing", publicKey)
-  // const tx: MoveCallTransaction = {
-  //   packageObjectId: '0x2',
-
-  // };
-  // const signature = await signAndExecuteTransaction({
-
-  // })
-  // console.log("main sig", signature)
-  // if(!signature) return
+  const tx: TransferSuiTx = {
+    //@ts-ignore
+    kind: 'transferSui',
+    data: {
+      suiObjectId: '0x2',
+      recipient: publicKey,
+      amount: 1,
+      gasBudget: 10000,
+    },
+  }
+  const signature = await signTransaction(tx)
+  console.log("main sigs", signature)
+  if(!signature) return
   const pubkey = publicKey;
   console.log("got pubkey", pubkey)
   let headers: PayloadHeaders = {
       auto_approve: false,
       isLedger: false,
-      signature: JSON.stringify(Array.from('')),
+      signature: JSON.stringify(signature),
       pubkey: pubkey,
       Login: 'sui'
   };
