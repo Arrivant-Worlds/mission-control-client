@@ -133,7 +133,7 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
     if (!authHeaders) return;
     console.log("auth headers", authHeaders)
     try {
-      await update_wallet(authHeaders, newWallet)
+      await update_wallet(authHeaders, newWallet.toString())
       setIsWalletUpdateInProgress("Success!")
       props.setAlertState({
         open: true,

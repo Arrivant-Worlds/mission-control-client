@@ -10,7 +10,7 @@ import { Button, Dialog, DialogContent, IconButton } from "@mui/material";
 import { useWeb3Wallet } from "../App";
 import CloseIcon from "@mui/icons-material/Close";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { ConnectButton, useWalletKit } from "@mysten/wallet-kit";
+import { SignInButton } from 'ethos-connect'
 
 
 
@@ -118,7 +118,7 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
           </IconButton>
           <Box sx={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <WalletMultiButton />
-            <ConnectButton />
+            <SignInButton />
           </Box>
         </DialogContent>
       </Dialog>

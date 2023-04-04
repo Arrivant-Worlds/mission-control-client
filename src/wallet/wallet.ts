@@ -8,17 +8,8 @@ import {
 from "@solana/spl-token"
 import { PayloadHeaders } from "interfaces";
 import { WalletContextInterface } from "App";
-import {
-  Ed25519Keypair,
-  JsonRpcProvider,
-  MoveCallTransaction,
-  PaySui,
-  RawSigner,
-  Transaction,
-  TransferObject,
-  TransferSuiTransaction,
-  TransferSuiTx,
-} from '@mysten/sui.js';
+import { SignedMessage, TransactionBlock, fromB64 } from '@mysten/sui.js';
+import * as tweetnacl from 'tweetnacl'
 
 export const refreshHeadersSolanaWallet = async (
   signMessage: any, 
@@ -28,6 +19,7 @@ export const refreshHeadersSolanaWallet = async (
     const message = now.toString();
     const encodedMessage = decodeUTF8(message);
     let signature = await signMessage(encodedMessage);
+    console.log("sig?", signature)
     if(!signature) return
     const pubkey = publicKey;
     let headers: PayloadHeaders = {
@@ -49,33 +41,27 @@ export const refreshHeadersSolanaWallet = async (
 }
 
 export const refreshHeadersSuiWallet = async (
-  signTransaction: any,
+  signMessage: any,
   publicKey: any
 ) => {
-  console.log("tx executing", publicKey)
-  const tx: TransferSuiTx = {
-    //@ts-ignore
-    kind: 'transferSui',
-    data: {
-      suiObjectId: '0x2',
-      recipient: publicKey,
-      amount: 1,
-      gasBudget: 10000,
-    },
-  }
-  const signature = await signTransaction(tx)
-  console.log("main sigs", signature)
-  if(!signature) return
+  const now = Date.now();
+  const message = now.toString();
+  const result: SignedMessage = await signMessage({
+    message: message
+  })
+  let uarr = fromB64(result.signature)
+  console.log("unint v", uarr)
+  if(!result) return
   const pubkey = publicKey;
   console.log("got pubkey", pubkey)
   let headers: PayloadHeaders = {
       auto_approve: false,
       isLedger: false,
-      signature: JSON.stringify(signature),
+      signedMsg: result.messageBytes,      
+      signature: result.signature,
       pubkey: pubkey,
       Login: 'sui'
   };
-
   const item = {
       value: headers,
       expiry: new Date().getTime() + 3600 * 100000,
