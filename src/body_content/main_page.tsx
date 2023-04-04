@@ -12,7 +12,8 @@ import {
   RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet, claim_all_quest_rewards, verify_discord,
 } from "../api_calls";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { LocalTxnDataSerializer, RawSigner, SignableTransaction, SuiTransaction } from "@mysten/sui.js";
+import { RawSigner, SuiTransaction } from "@mysten/sui.js";
+import { ethos } from "ethos-connect"
 import { useAnalytics } from '../mixpanel';
 import CONNECT_PAGE from "./connect_page";
 import BOUNTY_PAGE from "./bounty_page";
@@ -84,7 +85,7 @@ export const MAIN_PAGE = () => {
     logout
   } = useWeb3Wallet()
   const SolanaWallet = useWallet()
-  const SuiWallet = useWalletKit()
+  const SuiWallet = ethos.useWallet()
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists } = useAnalytics();
   const [dialog_state, change_dialog_state] = useState(false);
@@ -259,14 +260,15 @@ export const MAIN_PAGE = () => {
       if (
         (provider && wallet) || 
         SolanaWallet.connected || 
-        SuiWallet.isConnected
+        SuiWallet.wallet
       ) 
       {
-        console.log( 
-        SuiWallet.isConnected )
+        console.log( "is sui connected",
+        SuiWallet.wallet)
         console.log("user data?", user_data)
         await loadUserData()
         setShouldShowDisconnect(true);
+        console.log("eneted", shouldShowDisconnect)
       } else {
         if(!window.location.hash){
           handleNavigation("/");
@@ -275,7 +277,7 @@ export const MAIN_PAGE = () => {
     }
     console.log("rerunning")
     load();
-  }, [provider, wallet, SolanaWallet.connected, SuiWallet.isConnected]);
+  }, [provider, wallet, SolanaWallet.connected, SuiWallet.wallet]);
 
   useEffect(() => {
     if (user_data) {
@@ -370,11 +372,13 @@ export const MAIN_PAGE = () => {
         return headers
 
       }
-      else if(SuiWallet.isConnected){
-        console.log("SUI", SuiWallet)
+      else if(SuiWallet.wallet && SuiWallet.wallet.address){
+        console.log("SUI", SuiWallet.wallet)
+        let add = await SuiWallet.wallet.getAddress()
+        console.log("got add", add)
         let headers = await refreshHeadersSuiWallet(
-          SuiWallet.signTransaction,
-          SuiWallet.accounts[0]
+          SuiWallet.wallet?.signMessage,
+          SuiWallet.wallet?.address
         )
         return headers
       }
@@ -454,18 +458,19 @@ export const MAIN_PAGE = () => {
   const handleDisconnect = async () => {
     playDisconnectWallet();
     localStorage.removeItem("verifyHeader");
-    setShouldShowDisconnect(false)
-    handleNavigation("/");
     if(wallet){
       await logout()
     }
     if (SolanaWallet.connected) {
       await SolanaWallet.disconnect()
+      console.log("is disconnected?", SolanaWallet.connected)
     }
-    if(SuiWallet.isConnected){
-      console.log("trying to disconnect sui")
-      await SuiWallet.disconnect()
+    if(SuiWallet.wallet){
+      await SuiWallet.wallet.disconnect()
+      console.log("trying to disconnect sui", SuiWallet.wallet)
     }
+    setShouldShowDisconnect(false)
+    handleNavigation("/");
   };
 
   const handleDisconnectHover = () => {
@@ -700,14 +705,11 @@ export const MAIN_PAGE = () => {
     let claim = await claim_journey_reward(header_verification, reward_id);
     if (claim.data && reward.type_reward.type === "soulbound") {
 
-      if(SuiWallet.currentWallet?.connected){
+      if(SuiWallet.wallet){
         //connected with sui
-        let signableTX: SignableTransaction = {
-          kind: 'bytes',
-          data: claim.data,
-        }
+        let signableTX = claim.data
         console.log("SUI TX", signableTX)
-        let signedTX = await SuiWallet.currentWallet?.signTransaction(signableTX)
+        let signedTX = await SuiWallet.wallet?.signAndExecuteTransactionBlock(signableTX)
         console.log("signed", signedTX)
         let oldSignature = claim.data.signature;
         if(signedTX){
@@ -922,7 +924,7 @@ export const MAIN_PAGE = () => {
                 variant="outlined"
               >PRELUDE</Button>
             </a>
-            <WalletWidget connected={wallet || SolanaWallet.connected || SuiWallet.isConnected} user={user_data!} />
+            <WalletWidget connected={wallet || SolanaWallet.connected || SuiWallet.wallet} user={user_data!} />
           </Grid>
           <Menu
             anchorEl={dropdown_anchor}

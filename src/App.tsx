@@ -21,7 +21,7 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { FractalWalletAdapter, LedgerWalletAdapter, PhantomWalletAdapter, SlopeWalletAdapter, SolflareWalletAdapter, SolletExtensionWalletAdapter, SolletWalletAdapter, TorusWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { WalletKitProvider } from "@mysten/wallet-kit";
+import { EthosConnectProvider } from 'ethos-connect';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -365,13 +365,17 @@ export const SolanaWalletContext: FC<{ children: ReactNode }> = ({ children }) =
   );
 
   return (
-    <WalletKitProvider>
+    <EthosConnectProvider
+      ethosConfiguration={{
+        hideEmailSignIn: true
+      }}
+    >
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
-    </WalletKitProvider>
+    </EthosConnectProvider>
   );
 };
 
