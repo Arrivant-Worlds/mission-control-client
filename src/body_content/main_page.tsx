@@ -12,7 +12,6 @@ import {
   RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet, claim_all_quest_rewards, verify_discord,
 } from "../api_calls";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { LocalTxnDataSerializer, RawSigner, SignableTransaction, SuiTransaction } from "@mysten/sui.js";
 import { useAnalytics } from '../mixpanel';
 import CONNECT_PAGE from "./connect_page";
 import BOUNTY_PAGE from "./bounty_page";
@@ -373,8 +372,8 @@ export const MAIN_PAGE = () => {
       else if(SuiWallet.isConnected){
         console.log("SUI", SuiWallet)
         let headers = await refreshHeadersSuiWallet(
-          SuiWallet.signTransaction,
-          SuiWallet.accounts[0]
+          SuiWallet.signAndExecuteTransactionBlock,
+          SuiWallet.accounts[0].address
         )
         return headers
       }
@@ -667,47 +666,45 @@ export const MAIN_PAGE = () => {
       
     }
     if (reward.type_reward.type === "trait_pack") {
-      let connection = new Connection(RPC_CONNECTION_URL)
-      const userKey = new PublicKey(publicKey!);
-      //create associated token acc for user
-      let tx = new Transaction()
-      await getOrCreateUserAssociatedTokenAccountTX(
-        userKey,
-        new PublicKey(reward.mint),
-        tx
-      )
-      console.log("IM IN")
-      set_message_dialog({
-        open: true,
-        text: 'Claiming requires .03 SOL'
-      });
 
-      let block = await connection.getLatestBlockhash('confirmed')
-      tx.recentBlockhash = block.blockhash;
-      tx.feePayer = userKey;
-      let sig = await sendTransaction(wallet, tx);
-      set_message_dialog({
-        open: true,
-        text: 'Confirming transaction...'
-      });
-      await sleep(3000)
-      set_message_dialog({
-        open: false,
-      })
-      console.log(sig)
+      if(SolanaWallet.connected){
+        let connection = new Connection(RPC_CONNECTION_URL)
+        const userKey = new PublicKey(publicKey!);
+        //create associated token acc for user
+        let tx = new Transaction()
+        await getOrCreateUserAssociatedTokenAccountTX(
+          userKey,
+          new PublicKey(reward.mint),
+          tx
+        )
+        console.log("IM IN")
+        set_message_dialog({
+          open: true,
+          text: 'Claiming requires .03 SOL'
+        });
+  
+        let block = await connection.getLatestBlockhash('confirmed')
+        tx.recentBlockhash = block.blockhash;
+        tx.feePayer = userKey;
+        let sig = await sendTransaction(wallet, tx);
+        set_message_dialog({
+          open: true,
+          text: 'Confirming transaction...'
+        });
+        await sleep(3000)
+        set_message_dialog({
+          open: false,
+        })
+        console.log(sig)
+      }
     }
     if (!header_verification) return
     let claim = await claim_journey_reward(header_verification, reward_id);
     if (claim.data && reward.type_reward.type === "soulbound") {
 
       if(SuiWallet.currentWallet?.connected){
-        //connected with sui
-        let signableTX: SignableTransaction = {
-          kind: 'bytes',
-          data: claim.data,
-        }
-        console.log("SUI TX", signableTX)
-        let signedTX = await SuiWallet.currentWallet?.signTransaction(signableTX)
+        console.log("SUI TX", claim.data)
+        let signedTX = await SuiWallet.currentWallet?.signAndExecuteTransactionBlock(claim.data)
         console.log("signed", signedTX)
         let oldSignature = claim.data.signature;
         if(signedTX){

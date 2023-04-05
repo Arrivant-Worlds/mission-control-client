@@ -9,15 +9,7 @@ from "@solana/spl-token"
 import { PayloadHeaders } from "interfaces";
 import { WalletContextInterface } from "App";
 import {
-  Ed25519Keypair,
-  JsonRpcProvider,
-  MoveCallTransaction,
-  PaySui,
-  RawSigner,
-  Transaction,
-  TransferObject,
-  TransferSuiTransaction,
-  TransferSuiTx,
+
 } from '@mysten/sui.js';
 
 export const refreshHeadersSolanaWallet = async (
@@ -53,17 +45,18 @@ export const refreshHeadersSuiWallet = async (
   publicKey: any
 ) => {
   console.log("tx executing", publicKey)
-  const tx: TransferSuiTx = {
-    //@ts-ignore
-    kind: 'transferSui',
-    data: {
-      suiObjectId: '0x2',
-      recipient: publicKey,
-      amount: 1,
-      gasBudget: 10000,
-    },
-  }
-  const signature = await signTransaction(tx)
+  // const tx: any = {
+  //   //@ts-ignore
+  //   kind: 'transferSui',
+  //   data: {
+  //     suiObjectId: '0x2',
+  //     recipient: publicKey,
+  //     amount: 1,
+  //     gasBudget: 10000,
+  //   },
+  // }
+  // const signature = await signTransaction(tx)
+  const signature = ''
   console.log("main sigs", signature)
   if(!signature) return
   const pubkey = publicKey;
