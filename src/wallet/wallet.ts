@@ -49,8 +49,6 @@ export const refreshHeadersSuiWallet = async (
   const result: SignedMessage = await signMessage({
     message: message
   })
-  let uarr = fromB64(result.signature)
-  console.log("unint v", uarr)
   if(!result) return
   const pubkey = publicKey;
   console.log("got pubkey", pubkey)
