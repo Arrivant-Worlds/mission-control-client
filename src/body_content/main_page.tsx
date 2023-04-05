@@ -466,8 +466,8 @@ export const MAIN_PAGE = () => {
       console.log("is disconnected?", SolanaWallet.connected)
     }
     if(SuiWallet.wallet){
-      await SuiWallet.wallet.disconnect()
-      console.log("trying to disconnect sui", SuiWallet.wallet)
+      console.log("trying to disconnect sui", SuiWallet.status)
+      SuiWallet.wallet.disconnect()
     }
     setShouldShowDisconnect(false)
     handleNavigation("/");
@@ -672,34 +672,37 @@ export const MAIN_PAGE = () => {
       
     }
     if (reward.type_reward.type === "trait_pack") {
-      let connection = new Connection(RPC_CONNECTION_URL)
-      const userKey = new PublicKey(publicKey!);
-      //create associated token acc for user
-      let tx = new Transaction()
-      await getOrCreateUserAssociatedTokenAccountTX(
-        userKey,
-        new PublicKey(reward.mint),
-        tx
-      )
-      console.log("IM IN")
-      set_message_dialog({
-        open: true,
-        text: 'Claiming requires .03 SOL'
-      });
-
-      let block = await connection.getLatestBlockhash('confirmed')
-      tx.recentBlockhash = block.blockhash;
-      tx.feePayer = userKey;
-      let sig = await sendTransaction(wallet, tx);
-      set_message_dialog({
-        open: true,
-        text: 'Confirming transaction...'
-      });
-      await sleep(3000)
-      set_message_dialog({
-        open: false,
-      })
-      console.log(sig)
+      if(SolanaWallet.connected){
+        let connection = new Connection(RPC_CONNECTION_URL)
+        const userKey = new PublicKey(publicKey!);
+        //create associated token acc for user
+        let tx = new Transaction()
+        await getOrCreateUserAssociatedTokenAccountTX(
+          userKey,
+          new PublicKey(reward.mint),
+          tx
+        )
+        console.log("IM IN")
+        set_message_dialog({
+          open: true,
+          text: 'Claiming requires .03 SOL'
+        });
+  
+        let block = await connection.getLatestBlockhash('confirmed')
+        tx.recentBlockhash = block.blockhash;
+        tx.feePayer = userKey;
+        let sig = await sendTransaction(wallet, tx);
+        set_message_dialog({
+          open: true,
+          text: 'Confirming transaction...'
+        });
+        await sleep(3000)
+        set_message_dialog({
+          open: false,
+        })
+        console.log(sig)
+      }
+      
     }
     if (!header_verification) return
     let claim = await claim_journey_reward(header_verification, reward_id);
