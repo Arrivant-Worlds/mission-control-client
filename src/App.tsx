@@ -18,7 +18,7 @@ import { CHAIN_NAMESPACES, UserAuthInfo, WALLET_ADAPTERS } from "@web3auth/base"
 import RPC from "./solanaRPC"
 import { RPC_CONNECTION_URL } from './api_calls/constants';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { FractalWalletAdapter, LedgerWalletAdapter, PhantomWalletAdapter, SlopeWalletAdapter, SolflareWalletAdapter, SolletExtensionWalletAdapter, SolletWalletAdapter, TorusWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { LedgerWalletAdapter, PhantomWalletAdapter, SlopeWalletAdapter, SolflareWalletAdapter, SolletExtensionWalletAdapter, SolletWalletAdapter, TorusWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { EthosConnectProvider } from 'ethos-connect';
@@ -359,7 +359,6 @@ export const SolanaWalletContext: FC<{ children: ReactNode }> = ({ children }) =
       new LedgerWalletAdapter(),
       new SolletWalletAdapter({ network }),
       new SolletExtensionWalletAdapter({ network }),
-      new FractalWalletAdapter({ network })
     ],
     [network]
   );
@@ -371,7 +370,7 @@ export const SolanaWalletContext: FC<{ children: ReactNode }> = ({ children }) =
       }}
     >
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets}>
+      <WalletProvider autoConnect = {false} wallets={wallets}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

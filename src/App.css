@@ -16,6 +16,15 @@
   width: 3px;
 }
 
+.wallet-adapter-button.centralConnect {
+   background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,121,48,1) 21%, rgba(0,212,255,1) 100%);
+    border: none;
+
+}
+.centralConnect:hover {
+    background-color: #F6F6F6 !important;
+}
+
 .simplebar-track.simplebar-vertical {
   background-color: black;
   top: 10px !important;

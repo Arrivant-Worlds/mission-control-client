@@ -125,11 +125,11 @@ const PASSPORT = (props: PassportProps) => {
             style={styles.xp_numbers}
           >{`${props.user_data?.xp}/${props.user_data?.xpToNextLevel}`}</Typography>
         </Grid>
-      </Grid>
-      <Typography sx={{
+        <Typography sx={{
           textAlign: "left",
           fontStyle: "normal",
           fontWeight: "400",
+          
           fontSize: "12px",
           lineHeight: "140%",
           color: "#F6F6F6"}}>
@@ -137,6 +137,8 @@ const PASSPORT = (props: PassportProps) => {
             `TOTAL XP:${getPointFromLevelAndXP(props.user_data!.level, props.user_data!.xp)}`
           }
       </Typography>
+      </Grid>
+
     </Grid>
   );
 };

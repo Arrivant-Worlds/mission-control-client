@@ -12,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { SignInButton } from 'ethos-connect'
 import { ethos } from 'ethos-connect'
+import white_chest from "../images/chest.png";
 
 
 
@@ -81,87 +82,90 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
         </Box>
       </Grid>
       <Dialog
-        open={walletDialog}
-        onClose={() => setWalletDialog(false)}
-        BackdropProps={{
-          style: {
-            background: "rgba(255, 255, 255, 0.5)",
-            zIndex: 1,
-            position: 'relative',
-          },
-        }}
-        PaperProps={{
-          style: {
-            background: "#f2f2f2",
-            borderRadius: "5px",
-            border: 'solid white',
-            width: "40%",
-            height: "400px",
-            maxHeight: "none",
-            maxWidth: "none",
-            boxShadow: "none",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          },
-        }}
+  open={walletDialog}
+  onClose={() => setWalletDialog(false)}
+  BackdropProps={{
+    style: {
+      background: "rgba(255, 255, 255, 0.5)",
+      zIndex: 1,
+      position: 'relative',
+    },
+  }}
+  PaperProps={{
+    style: {
+      background: "#f2f2f2",
+      borderRadius: "5px",
+      border: 'solid white',
+      width: "40%",
+      height: "350px",
+      maxHeight: "none",
+      maxWidth: "none",
+      boxShadow: "none",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  }}
+  sx={{
+    zIndex: 0
+  }}
+>
+  <DialogContent sx={{ height: "150px" }}>
+    <IconButton
+      aria-label="close"
+      onClick={() => setWalletDialog(false)}
+      sx={{
+        position: "absolute",
+        right: 0,
+        top: 0,
+        color: "#6A6A6A",
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
+    <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%" }}>
+      <Typography variant="body2" sx={{ color: "black", alignSelf: "flex-start", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
+        Connect with Solana
+        <img src={white_chest} alt="Solana Logo" style={{ marginLeft: "10px", height: "24px", width: "24px" }} />
+      </Typography>
+      <WalletMultiButton className="centralConnect"/>
+    </Box>
+    <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
+      <Typography variant="body2" sx={{ color: "black", alignSelf: "flex-start", mb: "20px", fontWeight: 700 }}>
+        Connect with Sui
+        <img src={white_chest} alt="Sui Logo" style={{ marginLeft: "10px", height: "24px", width: "24px" }} />
+      </Typography>
+      <Button
+        onClick={ethos.showSignInModal}
+        variant="contained"
         sx={{
-          zIndex: 0
+          border: "none",
+          color: "#fff",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          fontFamily: "'DM Sans', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+          fontSize: "16px",
+          fontWeight: 600,
+          height: "48px",
+          lineHeight: "48px",
+          padding: "0 24px",
+          textTransform: 'none',
+          borderRadius: "4px",
+          background: 'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 21%, rgba(0,212,255,1) 100%)'
         }}
       >
-        <DialogContent sx={{ height: "150px" }}>
-          <IconButton
-            aria-label="close"
-            onClick={() => setWalletDialog(false)}
-            sx={{
-              position: "absolute",
-              right: 0,
-              top: 0,
-              color: "#6A6A6A",
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-          <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%" }}>
-            <Typography variant="body2" sx={{ color: "black", alignSelf: "flex-start", mb: "20px" }}>
-              Connect with Solana
-            </Typography>
-            <WalletMultiButton />
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
-            <Typography variant="body2" sx={{ color: "black", alignSelf: "flex-start", mb: "20px" }}>
-              Connect with Sui
-            </Typography>
-            <Button onClick={ethos.showSignInModal}
-            variant="contained"
-            sx = {{
-              border: "none",
-              color: "#fff",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              fontFamily: "'DM Sans', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif",
-              fontSize: "16px",
-              fontWeight: 600,
-              height: "48px",
-              lineHeight: "48px",
-              padding: "0 24px",
-              textTransform: 'none',
-              borderRadius: "4px",
-              backgroundColor: "blue"
-            }}
-            >
-              Select Wallet
-            </Button>
-          </Box>
-          <Box sx={{ width: "100%", display: "flex", justifyContent: "center", height: "50%" }}>
-            <Typography variant="body2" sx={{ color: "gray", alignSelf: "flex-end", mb: "10px" }}>
-              Select a wallet provider to connect
-            </Typography>
-          </Box>
-        </DialogContent>
-      </Dialog>
+        Select Wallet
+      </Button>
+    </Box>
+    <Box sx={{ width: "100%", display: "flex", justifyContent: "center", height: "25%" }}>
+      <Typography variant="body2" sx={{ color: "gray", alignSelf: "flex-end", mb: "10px", fontWeight: 600 }}>
+        Select a wallet provider to connect
+      </Typography>
+    </Box>
+  </DialogContent>
+</Dialog>
     </Grid>
   );
 }

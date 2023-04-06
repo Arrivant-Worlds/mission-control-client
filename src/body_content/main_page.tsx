@@ -268,7 +268,6 @@ export const MAIN_PAGE = () => {
         console.log("user data?", user_data)
         await loadUserData()
         setShouldShowDisconnect(true);
-        console.log("eneted", shouldShowDisconnect)
       } else {
         if(!window.location.hash){
           handleNavigation("/");
@@ -456,14 +455,21 @@ export const MAIN_PAGE = () => {
   };
 
   const handleDisconnect = async () => {
+    console.log("I WAS CLICKED")
     playDisconnectWallet();
     localStorage.removeItem("verifyHeader");
     if(wallet){
       await logout()
     }
     if (SolanaWallet.connected) {
-      await SolanaWallet.disconnect()
-      console.log("is disconnected?", SolanaWallet.connected)
+      console.log("I WAS INVOLVED")
+      try{
+        SolanaWallet.disconnect()
+        console.log("I DISCONNECTED")
+      } catch(err){
+        console.log("ERR IN SOLANA DISCONNECT", err)
+      }
+      console.log("solana wallet connection status", SolanaWallet.connected)
     }
     if(SuiWallet.wallet){
       console.log("trying to disconnect sui", SuiWallet.status)
