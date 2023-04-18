@@ -67,8 +67,6 @@ import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import { useWallet } from "@solana/wallet-adapter-react";
 import WalletWidget from "./wallet_widget";
 import { AlertState, DialogData, JourneyRewardResponseDTO, LeaderboardResponse, MessageDialog, PayloadHeaders, QuestResponse, questResponseDTO, RewardsDialogData, RewardTypes, TwitterSearchParams, userResponseDTO } from "interfaces";
-import * as SuiSDK from "@mysten/sui.js";
-import { useWalletKit } from "@mysten/wallet-kit";
 export const MAIN_PAGE = () => {
   const {
     provider,

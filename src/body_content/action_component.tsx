@@ -11,11 +11,12 @@ import {
   submit_email,
   update_wallet,
 } from "../api_calls";
+import { ethos } from "ethos-connect"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { decodeUTF8 } from "tweetnacl-util";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { AlertState, DialogData, MainProps, questResponseDTO, RewardsDialogData, RewardTypes } from "interfaces.js";
-import { ConnectButton, useWalletKit } from "@mysten/wallet-kit";
+import { ConnectButton } from "@mysten/wallet-kit";
 
 export interface ActionComponentProps {
   setActionDone: (arg0: boolean) => void;
@@ -35,7 +36,7 @@ export interface ActionComponentProps {
 
 export default function ACTION_COMPONENT(props: ActionComponentProps) {
   const SolanaWallet = useWallet()
-  const SuiWallet = useWalletKit()
+  const SuiWallet = ethos.useWallet()
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics();
   const [claimed_state, change_claimed_state] = useState(false);
   const helper_style = {
@@ -122,9 +123,9 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
       const encodedMessage = decodeUTF8(message);
       signature = await SolanaWallet.signMessage(encodedMessage);
       newWallet = SolanaWallet.publicKey!.toBase58()
-    } else if(SuiWallet.currentWallet?.connected){
+    } else if(SuiWallet.wallet){
       console.log("Im connected")
-      newWallet = SuiWallet.accounts[0];
+      newWallet = SuiWallet.wallet.address;
     } else {
       return;
     }
@@ -470,19 +471,8 @@ const type_render = () => {
         <Typography sx={{ fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px" }}>{props.action_data.message}</Typography>
         {/* @ts-ignore */}
         <WalletMultiButton
-          variant="contained"
           disabled={disabled_button()}
           onClick={() => setWalletUpdating()}
-          sx={{
-            color: "black",
-            fontSize: "10px",
-            width: "100%",
-            height: "100%",
-            fontWeight: "700",
-            backgroundColor: "#F6F6F6",
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
         >
           {isWalletUpdateInProgress ? (isWalletUpdateInProgress) : (props.action_data.buttonText)}
         </WalletMultiButton>
