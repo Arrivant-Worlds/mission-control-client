@@ -12,7 +12,6 @@ import REWARDS from "./rewards";
 import PASSPORT from "./passport";
 import { useAnalytics } from '../mixpanel';
 import loreIcon from "../images/Lore_Icon.png"
-import {ConnectButton} from "@suiet/wallet-kit"
 import "./bounty_page_styles.css";
 import {
   verify_discord,
