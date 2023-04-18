@@ -59,27 +59,35 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
         container
         xs={3}
         direction="column"
+        spacing={2} // Add spacing between items
       >
-        <Box onMouseEnter={() => handleConnectHover()}>
-          {/* @ts-ignore */}
-          <Button
-            styles={styles.button}
-            onClick={handleLogin}
-            type="button"
-            variant="outlined"
-          >
-            Social Sign On
-          </Button>
-          {/* @ts-ignore */}
-          <Button
-            styles={styles.button}
-            onClick={handleWalletLogin}
-            type="button"
-            variant="outlined"
-          >
-            Sign in with wallet
-          </Button>
-        </Box>
+        <Grid item> {/* Wrap each button in a Grid item */}
+          <Box onMouseEnter={() => handleConnectHover()}>
+            <Button
+              onClick={handleLogin}
+              variant="outlined"
+              sx = {{
+                border: "1px solid #F6F6F6",
+                marginTop: "10px",
+              }}
+            >
+              Social Sign On
+            </Button>
+          </Box>
+        </Grid>
+        <Grid item> {/* Wrap each button in a Grid item */}
+          <Box onMouseEnter={() => handleConnectHover()}>
+            <Button
+              onClick={handleWalletLogin}
+              variant="outlined"
+              sx = {{
+                border: "1px solid #F6F6F6",
+              }}
+            >
+              Sign in with wallet
+            </Button>
+          </Box>
+        </Grid>
       </Grid>
       <Dialog
   open={walletDialog}
@@ -93,9 +101,8 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
   }}
   PaperProps={{
     style: {
-      background: "#f2f2f2",
-      borderRadius: "5px",
-      border: 'solid white',
+      background: "#111",
+      borderRadius: "10px",
       width: "40%",
       height: "350px",
       maxHeight: "none",
@@ -119,22 +126,20 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
         position: "absolute",
         right: 0,
         top: 0,
-        color: "#6A6A6A",
+        color: "#fff",
       }}
     >
       <CloseIcon />
     </IconButton>
     <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%" }}>
-      <Typography variant="body2" sx={{ color: "black", alignSelf: "flex-start", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
+      <Typography variant="body2" sx={{ color: "#fff", alignSelf: "flex-start", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
         Connect with Solana
-        <img src={white_chest} alt="Solana Logo" style={{ marginLeft: "10px", height: "24px", width: "24px" }} />
       </Typography>
-      <WalletMultiButton className="centralConnect"/>
+      <WalletMultiButton className="centralConnect" />
     </Box>
     <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
-      <Typography variant="body2" sx={{ color: "black", alignSelf: "flex-start", mb: "20px", fontWeight: 700 }}>
+      <Typography variant="body2" sx={{ color: "#fff", alignSelf: "flex-start", mb: "20px", fontWeight: 700 }}>
         Connect with Sui
-        <img src={white_chest} alt="Sui Logo" style={{ marginLeft: "10px", height: "24px", width: "24px" }} />
       </Typography>
       <Button
         onClick={ethos.showSignInModal}
@@ -153,7 +158,10 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
           padding: "0 24px",
           textTransform: 'none',
           borderRadius: "4px",
-          background: 'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 21%, rgba(0,212,255,1) 100%)'
+          backgroundColor: "#43c5e2",
+          "&:hover": {
+            backgroundColor: "#35a5c7",
+          },
         }}
       >
         Select Wallet
