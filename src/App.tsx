@@ -77,6 +77,7 @@ const Context = ({ children }) => {
       try {
         const web3auth = new Web3Auth({
           clientId, 
+          authMode: 'WALLET',
           web3AuthNetwork: "cyan", // mainnet, aqua, celeste, cyan or testnet
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.SOLANA,
@@ -106,19 +107,6 @@ const Context = ({ children }) => {
   
   
         web3auth.configureAdapter(openloginAdapter);
-  
-  
-        const phantomAdapter = new PhantomAdapter({
-          sessionTime: 86400,
-          clientId,
-        });
-        web3auth.configureAdapter(phantomAdapter);
-  
-        const solflareAdapter = new SolflareAdapter({
-          sessionTime: 86400,
-          clientId,
-        });
-        web3auth.configureAdapter(solflareAdapter);
   
   
         setWeb3auth(web3auth);
@@ -171,11 +159,25 @@ const Context = ({ children }) => {
                   name: "twitter login",
                   showOnModal: false,
                 },
-  
+                twitch: {
+                  // it will hide the facebook option from the Web3Auth modal.
+                  name: "twitter login",
+                  showOnModal: false,
+                },
+                linkedin: {
+                  // it will hide the facebook option from the Web3Auth modal.
+                  name: "twitter login",
+                  showOnModal: false,
+                },
+                wechat: {
+                  // it will hide the facebook option from the Web3Auth modal.
+                  name: "twitter login",
+                  showOnModal: false,
+                },
               },
               // setting it to false will hide all social login methods from modal.
               showOnModal: true,
-            },
+            }
           },
         });
         if (web3auth.provider) {
