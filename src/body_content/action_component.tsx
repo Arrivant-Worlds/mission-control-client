@@ -115,6 +115,7 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
     console.log("is wallet connected?", SolanaWallet.connected)
     let signature: any
     let newWallet;
+    let newWalletAuthInfo = {}
     if (SolanaWallet.connected && SolanaWallet.signMessage) {
       setIsWalletUpdateInProgress("Sign Message")
       const now = Date.now();
@@ -122,9 +123,26 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
       const encodedMessage = decodeUTF8(message);
       signature = await SolanaWallet.signMessage(encodedMessage);
       newWallet = SolanaWallet.publicKey!.toBase58()
+      newWalletAuthInfo = {
+        login: 'solana',
+        signature: signature,
+        signedmsg: encodedMessage,
+        wallet: newWallet
+      }
     } else if(SuiWallet.wallet){
       console.log("Im connected")
+      const now = Date.now();
+      const message = now.toString();
+      const response = await SuiWallet.wallet?.signMessage({
+        message: message,
+      })
       newWallet = SuiWallet.wallet.address;
+      newWalletAuthInfo = {
+        login: 'sui',
+        signature: response.signature,
+        signedmsg: response.messageBytes,
+        wallet: newWallet
+      }
     } else {
       return;
     }
@@ -133,7 +151,7 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
     if (!authHeaders) return;
     console.log("auth headers", authHeaders)
     try {
-      await update_wallet(authHeaders, newWallet.toString())
+      await update_wallet(authHeaders, newWalletAuthInfo)
       setIsWalletUpdateInProgress("Success!")
       props.setAlertState({
         open: true,
@@ -469,15 +487,48 @@ const type_render = () => {
       >
         <Typography sx={{ fontSize: "18px", lineHeight: "25px", fontWeight: "700", marginBottom: "15px" }}>{props.action_data.message}</Typography>
         {/* @ts-ignore */}
-        <WalletMultiButton
-          disabled={disabled_button()}
-          onClick={() => setWalletUpdating()}
-        >
-          {isWalletUpdateInProgress ? (isWalletUpdateInProgress) : (props.action_data.buttonText)}
-        </WalletMultiButton>
-        <div onClick={()=>setWalletUpdating()}>
-        <SignInButton></SignInButton>
-        </div>
+
+        
+        <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%" }}>
+          <WalletMultiButton 
+           disabled={disabled_button()}
+           onClick={() => setWalletUpdating()}
+          className="centralConnect">CONNECT SOLANA</WalletMultiButton>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
+          <Button
+            onClick={()=> {
+              if(!SuiWallet.wallet){
+                ethos.showSignInModal()
+              }
+              setWalletUpdating()
+            }}
+            variant="outlined"
+            sx={{
+              border: '1px solid #4CA3FF',
+              color: "#fff",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              width: '72%',
+              fontFamily: 'Inter',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              fontSize: '12px',
+              lineHeight: '15px',
+              textAlign: 'center',
+              height: "48px",
+              textTransform: 'none',
+              borderRadius: "4px",
+              backgroundColor: "none",
+              "&:hover": {
+                backgroundColor: "none",
+              },
+            }}
+          >
+            CONNECT SUI
+          </Button>
+        </Box>
       </Grid>
     </Grid>
     )
