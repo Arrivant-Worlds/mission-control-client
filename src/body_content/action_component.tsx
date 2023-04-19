@@ -11,12 +11,11 @@ import {
   submit_email,
   update_wallet,
 } from "../api_calls";
-import { ethos } from "ethos-connect"
+import { SignInButton, ethos } from "ethos-connect"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { decodeUTF8 } from "tweetnacl-util";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { AlertState, DialogData, MainProps, questResponseDTO, RewardsDialogData, RewardTypes } from "interfaces.js";
-import { ConnectButton } from "@mysten/wallet-kit";
 
 export interface ActionComponentProps {
   setActionDone: (arg0: boolean) => void;
@@ -477,7 +476,7 @@ const type_render = () => {
           {isWalletUpdateInProgress ? (isWalletUpdateInProgress) : (props.action_data.buttonText)}
         </WalletMultiButton>
         <div onClick={()=>setWalletUpdating()}>
-        <ConnectButton connectText={"Update wallet"}></ConnectButton>
+        <SignInButton></SignInButton>
         </div>
       </Grid>
     </Grid>
