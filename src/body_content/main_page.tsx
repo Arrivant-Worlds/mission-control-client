@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useCallback } from "react";
+import React, { useState, useEffect, memo, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
@@ -67,6 +67,7 @@ import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import { useWallet } from "@solana/wallet-adapter-react";
 import WalletWidget from "./wallet_widget";
 import { AlertState, DialogData, JourneyRewardResponseDTO, LeaderboardResponse, MessageDialog, PayloadHeaders, QuestResponse, questResponseDTO, RewardsDialogData, RewardTypes, TwitterSearchParams, userResponseDTO } from "interfaces";
+import { EthosSignMessageInput } from "ethos-connect/dist/types/EthosSignMessageInput";
 export const MAIN_PAGE = () => {
   const {
     provider,
@@ -205,7 +206,7 @@ export const MAIN_PAGE = () => {
     }
   };
 
-  const handleLoginChange = () =>{
+  const handleLoginChange = () => {
     setLoginChange(loginChange + 1);
   }
 
@@ -218,8 +219,7 @@ export const MAIN_PAGE = () => {
       access_token
     );
   }
-
-  useEffect(() => {
+  const loadAllData = () => {
     //change this conditional to check for success in oath.
     //also trigger conditional for snackbar bar to show up saying twitter auth worked if url says finished?=true
     if (window.location.search) {
@@ -255,29 +255,33 @@ export const MAIN_PAGE = () => {
       }
     }
     async function load() {
+      console.log("sui wallet", SuiWallet.wallet)
       if (
-        (provider && wallet) || 
-        SolanaWallet.connected || 
-        SuiWallet.wallet
-      ) 
-      {
-        console.log( "is sui connected",
-        SuiWallet.wallet)
-        console.log("user data?", user_data)
+        (provider && wallet) ||
+        SolanaWallet.connected ||
+        (SuiWallet.status === "connected" && SuiWallet.wallet)
+      ) {
+        console.log("is sui connected",
+          SuiWallet.status)
         await loadUserData()
-        setShouldShowDisconnect(true);
+        console.log("I can continue")
       } else {
-        if(!window.location.hash){
+        if (!window.location.hash) {
           handleNavigation("/");
         }
-    }
+      }
     }
     console.log("rerunning")
     load();
-  }, [provider, wallet, SolanaWallet.connected, SuiWallet.wallet]);
+  }
+  useEffect(() => {
+    console.log("recalling with", SuiWallet.wallet?.address)
+    loadAllData()
+  }, [provider, SolanaWallet.connected, SuiWallet.wallet?.address]);
 
   useEffect(() => {
     if (user_data) {
+      if(!shouldShowDisconnect) setShouldShowDisconnect(true)
       console.log("tried navigating")
       handleNavigation("/bounty_main");
       let allActiveQuestRewards = quests_data.filter((i) => i.active_reward!.length > 0)
@@ -322,9 +326,15 @@ export const MAIN_PAGE = () => {
     return headers
   }
 
+  const signMessageSui = useCallback(
+    async (message: EthosSignMessageInput) => {
+      const response = await SuiWallet.wallet?.signMessage(message)
+      return response
+  }, [SuiWallet.wallet]);
+
   const getAuthHeaders = async (): Promise<PayloadHeaders | undefined> => {
     try {
-      if(localStorage.getItem("verifyHeader")){
+      if (localStorage.getItem("verifyHeader")) {
         let headers = JSON.parse(localStorage.getItem("verifyHeader") || "{}")
         return headers.value
       }
@@ -347,7 +357,7 @@ export const MAIN_PAGE = () => {
             return headers
           }
         }
-  
+
         //if user is using SSO use it for auth
         const app_scoped_privkey = await getPrivateKey() as string
         const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
@@ -362,6 +372,7 @@ export const MAIN_PAGE = () => {
         return headers
       }
       else if (SolanaWallet.connected) {
+
         let headers = await refreshHeadersSolanaWallet(
           SolanaWallet.signMessage,
           SolanaWallet.publicKey,
@@ -369,17 +380,22 @@ export const MAIN_PAGE = () => {
         return headers
 
       }
-      else if(SuiWallet.wallet && SuiWallet.wallet.address){
-        console.log("SUI", SuiWallet.wallet)
-        let add = await SuiWallet.wallet.getAddress()
-        console.log("got add", add)
-        let headers = await refreshHeadersSuiWallet(
-          SuiWallet.wallet?.signMessage,
-          SuiWallet.wallet?.address
-        )
-        return headers
+      else if (SuiWallet.status === "connected" && SuiWallet.wallet) {
+        try {
+          console.log("SUI", SuiWallet.wallet)
+          let add = await SuiWallet.wallet?.getAddress()
+          console.log("got add", add)
+          let headers = await refreshHeadersSuiWallet(
+            signMessageSui,
+            SuiWallet.wallet?.address
+          )
+          return headers
+        } catch (err) {
+          console.log("err in sui signing msg", err);
+          await handleDisconnect()
+        }
       }
-     
+
     } catch (err) {
       console.log("we got", err)
     }
@@ -456,22 +472,26 @@ export const MAIN_PAGE = () => {
     console.log("I WAS CLICKED")
     playDisconnectWallet();
     localStorage.removeItem("verifyHeader");
-    if(wallet){
+    if (wallet) {
       await logout()
     }
     if (SolanaWallet.connected) {
       console.log("I WAS INVOLVED")
-      try{
+      try {
         SolanaWallet.disconnect()
         console.log("I DISCONNECTED")
-      } catch(err){
+      } catch (err) {
         console.log("ERR IN SOLANA DISCONNECT", err)
       }
       console.log("solana wallet connection status", SolanaWallet.connected)
     }
-    if(SuiWallet.wallet){
-      console.log("trying to disconnect sui", SuiWallet.status)
-      SuiWallet.wallet.disconnect()
+    if (SuiWallet.status === 'connected') {
+      try {
+        console.log("trying to disconnect sui", SuiWallet.status)
+        SuiWallet.wallet?.disconnect()
+      } catch (err) {
+        console.log("ERR IN SUI DISCONNECT", err)
+      }
     }
     setShouldShowDisconnect(false)
     handleNavigation("/");
@@ -657,7 +677,7 @@ export const MAIN_PAGE = () => {
     let header_verification = await getAuthHeaders();
     console.log("THE MAIN", reward)
     if (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack") {
-      if(publicKey){
+      if (publicKey) {
         let balance_check = await getBalance();
         let u = await getUserInfo()
         console.log("got s", u)
@@ -674,10 +694,10 @@ export const MAIN_PAGE = () => {
           }
         }
       }
-      
+
     }
     if (reward.type_reward.type === "trait_pack") {
-      if(SolanaWallet.connected){
+      if (SolanaWallet.connected) {
         let connection = new Connection(RPC_CONNECTION_URL)
         const userKey = new PublicKey(publicKey!);
         //create associated token acc for user
@@ -692,7 +712,7 @@ export const MAIN_PAGE = () => {
           open: true,
           text: 'Claiming requires .03 SOL'
         });
-  
+
         let block = await connection.getLatestBlockhash('confirmed')
         tx.recentBlockhash = block.blockhash;
         tx.feePayer = userKey;
@@ -707,22 +727,22 @@ export const MAIN_PAGE = () => {
         })
         console.log(sig)
       }
-      
+
     }
     if (!header_verification) return
     let claim = await claim_journey_reward(header_verification, reward_id);
     if (claim.data && reward.type_reward.type === "soulbound") {
 
-      if(SuiWallet.wallet){
+      if (SuiWallet.wallet) {
         //connected with sui
         let signableTX = claim.data
         console.log("SUI TX", signableTX)
         let signedTX = await SuiWallet.wallet?.signAndExecuteTransactionBlock(signableTX)
         console.log("signed", signedTX)
         let oldSignature = claim.data.signature;
-        if(signedTX){
+        if (signedTX) {
           //@ts-ignore
-          await transmit_signed_journey_reward_tx_to_server(header_verification,  signedTX, reward_id)
+          await transmit_signed_journey_reward_tx_to_server(header_verification, signedTX, reward_id)
         }
       }
 
@@ -769,7 +789,7 @@ export const MAIN_PAGE = () => {
     await populate_data()
     setTimeout(() => {
       populate_data()
-    }, 15000)
+    }, 10000)
     return claim
   };
 
@@ -1076,7 +1096,8 @@ export const MAIN_PAGE = () => {
             element={
               <CONNECT_PAGE
                 handleConnectHover={handleConnectHover}
-                loginChange = {handleLoginChange}
+                loginChange={handleLoginChange}
+                isDisconnectVisible = {shouldShowDisconnect}
               />
             }
           />

@@ -40,18 +40,20 @@ export const refreshHeadersSolanaWallet = async (
     return headers
 }
 
+
 export const refreshHeadersSuiWallet = async (
   signMessage: any,
-  publicKey: any
+  suiPKey: any
 ) => {
+  console.log("called with pkey", suiPKey)
   const now = Date.now();
   const message = now.toString();
   const result: SignedMessage = await signMessage({
     message: message
   })
+  console.log("result?", result)
   if(!result) return
-  const pubkey = publicKey;
-  console.log("got pubkey", pubkey)
+  const pubkey = suiPKey;
   let headers: PayloadHeaders = {
       auto_approve: false,
       isLedger: false,
