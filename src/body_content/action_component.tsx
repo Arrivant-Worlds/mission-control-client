@@ -111,25 +111,26 @@ export default function ACTION_COMPONENT(props: ActionComponentProps) {
     setFormValue(value);
   };
 
-  const setWalletUpdating = async () => {
+  const setWalletUpdating = async (wallet: 'solana' | 'sui') => {
     console.log("is wallet connected?", SolanaWallet.connected)
     let signature: any
     let newWallet;
     let newWalletAuthInfo = {}
-    if (SolanaWallet.connected && SolanaWallet.signMessage) {
+    if (SolanaWallet.connected && SolanaWallet.signMessage && wallet === 'solana') {
       setIsWalletUpdateInProgress("Sign Message")
       const now = Date.now();
       const message = now.toString();
       const encodedMessage = decodeUTF8(message);
       signature = await SolanaWallet.signMessage(encodedMessage);
       newWallet = SolanaWallet.publicKey!.toBase58()
+      console.log("SIG", signature)
       newWalletAuthInfo = {
         login: 'solana',
-        signature: signature,
+        signature: JSON.stringify(Array.from(signature)),
         signedmsg: encodedMessage,
         wallet: newWallet
       }
-    } else if(SuiWallet.wallet){
+    } else if(SuiWallet.wallet && wallet === 'sui'){
       console.log("Im connected")
       const now = Date.now();
       const message = now.toString();
@@ -492,8 +493,8 @@ const type_render = () => {
         <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%" }}>
           <WalletMultiButton 
            disabled={disabled_button()}
-           onClick={() => setWalletUpdating()}
-          className="centralConnect">CONNECT SOLANA</WalletMultiButton>
+           onClick={() => setWalletUpdating('solana')}
+          className="centralConnect">{SolanaWallet.connected ? "SIGN MESSAGE" : "CONNECT WALLET"}</WalletMultiButton>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
           <Button
@@ -501,7 +502,7 @@ const type_render = () => {
               if(!SuiWallet.wallet){
                 ethos.showSignInModal()
               }
-              setWalletUpdating()
+              setWalletUpdating('sui')
             }}
             variant="outlined"
             sx={{
@@ -526,7 +527,7 @@ const type_render = () => {
               },
             }}
           >
-            CONNECT SUI
+            {SuiWallet.wallet ? "SIGN MESSAGE" : "CONNECT WALLET"}
           </Button>
         </Box>
       </Grid>
