@@ -105,10 +105,10 @@ export const get_leaderboard = async (headers: PayloadHeaders): Promise<Leaderbo
   }
 };
 
-export const auth_twitter = async (headers: PayloadHeaders, wallet: string) => {
+export const auth_twitter = async (headers: PayloadHeaders) => {
   try {
     const response = await axios.put(
-      `${BASE_URL}/users/${wallet}/twitter/authorize`,
+      `${BASE_URL}/users/twitter/authorize`,
       {},
       { headers: {...headers} }
     );

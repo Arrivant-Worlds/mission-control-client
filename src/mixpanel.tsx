@@ -2,6 +2,8 @@ import mixpanel from "mixpanel-browser"
 import React, { useContext, useEffect, useState, createContext } from "react"
 import { useLocation } from "react-router";
 import { useWeb3Wallet } from "./App";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { ethos } from "ethos-connect";
 
 let MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 const debugAnalytics = true;
@@ -107,11 +109,13 @@ const AnalyticsContext = createContext<IAnalyticsContext | null>(null);
 
 
 export function AnalyticsProvider(props: { children: React.ReactNode }) {
-  const { publicKey } = useWeb3Wallet()
+  const SolanaWallet = useWallet();
+  const { publicKey } = useWeb3Wallet();
+  const SuiWallet = ethos.useWallet()
+  let pubkey = SolanaWallet.publicKey?.toBase58() || SuiWallet.wallet?.address || publicKey
   const router = useLocation();
   const [trackingInitialized, setTrackingInitialized] = useState(false);
   const [lastPubkeyConnected, setLastPubkeyConnected] = useState<string | null>(null);
-  const pubkey = publicKey
   function initializeTracking() {
     const integrations = {
       mixpanel: !!MIXPANEL_TOKEN,

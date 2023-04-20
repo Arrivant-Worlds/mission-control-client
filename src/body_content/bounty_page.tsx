@@ -38,13 +38,11 @@ export interface BountyProps extends MainProps {
 
 export const BOUNTY_PAGE = (props: BountyProps) => {
   const { track } = useAnalytics();
-  const { publicKey } = useWeb3Wallet()
   const [tab1_value, tab1_setValue] = useState(0);
   const [tab2_value, tab2_setValue] = useState(0);
   const [expanded_tab, change_expanded_tab] = useState("prime");
   let [claimableCount, setClaimableCount] = useState(0);
   let [journeyRewardClaimableCount, setJourneyRewardClaimableCount] = useState(0);
-  const { provider } = useWeb3Wallet()
   useEffect(() => {
     if(!props.quests_data || !props.rewards_data) return;
     let allActiveQuestRewards = props.quests_data?.filter((i) => i.active_reward.length > 0)
