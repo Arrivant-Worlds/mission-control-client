@@ -281,7 +281,7 @@ export const MAIN_PAGE = () => {
 
   useEffect(() => {
     if (user_data) {
-      if(!shouldShowDisconnect) setShouldShowDisconnect(true)
+      if (!shouldShowDisconnect) setShouldShowDisconnect(true)
       console.log("tried navigating")
       handleNavigation("/bounty_main");
       let allActiveQuestRewards = quests_data.filter((i) => i.active_reward!.length > 0)
@@ -330,7 +330,7 @@ export const MAIN_PAGE = () => {
     async (message: EthosSignMessageInput) => {
       const response = await SuiWallet.wallet?.signMessage(message)
       return response
-  }, [SuiWallet.wallet]);
+    }, [SuiWallet.wallet]);
 
   const getAuthHeaders = async (): Promise<PayloadHeaders | undefined> => {
     try {
@@ -372,12 +372,17 @@ export const MAIN_PAGE = () => {
         return headers
       }
       else if (SolanaWallet.connected) {
-
-        let headers = await refreshHeadersSolanaWallet(
-          SolanaWallet.signMessage,
-          SolanaWallet.publicKey,
-        )
-        return headers
+        try {
+          let headers = await refreshHeadersSolanaWallet(
+            SolanaWallet.signMessage,
+            SolanaWallet.publicKey,
+          )
+          return headers
+        }
+        catch (err) {
+          console.log("err in solana signing msg", err);
+          await handleDisconnect()
+        }
 
       }
       else if (SuiWallet.status === "connected" && SuiWallet.wallet) {
@@ -673,14 +678,12 @@ export const MAIN_PAGE = () => {
     reward_id: string,
     reward: RewardsDialogData
   ) => {
-
     let header_verification = await getAuthHeaders();
-    console.log("THE MAIN", reward)
-    if (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack") {
+    if (!header_verification) return
+    if (SolanaWallet.connected && (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack")) {
       if (publicKey) {
         let balance_check = await getBalance();
         let u = await getUserInfo()
-        console.log("got s", u)
         if (!u) return
         if (Object.entries(u).length !== 0) {
           //user is using a web wallet
@@ -694,7 +697,6 @@ export const MAIN_PAGE = () => {
           }
         }
       }
-
     }
     if (reward.type_reward.type === "trait_pack") {
       if (SolanaWallet.connected) {
@@ -727,25 +729,23 @@ export const MAIN_PAGE = () => {
         })
         console.log(sig)
       }
-
     }
-    if (!header_verification) return
     let claim = await claim_journey_reward(header_verification, reward_id);
     if (claim.data && reward.type_reward.type === "soulbound") {
-
+      //if connected with sui
       if (SuiWallet.wallet) {
         //connected with sui
-        let signableTX = claim.data
-        console.log("SUI TX", signableTX)
-        let signedTX = await SuiWallet.wallet?.signAndExecuteTransactionBlock(signableTX)
-        console.log("signed", signedTX)
-        let oldSignature = claim.data.signature;
-        if (signedTX) {
-          //@ts-ignore
-          await transmit_signed_journey_reward_tx_to_server(header_verification, signedTX, reward_id)
-        }
+        setAlertState({
+          open: true,
+          message:
+            "Your reward is being sent! (can take upto 1 min)",
+          severity: "success",
+        });
+        await sleep(1000)
+        await populate_data()
+        return;
       }
-
+      //if connected with solana
       setAlertState({
         open: true,
         message:
@@ -767,12 +767,7 @@ export const MAIN_PAGE = () => {
         })
         const serializedTX = dehydratedTx.toString('base64')
         await transmit_signed_journey_reward_tx_to_server(header_verification, serializedTX, reward_id)
-        setAlertState({
-          open: true,
-          message:
-            "Nft transactions may take up to one minute!",
-          severity: "warning",
-        });
+
       } catch (e: any) {
         if (e.message === "User rejected the request.") {
           handleMessageOpen("You must approve the transaction in order to claim!");
@@ -786,10 +781,8 @@ export const MAIN_PAGE = () => {
       }
       console.log("Wrong journey reward type or claim transaction is empty");
     }
-    await populate_data()
-    setTimeout(() => {
-      populate_data()
-    }, 10000)
+    await sleep(3000)
+    await loadUserData()
     return claim
   };
 
@@ -1097,7 +1090,7 @@ export const MAIN_PAGE = () => {
               <CONNECT_PAGE
                 handleConnectHover={handleConnectHover}
                 loginChange={handleLoginChange}
-                isDisconnectVisible = {shouldShowDisconnect}
+                isDisconnectVisible={shouldShowDisconnect}
               />
             }
           />

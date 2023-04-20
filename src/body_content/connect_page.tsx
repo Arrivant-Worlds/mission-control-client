@@ -15,7 +15,7 @@ import { ethos } from 'ethos-connect'
 import white_chest from "../images/chest.png";
 import suiLogo from "../images/SUI.png";
 import solanaLogo from "../images/SOLANA.png";
-
+import { useWallet } from "@solana/wallet-adapter-react";
 
 interface ConnectPageProps {
   handleConnectHover: () => void;
@@ -24,7 +24,8 @@ interface ConnectPageProps {
 }
 
 export const CONNECT_PAGE = (props: ConnectPageProps) => {
-  const [button_text, change_button_text] = useState("SIGN IN");
+  const SolanaWallet = useWallet();
+  const SuiWallet = ethos.useWallet()
   const { login, logout, getUserInfo } = useWeb3Wallet()
   const [walletDialog, setWalletDialog] = useState(false)
   const handleLogin = async () => {
@@ -180,7 +181,7 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
           <Box sx={{ color: "#fff", alignSelf: "center", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
             <img src={solanaLogo} alt='solanaLogo'></img>
           </Box>
-          <WalletMultiButton className="centralConnect">CONNECT WALLET</WalletMultiButton>
+          <WalletMultiButton className="centralConnect">{SolanaWallet.connected ? "SIGN MESSAGE" : "CONNECT WALLET"}</WalletMultiButton>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
           <Box sx={{ color: "#fff", alignSelf: "center", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
@@ -211,7 +212,7 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
               },
             }}
           >
-            CONNECT WALLET
+            {SuiWallet.status === 'connected' ? "SIGN MESSAGE" : "CONNECT WALLET"}
           </Button>
         </Box>
       </DialogContent>
