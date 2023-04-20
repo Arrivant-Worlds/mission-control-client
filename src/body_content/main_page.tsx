@@ -727,7 +727,6 @@ export const MAIN_PAGE = () => {
           open: false,
         })
         console.log(sig)
-        await populate_data()
       }
     }
     let claim = await claim_journey_reward(header_verification, reward_id);
@@ -783,6 +782,7 @@ export const MAIN_PAGE = () => {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
+      await populate_data()
     }
     else {
       if (claim.data.message) {
