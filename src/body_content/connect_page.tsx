@@ -26,7 +26,7 @@ interface ConnectPageProps {
 export const CONNECT_PAGE = (props: ConnectPageProps) => {
   const SolanaWallet = useWallet();
   const SuiWallet = ethos.useWallet()
-  const { login, logout, getUserInfo } = useWeb3Wallet()
+  const { login } = useWeb3Wallet()
   const [walletDialog, setWalletDialog] = useState(false)
   const handleLogin = async () => {
     await login()

@@ -12,7 +12,6 @@ import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
 import styles from './rewards_dialog_styles';
 import { useAnalytics } from '../mixpanel';
-import { useWeb3Wallet } from "../App";
 import { MainProps, RewardsDialogData } from "interfaces";
 
 interface RewardDialogProps {
@@ -28,14 +27,12 @@ interface RewardDialogProps {
 
 export default function REWARDS_DIALOG(props: RewardDialogProps) {
   const { track, setPropertyIfNotExists, increment, setProperty } = useAnalytics()
-  const { publicKey } = useWeb3Wallet()
   const handleOnClick = async () => {
     props.playRewardFanfare();
     props.set_clicked_state(true);
     if(!props.rewards_dialog_data) return;
      if (props.rewards_dialog_data.type === "journey") {
       console.log("journey", props.rewards_dialog_data)
-      console.log("key", publicKey)
       let claim = await props.handleClaimJourneyReward(
         props.rewards_dialog_data.id,
         props.rewards_dialog_data,
