@@ -71,15 +71,12 @@ import { EthosSignMessageInput } from "ethos-connect/dist/types/EthosSignMessage
 export const MAIN_PAGE = () => {
   const {
     provider,
-    signMessage,
     wallet,
     signTransaction,
-    sendTransaction,
     authenticateUser,
     publicKey,
     getPrivateKey,
     getUserInfo,
-    login,
     getBalance,
     logout
   } = useWeb3Wallet()
@@ -640,28 +637,30 @@ export const MAIN_PAGE = () => {
       });
     }
     if (response.data && type_reward === RewardTypes.claim_caught_creature_reward) {
-      let buffer = Buffer.from(response.data, "base64");
-      let signedTX;
-      try {
-        const tx = Transaction.from(buffer);
-        signedTX = await signTransaction(wallet, tx);
-      } catch (e) {
-        //@ts-ignore
-        if (e.message === "User rejected the request.") {
-          handleMessageOpen("You must approve the transaction in order to claim!");
+      if (SolanaWallet.connected) {
+        let buffer = Buffer.from(response.data, "base64");
+        let signedTX;
+        try {
+          const tx = Transaction.from(buffer);
+          signedTX = await SolanaWallet.signTransaction!(tx);
+        } catch (e) {
+          //@ts-ignore
+          if (e.message === "User rejected the request.") {
+            handleMessageOpen("You must approve the transaction in order to claim!");
+          }
         }
-      }
 
-      if (signedTX) {
-        //@ts-ignore
-        const dehydratedTx = signedTX.serialize({
-          requireAllSignatures: false,
-          verifySignatures: false
-        })
-        const serializedTX = dehydratedTx.toString('base64')
-        await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
-      } else {
-        await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id)
+        if (signedTX) {
+          //@ts-ignore
+          const dehydratedTx = signedTX.serialize({
+            requireAllSignatures: false,
+            verifySignatures: false
+          })
+          const serializedTX = dehydratedTx.toString('base64')
+          await transmit_signed_quest_reward_tx_to_server(header_verification, serializedTX, reward_id)
+        } else {
+          await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id)
+        }
       }
       setAlertState({
         open: true,
@@ -745,7 +744,7 @@ export const MAIN_PAGE = () => {
         });
         await sleep(1000)
         await populate_data()
-        setTimeout(()=> {
+        setTimeout(() => {
           populate_data()
         }, 10000)
         return;
@@ -774,7 +773,7 @@ export const MAIN_PAGE = () => {
         await transmit_signed_journey_reward_tx_to_server(header_verification, serializedTX, reward_id)
         await sleep(3000)
         await populate_data()
-        setTimeout(()=> {
+        setTimeout(() => {
           populate_data()
         }, 10000)
         return claim
