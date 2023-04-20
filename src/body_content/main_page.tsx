@@ -701,7 +701,7 @@ export const MAIN_PAGE = () => {
     if (reward.type_reward.type === "trait_pack") {
       if (SolanaWallet.connected) {
         let connection = new Connection(RPC_CONNECTION_URL)
-        const userKey = new PublicKey(publicKey!);
+        const userKey = SolanaWallet.publicKey!;
         //create associated token acc for user
         let tx = new Transaction()
         await getOrCreateUserAssociatedTokenAccountTX(
@@ -718,7 +718,8 @@ export const MAIN_PAGE = () => {
         let block = await connection.getLatestBlockhash('confirmed')
         tx.recentBlockhash = block.blockhash;
         tx.feePayer = userKey;
-        let sig = await sendTransaction(wallet, tx);
+        let solanaConnection = new Connection(RPC_CONNECTION_URL, "confirmed");
+        let sig = await SolanaWallet.sendTransaction!(tx, solanaConnection);
         set_message_dialog({
           open: true,
           text: 'Confirming transaction...'
@@ -728,9 +729,11 @@ export const MAIN_PAGE = () => {
           open: false,
         })
         console.log(sig)
+        await populate_data()
       }
     }
     let claim = await claim_journey_reward(header_verification, reward_id);
+    console.log("recieved claim", claim)
     if (claim.data && reward.type_reward.type === "soulbound") {
       //if connected with sui
       if (SuiWallet.wallet) {
@@ -761,7 +764,7 @@ export const MAIN_PAGE = () => {
       try {
         const tx = Transaction.from(buffer);
         console.log("created teX", tx)
-        signedTX = await signTransaction(wallet, tx);
+        signedTX = await SolanaWallet.signTransaction!(tx);
         console.log(signedTX, "?");
         //@ts-ignore
         const dehydratedTx = signedTX.serialize({
@@ -770,23 +773,25 @@ export const MAIN_PAGE = () => {
         })
         const serializedTX = dehydratedTx.toString('base64')
         await transmit_signed_journey_reward_tx_to_server(header_verification, serializedTX, reward_id)
-
+        await sleep(3000)
+        await populate_data()
+        setTimeout(()=> {
+          populate_data()
+        }, 10000)
+        return claim
       } catch (e: any) {
+        console.log("got error", e)
         if (e.message === "User rejected the request.") {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
     }
     else {
-      console.log("claim", claim.data.message)
       if (claim.data.message) {
         handleMessageOpen(claim.data.message);
       }
       console.log("Wrong journey reward type or claim transaction is empty");
     }
-    await sleep(3000)
-    await loadUserData()
-    return claim
   };
 
 
