@@ -743,6 +743,9 @@ export const MAIN_PAGE = () => {
         });
         await sleep(1000)
         await populate_data()
+        setTimeout(()=> {
+          populate_data()
+        }, 10000)
         return;
       }
       //if connected with solana
