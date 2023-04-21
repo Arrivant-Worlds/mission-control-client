@@ -336,6 +336,7 @@ export const MAIN_PAGE = () => {
         return headers.value
       }
       if (wallet) {
+        console.log("its wallet")
         let web3Auth = await getUserInfo()
         let headers: PayloadHeaders | undefined = {
           "Content-Type": "application/json",
@@ -366,6 +367,7 @@ export const MAIN_PAGE = () => {
           Pubkey: app_pub_key,
           Login: 'sso'
         }
+        console.log("sso headers being sent")
         return headers
       }
       else if (SolanaWallet.connected) {
@@ -608,24 +610,20 @@ export const MAIN_PAGE = () => {
   const handleClaimQuestReward = async (reward_id: string, type_reward: RewardTypes) => {
     let header_verification = await getAuthHeaders();
     if (!header_verification) return;
-    if (type_reward === RewardTypes.claim_caught_creature_reward) {
-      let balance_check = await getBalance();
+    if (type_reward === RewardTypes.claim_caught_creature_reward && SolanaWallet.connected) {
+      let connection = new Connection(RPC_CONNECTION_URL);
+      let balance_check = await connection.getBalance(SolanaWallet.publicKey!);
       let u = await getUserInfo()
       if (!u) return
-      if (Object.entries(u).length !== 0 && balance_check) {
+      if (Object.entries(u).length !== 0) {
         //user is using a web wallet
-        if (balance_check / LAMPORTS_PER_SOL < .01) {
-          handleMessageOpen(`Please connect with your a crypto wallet to claim`);
-          return;
-        }
-      } else {
+        handleMessageOpen(`Please connect with your a crypto wallet to claim`);
+        return;
+      } else if (balance_check / LAMPORTS_PER_SOL < .01) {
         //user is using an external crypto wallet
-        if (balance_check! / LAMPORTS_PER_SOL < .01) {
-          handleMessageOpen("You must have more than .01 SOL in your wallet!");
-          return;
-        }
+        handleMessageOpen("You must have more than .01 SOL in your wallet!");
+        return;
       }
-
     }
     let response = await claim_quest_reward(header_verification, reward_id);
     if (response.status !== 200) {
