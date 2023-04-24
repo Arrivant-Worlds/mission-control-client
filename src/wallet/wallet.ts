@@ -87,16 +87,15 @@ export const refreshHeadersSuiWallet = async (
 // }
 
 export const refreshHeadersLedger = async (
-  signTransaction: WalletContextInterface['signTransaction'], 
+  signTransaction: any, 
   publicKey: PublicKey,
-  wallet: WalletContextInterface['wallet']
 ): Promise<PayloadHeaders | undefined> => {
     if(!publicKey) return
     console.log("ledger detected")
     const now = Date.now();
     const message = now.toString();
     const emptyTX = await createLedgerEmptyTX(publicKey)
-    let signedTX = await signTransaction(wallet, emptyTX);
+    let signedTX = await signTransaction(emptyTX);
     //@ts-ignore
     const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,

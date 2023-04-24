@@ -192,7 +192,7 @@ export const MAIN_PAGE = () => {
     let ledgerState = JSON.parse(localStorage.getItem("verifyHeader") || "{}");
     console.log("Ledger state", ledgerState)
     if (
-      wallet && (
+      SolanaWallet.connected && (
         ledger_state ||
         ledgerState?.value?.isLedger
       )
@@ -252,14 +252,12 @@ export const MAIN_PAGE = () => {
       }
     }
     async function load() {
-      console.log("sui wallet", SuiWallet.wallet)
       if (
         (provider && wallet) ||
         SolanaWallet.connected ||
         (SuiWallet.status === "connected" && SuiWallet.wallet)
       ) {
-        console.log("is sui connected",
-          SuiWallet.status)
+        console.log("loading in data")
         await loadUserData()
         console.log("I can continue")
       } else {
@@ -272,7 +270,6 @@ export const MAIN_PAGE = () => {
     load();
   }
   useEffect(() => {
-    console.log("recalling with", SuiWallet.wallet?.address)
     loadAllData()
   }, [provider, SolanaWallet.connected, SuiWallet.wallet?.address]);
 
@@ -341,20 +338,6 @@ export const MAIN_PAGE = () => {
         let headers: PayloadHeaders | undefined = {
           "Content-Type": "application/json",
         }
-        //if user is using external wallet, use wallet pkey for auth
-        //@ts-ignore
-        if (Object.entries(web3Auth).length === 0) {
-          const address = (await wallet.requestAccounts())[0];
-          //if ledger do literally fucking everything
-          let isLedger = check_ledger()
-          if (isLedger) {
-            headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
-            return headers
-          } else {
-            headers = (await authUserStandard(address)) as PayloadHeaders
-            return headers
-          }
-        }
 
         //if user is using SSO use it for auth
         const app_scoped_privkey = await getPrivateKey() as string
@@ -372,6 +355,11 @@ export const MAIN_PAGE = () => {
       }
       else if (SolanaWallet.connected) {
         try {
+          let isLedger = check_ledger()
+          if (isLedger) {
+            let headers = await refreshHeadersLedger(SolanaWallet.signTransaction, SolanaWallet.publicKey!)
+            return headers
+          }
           let headers = await refreshHeadersSolanaWallet(
             SolanaWallet.signMessage,
             SolanaWallet.publicKey,
@@ -716,6 +704,7 @@ export const MAIN_PAGE = () => {
         tx.feePayer = userKey;
         let solanaConnection = new Connection(RPC_CONNECTION_URL, "confirmed");
         let sig = await SolanaWallet.sendTransaction!(tx, solanaConnection);
+        console.log("SIG?", sig)
         set_message_dialog({
           open: true,
           text: 'Confirming transaction...'
@@ -786,7 +775,7 @@ export const MAIN_PAGE = () => {
       if (claim.data.message) {
         handleMessageOpen(claim.data.message);
       }
-      console.log("Wrong journey reward type or claim transaction is empty");
+      await populate_data()
     }
   };
 
