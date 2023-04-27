@@ -664,21 +664,24 @@ export const MAIN_PAGE = () => {
   ) => {
     let header_verification = await getAuthHeaders();
     if (!header_verification) return
-    if (SolanaWallet.connected && (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack")) {
+    if (
+      (SolanaWallet.connected || publicKey) &&
+      (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack")) {
       if (publicKey) {
-        let balance_check = await getBalance();
         let u = await getUserInfo()
         if (!u) return
         if (Object.entries(u).length !== 0) {
           //user is using a web wallet
           handleMessageOpen(`Please connect with your a crypto wallet to claim`);
           return
-        } else {
-          //user is using an external crypto wallet
-          if (balance_check! / LAMPORTS_PER_SOL < .01) {
-            handleMessageOpen("You must have more than .01 SOL in your wallet!");
-            return;
-          }
+        }
+      } else {
+        let connection = new Connection(RPC_CONNECTION_URL);
+        let balance_check = await connection.getBalance(SolanaWallet.publicKey!);
+        //user is using an external crypto wallet
+        if (balance_check! / LAMPORTS_PER_SOL < .01) {
+          handleMessageOpen("You must have more than .01 SOL in your wallet!");
+          return;
         }
       }
     }
