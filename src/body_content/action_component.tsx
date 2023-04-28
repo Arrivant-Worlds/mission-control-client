@@ -497,7 +497,7 @@ const type_render = () => {
           className="centralConnect">{SolanaWallet.connected ? "SIGN MESSAGE" : "CONNECT WALLET"}</WalletMultiButton>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
-          <Button
+          {/* <Button
             onClick={()=> {
               if(!SuiWallet.wallet){
                 ethos.showSignInModal()
@@ -528,7 +528,7 @@ const type_render = () => {
             }}
           >
             {SuiWallet.wallet ? "SIGN MESSAGE" : "CONNECT WALLET"}
-          </Button>
+          </Button> */}
         </Box>
       </Grid>
     </Grid>
