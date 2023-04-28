@@ -656,6 +656,9 @@ export const MAIN_PAGE = () => {
       });
     }
     await populate_data();
+    setTimeout(() => {
+      populate_data()
+    }, 10000)
   };
 
   const handleClaimJourneyReward = async (
@@ -712,11 +715,13 @@ export const MAIN_PAGE = () => {
           open: true,
           text: 'Confirming transaction...'
         });
-        await sleep(3000)
+        await populate_data()
         set_message_dialog({
           open: false,
         })
-        console.log(sig)
+        setTimeout(() => {
+          populate_data()
+        }, 10000)
       }
     }
     let claim = await claim_journey_reward(header_verification, reward_id);
