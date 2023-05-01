@@ -63,6 +63,8 @@ export const get_user = async (headers: PayloadHeaders) => {
         return await create_user_call;
       }
     } else {
+      localStorage.removeItem("verifyHeader")
+      console.log("removed headers")
       throw new Error("There was an error, please login again.");
     }
   }
