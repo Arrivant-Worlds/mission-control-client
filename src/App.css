@@ -16,6 +16,24 @@
   width: 3px;
 }
 
+.wallet-adapter-button.centralConnect {
+   background: none;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 15px;
+text-align: center;
+
+color: #FFFFFF;
+   border: 0.916143px solid rgb(206, 77, 206);
+
+}
+.centralConnect:hover {
+    background-color: none !important;
+}
+
 .simplebar-track.simplebar-vertical {
   background-color: black;
   top: 10px !important;

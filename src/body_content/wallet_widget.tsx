@@ -1,3 +1,5 @@
+import { useWallet } from '@solana/wallet-adapter-react';
+import { ethos } from 'ethos-connect';
 import { userResponseDTO } from 'interfaces';
 import React, { useEffect } from 'react'
 
@@ -7,6 +9,8 @@ interface WalletWidgetProps {
 }
 
 export default function WalletWidget(props: WalletWidgetProps) {
+  const SolanaWallet = useWallet();
+  const SuiWallet = ethos.useWallet()
   return (
     <div className="wallet-display"
     style= {{
@@ -23,7 +27,7 @@ export default function WalletWidget(props: WalletWidgetProps) {
     }}
     >
       <div style = {{padding: "5px"}} className="text-sm font-medium text-white">
-          Wallet:
+          Wallet: {(SuiWallet.wallet && "SUI") || (SolanaWallet.connected && "SOL") || ("")}
       </div>
       { props.connected && props.user?.wallet ? (
         <div className="text-sm font-medium text-white">

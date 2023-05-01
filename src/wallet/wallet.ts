@@ -1,4 +1,4 @@
-import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { Connection, PublicKey, Transaction as SolanaTX } from "@solana/web3.js";
 import {decodeUTF8} from "tweetnacl-util";
 import { RPC_CONNECTION_URL } from "../api_calls/constants";
 import {
@@ -8,25 +8,27 @@ import {
 from "@solana/spl-token"
 import { PayloadHeaders } from "interfaces";
 import { WalletContextInterface } from "App";
-export const refreshHeaders = async (
-  signMessage: WalletContextInterface['signMessage'], 
-  publicKey: WalletContextInterface['publicKey'],
-  wallet: WalletContextInterface['wallet']
+import { SignedMessage, TransactionBlock, fromB64 } from '@mysten/sui.js';
+import * as tweetnacl from 'tweetnacl'
+
+export const refreshHeadersSolanaWallet = async (
+  signMessage: any, 
+  publicKey: any,
 ) => {
     const now = Date.now();
     const message = now.toString();
     const encodedMessage = decodeUTF8(message);
-    console.log("signing message")
-    let signature = await signMessage(wallet);
+    let signature = await signMessage(encodedMessage);
+    console.log("sig?", signature)
     if(!signature) return
-    console.log("signed message", signature.toString())
     const pubkey = publicKey;
-    let headers = {
+    let headers: PayloadHeaders = {
         auto_approve: false,
         isLedger: false,
         signedMsg: message,
         signature: JSON.stringify(Array.from(signature)),
         pubkey: pubkey,
+        Login: 'solana'
     };
 
     const item = {
@@ -38,17 +40,62 @@ export const refreshHeaders = async (
     return headers
 }
 
+
+export const refreshHeadersSuiWallet = async (
+  signMessage: any,
+  suiPKey: any
+) => {
+  console.log("called with pkey", suiPKey)
+  const now = Date.now();
+  const message = now.toString();
+  const result: SignedMessage = await signMessage({
+    message: message
+  })
+  console.log("result?", result)
+  if(!result) return
+  const pubkey = suiPKey;
+  let headers: PayloadHeaders = {
+      auto_approve: false,
+      isLedger: false,
+      signedMsg: result.messageBytes,      
+      signature: result.signature,
+      pubkey: pubkey,
+      Login: 'sui'
+  };
+  const item = {
+      value: headers,
+      expiry: new Date().getTime() + 3600 * 100000,
+  };
+
+  localStorage.setItem("verifyHeader", JSON.stringify(item));
+  return headers
+}
+
+// async function signMessageSui() {
+//   const suietAdapter = new SuietWalletAdapter();
+
+//   const result = await suietAdapter.signMessage({
+//     message: new TextEncoder().encode('Hello world')
+//   })
+
+//   const textDecoder = new TextDecoder()
+//   console.log('signMessage success', result)
+//   console.log('signMessage signature', result.signature)  // output -> Uint8Array
+//   console.log('signMessage signedMessage', textDecoder.decode(result.signedMessage).toString()) // Uint8Array of your raw message
+
+//   return result.signature
+// }
+
 export const refreshHeadersLedger = async (
-  signTransaction: WalletContextInterface['signTransaction'], 
+  signTransaction: any, 
   publicKey: PublicKey,
-  wallet: WalletContextInterface['wallet']
 ): Promise<PayloadHeaders | undefined> => {
     if(!publicKey) return
     console.log("ledger detected")
     const now = Date.now();
     const message = now.toString();
     const emptyTX = await createLedgerEmptyTX(publicKey)
-    let signedTX = await signTransaction(wallet, emptyTX);
+    let signedTX = await signTransaction(emptyTX);
     //@ts-ignore
     const dehydratedTx = signedTX.serialize({
         requireAllSignatures: false,
@@ -78,7 +125,7 @@ export const refreshHeadersLedger = async (
 export const getOrCreateUserAssociatedTokenAccountTX = async (
     publicKey: PublicKey,
     mint: PublicKey,
-    tx: Transaction
+    tx: SolanaTX
   ) => {
 
     const connection = new Connection(RPC_CONNECTION_URL);
@@ -122,7 +169,7 @@ export const getOrCreateUserAssociatedTokenAccountTX = async (
 export const createLedgerEmptyTX = async (
     publicKey: PublicKey,
 ) => {
-    const emptyTX = new Transaction();
+    const emptyTX = new SolanaTX();
     const connection = new Connection(RPC_CONNECTION_URL);
     let block = await connection.getLatestBlockhash('confirmed')
     emptyTX.recentBlockhash = block.blockhash;

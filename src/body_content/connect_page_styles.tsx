@@ -27,7 +27,7 @@ const styles = {
     },
   },
   button: {
-    fontSize: "20px",
+    fontSize: "15px",
     backgroundColor: "transparent",
     border: "1px solid #F6F6F6",
     color: "#F6F6F6",

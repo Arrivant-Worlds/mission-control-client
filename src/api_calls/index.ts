@@ -105,10 +105,10 @@ export const get_leaderboard = async (headers: PayloadHeaders): Promise<Leaderbo
   }
 };
 
-export const auth_twitter = async (headers: PayloadHeaders, wallet: string) => {
+export const auth_twitter = async (headers: PayloadHeaders) => {
   try {
     const response = await axios.put(
-      `${BASE_URL}/users/${wallet}/twitter/authorize`,
+      `${BASE_URL}/users/twitter/authorize`,
       {},
       { headers: {...headers} }
     );
@@ -189,11 +189,12 @@ export const submit_email = async (
   }
 };
 
-export const update_wallet = async (headers: PayloadHeaders, wallet: string) => {
-    console.log("sending", wallet)
+export const update_wallet = async (
+  headers: PayloadHeaders, newWalletinfo: any) => {
+    console.log("sending", newWalletinfo)
     const response = await axios.post(
       `${BASE_URL}/users/updateWallet`,
-      { wallet },
+      { ...newWalletinfo },
       { headers: {...headers} }
     );
     return response.data;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useCallback } from "react";
+import React, { useState, useEffect, memo, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
@@ -12,6 +12,8 @@ import {
   RPC_CONNECTION, transmit_signed_quest_reward_tx_to_server, transmit_signed_journey_reward_tx_to_server, sleep, update_wallet, claim_all_quest_rewards, verify_discord,
 } from "../api_calls";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { RawSigner, SuiTransaction } from "@mysten/sui.js";
+import { ethos } from "ethos-connect"
 import { useAnalytics } from '../mixpanel';
 import CONNECT_PAGE from "./connect_page";
 import BOUNTY_PAGE from "./bounty_page";
@@ -58,37 +60,35 @@ import EggTab from "../audio/EggTab.wav";
 import DisconnectHover from "../audio/QuestHover.mp3";
 import RewardFanfare from "../audio/RewardFanfare.wav";
 import useSound from "use-sound";
-import { getOrCreateUserAssociatedTokenAccountTX, refreshHeaders, refreshHeadersLedger } from "../wallet/wallet";
+import { getOrCreateUserAssociatedTokenAccountTX, refreshHeadersSolanaWallet, refreshHeadersSuiWallet, refreshHeadersLedger } from "../wallet/wallet";
 import { RPC_CONNECTION_URL, PRELUDE_URL } from "../api_calls/constants";
 import { useWeb3Wallet } from "../App";
 import { getED25519Key } from "@toruslabs/openlogin-ed25519";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { decodeUTF8 } from "tweetnacl-util";
 import WalletWidget from "./wallet_widget";
 import { AlertState, DialogData, JourneyRewardResponseDTO, LeaderboardResponse, MessageDialog, PayloadHeaders, QuestResponse, questResponseDTO, RewardsDialogData, RewardTypes, TwitterSearchParams, userResponseDTO } from "interfaces";
-
+import { EthosSignMessageInput } from "ethos-connect/dist/types/EthosSignMessageInput";
 export const MAIN_PAGE = () => {
   const {
     provider,
-    signMessage,
     wallet,
     signTransaction,
-    sendTransaction,
     authenticateUser,
     publicKey,
     getPrivateKey,
     getUserInfo,
-    login,
     getBalance,
     logout
   } = useWeb3Wallet()
   const SolanaWallet = useWallet()
+  const SuiWallet = ethos.useWallet()
   let navigate = useNavigate();
   const { track, setPropertyIfNotExists } = useAnalytics();
   const [dialog_state, change_dialog_state] = useState(false);
   const [message_dialog, set_message_dialog] = useState<MessageDialog>({
     open: false,
   });
+  const [loginChange, setLoginChange] = useState(0);
   const [rewards_dialog_state, change_rewards_dialog_state] = useState(false);
   const [dialog_data, change_dialog_data] = useState<DialogData>();
   let [user_data, change_user_data] = useState<userResponseDTO>();
@@ -192,7 +192,7 @@ export const MAIN_PAGE = () => {
     let ledgerState = JSON.parse(localStorage.getItem("verifyHeader") || "{}");
     console.log("Ledger state", ledgerState)
     if (
-      wallet && (
+      SolanaWallet.connected && (
         ledger_state ||
         ledgerState?.value?.isLedger
       )
@@ -203,6 +203,10 @@ export const MAIN_PAGE = () => {
     }
   };
 
+  const handleLoginChange = () => {
+    setLoginChange(loginChange + 1);
+  }
+
   const handleLinkDiscord = async (token_type: string, access_token: string) => {
     let header_verification = await getAuthHeaders();
     if (!header_verification) return;
@@ -212,8 +216,7 @@ export const MAIN_PAGE = () => {
       access_token
     );
   }
-
-  useEffect(() => {
+  const loadAllData = () => {
     //change this conditional to check for success in oath.
     //also trigger conditional for snackbar bar to show up saying twitter auth worked if url says finished?=true
     if (window.location.search) {
@@ -249,22 +252,31 @@ export const MAIN_PAGE = () => {
       }
     }
     async function load() {
-      if (provider && wallet) {
-        console.log("got wallet", wallet)
-        setShouldShowDisconnect(true);
+      if (
+        (provider && wallet) ||
+        SolanaWallet.connected ||
+        (SuiWallet.status === "connected" && SuiWallet.wallet)
+      ) {
+        console.log("loading in data")
         await loadUserData()
+        console.log("I can continue")
       } else {
-        if(!window.location.hash){
+        if (!window.location.hash) {
           handleNavigation("/");
         }
+      }
     }
-    }
+    console.log("rerunning")
     load();
-  }, [provider, wallet]);
+  }
+  useEffect(() => {
+    loadAllData()
+  }, [provider, SolanaWallet.connected, SuiWallet.wallet?.address]);
 
   useEffect(() => {
-    if (quests_data && user_data) {
-      console.log("I GOT", quests_data, user_data)
+    if (user_data) {
+      if (!shouldShowDisconnect) setShouldShowDisconnect(true)
+      console.log("tried navigating")
       handleNavigation("/bounty_main");
       let allActiveQuestRewards = quests_data.filter((i) => i.active_reward!.length > 0)
       if (allActiveQuestRewards.length > 0) {
@@ -275,7 +287,7 @@ export const MAIN_PAGE = () => {
         })
       }
     }
-  }, [quests_data, user_data])
+  }, [user_data])
 
 
   const backgroundImageRender = () => {
@@ -308,46 +320,76 @@ export const MAIN_PAGE = () => {
     return headers
   }
 
+  const signMessageSui = useCallback(
+    async (message: EthosSignMessageInput) => {
+      const response = await SuiWallet.wallet?.signMessage(message)
+      return response
+    }, [SuiWallet.wallet]);
+
   const getAuthHeaders = async (): Promise<PayloadHeaders | undefined> => {
     try {
-      let u = await getUserInfo()
-      if (!wallet || !u) return
-      let headers: PayloadHeaders | undefined = {
-        "Content-Type": "application/json",
+      if (localStorage.getItem("verifyHeader")) {
+        let headers = JSON.parse(localStorage.getItem("verifyHeader") || "{}")
+        return headers.value
       }
-      //if user is using external wallet, use wallet pkey for auth
-      if (Object.entries(u).length === 0) {
-        const address = (await wallet.requestAccounts())[0];
-        console.log("got address", address)
-        //if ledger do literally fucking everything
-        let isLedger = check_ledger()
-        let key = "verifyHeader";
-        const itemStr = localStorage.getItem(key);
-        console.log("is ledger", isLedger)
-        console.log("item str?", itemStr)
-        if (isLedger) {
-          headers = await refreshHeadersLedger(signTransaction, new PublicKey(address), wallet)
+      if (wallet) {
+        console.log("its wallet")
+        let web3Auth = await getUserInfo()
+        let headers: PayloadHeaders | undefined = {
+          "Content-Type": "application/json",
+        }
+
+        //if user is using SSO use it for auth
+        const app_scoped_privkey = await getPrivateKey() as string
+        const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
+        const app_pub_key = ed25519Key.pk.toString("hex");
+        const token = await authenticateUser();
+        headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Pubkey: app_pub_key,
+          Login: 'sso'
+        }
+        console.log("sso headers being sent")
+        return headers
+      }
+      else if (SolanaWallet.connected) {
+        try {
+          let isLedger = check_ledger()
+          if (isLedger) {
+            let headers = await refreshHeadersLedger(SolanaWallet.signTransaction, SolanaWallet.publicKey!)
+            return headers
+          }
+          let headers = await refreshHeadersSolanaWallet(
+            SolanaWallet.signMessage,
+            SolanaWallet.publicKey,
+          )
           return headers
-        } else {
-          headers = (await authUserStandard(address)) as PayloadHeaders
+        }
+        catch (err) {
+          console.log("err in solana signing msg", err);
+          await handleDisconnect()
+        }
+
+      }
+      else if (SuiWallet.status === "connected" && SuiWallet.wallet) {
+        try {
+          console.log("SUI", SuiWallet.wallet)
+          let add = await SuiWallet.wallet?.getAddress()
+          console.log("got add", add)
+          let headers = await refreshHeadersSuiWallet(
+            signMessageSui,
+            SuiWallet.wallet?.address
+          )
           return headers
+        } catch (err) {
+          console.log("err in sui signing msg", err);
+          await handleDisconnect()
         }
       }
 
-      //if user is using SSO use it for auth
-      const app_scoped_privkey = await getPrivateKey() as string
-      const ed25519Key = getED25519Key(Buffer.from(app_scoped_privkey.padStart(64, "0"), "hex"));
-      const app_pub_key = ed25519Key.pk.toString("hex");
-      const token = await authenticateUser();
-      headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Pubkey: app_pub_key,
-        Login: 'sso'
-      }
-      return headers
     } catch (err) {
-      logout()
+      console.log("we got", err)
     }
 
   }
@@ -407,7 +449,7 @@ export const MAIN_PAGE = () => {
   const handleClick = async () => {
     playAurahTheme();
     //run login modal
-    await login()
+    handleNavigation('/connect')
   };
 
   const handleMainHover = () => {
@@ -419,14 +461,32 @@ export const MAIN_PAGE = () => {
   };
 
   const handleDisconnect = async () => {
+    console.log("I WAS CLICKED")
     playDisconnectWallet();
     localStorage.removeItem("verifyHeader");
+    if (wallet) {
+      await logout()
+    }
+    if (SolanaWallet.connected) {
+      console.log("I WAS INVOLVED")
+      try {
+        SolanaWallet.disconnect()
+        console.log("I DISCONNECTED")
+      } catch (err) {
+        console.log("ERR IN SOLANA DISCONNECT", err)
+      }
+      console.log("solana wallet connection status", SolanaWallet.connected)
+    }
+    if (SuiWallet.status === 'connected') {
+      try {
+        console.log("trying to disconnect sui", SuiWallet.status)
+        SuiWallet.wallet?.disconnect()
+      } catch (err) {
+        console.log("ERR IN SUI DISCONNECT", err)
+      }
+    }
     setShouldShowDisconnect(false)
     handleNavigation("/");
-    await logout()
-    if (SolanaWallet.connected) {
-      await SolanaWallet.disconnect()
-    }
   };
 
   const handleDisconnectHover = () => {
@@ -538,24 +598,20 @@ export const MAIN_PAGE = () => {
   const handleClaimQuestReward = async (reward_id: string, type_reward: RewardTypes) => {
     let header_verification = await getAuthHeaders();
     if (!header_verification) return;
-    if (type_reward === RewardTypes.claim_caught_creature_reward) {
-      let balance_check = await getBalance();
+    if (type_reward === RewardTypes.claim_caught_creature_reward && SolanaWallet.connected) {
+      let connection = new Connection(RPC_CONNECTION_URL);
+      let balance_check = await connection.getBalance(SolanaWallet.publicKey!);
       let u = await getUserInfo()
       if (!u) return
-      if (Object.entries(u).length !== 0 && balance_check) {
+      if (Object.entries(u).length !== 0) {
         //user is using a web wallet
-        if (balance_check / LAMPORTS_PER_SOL < .01) {
-          handleMessageOpen(`Please connect with your a crypto wallet to claim`);
-          return;
-        }
-      } else {
+        handleMessageOpen(`Please connect with your a crypto wallet to claim`);
+        return;
+      } else if (balance_check / LAMPORTS_PER_SOL < .01) {
         //user is using an external crypto wallet
-        if (balance_check! / LAMPORTS_PER_SOL < .01) {
-          handleMessageOpen("You must have more than .01 SOL in your wallet!");
-          return;
-        }
+        handleMessageOpen("You must have more than .01 SOL in your wallet!");
+        return;
       }
-
     }
     let response = await claim_quest_reward(header_verification, reward_id);
     if (response.status !== 200) {
@@ -567,29 +623,30 @@ export const MAIN_PAGE = () => {
       });
     }
     if (response.data && type_reward === RewardTypes.claim_caught_creature_reward) {
-      let buffer = Buffer.from(response.data, "base64");
-      let signedTX;
-      try {
-        const tx = Transaction.from(buffer);
-        signedTX = await signTransaction(wallet, tx);
-      } catch (e) {
-        //@ts-ignore
-        if (e.message === "User rejected the request.") {
-          handleMessageOpen("You must approve the transaction in order to claim!");
+      if (SolanaWallet.connected) {
+        let buffer = Buffer.from(response.data, "base64");
+        let signedTX;
+        try {
+          const tx = Transaction.from(buffer);
+          signedTX = await SolanaWallet.signTransaction!(tx);
+        } catch (e) {
+          //@ts-ignore
+          if (e.message === "User rejected the request.") {
+            handleMessageOpen("You must approve the transaction in order to claim!");
+          }
         }
-      }
-      console.log("signed tx", signedTX)
-      if (signedTX) {
-        //@ts-ignore
-        const dehydratedTx = signedTX.serialize({
-          requireAllSignatures: false,
-          verifySignatures: false
-        })
-        const serializedTX = dehydratedTx.toString('base64')
-        console.log("sending", serializedTX)
-        await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id, serializedTX)
-      } else {
-        await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id)
+
+        if (signedTX) {
+          //@ts-ignore
+          const dehydratedTx = signedTX.serialize({
+            requireAllSignatures: false,
+            verifySignatures: false
+          })
+          const serializedTX = dehydratedTx.toString('base64')
+          await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id, serializedTX)
+        } else {
+          await transmit_signed_quest_reward_tx_to_server(header_verification, reward_id)
+        }
       }
       setAlertState({
         open: true,
@@ -599,26 +656,31 @@ export const MAIN_PAGE = () => {
       });
     }
     await populate_data();
+    setTimeout(() => {
+      populate_data()
+    }, 10000)
   };
 
   const handleClaimJourneyReward = async (
     reward_id: string,
     reward: RewardsDialogData
   ) => {
-    if (!publicKey) return
-    const userKey = new PublicKey(publicKey);
     let header_verification = await getAuthHeaders();
-    console.log("THE MAIN", reward)
-    if (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack") {
-      let balance_check = await getBalance();
-      let u = await getUserInfo()
-      console.log("got s", u)
-      if (!u) return
-      if (Object.entries(u).length !== 0) {
-        //user is using a web wallet
-        handleMessageOpen(`Please connect with your a crypto wallet to claim`);
-        return
+    if (!header_verification) return
+    if (
+      (SolanaWallet.connected || publicKey) &&
+      (reward.type_reward.type === "soulbound" || reward.type_reward.type === "trait_pack")) {
+      if (publicKey) {
+        let u = await getUserInfo()
+        if (!u) return
+        if (Object.entries(u).length !== 0) {
+          //user is using a web wallet
+          handleMessageOpen(`Please connect with your a crypto wallet to claim`);
+          return
+        }
       } else {
+        let connection = new Connection(RPC_CONNECTION_URL);
+        let balance_check = await connection.getBalance(SolanaWallet.publicKey!);
         //user is using an external crypto wallet
         if (balance_check! / LAMPORTS_PER_SOL < .01) {
           handleMessageOpen("You must have more than .01 SOL in your wallet!");
@@ -627,37 +689,61 @@ export const MAIN_PAGE = () => {
       }
     }
     if (reward.type_reward.type === "trait_pack") {
-      let connection = new Connection(RPC_CONNECTION_URL)
-      //create associated token acc for user
-      let tx = new Transaction()
-      await getOrCreateUserAssociatedTokenAccountTX(
-        userKey,
-        new PublicKey(reward.mint),
-        tx
-      )
-      console.log("IM IN")
-      set_message_dialog({
-        open: true,
-        text: 'Claiming requires .03 SOL'
-      });
+      if (SolanaWallet.connected) {
+        let connection = new Connection(RPC_CONNECTION_URL)
+        const userKey = SolanaWallet.publicKey!;
+        //create associated token acc for user
+        let tx = new Transaction()
+        await getOrCreateUserAssociatedTokenAccountTX(
+          userKey,
+          new PublicKey(reward.mint),
+          tx
+        )
+        console.log("IM IN")
+        set_message_dialog({
+          open: true,
+          text: 'Claiming requires .03 SOL'
+        });
 
-      let block = await connection.getLatestBlockhash('confirmed')
-      tx.recentBlockhash = block.blockhash;
-      tx.feePayer = userKey;
-      let sig = await sendTransaction(wallet, tx);
-      set_message_dialog({
-        open: true,
-        text: 'Confirming transaction...'
-      });
-      await sleep(3000)
-      set_message_dialog({
-        open: false,
-      })
-      console.log(sig)
+        let block = await connection.getLatestBlockhash('confirmed')
+        tx.recentBlockhash = block.blockhash;
+        tx.feePayer = userKey;
+        let solanaConnection = new Connection(RPC_CONNECTION_URL, "confirmed");
+        let sig = await SolanaWallet.sendTransaction!(tx, solanaConnection);
+        console.log("SIG?", sig)
+        set_message_dialog({
+          open: true,
+          text: 'Confirming transaction...'
+        });
+        await populate_data()
+        set_message_dialog({
+          open: false,
+        })
+        setTimeout(() => {
+          populate_data()
+        }, 10000)
+      }
     }
-    if (!header_verification) return
     let claim = await claim_journey_reward(header_verification, reward_id);
+    console.log("recieved claim", claim)
     if (claim.data && reward.type_reward.type === "soulbound") {
+      //if connected with sui
+      if (SuiWallet.wallet) {
+        //connected with sui
+        setAlertState({
+          open: true,
+          message:
+            "Your reward is being sent! (can take upto 1 min)",
+          severity: "success",
+        });
+        await sleep(1000)
+        await populate_data()
+        setTimeout(() => {
+          populate_data()
+        }, 10000)
+        return;
+      }
+      //if connected with solana
       setAlertState({
         open: true,
         message:
@@ -670,7 +756,7 @@ export const MAIN_PAGE = () => {
       try {
         const tx = Transaction.from(buffer);
         console.log("created teX", tx)
-        signedTX = await signTransaction(wallet, tx);
+        signedTX = await SolanaWallet.signTransaction!(tx);
         console.log(signedTX, "?");
         //@ts-ignore
         const dehydratedTx = signedTX.serialize({
@@ -679,30 +765,26 @@ export const MAIN_PAGE = () => {
         })
         const serializedTX = dehydratedTx.toString('base64')
         await transmit_signed_journey_reward_tx_to_server(header_verification, serializedTX, reward_id)
-        setAlertState({
-          open: true,
-          message:
-            "Nft transactions may take up to one minute!",
-          severity: "warning",
-        });
+        await sleep(3000)
+        await populate_data()
+        setTimeout(() => {
+          populate_data()
+        }, 10000)
+        return claim
       } catch (e: any) {
+        console.log("got error", e)
         if (e.message === "User rejected the request.") {
           handleMessageOpen("You must approve the transaction in order to claim!");
         }
       }
+      await populate_data()
     }
     else {
-      console.log("claim", claim.data.message)
       if (claim.data.message) {
         handleMessageOpen(claim.data.message);
       }
-      console.log("Wrong journey reward type or claim transaction is empty");
+      await populate_data()
     }
-    await populate_data()
-    setTimeout(() => {
-      populate_data()
-    }, 15000)
-    return claim
   };
 
 
@@ -864,7 +946,7 @@ export const MAIN_PAGE = () => {
                 variant="outlined"
               >PRELUDE</Button>
             </a>
-            <WalletWidget connected={provider} user={user_data!} />
+            <WalletWidget connected={wallet || SolanaWallet.connected || SuiWallet.wallet} user={user_data!} />
           </Grid>
           <Menu
             anchorEl={dropdown_anchor}
@@ -1008,6 +1090,8 @@ export const MAIN_PAGE = () => {
             element={
               <CONNECT_PAGE
                 handleConnectHover={handleConnectHover}
+                loginChange={handleLoginChange}
+                isDisconnectVisible={shouldShowDisconnect}
               />
             }
           />
