@@ -188,7 +188,6 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
             <img src={suiLogo} alt='suiLogo'></img>
           </Box>
           <Button
-            disabled={true}
             onClick={ethos.showSignInModal}
             variant="outlined"
             sx={{
@@ -213,8 +212,7 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
               },
             }}
           >
-            COMING SOON
-            {/* {SuiWallet.status === 'connected' ? "SIGN MESSAGE" : "CONNECT WALLET"} */}
+            {SuiWallet.status === 'connected' ? "SIGN MESSAGE" : "CONNECT WALLET"}
           </Button>
         </Box>
       </DialogContent>
