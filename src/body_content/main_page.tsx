@@ -598,16 +598,14 @@ export const MAIN_PAGE = () => {
   const handleClaimQuestReward = async (reward_id: string, type_reward: RewardTypes) => {
     let header_verification = await getAuthHeaders();
     if (!header_verification) return;
-    if (type_reward === RewardTypes.claim_caught_creature_reward && SolanaWallet.connected) {
-      let connection = new Connection(RPC_CONNECTION_URL);
-      let balance_check = await connection.getBalance(SolanaWallet.publicKey!);
-      let u = await getUserInfo()
-      if (!u) return
-      if (Object.entries(u).length !== 0) {
-        //user is using a web wallet
+    if (type_reward === RewardTypes.claim_caught_creature_reward && (SolanaWallet.connected || publicKey)) {
+      if (publicKey) {
         handleMessageOpen(`Please connect with your a crypto wallet to claim`);
         return;
-      } else if (balance_check / LAMPORTS_PER_SOL < .01) {
+      }
+      let connection = new Connection(RPC_CONNECTION_URL);
+      let balance_check = await connection.getBalance(SolanaWallet.publicKey!);
+      if (balance_check / LAMPORTS_PER_SOL < .01) {
         //user is using an external crypto wallet
         handleMessageOpen("You must have more than .01 SOL in your wallet!");
         return;
@@ -630,6 +628,7 @@ export const MAIN_PAGE = () => {
           const tx = Transaction.from(buffer);
           signedTX = await SolanaWallet.signTransaction!(tx);
         } catch (e) {
+          console.log("e", e)
           //@ts-ignore
           if (e.message === "User rejected the request.") {
             handleMessageOpen("You must approve the transaction in order to claim!");
