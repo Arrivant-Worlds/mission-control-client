@@ -313,7 +313,7 @@ const Context = ({ children }) => {
     <EthosConnectProvider
       ethosConfiguration={{
         hideEmailSignIn: true,
-        disableAutoConnect: true,
+        disableAutoConnect: false,
         chain: Chain.SUI_CUSTOM,
         network: SUI_RPC_URL
       }}
@@ -377,7 +377,7 @@ export const SolanaWalletContext: FC<{ children: ReactNode }> = ({ children }) =
   return (
 
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider autoConnect={false} wallets={wallets}>
+      <WalletProvider autoConnect={true} wallets={wallets}>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
