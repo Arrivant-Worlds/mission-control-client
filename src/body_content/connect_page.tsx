@@ -177,12 +177,7 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
             PLEASE CHOOSE YOUR PREFERRED WALLET
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%" }}>
-          <Box sx={{ color: "#fff", alignSelf: "center", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
-            <img src={solanaLogo} alt='solanaLogo'></img>
-          </Box>
-          <WalletMultiButton className="centralConnect">{SolanaWallet.connected ? "SIGN MESSAGE" : "CONNECT WALLET"}</WalletMultiButton>
-        </Box>
+   
         <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%", marginTop: "20px" }}>
           <Box sx={{ color: "#fff", alignSelf: "center", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
             <img src={suiLogo} alt='suiLogo'></img>
@@ -214,6 +209,12 @@ export const CONNECT_PAGE = (props: ConnectPageProps) => {
           >
             {SuiWallet.status === 'connected' ? "SIGN MESSAGE" : "CONNECT WALLET"}
           </Button>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", width: "100%" }}>
+          <Box sx={{ color: "#fff", alignSelf: "center", mb: "20px", fontWeight: 700, marginTop: '10%' }}>
+            <img src={solanaLogo} alt='solanaLogo'></img>
+          </Box>
+          <WalletMultiButton className="centralConnect">{SolanaWallet.connected ? "SIGN MESSAGE" : "CONNECT WALLET"}</WalletMultiButton>
         </Box>
       </DialogContent>
     </Dialog>
